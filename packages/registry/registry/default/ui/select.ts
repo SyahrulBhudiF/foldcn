@@ -3,7 +3,8 @@ import type { AnchorConfig } from '@foldkit/ui/listbox'
 import { Option } from 'effect'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { chevronDownIcon, checkIcon } from '@/lib/icons'
+import { icon } from '@/lib/icons'
+import { Check, ChevronDown } from 'lucide'
 import { cn } from '@/lib/utils'
 
 export const create = FoldkitListbox.create
@@ -91,7 +92,7 @@ export const styledViewInputs = <M, Item, Value extends string = string>(
         [h.Class('flex w-full items-center')],
         [
           h.span([h.Class('flex-1')], [config.itemToLabel(item)]),
-          context.isSelected ? h.span([h.Class('absolute right-2 flex size-4 items-center justify-center')], [checkIcon(h)]) : h.empty,
+          context.isSelected ? h.span([h.Class('absolute right-2 flex size-4 items-center justify-center')], [icon(h, Check)]) : h.empty,
         ],
       ),
     }),
@@ -111,7 +112,7 @@ export const selectDescription = <M>(description: string, h: HtmlBuilder<M>, cla
   h.span([h.Class(cn(selectDescriptionClass, className))], [description])
 
 export const selectChevron = <M>(h: HtmlBuilder<M>): Html =>
-  h.span([h.Class('shrink-0 text-muted-foreground')], [chevronDownIcon(h, 'size-4')])
+  h.span([h.Class('shrink-0 text-muted-foreground')], [icon(h, ChevronDown, 'size-4')])
 
 export const select = <M>(config: Readonly<{
   id: string

@@ -1,9 +1,9 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { button } from '@/ui/button'
-import { checkIcon, icon } from '@/lib/icons'
+import { icon } from '@/lib/icons'
 
-import { Copy } from 'lucide'
+import { Check, Copy } from 'lucide'
 
 // ---------------------------------------------------------------------------
 // Copy button — reusable component for copying text to clipboard.
@@ -22,8 +22,6 @@ export type CopyButtonConfig<M> = Readonly<{
   ariaLabel?: string
 }>
 
-const copyIcon = <M>(h: HtmlBuilder<M>, className = 'size-4'): Html => icon(Copy, className, h)
-
 /** A styled copy button that toggles between copy and check icons. */
 export const copyButton = <M>(config: CopyButtonConfig<M>, h: HtmlBuilder<M>): Html =>
   button<M>(
@@ -34,6 +32,6 @@ export const copyButton = <M>(config: CopyButtonConfig<M>, h: HtmlBuilder<M>): H
       isDisabled: config.isCopied,
       className: config.className,
     },
-    config.isCopied ? checkIcon(h) : copyIcon(h),
+    config.isCopied ? icon(h, Check) : icon(h, Copy),
     h,
   )

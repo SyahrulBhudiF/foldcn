@@ -1,7 +1,8 @@
 import { Checkbox as FoldkitCheckbox } from '@foldkit/ui'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { checkIcon, minusIcon } from '@/lib/icons'
+import { icon } from '@/lib/icons'
+import { Check, Minus } from 'lucide'
 import { cn } from '@/lib/utils'
 
 export const checkboxClass =
@@ -56,9 +57,9 @@ export const checkbox = <M>(config: CheckboxConfig<M>, h: HtmlBuilder<M>): Html 
                 h.button(
                   [...attributes.checkbox, h.Class(checkboxClass)],
                   config.isIndeterminate === true
-                    ? [minusIcon(h, 'size-3')]
+                    ? [icon(h, Minus, 'size-3')]
                     : config.isChecked
-                      ? [checkIcon(h, 'size-3')]
+                      ? [icon(h, Check, 'size-3')]
                       : [],
                 ),
                 h.label(

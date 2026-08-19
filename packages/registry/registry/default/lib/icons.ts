@@ -1,5 +1,4 @@
 import type { Attribute, ChildAttribute, Html, HtmlBuilder } from 'foldkit/html'
-import { Check, ChevronDown, ChevronLeft, ChevronRight, Minus, X } from 'lucide'
 import type { IconNode, SVGProps } from 'lucide'
 
 /**
@@ -10,11 +9,14 @@ import type { IconNode, SVGProps } from 'lucide'
  * Foldkit VNodes with no string parsing involved.
  *
  * ```ts
- * // Default size (size-4)
- * icon(ChevronDown, h)
+ * import { icon } from '@foldcn/registry/src/lib/icons'
+ * import { ChevronDown } from 'lucide'
+ *
+ * // Default size (size-4 shrink-0)
+ * icon(h, ChevronDown)
  *
  * // Custom size
- * icon(ChevronDown, 'size-3', h)
+ * icon(h, ChevronDown, 'size-3')
  * ```
  */
 
@@ -62,38 +64,9 @@ const nodeToAttributes = <M>(
 
 const defaultIconClass = 'size-4 shrink-0'
 
-export const icon = <M>(
-  node: IconNode,
-  hOrClass: HtmlBuilder<M> | string,
-  maybeH?: HtmlBuilder<M>,
-): Html => {
-  const render = (h: HtmlBuilder<M>, className: string): Html =>
-    h.svg(
-      svgAttributes(className, h),
-      node.map(([tag, attrs]) => svgElement(tag, h)(nodeToAttributes(attrs, h))),
-    )
+export const icon = <M>(h: HtmlBuilder<M>, node: IconNode, className = defaultIconClass): Html =>
+  h.svg(
+    svgAttributes(className, h),
+    node.map(([tag, attrs]) => svgElement(tag, h)(nodeToAttributes(attrs, h))),
+  )
 
-  if (typeof hOrClass === 'string') {
-    if (maybeH === undefined) throw new Error('HtmlBuilder is required when passing an icon class')
-    return render(maybeH, hOrClass)
-  }
-  return render(hOrClass, defaultIconClass)
-}
-
-export const checkIcon = <M>(h: HtmlBuilder<M>, className?: string): Html =>
-  icon(Check, className ?? defaultIconClass, h)
-
-export const chevronDownIcon = <M>(h: HtmlBuilder<M>, className?: string): Html =>
-  icon(ChevronDown, className ?? defaultIconClass, h)
-
-export const chevronLeftIcon = <M>(h: HtmlBuilder<M>, className?: string): Html =>
-  icon(ChevronLeft, className ?? defaultIconClass, h)
-
-export const chevronRightIcon = <M>(h: HtmlBuilder<M>, className?: string): Html =>
-  icon(ChevronRight, className ?? defaultIconClass, h)
-
-export const xIcon = <M>(h: HtmlBuilder<M>, className?: string): Html =>
-  icon(X, className ?? defaultIconClass, h)
-
-export const minusIcon = <M>(h: HtmlBuilder<M>, className?: string): Html =>
-  icon(Minus, className ?? defaultIconClass, h)

@@ -2,14 +2,15 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { checkbox } from '@foldcn/registry/src/ui/checkbox'
 import { fieldset } from '@foldcn/registry/src/ui/fieldset'
+import { icon } from '@foldcn/registry/src/lib/icons'
 import {
-  chevronDownIcon,
-  chevronLeftIcon,
-  chevronRightIcon,
-  checkIcon,
-  minusIcon,
-  xIcon,
-} from '@foldcn/registry/src/lib/icons'
+  Check,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Minus,
+  X,
+} from 'lucide'
 import { input } from '@foldcn/registry/src/ui/input'
 import * as select from '@foldcn/registry/src/ui/select'
 import { switch_ } from '@foldcn/registry/src/ui/switch'
@@ -195,12 +196,12 @@ export const fieldsetView = (model: Model, h: HtmlBuilder<Message>): Html =>
 // `icon` helper.
 const ICON_ROWS: ReadonlyArray<ReadonlyArray<[string, (h: HtmlBuilder<Message>) => Html]>> = [
   [
-    ['check', (h) => checkIcon(h)],
-    ['chevron-down', (h) => chevronDownIcon(h)],
-    ['chevron-left', (h) => chevronLeftIcon(h)],
-    ['chevron-right', (h) => chevronRightIcon(h)],
-    ['minus', (h) => minusIcon(h)],
-    ['x', (h) => xIcon(h)],
+    ['check', (h) => icon(h, Check)],
+    ['chevron-down', (h) => icon(h, ChevronDown)],
+    ['chevron-left', (h) => icon(h, ChevronLeft)],
+    ['chevron-right', (h) => icon(h, ChevronRight)],
+    ['minus', (h) => icon(h, Minus)],
+    ['x', (h) => icon(h, X)],
   ],
 ]
 
@@ -211,7 +212,7 @@ export const iconsView = (model: Model, h: HtmlBuilder<Message>): Html =>
       h.p(
         [h.Class('mb-4 text-sm text-muted-foreground')],
         [
-          'Lucide icons rendered as Foldkit virtual DOM via the h builder. Import `icon(node, className, h)` or one of the named helpers.',
+          'Lucide icons rendered as Foldkit virtual DOM via the h builder. Import `icon(h, node, className?)` from `@foldcn/registry/src/lib/icons`.',
         ],
       ),
       ...ICON_ROWS.map((row) =>

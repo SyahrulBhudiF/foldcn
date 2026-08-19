@@ -4,7 +4,8 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 type Child = Html | string
 
-import { xIcon } from '@/lib/icons'
+import { icon } from '@/lib/icons'
+import { X } from 'lucide'
 import { cn } from '@/lib/utils'
 
 // Re-export the @foldkit/ui Toast surface.
@@ -75,7 +76,7 @@ export const make = <A, I>(payloadSchema: S.Codec<A, I>) => {
       ],
       [
         h.div([], config.toContent(entry)),
-        h.button([...handlers.dismiss, h.Class(cn(toastDismissButtonClass))], [xIcon(h)]),
+        h.button([...handlers.dismiss, h.Class(cn(toastDismissButtonClass))], [icon(h, X)]),
       ],
     )
   }

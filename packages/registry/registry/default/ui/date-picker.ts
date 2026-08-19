@@ -4,7 +4,8 @@ import type { AnchorConfig } from '@foldkit/ui/anchor'
 import type { CalendarDate } from 'foldkit/calendar'
 import type { HtmlBuilder } from 'foldkit/html'
 
-import { chevronDownIcon } from '@/lib/icons'
+import { icon } from '@/lib/icons'
+import { ChevronDown } from 'lucide'
 import { cn } from '@/lib/utils'
 import { calendarToView } from '@/ui/calendar'
 
@@ -80,7 +81,7 @@ export const styledViewInputs = <M>(
           onNone: () => h.span([h.Class(datePickerPlaceholderClass)], ['Pick a date']),
           onSome: (date) => h.span([], [formatTriggerLabel(date)]),
         }),
-        chevronDownIcon(h),
+        icon(h, ChevronDown),
       ],
     ),
   toCalendarView: calendarToView(h),

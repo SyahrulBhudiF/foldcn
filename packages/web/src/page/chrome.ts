@@ -5,7 +5,9 @@ import * as Tabs from '@foldkit/ui/tabs'
 
 import { codeBlock as registryCodeBlock } from '@foldcn/registry/src/lib/code-block'
 import { copyButton as registryCopyButton } from '@foldcn/registry/src/lib/copy-button'
+import { icon } from '@foldcn/registry/src/lib/icons'
 import { styledViewInputs as tabsStyledViewInputs } from '@foldcn/registry/src/ui/tabs'
+import { ArrowRight, Computer, Moon, Sun } from 'lucide'
 
 import {
   ClickedCopy,
@@ -14,7 +16,7 @@ import {
   type Message,
 } from '../message'
 import type { Model, PackageManager, ThemePreference } from '../model'
-import { arrowRightIcon, computerIcon, moonIcon, sunIcon } from '../site-icons'
+
 import { componentCount } from '../catalog'
 
 const THEME_OPTIONS: ReadonlyArray<{
@@ -22,9 +24,9 @@ const THEME_OPTIONS: ReadonlyArray<{
   label: string
   icon: (h: HtmlBuilder<Message>) => Html
 }> = [
-  { preference: 'Light', label: 'Light mode', icon: (h) => sunIcon(h) },
-  { preference: 'System', label: 'System mode', icon: (h) => computerIcon(h) },
-  { preference: 'Dark', label: 'Dark mode', icon: (h) => moonIcon(h) },
+  { preference: 'Light', label: 'Light mode', icon: (h) => icon(h, Sun) },
+  { preference: 'System', label: 'System mode', icon: (h) => icon(h, Computer) },
+  { preference: 'Dark', label: 'Dark mode', icon: (h) => icon(h, Moon) },
 ]
 
 export const themeSelector = (model: Model, h: HtmlBuilder<Message>): Html =>
@@ -196,7 +198,7 @@ export const sectionLink = (h: HtmlBuilder<Message>, href: string, label: string
         'inline-flex items-center gap-1.5 text-sm font-medium text-primary underline-offset-4 hover:underline',
       ),
     ],
-    [label, arrowRightIcon(h, 'size-3.5')],
+    [label, icon(h, ArrowRight, 'size-3.5')],
   )
 
 const PackageManagerTabs = Tabs.create<PackageManager>()
