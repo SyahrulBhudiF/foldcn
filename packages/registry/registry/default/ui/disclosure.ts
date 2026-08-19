@@ -13,7 +13,7 @@ export const disclosurePanelClass =
   'overflow-hidden rounded-b-lg border border-t-0 border-border bg-card px-4 py-3 text-sm text-muted-foreground'
 
 export const disclosureAnimatedPanelClass =
-  'overflow-hidden border-t border-border text-sm text-muted-foreground'
+  'overflow-hidden rounded-b-lg border-x border-b border-t-0 border-border bg-card px-4 py-3 text-sm text-muted-foreground'
 
 export const disclosureChevronClass =
   'size-4 shrink-0 text-muted-foreground transition-transform duration-200'
