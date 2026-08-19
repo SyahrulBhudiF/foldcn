@@ -4,7 +4,8 @@ import { Url } from 'foldkit'
 import { UrlRequest } from 'foldkit/navigation'
 
 import { Message as DemoMessage } from './demo/message'
-import { ResolvedTheme, ThemePreference } from './model'
+import { Message as InstallTabsMessage } from '@foldkit/ui/tabs'
+import { PackageManager, ResolvedTheme, ThemePreference } from './model'
 
 // routing
 export const ClickedLink = m('ClickedLink', { request: UrlRequest })
@@ -27,6 +28,12 @@ export const CompletedSaveThemePreference = m('CompletedSaveThemePreference')
 export const ClickedCopy = m('ClickedCopy', { value: S.String })
 export const CompletedCopy = m('CompletedCopy', { value: S.String })
 
+// install tabs
+export const GotInstallTabsMessage = m('GotInstallTabsMessage', {
+  message: InstallTabsMessage,
+})
+export const CompletedSavePackageManager = m('CompletedSavePackageManager')
+
 // navigation completions
 export const CompletedNavigateInternal = m('CompletedNavigateInternal')
 export const CompletedLoadExternal = m('CompletedLoadExternal')
@@ -42,6 +49,8 @@ export const Message = S.Union([
   CompletedSaveThemePreference,
   ClickedCopy,
   CompletedCopy,
+  GotInstallTabsMessage,
+  CompletedSavePackageManager,
   CompletedNavigateInternal,
   CompletedLoadExternal,
   CompletedScrollToTop,

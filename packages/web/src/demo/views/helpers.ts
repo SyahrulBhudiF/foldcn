@@ -1,10 +1,6 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import {
-  button,
-  buttonSizeKeys,
-  buttonVariantKeys,
-} from '@foldcn/registry/src/ui/button'
+import { button, buttonSizeKeys, buttonVariantKeys } from '@foldcn/registry/src/ui/button'
 import { card } from '@foldcn/registry/src/ui/card'
 import { disclosure } from '@foldcn/registry/src/ui/disclosure'
 import { nav } from '@foldcn/registry/src/ui/nav'

@@ -4,7 +4,14 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 import { cn } from '@/lib/utils'
 
 /** Button variant keys — keep in sync with `buttonVariants`. */
-export const buttonVariantKeys = ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'] as const
+export const buttonVariantKeys = [
+  'default',
+  'destructive',
+  'outline',
+  'secondary',
+  'ghost',
+  'link',
+] as const
 
 export const buttonVariants: Record<ButtonVariant, string> = {
   default: 'bg-primary text-primary-foreground hover:bg-primary/90',

@@ -5,7 +5,7 @@ import type { Item } from '../catalog/types'
 import { arrowRightIcon } from '../site-icons'
 import type { Message } from '../message'
 import type { Model } from '../model'
-import { installLine } from './chrome'
+import { installTabs } from './chrome'
 
 const card = (item: Item, h: HtmlBuilder<Message>): Html =>
   h.a(
@@ -75,10 +75,7 @@ export const homeView = (model: Model, h: HtmlBuilder<Message>): Html =>
                       ' accessible components and blocks — built with @foldkit/ui and Tailwind CSS v4. Add one command, then own the source.',
                     ],
                   ),
-                  h.div(
-                    [h.Class('mx-auto mt-10 max-w-xl')],
-                    [installLine(h, model, 'npx shadcn@latest add @foldcn/foldcn')],
-                  ),
+                  h.div([h.Class('mx-auto mt-10 max-w-xl')], [installTabs(h, model, 'foldcn')]),
                   h.p(
                     [h.Class('mt-4 text-sm text-muted-foreground')],
                     [

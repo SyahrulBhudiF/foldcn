@@ -6,7 +6,7 @@ import type { Item, MaybeTheme } from '../catalog/types'
 import { GotDemoMessage, type Message } from '../message'
 import type { Model } from '../model'
 import { checkIcon } from '../site-icons'
-import { codeBlock, installLine } from './chrome'
+import { codeBlock, installTabs } from './chrome'
 import { notFoundView } from './home'
 
 /** Tokens worth rendering as swatches (skip non-color tokens like fonts). */
@@ -17,10 +17,7 @@ const swatch = (h: HtmlBuilder<Message>, token: string, value: string): Html =>
     [h.Class('flex flex-col gap-2')],
     [
       h.div(
-        [
-          h.Class('h-12 w-full rounded-md border border-border'),
-          h.Style({ background: value }),
-        ],
+        [h.Class('h-12 w-full rounded-md border border-border'), h.Style({ background: value })],
         [],
       ),
       h.code([h.Class('truncate font-mono text-[11px] text-muted-foreground')], [token]),
@@ -177,7 +174,7 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                 [h.Class('mt-2 mb-3 text-sm text-muted-foreground')],
                 ['Add this component to your project:'],
               ),
-              installLine(h, model, item.install),
+              installTabs(h, model, item.name),
             ],
           ),
 

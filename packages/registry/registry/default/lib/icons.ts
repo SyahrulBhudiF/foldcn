@@ -35,17 +35,20 @@ const svgElement =
     }
   }
 
-const svgAttributes = <M>(className: string, h: HtmlBuilder<M>): ReadonlyArray<Attribute<M> | ChildAttribute> => [
-    h.AriaHidden(true),
-    h.Class(className),
-    h.Xmlns('http://www.w3.org/2000/svg'),
-    h.Fill('none'),
-    h.ViewBox('0 0 24 24'),
-    h.StrokeWidth('2'),
-    h.Stroke('currentColor'),
-    h.StrokeLinecap('round'),
-    h.StrokeLinejoin('round'),
-  ]
+const svgAttributes = <M>(
+  className: string,
+  h: HtmlBuilder<M>,
+): ReadonlyArray<Attribute<M> | ChildAttribute> => [
+  h.AriaHidden(true),
+  h.Class(className),
+  h.Xmlns('http://www.w3.org/2000/svg'),
+  h.Fill('none'),
+  h.ViewBox('0 0 24 24'),
+  h.StrokeWidth('2'),
+  h.Stroke('currentColor'),
+  h.StrokeLinecap('round'),
+  h.StrokeLinejoin('round'),
+]
 
 const nodeToAttributes = <M>(
   attrs: SVGProps,

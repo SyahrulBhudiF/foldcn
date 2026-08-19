@@ -1,13 +1,15 @@
 import { Option, pipe } from 'effect'
 import { Command } from 'foldkit'
 import type { Url } from 'foldkit'
+import * as Tabs from '@foldkit/ui/tabs'
 
 import * as Demo from './demo'
 import { parseRoute } from './route'
-import { GotDemoMessage, type Message } from './message'
-import { Model, ResolvedTheme, type ThemePreference as TP } from './model'
+import { GotDemoMessage, GotInstallTabsMessage, type Message } from './message'
+import { Model, type PackageManager, ResolvedTheme, type ThemePreference as TP } from './model'
 
 export const THEME_STORAGE_KEY = 'foldcn-theme'
+export const PACKAGE_MANAGER_STORAGE_KEY = 'foldcn-package-manager'
 
 export type InitReturn = readonly [Model, ReadonlyArray<Command.Command<Message>>]
 
@@ -21,6 +23,23 @@ const readStoredPreference = (): Option.Option<TP> =>
         Option.some(localStorage.getItem(THEME_STORAGE_KEY)),
         Option.flatMap((raw) => (raw === null ? Option.none() : Option.some(fromStored(raw)))),
         Option.flatMap((parsed) => (parsed === undefined ? Option.none() : Option.some(parsed))),
+      )
+
+const fromStoredPackageManager = (raw: string): PackageManager | undefined =>
+  raw === 'npm' ? 'npm' : raw === 'pnpm' ? 'pnpm' : raw === 'bun' ? 'bun' : undefined
+
+const readStoredPackageManager = (): PackageManager =>
+  typeof localStorage === 'undefined'
+    ? 'npm'
+    : pipe(
+        Option.some(localStorage.getItem(PACKAGE_MANAGER_STORAGE_KEY)),
+        Option.flatMap((raw) =>
+          raw === null ? Option.none() : Option.some(fromStoredPackageManager(raw)),
+        ),
+        Option.match({
+          onNone: () => 'npm' as PackageManager,
+          onSome: (parsed) => (parsed === undefined ? 'npm' : parsed),
+        }),
       )
 
 const systemPrefersDark = (): ResolvedTheme =>
@@ -42,6 +61,7 @@ const initialResolved = (maybePreference: Option.Option<TP>): ResolvedTheme =>
 export const init = (url: Url.Url): InitReturn => {
   const maybePreference = readStoredPreference()
   const [demo, demoCommands] = Demo.init()
+  const installTabs = Tabs.init({ id: 'install-tabs' })
 
   return [
     {
@@ -50,6 +70,8 @@ export const init = (url: Url.Url): InitReturn => {
       resolvedTheme: initialResolved(maybePreference),
       maybeCopiedValue: Option.none(),
       demo,
+      installTabs,
+      selectedPackageManager: readStoredPackageManager(),
     },
     Command.mapMessages(demoCommands, (message) => GotDemoMessage({ message })),
   ]

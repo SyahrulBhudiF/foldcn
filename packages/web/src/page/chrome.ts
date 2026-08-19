@@ -1,13 +1,20 @@
 import { clsx } from 'clsx'
 import { Option } from 'effect'
 import type { Html, HtmlBuilder } from 'foldkit/html'
+import * as Tabs from '@foldkit/ui/tabs'
 
 import { codeBlock as registryCodeBlock } from '@foldcn/registry/src/lib/code-block'
-import { button } from '@foldcn/registry/src/ui/button'
+import { copyButton as registryCopyButton } from '@foldcn/registry/src/lib/copy-button'
+import { styledViewInputs as tabsStyledViewInputs } from '@foldcn/registry/src/ui/tabs'
 
-import { ClickedCopy, SelectedThemePreference, type Message } from '../message'
-import type { Model, ThemePreference } from '../model'
-import { arrowRightIcon, checkIcon, computerIcon, copyIcon, moonIcon, sunIcon } from '../site-icons'
+import {
+  ClickedCopy,
+  GotInstallTabsMessage,
+  SelectedThemePreference,
+  type Message,
+} from '../message'
+import type { Model, PackageManager, ThemePreference } from '../model'
+import { arrowRightIcon, computerIcon, moonIcon, sunIcon } from '../site-icons'
 import { componentCount } from '../catalog'
 
 // --- theme selector ---
@@ -138,14 +145,12 @@ export const copyButton = (
   value: string,
   maybeCopied: Option.Option<string>,
 ): Html =>
-  button<Message>(
+  registryCopyButton<Message>(
     {
-      variant: 'ghost',
-      size: 'icon',
-      className: 'size-8',
-      onClick: ClickedCopy({ value }),
+      value,
+      onCopy: ClickedCopy({ value }),
+      isCopied: Option.exists(maybeCopied, (v) => v === value),
     },
-    Option.exists(maybeCopied, (v) => v === value) ? checkIcon(h, 'size-4') : copyIcon(h, 'size-4'),
     h,
   )
 
@@ -191,3 +196,50 @@ export const sectionLink = (h: HtmlBuilder<Message>, href: string, label: string
     ],
     [label, arrowRightIcon(h, 'size-3.5')],
   )
+
+// --- install tabs ---
+
+const PackageManagerTabs = Tabs.create<PackageManager>()
+
+const PACKAGE_MANAGER_COMMANDS: Record<PackageManager, string> = {
+  npm: 'npx',
+  pnpm: 'pnpm dlx',
+  bun: 'bunx',
+}
+
+const installCommand = (packageManager: PackageManager, componentName: string): string =>
+  `${PACKAGE_MANAGER_COMMANDS[packageManager]} shadcn@latest add @foldcn/${componentName}`
+
+export const installTabs = (h: HtmlBuilder<Message>, model: Model, componentName: string): Html =>
+  h.submodel({
+    slotId: 'install-tabs',
+    model: model.installTabs,
+    view: PackageManagerTabs.view,
+    viewInputs: tabsStyledViewInputs<Message, PackageManager>(
+      {
+        tabs: ['npm', 'pnpm', 'bun'],
+        selectedValue: model.selectedPackageManager,
+        ariaLabel: 'Package manager',
+        variant: 'line',
+        panel: (tab, _render, h) => {
+          const command = installCommand(tab, componentName)
+          return h.div(
+            [
+              h.Class(
+                'flex w-full items-center justify-between gap-3 rounded-md border border-border bg-muted/40 px-3 py-2',
+              ),
+            ],
+            [
+              h.code(
+                [h.Class('select-all overflow-x-auto whitespace-nowrap font-mono text-[13px]')],
+                [command],
+              ),
+              copyButton(h, command, model.maybeCopiedValue),
+            ],
+          )
+        },
+      },
+      h,
+    ),
+    toParentMessage: (message) => GotInstallTabsMessage({ message }),
+  })

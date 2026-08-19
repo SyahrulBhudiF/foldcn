@@ -2,21 +2,27 @@ import { Effect, Match as M, Option, Schema as S } from 'effect'
 import { Command, Url } from 'foldkit'
 import { load, pushUrl } from 'foldkit/navigation'
 import { evo } from 'foldkit/struct'
+import * as Tabs from '@foldkit/ui/tabs'
 
 import * as Demo from './demo'
 import { parseRoute } from './route'
-import { THEME_STORAGE_KEY } from './init'
+import { PACKAGE_MANAGER_STORAGE_KEY, THEME_STORAGE_KEY } from './init'
 import {
   CompletedApplyTheme,
   CompletedCopy,
   CompletedLoadExternal,
   CompletedNavigateInternal,
+  CompletedSavePackageManager,
   CompletedSaveThemePreference,
   CompletedScrollToTop,
   GotDemoMessage,
+  GotInstallTabsMessage,
   type Message,
 } from './message'
-import { Model, ResolvedTheme, ThemePreference } from './model'
+import { Model, PackageManager, ResolvedTheme, ThemePreference } from './model'
+
+// Create a tabs bundle for package manager selection
+const PackageManagerTabs = Tabs.create<PackageManager>()
 
 type UpdateReturn = readonly [Model, ReadonlyArray<Command.Command<Message>>]
 const withUpdateReturn = M.withReturnType<UpdateReturn>()
@@ -94,6 +100,18 @@ const LoadExternal = Command.define('LoadExternal', {
   execute: ({ href }) => load(href).pipe(Effect.as(CompletedLoadExternal())),
 })
 
+const SavePackageManager = Command.define('SavePackageManager', {
+  args: { packageManager: PackageManager },
+  messages: [CompletedSavePackageManager],
+  execute: ({ packageManager }) =>
+    Effect.sync(() => {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem(PACKAGE_MANAGER_STORAGE_KEY, packageManager)
+      }
+      return CompletedSavePackageManager()
+    }),
+})
+
 const systemPrefersDark = (): ResolvedTheme =>
   typeof window !== 'undefined' &&
   typeof window.matchMedia === 'function' &&
@@ -112,6 +130,30 @@ const foldDemo = (model: Model, message: Demo.DemoMessage): UpdateReturn => {
   ]
 }
 
+const foldInstallTabs = (model: Model, message: Tabs.Message): UpdateReturn => {
+  const [next, commands, maybeOutMessage] = PackageManagerTabs.update(model.installTabs, message)
+  const mappedCommands = Command.mapMessages(commands, (m) => GotInstallTabsMessage({ message: m }))
+
+  return Option.match(maybeOutMessage, {
+    onNone: () => [evo(model, { installTabs: () => next }), mappedCommands],
+    onSome: (outMessage) => {
+      switch (outMessage._tag) {
+        case 'Selected':
+          return [
+            evo(model, {
+              installTabs: () => next,
+              selectedPackageManager: () => outMessage.value as PackageManager,
+            }),
+            [
+              ...mappedCommands,
+              SavePackageManager({ packageManager: outMessage.value as PackageManager }),
+            ],
+          ]
+      }
+    },
+  })
+}
+
 export const update = (model: Model, message: Message): UpdateReturn =>
   M.value(message).pipe(
     withUpdateReturn,
@@ -126,6 +168,7 @@ export const update = (model: Model, message: Message): UpdateReturn =>
         ),
       ChangedUrl: ({ url }) => [evo(model, { route: () => parseRoute(url) }), [ScrollToTop()]],
       GotDemoMessage: ({ message }) => foldDemo(model, message),
+      GotInstallTabsMessage: ({ message }) => foldInstallTabs(model, message),
 
       SelectedThemePreference: ({ preference }) => [
         evo(model, {
@@ -143,12 +186,14 @@ export const update = (model: Model, message: Message): UpdateReturn =>
           : [model, []],
       CompletedApplyTheme: () => [model, []],
       CompletedSaveThemePreference: () => [model, []],
+      CompletedSavePackageManager: () => [model, []],
 
-      ClickedCopy: ({ value }) => [
-        evo(model, { maybeCopiedValue: () => Option.some(value) }),
-        [CopyText({ value })],
-      ],
-      CompletedCopy: () => [model, []],
+      ClickedCopy: ({ value }) =>
+        // Guard: ignore clicks while already in the copied state (prevents spam).
+        Option.isSome(model.maybeCopiedValue)
+          ? [model, []]
+          : [evo(model, { maybeCopiedValue: () => Option.some(value) }), [CopyText({ value })]],
+      CompletedCopy: () => [evo(model, { maybeCopiedValue: () => Option.none() }), []],
       CompletedNavigateInternal: () => [model, []],
       CompletedLoadExternal: () => [model, []],
       CompletedScrollToTop: () => [model, []],

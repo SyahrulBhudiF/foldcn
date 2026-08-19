@@ -5,7 +5,6 @@ import type { ChildAttribute, Html, HtmlBuilder } from 'foldkit/html'
 
 import { chevronDownIcon, chevronLeftIcon, chevronRightIcon } from '@/lib/icons'
 
-
 // Re-export the @foldkit/ui Calendar submodel surface.
 
 export const init = FoldkitCalendar.init

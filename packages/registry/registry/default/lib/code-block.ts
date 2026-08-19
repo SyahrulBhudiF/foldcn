@@ -1,7 +1,8 @@
 import { highlight } from '@tanstack/highlight'
-import type { Attribute, Html, HtmlBuilder } from 'foldkit/html'
+import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { cn } from '@/lib/utils'
+import { copyButton } from '@/lib/copy-button'
 
 // ---------------------------------------------------------------------------
 // Styled class constants — override these to re-skin the code block.
@@ -18,6 +19,8 @@ export const codeBlockMetaClass = 'flex items-center gap-2'
 
 export const codeBlockLineCountClass = 'text-xs text-muted-foreground'
 
+// codeBlockCopyButtonClass is no longer needed — use copyButton from '@/lib/copy-button' instead.
+// Kept for backwards compatibility if imported elsewhere.
 export const codeBlockCopyButtonClass =
   'inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer'
 
@@ -90,9 +93,6 @@ export const codeBlock = <M>(config: CodeBlockConfig<M>, h: HtmlBuilder<M>): Htm
   const result = highlight(config.code, { lang })
   const lineCount = config.code.split('\n').length
 
-  const copyAttrs: ReadonlyArray<Attribute<M>> =
-    config.onCopy !== undefined ? [h.OnClick(config.onCopy)] : []
-
   // TanStack Highlight emits <pre class="th-code th-code--{lang}" data-language="{lang}">
   // with inner <span class="th-token th-{token}"> for each tokenized range.
   // The theme CSS (createThemeCss) maps th-* classes to CSS custom properties.
@@ -108,18 +108,14 @@ export const codeBlock = <M>(config: CodeBlockConfig<M>, h: HtmlBuilder<M>): Htm
             [h.Class(codeBlockMetaClass)],
             [
               h.span([h.Class(codeBlockLineCountClass)], [`${lineCount} lines`]),
-              h.button(
-                [
-                  h.Class(codeBlockCopyButtonClass),
-                  h.OnCopyText(config.code),
-                  h.AriaLabel('Copy source code'),
-                  ...copyAttrs,
-                ],
-                [
-                  config.isCopied
-                    ? h.span([h.Class('size-4')], ['✓'])
-                    : h.span([h.Class('size-4')], ['⧉']),
-                ],
+              copyButton(
+                {
+                  value: config.code,
+                  onCopy: config.onCopy,
+                  isCopied: config.isCopied,
+                  ariaLabel: 'Copy source code',
+                },
+                h,
               ),
             ],
           ),
