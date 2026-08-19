@@ -3,7 +3,8 @@ import { Calendar as FoldkitCalendar } from '@foldkit/ui'
 import type { CalendarDate } from 'foldkit/calendar'
 import type { ChildAttribute, Html, HtmlBuilder } from 'foldkit/html'
 
-import { chevronDownIcon, chevronLeftIcon, chevronRightIcon } from '@/lib/icons'
+import { icon } from '@/lib/icons'
+import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide'
 
 // Re-export the @foldkit/ui Calendar submodel surface.
 
@@ -68,7 +69,7 @@ const headingButton = <M>(
 ): Html =>
   h.button(
     [h.Id(heading.id), ...attributes, h.Class(calendarHeadingButtonClass)],
-    [heading.text, chevronDownIcon(h, 'size-3')],
+    [heading.text, icon(h, ChevronDown, 'size-3')],
   )
 
 const weekRow = <M>(week: Week, h: HtmlBuilder<M>): Html =>
@@ -89,9 +90,9 @@ const daysView = <M>(days: DaysModeAttributes, h: HtmlBuilder<M>): Html =>
       h.div(
         [h.Class(calendarHeaderClass)],
         [
-          navButton(days.previousMonthButton, chevronLeftIcon(h, 'size-5'), h),
+          navButton(days.previousMonthButton, icon(h, ChevronLeft, 'size-5'), h),
           headingButton(days.heading, days.headingButton, h),
-          navButton(days.nextMonthButton, chevronRightIcon(h, 'size-5'), h),
+          navButton(days.nextMonthButton, icon(h, ChevronRight, 'size-5'), h),
         ],
       ),
       h.div(
@@ -141,9 +142,9 @@ const yearsView = <M>(years: YearsModeAttributes, h: HtmlBuilder<M>): Html =>
       h.div(
         [h.Class(calendarHeaderClass)],
         [
-          navButton(years.previousPageButton, chevronLeftIcon(h, 'size-5'), h),
+          navButton(years.previousPageButton, icon(h, ChevronLeft, 'size-5'), h),
           h.h2([h.Id(years.heading.id), h.Class(calendarHeadingTextClass)], [years.heading.text]),
-          navButton(years.nextPageButton, chevronRightIcon(h, 'size-5'), h),
+          navButton(years.nextPageButton, icon(h, ChevronRight, 'size-5'), h),
         ],
       ),
       h.div(

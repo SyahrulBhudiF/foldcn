@@ -1,52 +1,14 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import * as Demo from '../demo'
-import type { DemoItemName } from '../demo/view'
+import { type DemoItemName, hasDemo } from '../demo/view'
 import { itemByName } from '../catalog'
-import type { Item, MaybeTheme } from '../catalog/types'
+import type { Item } from '../catalog/types'
 import { GotDemoMessage, type Message } from '../message'
 import type { Model } from '../model'
-import { checkIcon } from '../site-icons'
+
 import { codeBlock, installTabs } from './chrome'
 import { notFoundView } from './home'
-
-/** Tokens worth rendering as swatches (skip non-color tokens like fonts). */
-const SWATCH_EXCLUDE = new Set(['font-sans', 'font-mono'])
-
-const swatch = (h: HtmlBuilder<Message>, token: string, value: string): Html =>
-  h.div(
-    [h.Class('flex flex-col gap-2')],
-    [
-      h.div(
-        [h.Class('h-12 w-full rounded-md border border-border'), h.Style({ background: value })],
-        [],
-      ),
-      h.code([h.Class('truncate font-mono text-[11px] text-muted-foreground')], [token]),
-      h.code([h.Class('truncate font-mono text-[11px] text-muted-foreground')], [value]),
-    ],
-  )
-
-const themeSwatches = (item: Item, h: HtmlBuilder<Message>): Html => {
-  const theme = item.maybeTheme
-  const renderTokens = (tokens: MaybeTheme['light'], label: string): Html =>
-    h.div(
-      [h.Class('flex-1')],
-      [
-        h.h3([h.Class('mb-4 text-sm font-semibold')], [label]),
-        h.div(
-          [h.Class('grid grid-cols-2 gap-3 sm:grid-cols-3')],
-          Object.entries(tokens ?? {})
-            .filter(([token]) => !SWATCH_EXCLUDE.has(token))
-            .map(([token, value]) => swatch(h, token, value)),
-        ),
-      ],
-    )
-
-  return h.div(
-    [h.Class('grid gap-8 lg:grid-cols-2')],
-    [renderTokens(theme?.light, 'Light'), renderTokens(theme?.dark, 'Dark')],
-  )
-}
 
 const categoryLabel = (category: Item['category']): string =>
   ({ Base: 'Base', Lib: 'Lib', Components: 'Components', Blocks: 'Blocks' })[category]
@@ -62,16 +24,13 @@ const dependencyChips = (
     ),
   )
 
-type PreviewKind = 'demo' | 'swatches' | 'none'
 
-const previewKindOf = (name: string): PreviewKind =>
-  name === 'foldcn' ? 'swatches' : name === 'utils' ? 'none' : 'demo'
 
 export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): Html => {
   const item = itemByName[name]
   if (item === undefined) return notFoundView(h)
 
-  const previewKind = previewKindOf(item.name)
+  const demoName: DemoItemName | undefined = hasDemo(item.name) ? item.name : undefined
 
   return h.div(
     [h.Class('flex-1')],
@@ -125,7 +84,7 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
             : []),
 
           // preview
-          ...(previewKind !== 'none'
+          ...(demoName !== undefined
             ? [
                 h.div(
                   [h.Class('mt-10 overflow-hidden rounded-xl border border-border bg-background')],
@@ -140,26 +99,21 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                         h.span([h.Class('text-xs font-medium text-muted-foreground')], ['Preview']),
                         h.span(
                           [h.Class('flex items-center gap-1.5 text-xs text-muted-foreground')],
-                          [
-                            checkIcon(h, 'size-3.5'),
-                            previewKind === 'swatches' ? 'Theme tokens' : 'Interactive demo',
-                          ],
+                          ['Interactive demo'],
                         ),
                       ],
                     ),
                     h.div(
                       [h.Class('flex min-h-[260px] items-center justify-center p-6')],
-                      previewKind === 'swatches'
-                        ? [themeSwatches(item, h)]
-                        : [
-                            h.submodel({
-                              slotId: 'demo-harness',
-                              model: model.demo,
-                              view: Demo.view,
-                              viewInputs: { itemName: item.name as DemoItemName },
-                              toParentMessage: (message) => GotDemoMessage({ message }),
-                            }),
-                          ],
+                      [
+                        h.submodel({
+                          slotId: 'demo-harness',
+                          model: model.demo,
+                          view: Demo.view,
+                          viewInputs: { itemName: demoName! },
+                          toParentMessage: (message) => GotDemoMessage({ message }),
+                        }),
+                      ],
                     ),
                   ],
                 ),

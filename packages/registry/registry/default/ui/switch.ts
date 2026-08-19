@@ -3,14 +3,26 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { cn } from '@/lib/utils'
 
-export const switchClass =
-  'peer group/switch inline-flex shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-[1.15rem] data-[size=default]:w-8 data-[size=sm]:h-3.5 data-[size=sm]:w-6 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80'
+export const switchSizeKeys = ['default', 'sm'] as const
+export type SwitchSize = (typeof switchSizeKeys)[number]
+
+export const switchSizes: Record<SwitchSize, string> = {
+  default: 'h-5 w-9',
+  sm: 'h-3.5 w-6',
+}
+
+const switchBase =
+  'peer group/switch inline-flex shrink-0 cursor-pointer items-center rounded-full border border-transparent bg-input shadow-xs transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 data-[checked]:bg-primary dark:bg-input/80'
+
+export const switchClass = switchBase
 
 export const switchThumbClass =
-  'pointer-events-none block rounded-full bg-background ring-0 transition-transform group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3 data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0 dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground'
+  'pointer-events-none block rounded-full bg-background ring-0 transition-transform dark:group-data-[checked]/switch:bg-primary-foreground dark:group-data-[unchecked]/switch:bg-foreground'
 
-const switchThumbOn = 'translate-x-4'
-const switchThumbOff = 'translate-x-0'
+export const switchThumbSizes: Record<SwitchSize, string> = {
+  default: 'size-4 group-data-[checked]/switch:translate-x-4',
+  sm: 'size-3 group-data-[checked]/switch:translate-x-3',
+}
 
 export const switchLabelClass =
   'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
@@ -31,6 +43,7 @@ export type SwitchConfig<M> = Readonly<{
   isReadOnly?: boolean
   name?: string
   value?: string
+  size?: SwitchSize
   className?: string
   thumbClass?: string
   labelClass?: string
@@ -55,13 +68,17 @@ export const switch_ = <M>(config: SwitchConfig<M>, h: HtmlBuilder<M>): Html =>
           [h.Class(cn(switchWrapperClass, config.wrapperClass))],
           [
             h.button(
-              [...attributes.button, h.Class(cn(switchClass, config.className))],
+              [
+                ...attributes.button,
+                h.Class(cn(switchClass, switchSizes[config.size ?? 'default'], config.className)),
+                h.DataAttribute('size', config.size ?? 'default'),
+              ],
               [
                 h.span([
                   h.Class(
                     cn(
                       switchThumbClass,
-                      config.isChecked ? switchThumbOn : switchThumbOff,
+                      switchThumbSizes[config.size ?? 'default'],
                       config.thumbClass,
                     ),
                   ),

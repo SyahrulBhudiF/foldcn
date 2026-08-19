@@ -12,6 +12,7 @@ import * as Listbox from '@foldcn/registry/src/ui/listbox'
 import * as Menu from '@foldcn/registry/src/ui/menu'
 import * as Popover from '@foldcn/registry/src/ui/popover'
 import * as RadioGroup from '@foldcn/registry/src/ui/radio-group'
+import * as Select from '@foldcn/registry/src/ui/select'
 import * as Slider from '@foldcn/registry/src/ui/slider'
 import * as Tabs from '@foldcn/registry/src/ui/tabs'
 import * as Tooltip from '@foldcn/registry/src/ui/tooltip'
@@ -63,6 +64,8 @@ export const init = (): [Model, ReadonlyArray<Command.Command<Message>>] => [
     menu: Menu.init({ id: 'menu-demo' }),
     listbox: Listbox.init({ id: 'listbox-demo' }),
     maybeListboxValue: Option.none(),
+    select: Select.init({ id: 'select-language' }),
+    maybeSelectValue: Option.some('en'),
     combobox: Combobox.init({ id: 'combobox-demo' }),
     maybeComboboxValue: Option.none(),
     tabs: Tabs.init({ id: 'tabs-demo' }),

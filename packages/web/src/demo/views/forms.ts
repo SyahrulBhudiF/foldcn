@@ -2,20 +2,23 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { checkbox } from '@foldcn/registry/src/ui/checkbox'
 import { fieldset } from '@foldcn/registry/src/ui/fieldset'
+import { icon } from '@foldcn/registry/src/lib/icons'
 import {
-  chevronDownIcon,
-  chevronLeftIcon,
-  chevronRightIcon,
-  checkIcon,
-  minusIcon,
-  xIcon,
-} from '@foldcn/registry/src/lib/icons'
+  Check,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Minus,
+  X,
+} from 'lucide'
 import { input } from '@foldcn/registry/src/ui/input'
-import { select } from '@foldcn/registry/src/ui/select'
+import * as select from '@foldcn/registry/src/ui/select'
 import { switch_ } from '@foldcn/registry/src/ui/switch'
+import { LanguageSelect } from '../bundles'
 import { textarea } from '@foldcn/registry/src/ui/textarea'
 
 import {
+  GotSelectMessage,
   ToggledCheckbox,
   ToggledSwitchEmail,
   ToggledSwitchTfa,
@@ -80,16 +83,27 @@ const LANGUAGE_OPTIONS = [
 ] as const
 
 export const selectView = (model: Model, h: HtmlBuilder<Message>): Html =>
-  select<Message>(
-    {
-      id: 'select-language',
-      label: 'Language',
-      value: model.selectValue,
-      onChange: (value) => UpdatedSelectValue({ value }),
-      maybeDescription: 'Choose your interface language.',
-      options: LANGUAGE_OPTIONS.map(([value, label]) => h.option([h.Value(value)], [label])),
-    },
-    h,
+  h.div(
+    [h.Class(select.selectWrapperClass)],
+    [
+      select.selectLabel('Language', h),
+      h.submodel({
+        slotId: model.select.id,
+        model: model.select,
+        view: LanguageSelect.view,
+        viewInputs: select.styledViewInputs<Message, { value: string; label: string }, string>({
+          options: LANGUAGE_OPTIONS.map(([value, label]) => ({ value, label })),
+          maybeSelectedValue: model.maybeSelectValue,
+          itemToValue: (item) => item.value,
+          itemToLabel: (item) => item.label,
+          label: 'Language',
+          description: 'Choose your interface language.',
+          isInvalid: false,
+        }, h),
+        toParentMessage: (message) => GotSelectMessage({ message }),
+      }),
+      select.selectDescription('Choose your interface language.', h)
+    ],
   )
 
 export const checkboxView = (model: Model, h: HtmlBuilder<Message>): Html =>
@@ -163,7 +177,7 @@ export const fieldsetView = (model: Model, h: HtmlBuilder<Message>): Html =>
           },
           h,
         ),
-        select<Message>(
+        select.select<Message>(
           {
             id: 'fieldset-country',
             label: 'Country',
@@ -182,12 +196,12 @@ export const fieldsetView = (model: Model, h: HtmlBuilder<Message>): Html =>
 // `icon` helper.
 const ICON_ROWS: ReadonlyArray<ReadonlyArray<[string, (h: HtmlBuilder<Message>) => Html]>> = [
   [
-    ['check', (h) => checkIcon(h)],
-    ['chevron-down', (h) => chevronDownIcon(h)],
-    ['chevron-left', (h) => chevronLeftIcon(h)],
-    ['chevron-right', (h) => chevronRightIcon(h)],
-    ['minus', (h) => minusIcon(h)],
-    ['x', (h) => xIcon(h)],
+    ['check', (h) => icon(h, Check)],
+    ['chevron-down', (h) => icon(h, ChevronDown)],
+    ['chevron-left', (h) => icon(h, ChevronLeft)],
+    ['chevron-right', (h) => icon(h, ChevronRight)],
+    ['minus', (h) => icon(h, Minus)],
+    ['x', (h) => icon(h, X)],
   ],
 ]
 
@@ -198,7 +212,7 @@ export const iconsView = (model: Model, h: HtmlBuilder<Message>): Html =>
       h.p(
         [h.Class('mb-4 text-sm text-muted-foreground')],
         [
-          'Lucide icons rendered as Foldkit virtual DOM via the h builder. Import `icon(node, className, h)` or one of the named helpers.',
+          'Lucide icons rendered as Foldkit virtual DOM via the h builder. Import `icon(h, node, className?)` from `@foldcn/registry/src/lib/icons`.',
         ],
       ),
       ...ICON_ROWS.map((row) =>

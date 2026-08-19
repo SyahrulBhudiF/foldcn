@@ -3,7 +3,8 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 type Child = Html | string
 
-import { chevronDownIcon } from '@/lib/icons'
+import { icon } from '@/lib/icons'
+import { ChevronDown } from 'lucide'
 import { cn } from '@/lib/utils'
 
 export const disclosureButtonClass =
@@ -66,7 +67,7 @@ export const disclosure = <M>(config: DisclosureConfig<M>, h: HtmlBuilder<M>): H
                           cn(disclosureChevronClass, config.isOpen ? 'rotate-180' : 'rotate-0'),
                         ),
                       ],
-                      [chevronDownIcon(h)],
+                      [icon(h, ChevronDown)],
                     ),
                   ],
                 ),

@@ -2,7 +2,8 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { categoryGroups, componentCount } from '../catalog'
 import type { Item } from '../catalog/types'
-import { arrowRightIcon } from '../site-icons'
+import { icon } from '@foldcn/registry/src/lib/icons'
+import { ArrowRight } from 'lucide'
 import type { Message } from '../message'
 import type { Model } from '../model'
 import { installTabs } from './chrome'
@@ -23,8 +24,9 @@ const card = (item: Item, h: HtmlBuilder<Message>): Html =>
             [h.Class('rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground')],
             [item.type],
           ),
-          arrowRightIcon(
+          icon(
             h,
+            ArrowRight,
             'size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-foreground',
           ),
         ],
