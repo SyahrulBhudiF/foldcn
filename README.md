@@ -1,5 +1,8 @@
 # foldcn
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![GitHub](https://img.shields.io/github/stars/elianiva/foldcn)](https://github.com/elianiva/foldcn)
+
 A **shadcn-style component registry for [Foldkit](https://foldkit.dev)**. Copy-paste styled components built on [`@foldkit/ui`](https://foldkit.dev/ui/overview), themed with Tailwind CSS variables — the same distribution model as shadcn/ui, for the Elm-architecture world of Foldkit.
 
 - **30 registry items** — every `@foldkit/ui` component, styled, plus a base style, utilities, icons and composed blocks.
@@ -11,7 +14,7 @@ A **shadcn-style component registry for [Foldkit](https://foldkit.dev)**. Copy-p
 Requirements: a Foldkit project with Tailwind CSS v4. Start with the base style, which installs the core dependencies (`foldkit`, `effect`, `@foldkit/ui`, `clsx`, `tailwind-merge`, `lucide`, `tw-animate-css`) and writes the theme variables into your CSS:
 
 ```bash
-npx shadcn@latest registry add @foldcn=https://foldcn.dev/r/{name}.json
+npx shadcn@latest registry add @foldcn=https://foldcn.elianiva.com/r/{name}.json
 npx shadcn@latest add @foldcn/foldcn
 ```
 
@@ -27,7 +30,7 @@ Or add the namespace manually to your `components.json`:
     "hooks": "@/hooks"
   },
   "registries": {
-    "@foldcn": "https://foldcn.dev/r/{name}.json"
+    "@foldcn": "https://foldcn.elianiva.com/r/{name}.json"
   }
 }
 ```
@@ -38,34 +41,39 @@ Or add the namespace manually to your `components.json`:
 npx shadcn@latest add @foldcn/button @foldcn/input @foldcn/dialog
 ```
 
-| Category | Items |
-| --- | --- |
-| **Base** | `@foldcn/foldcn` (style) |
-| **Lib** | `@foldcn/utils` (cn), `@foldcn/icons` (lucide → h.svg) |
-| **Helpers** | `button`, `input`, `textarea`, `select`, `checkbox`, `switch`, `fieldset`, `disclosure`, `nav`, `card` |
+| Category      | Items                                                                                                                                                                                         |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Base**      | `@foldcn/foldcn` (style)                                                                                                                                                                      |
+| **Lib**       | `@foldcn/utils` (cn), `@foldcn/icons` (lucide → h.svg)                                                                                                                                        |
+| **Helpers**   | `button`, `input`, `textarea`, `select`, `checkbox`, `switch`, `fieldset`, `disclosure`, `nav`, `card`                                                                                        |
 | **Submodels** | `dialog`, `popover`, `tooltip`, `menu`, `listbox`, `combobox`, `tabs`, `radio-group`, `slider`, `calendar`, `date-picker`, `toast`, `animation`, `file-drop`, `virtual-list`, `drag-and-drop` |
-| **Blocks** | `login-form`, `settings-page`, `data-table` |
+| **Blocks**    | `login-form`, `settings-page`, `data-table`                                                                                                                                                   |
 
 ## Usage
 
 ### Stateless helpers
 
 ```ts
-import { Submodel } from "foldkit"
-import { button } from "@/components/ui/button"
-import { input } from "@/components/ui/input"
+import { Submodel } from 'foldkit'
+import { button } from '@/components/ui/button'
+import { input } from '@/components/ui/input'
 
-export const view = Submodel.defineView<Model, Message>(
-  (model, h) =>
-    h.div([], [
-      input<Message>({
-        id: "email",
-        label: "Email",
-        value: model.email,
-        onInput: value => UpdatedEmail({ value }),
-      }, h),
-      button<Message>({ onClick: Submitted() }, "Submit", h),
-    ]),
+export const view = Submodel.defineView<Model, Message>((model, h) =>
+  h.div(
+    [],
+    [
+      input<Message>(
+        {
+          id: 'email',
+          label: 'Email',
+          value: model.email,
+          onInput: (value) => UpdatedEmail({ value }),
+        },
+        h,
+      ),
+      button<Message>({ onClick: Submitted() }, 'Submit', h),
+    ],
+  ),
 )
 ```
 
@@ -120,12 +128,12 @@ h.submodel({
     items: cities,
     maybeSelectedValue: model.maybeCity,
     itemToConfig: (city, { isSelected }) => ({
-      className: isSelected ? "font-semibold" : "",
+      className: isSelected ? 'font-semibold' : '',
       content: h.span([], [city]),
     }),
-    buttonContent: h.span([], ["Select a city"]),
+    buttonContent: h.span([], ['Select a city']),
   }),
-  toParentMessage: message => GotListboxMessage({ message }),
+  toParentMessage: (message) => GotListboxMessage({ message }),
 })
 ```
 
@@ -151,11 +159,19 @@ The base style installs the full shadcn token set (`background`, `foreground`, `
 ## Development
 
 ```bash
-npm install
-npm run typecheck   # typecheck the registry source
-npx shadcn@latest build    # generate public/r/*.json
+git clone git@github.com:elianiva/foldcn.git
+cd foldcn
+pnpm install
+pnpm dev            # start the showcase site
+pnpm typecheck      # typecheck all packages
+pnpm test           # run tests
+pnpm validate       # validate the registry
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## License
 
-MIT
+[MIT](LICENSE)

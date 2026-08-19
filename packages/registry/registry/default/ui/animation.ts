@@ -1,7 +1,7 @@
-import { Animation as FoldkitAnimation } from "@foldkit/ui"
-import type { Html } from "foldkit/html"
+import { Animation as FoldkitAnimation } from '@foldkit/ui'
+import type { Html } from 'foldkit/html'
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils'
 
 // Re-export the @foldkit/ui Animation submodel surface.
 
@@ -19,7 +19,7 @@ export type InitConfig = FoldkitAnimation.InitConfig
 export type ViewInputs = FoldkitAnimation.ViewInputs
 
 export const animationContentClass =
-  "rounded-lg border border-border bg-card p-4 text-card-foreground shadow-sm transition duration-200 ease-out data-[closed]:opacity-0 data-[closed]:scale-95 data-[closed]:-translate-y-2"
+  'rounded-lg border border-border bg-card p-4 text-card-foreground shadow-sm transition duration-200 ease-out data-[closed]:opacity-0 data-[closed]:scale-95 data-[closed]:-translate-y-2'
 
 export type StyledViewInputs = Readonly<{
   content: Html

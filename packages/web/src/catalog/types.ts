@@ -1,5 +1,13 @@
 export type Category = 'Base' | 'Lib' | 'Components' | 'Blocks'
 
+/** Light/dark color maps from the registry style's `cssVars`. */
+export type ThemeColorMap = Readonly<Record<string, string>>
+
+export type MaybeTheme = Readonly<{
+  light?: ThemeColorMap
+  dark?: ThemeColorMap
+}>
+
 /** A loose structural type for a sub-registry manifest group. */
 export type RegistryGroupJson = Readonly<{
   items?: ReadonlyArray<{
@@ -11,7 +19,7 @@ export type RegistryGroupJson = Readonly<{
     devDependencies?: ReadonlyArray<string>
     registryDependencies?: ReadonlyArray<string>
     files?: ReadonlyArray<{ path?: string; type?: string }>
-    cssVars?: unknown
+    cssVars?: MaybeTheme
     css?: unknown
   }>
 }>
@@ -32,7 +40,7 @@ export type Item = Readonly<{
   /** Primary source shown on the item page under "Source". */
   maybeSource: Readonly<{ path: string; code: string }> | undefined
   /** The base-style item carries theme tokens we render as swatches. */
-  maybeTheme: unknown
+  maybeTheme: MaybeTheme | undefined
 }>
 
 export type CategoryGroup = Readonly<{

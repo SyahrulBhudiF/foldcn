@@ -23,7 +23,4 @@ const itemRouter = pipe(
 
 export const routeParser = Route.oneOf(itemRouter, homeRouter)
 
-export const parseRoute = Route.parseUrlWithFallback(
-  routeParser,
-  NotFoundRoute,
-)
+export const parseRoute = Route.parseUrlWithFallback(routeParser, NotFoundRoute)

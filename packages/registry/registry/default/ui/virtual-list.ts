@@ -1,7 +1,7 @@
-import { VirtualList as FoldkitVirtualList } from "@foldkit/ui"
-import type { Html } from "foldkit/html"
+import { VirtualList as FoldkitVirtualList } from '@foldkit/ui'
+import type { Html } from 'foldkit/html'
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils'
 
 // Re-export the @foldkit/ui VirtualList submodel surface.
 
@@ -17,10 +17,10 @@ export type InitConfig = FoldkitVirtualList.InitConfig
 export type ViewInputs<Item> = FoldkitVirtualList.ViewInputs<Item>
 
 export const virtualListContainerClass =
-  "h-96 w-full overflow-auto overscroll-none rounded-lg border border-border bg-card shadow-sm"
+  'h-96 w-full overflow-auto overscroll-none rounded-lg border border-border bg-card shadow-sm'
 
 export const virtualListRowClass =
-  "grid grid-cols-[2rem_1fr_5rem] items-center gap-3 border-b border-border px-4 py-3"
+  'grid grid-cols-[2rem_1fr_5rem] items-center gap-3 border-b border-border px-4 py-3'
 
 export type StyledViewInputs<Item> = Readonly<{
   items: ReadonlyArray<Item>
@@ -32,9 +32,7 @@ export type StyledViewInputs<Item> = Readonly<{
 }>
 
 /** Build styled `VirtualList.ViewInputs` with foldcn's container classes. */
-export const styledViewInputs = <Item>(
-  viewInputs: StyledViewInputs<Item>,
-): ViewInputs<Item> => ({
+export const styledViewInputs = <Item>(viewInputs: StyledViewInputs<Item>): ViewInputs<Item> => ({
   items: viewInputs.items,
   itemToKey: viewInputs.itemToKey,
   itemToView: viewInputs.itemToView,

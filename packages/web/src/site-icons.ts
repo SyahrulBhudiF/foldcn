@@ -1,12 +1,5 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
-import {
-  ArrowRight,
-  Check,
-  Computer,
-  Copy,
-  Moon,
-  Sun,
-} from 'lucide'
+import { ArrowRight, Check, Computer, Copy, Moon, Sun } from 'lucide'
 
 import { icon } from '@foldcn/registry/src/lib/icons'
 

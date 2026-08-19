@@ -36,7 +36,13 @@ export const INITIAL_ROWS: ReadonlyArray<{
   { id: '2', name: 'Grace Hopper', email: 'grace@example.com', plan: 'Startup', status: 'Active' },
   { id: '3', name: 'Alan Turing', email: 'alan@example.com', plan: 'Business', status: 'Invited' },
   { id: '4', name: 'Linus Pauling', email: 'linus@example.com', plan: 'Startup', status: 'Active' },
-  { id: '5', name: 'Barbara Liskov', email: 'barbara@example.com', plan: 'Enterprise', status: 'Inactive' },
+  {
+    id: '5',
+    name: 'Barbara Liskov',
+    email: 'barbara@example.com',
+    plan: 'Enterprise',
+    status: 'Inactive',
+  },
 ]
 
 export const init = (): [Model, ReadonlyArray<Command.Command<Message>>] => [

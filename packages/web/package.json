@@ -2,8 +2,8 @@
   "name": "@foldcn/web",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "description": "The foldcn showcase: a Foldkit app (SSG) presenting every registry item with live previews, install commands and source views.",
+  "type": "module",
   "scripts": {
     "dev": "portless run --name foldcn vite",
     "build": "node scripts/build.mjs",

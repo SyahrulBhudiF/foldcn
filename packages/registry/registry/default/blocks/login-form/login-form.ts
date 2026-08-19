@@ -1,8 +1,8 @@
-import type { Html, HtmlBuilder } from "foldkit/html"
+import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { button } from "@/components/ui/button"
-import { card } from "@/components/ui/card"
-import { input } from "@/components/ui/input"
+import { button } from '@/components/ui/button'
+import { card } from '@/components/ui/card'
+import { input } from '@/components/ui/input'
 
 export type LoginFormConfig<M> = Readonly<{
   email: string
@@ -19,66 +19,64 @@ export type LoginFormConfig<M> = Readonly<{
  *  foldcn primitives. */
 export const loginForm = <M>(config: LoginFormConfig<M>, h: HtmlBuilder<M>): Html =>
   h.div(
-    [h.Class("flex min-h-svh w-full items-center justify-center p-4")],
+    [h.Class('flex min-h-svh w-full items-center justify-center p-4')],
     [
       card<M>(
         {
-          title: "Welcome back",
-          maybeDescription: "Enter your email below to login to your account",
-          className: "w-full max-w-md",
+          title: 'Welcome back',
+          maybeDescription: 'Enter your email below to login to your account',
+          className: 'w-full max-w-md',
           content: [
-            h.div([h.Class("grid gap-4")], [
-              input<M>(
-                {
-                  id: "login-email",
-                  label: "Email",
-                  type: "email",
-                  value: config.email,
-                  onInput: config.onEmailInput,
-                  placeholder: "you@example.com",
-                  isDisabled: config.isSubmitting,
-                },
-                h,
-              ),
-              input<M>(
-                {
-                  id: "login-password",
-                  label: "Password",
-                  type: "password",
-                  value: config.password,
-                  onInput: config.onPasswordInput,
-                  placeholder: "••••••••",
-                  isDisabled: config.isSubmitting,
-                },
-                h,
-              ),
-              ...(config.error === undefined
-                ? []
-                : [
-                    h.p(
-                      [h.Class("text-sm text-destructive")],
-                      [config.error],
-                    ),
-                  ]),
-              button<M>(
-                {
-                  onClick: config.onSubmit,
-                  isDisabled: config.isSubmitting,
-                  className: "w-full",
-                },
-                config.isSubmitting === true ? "Signing in..." : "Login",
-                h,
-              ),
-            ]),
+            h.div(
+              [h.Class('grid gap-4')],
+              [
+                input<M>(
+                  {
+                    id: 'login-email',
+                    label: 'Email',
+                    type: 'email',
+                    value: config.email,
+                    onInput: config.onEmailInput,
+                    placeholder: 'you@example.com',
+                    isDisabled: config.isSubmitting,
+                  },
+                  h,
+                ),
+                input<M>(
+                  {
+                    id: 'login-password',
+                    label: 'Password',
+                    type: 'password',
+                    value: config.password,
+                    onInput: config.onPasswordInput,
+                    placeholder: '••••••••',
+                    isDisabled: config.isSubmitting,
+                  },
+                  h,
+                ),
+                ...(config.error === undefined
+                  ? []
+                  : [h.p([h.Class('text-sm text-destructive')], [config.error])]),
+                button<M>(
+                  {
+                    onClick: config.onSubmit,
+                    isDisabled: config.isSubmitting,
+                    className: 'w-full',
+                  },
+                  config.isSubmitting === true ? 'Signing in...' : 'Login',
+                  h,
+                ),
+              ],
+            ),
           ],
           footer: [
             h.p(
-              [h.Class("text-sm text-muted-foreground")],
+              [h.Class('text-sm text-muted-foreground')],
               [
-                "Forgot your password? ",
+                'Forgot your password? ',
                 h.a(
-                  [h.Href("#"), h.Class("underline underline-offset-4 hover:text-primary")],
-                  ["Reset it"],
+                  [h.Href('#'), h.Class('underline underline-offset-4 hover:text-primary')],
+                  ['Reset it'],
                 ),
               ],
             ),

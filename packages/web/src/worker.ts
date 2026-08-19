@@ -48,13 +48,10 @@ export default {
         new Request(new URL(registryFile, request.url).toString(), request),
       )
       if (res.status === 404) {
-        return new Response(
-          JSON.stringify({ error: `Registry item not found: ${registryFile}` }),
-          {
-            status: 404,
-            headers: { 'content-type': 'application/json; charset=utf-8' },
-          },
-        )
+        return new Response(JSON.stringify({ error: `Registry item not found: ${registryFile}` }), {
+          status: 404,
+          headers: { 'content-type': 'application/json; charset=utf-8' },
+        })
       }
       return asRegistryResponse(res)
     }

@@ -4,14 +4,11 @@ import type { Category, CategoryGroup, Item, RegistryGroupJson } from './types'
 
 const INSTALL_PREFIX = 'npx shadcn@latest add @foldcn/'
 
-const buildItems = (
-  group: RegistryGroupJson,
-  category: Category,
-): ReadonlyArray<Item> =>
+const buildItems = (group: RegistryGroupJson, category: Category): ReadonlyArray<Item> =>
   (group.items ?? [])
-    .map(item => {
+    .map((item) => {
       const name = item.name ?? ''
-      const files = (item.files ?? []).map(file => ({
+      const files = (item.files ?? []).map((file) => ({
         path: file.path ?? '',
         type: file.type ?? '',
       }))
@@ -29,7 +26,7 @@ const buildItems = (
         maybeTheme: item.cssVars,
       } satisfies Item
     })
-    .filter(item => item.name !== '')
+    .filter((item) => item.name !== '')
 
 export const items: ReadonlyArray<Item> = [
   ...buildItems(styleGroup, 'Base'),
@@ -39,7 +36,7 @@ export const items: ReadonlyArray<Item> = [
 ]
 
 export const itemByName: Readonly<Record<string, Item>> = Object.fromEntries(
-  items.map(item => [item.name, item]),
+  items.map((item) => [item.name, item]),
 )
 
 export const categoryGroups: ReadonlyArray<CategoryGroup> = [
@@ -47,17 +44,16 @@ export const categoryGroups: ReadonlyArray<CategoryGroup> = [
     category: 'Components',
     label: 'Components',
     description: 'The styled primitives: stateless helpers and stateful submodels.',
-    items: items.filter(item => item.category === 'Components'),
+    items: items.filter((item) => item.category === 'Components'),
   },
   {
     category: 'Blocks',
     label: 'Blocks',
     description: 'Composed pages that combine primitives into ready-to-use sections.',
-    items: items.filter(item => item.category === 'Blocks'),
+    items: items.filter((item) => item.category === 'Blocks'),
   },
 ]
 
 export const componentCount = items.length
 
-export const itemTitle = (name: string): string =>
-  itemByName[name]?.title ?? name
+export const itemTitle = (name: string): string => itemByName[name]?.title ?? name

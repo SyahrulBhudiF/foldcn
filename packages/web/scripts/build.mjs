@@ -1,12 +1,6 @@
 import { spawnSync } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
-import {
-  copyFileSync,
-  existsSync,
-  mkdirSync,
-  readdirSync,
-  statSync,
-} from 'node:fs'
+import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -15,8 +9,7 @@ import { fileURLToPath } from 'node:url'
 // deployment they are. FOLDKIT_BUILD_ID is compiled into the bundle by
 // @foldkit/vite-plugin; Runtime.hydrate compares it before adopting any DOM.
 const supplied = process.env.FOLDKIT_BUILD_ID
-const buildId =
-  supplied === undefined || supplied === '' ? randomUUID() : supplied
+const buildId = supplied === undefined || supplied === '' ? randomUUID() : supplied
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const WEB_DIR = resolve(SCRIPT_DIR, '..')
@@ -58,7 +51,9 @@ for (const [command, args] of steps) {
 // it reaches through `env.ASSETS`), so the compiled registry must ship inside
 // the client output directory.
 if (!existsSync(REGISTRY_DIST)) {
-  throw new Error(`Registry build output not found at ${REGISTRY_DIST}. Run the registry build first.`)
+  throw new Error(
+    `Registry build output not found at ${REGISTRY_DIST}. Run the registry build first.`,
+  )
 }
 copyDir(REGISTRY_DIST, resolve(CLIENT_DIR, 'r'))
 console.log(`Copied registry → ${resolve(CLIENT_DIR, 'r')}`)

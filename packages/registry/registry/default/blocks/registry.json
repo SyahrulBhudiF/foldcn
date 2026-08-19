@@ -6,11 +6,7 @@
       "type": "registry:block",
       "title": "Login Form",
       "description": "A login page with email and password fields, error state and submit button. Composed from foldcn primitives.",
-      "registryDependencies": [
-        "@foldcn/button",
-        "@foldcn/input",
-        "@foldcn/card"
-      ],
+      "registryDependencies": ["@foldcn/button", "@foldcn/input", "@foldcn/card"],
       "files": [
         {
           "path": "login-form/login-form.ts",
@@ -45,10 +41,7 @@
       "type": "registry:block",
       "title": "Data Table",
       "description": "A searchable table with styled rows and cells. Composed from foldcn primitives.",
-      "registryDependencies": [
-        "@foldcn/button",
-        "@foldcn/input"
-      ],
+      "registryDependencies": ["@foldcn/button", "@foldcn/input"],
       "files": [
         {
           "path": "data-table/data-table.ts",

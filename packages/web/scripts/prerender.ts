@@ -20,9 +20,7 @@ const loadServerEntry: Effect.Effect<typeof ServerEntry> = Effect.promise(
 const outputFileFor = (path: string): string => {
   const url = new URL(path, SITE_ORIGIN)
   if (url.origin !== SITE_ORIGIN || url.pathname !== path) {
-    throw new Error(
-      `Cannot generate the non-normalized same-origin path "${path}".`,
-    )
+    throw new Error(`Cannot generate the non-normalized same-origin path "${path}".`)
   }
   return path === '/'
     ? resolve(CLIENT_DIR, 'index.html')
@@ -64,9 +62,7 @@ const program = Effect.gen(function* () {
 
     yield* fs.makeDirectory(dirname(outputFile), { recursive: true })
     yield* fs.writeFileString(outputFile, html)
-    yield* Console.log(
-      `Generated ${path} (${serverEntry.prerenderPaths.length} pages in catalog)`,
-    )
+    yield* Console.log(`Generated ${path} (${serverEntry.prerenderPaths.length} pages in catalog)`)
   }
 }).pipe(Effect.provide(NodeServices.layer))
 

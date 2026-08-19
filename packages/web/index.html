@@ -19,9 +19,7 @@
       // first paint so the prerendered page doesn't flash the wrong mode.
       ;(function () {
         var preference =
-          typeof localStorage !== 'undefined'
-            ? localStorage.getItem('foldcn-theme')
-            : null
+          typeof localStorage !== 'undefined' ? localStorage.getItem('foldcn-theme') : null
         var dark =
           preference === 'dark'
             ? true

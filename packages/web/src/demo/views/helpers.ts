@@ -1,6 +1,10 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { button, buttonSizes, buttonVariants } from '@foldcn/registry/src/ui/button'
+import {
+  button,
+  buttonSizeKeys,
+  buttonVariantKeys,
+} from '@foldcn/registry/src/ui/button'
 import { card } from '@foldcn/registry/src/ui/card'
 import { disclosure } from '@foldcn/registry/src/ui/disclosure'
 import { nav } from '@foldcn/registry/src/ui/nav'
@@ -14,27 +18,35 @@ import {
 import type { Model } from '../model'
 
 export const buttonView = (model: Model, h: HtmlBuilder<Message>): Html =>
-  h.div([h.Class('flex flex-col items-start gap-6')], [
-    h.div([h.Class('flex flex-wrap items-center gap-3')], [
-      ...(Object.keys(buttonVariants) as Array<keyof typeof buttonVariants>).map(
-        variant =>
-          button<Message>(
-            { variant, onClick: ClickedButtonDemo(), className: 'capitalize' },
-            variant,
-            h,
+  h.div(
+    [h.Class('flex flex-col items-start gap-6')],
+    [
+      h.div(
+        [h.Class('flex flex-wrap items-center gap-3')],
+        [
+          ...buttonVariantKeys.map((variant) =>
+            button<Message>(
+              { variant, onClick: ClickedButtonDemo(), className: 'capitalize' },
+              variant,
+              h,
+            ),
           ),
+        ],
       ),
-    ]),
-    h.div([h.Class('flex flex-wrap items-center gap-3')], [
-      ...(Object.keys(buttonSizes) as Array<keyof typeof buttonSizes>).map(size =>
-        button<Message>({ size, onClick: ClickedButtonDemo() }, size, h),
+      h.div(
+        [h.Class('flex flex-wrap items-center gap-3')],
+        [
+          ...buttonSizeKeys.map((size) =>
+            button<Message>({ size, onClick: ClickedButtonDemo() }, size, h),
+          ),
+        ],
       ),
-    ]),
-    h.p(
-      [h.Class('text-sm text-muted-foreground')],
-      [`Clicked ${model.buttonClickCount} time${model.buttonClickCount === 1 ? '' : 's'}.`],
-    ),
-  ])
+      h.p(
+        [h.Class('text-sm text-muted-foreground')],
+        [`Clicked ${model.buttonClickCount} time${model.buttonClickCount === 1 ? '' : 's'}.`],
+      ),
+    ],
+  )
 
 export const cardView = (model: Model, h: HtmlBuilder<Message>): Html =>
   card<Message>(
@@ -48,9 +60,7 @@ export const cardView = (model: Model, h: HtmlBuilder<Message>): Html =>
           ['You can add as much content as you like here, in any layout.'],
         ),
       ],
-      footer: [
-        button<Message>({ size: 'sm' }, 'Action', h),
-      ],
+      footer: [button<Message>({ size: 'sm' }, 'Action', h)],
     },
     h,
   )
@@ -58,31 +68,43 @@ export const cardView = (model: Model, h: HtmlBuilder<Message>): Html =>
 const NAV_ITEMS = ['Overview', 'Components', 'Settings', 'Docs'] as const
 
 export const navView = (model: Model, h: HtmlBuilder<Message>): Html =>
-  nav<Message, (typeof NAV_ITEMS)[number]>({
-    items: NAV_ITEMS,
-    ariaLabel: 'Primary',
-    toHref: (value, index) => (index === 1 ? '/' : '#'),
-    isItemCurrent: (_, index) => index === 1,
-    toLabel: value => value,
-  }, h)
+  nav<Message, (typeof NAV_ITEMS)[number]>(
+    {
+      items: NAV_ITEMS,
+      ariaLabel: 'Primary',
+      toHref: (value, index) => (index === 1 ? '/' : '#'),
+      isItemCurrent: (_, index) => index === 1,
+      toLabel: (value) => value,
+    },
+    h,
+  )
 
 export const disclosureView = (model: Model, h: HtmlBuilder<Message>): Html =>
-  h.div([h.Class('flex w-full flex-col gap-4')], [
-    disclosure<Message>({
-      id: 'disclosure-basic',
-      isOpen: model.isDisclosureBasicOpen,
-      onToggle: isOpen => ToggledDisclosureBasic({ isOpen }),
-      title: 'What is foldcn?',
-      content:
-        'A shadcn-style registry of copy-paste styled components built on @foldkit/ui, themed with Tailwind CSS variables.',
-    }, h),
-    disclosure<Message>({
-      id: 'disclosure-animated',
-      isOpen: model.isDisclosureAnimatedOpen,
-      onToggle: isOpen => ToggledDisclosureAnimated({ isOpen }),
-      title: 'Does it animate?',
-      content:
-        'Yes — pass isAnimated to smooth the panel open/close with a CSS transition instead of an instant toggle.',
-      isAnimated: true,
-    }, h),
-  ])
+  h.div(
+    [h.Class('flex w-full flex-col gap-4')],
+    [
+      disclosure<Message>(
+        {
+          id: 'disclosure-basic',
+          isOpen: model.isDisclosureBasicOpen,
+          onToggle: (isOpen) => ToggledDisclosureBasic({ isOpen }),
+          title: 'What is foldcn?',
+          content:
+            'A shadcn-style registry of copy-paste styled components built on @foldkit/ui, themed with Tailwind CSS variables.',
+        },
+        h,
+      ),
+      disclosure<Message>(
+        {
+          id: 'disclosure-animated',
+          isOpen: model.isDisclosureAnimatedOpen,
+          onToggle: (isOpen) => ToggledDisclosureAnimated({ isOpen }),
+          title: 'Does it animate?',
+          content:
+            'Yes — pass isAnimated to smooth the panel open/close with a CSS transition instead of an instant toggle.',
+          isAnimated: true,
+        },
+        h,
+      ),
+    ],
+  )

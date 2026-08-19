@@ -7,10 +7,6 @@ import * as Demo from './demo'
 import { parseRoute } from './route'
 import { THEME_STORAGE_KEY } from './init'
 import {
-  ChangedSystemTheme,
-  ChangedUrl,
-  ClickedCopy,
-  ClickedLink,
   CompletedApplyTheme,
   CompletedCopy,
   CompletedLoadExternal,
@@ -18,15 +14,11 @@ import {
   CompletedSaveThemePreference,
   CompletedScrollToTop,
   GotDemoMessage,
-  SelectedThemePreference,
   type Message,
 } from './message'
 import { Model, ResolvedTheme, ThemePreference } from './model'
 
-type UpdateReturn = readonly [
-  Model,
-  ReadonlyArray<Command.Command<Message>>,
-]
+type UpdateReturn = readonly [Model, ReadonlyArray<Command.Command<Message>>]
 const withUpdateReturn = M.withReturnType<UpdateReturn>()
 
 // --- commands ---
@@ -81,8 +73,7 @@ const CopyText = Command.define('CopyText', {
 const NavigateInternal = Command.define('NavigateInternal', {
   args: { url: S.String },
   messages: [CompletedNavigateInternal],
-  execute: ({ url }) =>
-    pushUrl(url).pipe(Effect.as(CompletedNavigateInternal())),
+  execute: ({ url }) => pushUrl(url).pipe(Effect.as(CompletedNavigateInternal())),
 })
 
 const ScrollToTop = Command.define('ScrollToTop', {
@@ -110,20 +101,14 @@ const systemPrefersDark = (): ResolvedTheme =>
     ? 'Dark'
     : 'Light'
 
-const resolveTheme = (
-  model: Model,
-  preference: ThemePreference,
-): ResolvedTheme =>
+const resolveTheme = (model: Model, preference: ThemePreference): ResolvedTheme =>
   preference === 'System' ? systemPrefersDark() : preference
 
-const foldDemo = (
-  model: Model,
-  message: Demo.DemoMessage,
-): UpdateReturn => {
+const foldDemo = (model: Model, message: Demo.DemoMessage): UpdateReturn => {
   const [nextDemo, demoCommands] = Demo.update(model.demo, message)
   return [
     evo(model, { demo: () => nextDemo }),
-    Command.mapMessages(demoCommands, m => GotDemoMessage({ message: m })),
+    Command.mapMessages(demoCommands, (m) => GotDemoMessage({ message: m })),
   ]
 }
 
@@ -135,17 +120,11 @@ export const update = (model: Model, message: Message): UpdateReturn =>
         M.value(request).pipe(
           withUpdateReturn,
           M.tagsExhaustive({
-            Internal: ({ url }) => [
-              model,
-              [NavigateInternal({ url: Url.toString(url) })],
-            ],
+            Internal: ({ url }) => [model, [NavigateInternal({ url: Url.toString(url) })]],
             External: ({ href }) => [model, [LoadExternal({ href })]],
           }),
         ),
-      ChangedUrl: ({ url }) => [
-        evo(model, { route: () => parseRoute(url) }),
-        [ScrollToTop()],
-      ],
+      ChangedUrl: ({ url }) => [evo(model, { route: () => parseRoute(url) }), [ScrollToTop()]],
       GotDemoMessage: ({ message }) => foldDemo(model, message),
 
       SelectedThemePreference: ({ preference }) => [
@@ -153,14 +132,14 @@ export const update = (model: Model, message: Message): UpdateReturn =>
           maybeThemePreference: () => Option.some(preference),
           resolvedTheme: () => resolveTheme(model, preference),
         }),
-        [ApplyTheme({ theme: resolveTheme(model, preference) }), SaveThemePreference({ preference })],
+        [
+          ApplyTheme({ theme: resolveTheme(model, preference) }),
+          SaveThemePreference({ preference }),
+        ],
       ],
       ChangedSystemTheme: ({ theme }) =>
-        Option.exists(model.maybeThemePreference, p => p === 'System')
-          ? [
-              evo(model, { resolvedTheme: () => theme }),
-              [ApplyTheme({ theme })],
-            ]
+        Option.exists(model.maybeThemePreference, (p) => p === 'System')
+          ? [evo(model, { resolvedTheme: () => theme }), [ApplyTheme({ theme })]]
           : [model, []],
       CompletedApplyTheme: () => [model, []],
       CompletedSaveThemePreference: () => [model, []],

@@ -25,18 +25,14 @@ run('pnpm', ['dlx', 'shadcn@latest', 'build', '-c', REGISTRY_DIR, '-o', OUT_DIR]
 // 2. Generate a worker index over the built item JSONs so the deploy worker
 //    can serve /r/{name}.json without knowing the item list ahead of time.
 const itemFiles = readdirSync(OUT_DIR)
-  .filter(file => file.endsWith('.json') && file !== 'registry.json')
+  .filter((file) => file.endsWith('.json') && file !== 'registry.json')
   .sort()
 
-const identifierFor = (file) =>
-  `_${file.slice(0, -'.json'.length).replace(/[^a-zA-Z0-9]/g, '_')}`
+const identifierFor = (file) => `_${file.slice(0, -'.json'.length).replace(/[^a-zA-Z0-9]/g, '_')}`
 
-const importLines = itemFiles.map(
-  file => `import ${identifierFor(file)} from './${file}'`,
-)
+const importLines = itemFiles.map((file) => `import ${identifierFor(file)} from './${file}'`)
 const itemEntries = itemFiles.map(
-  file =>
-    `  ${JSON.stringify(file.slice(0, -'.json'.length))}: ${identifierFor(file)},`,
+  (file) => `  ${JSON.stringify(file.slice(0, -'.json'.length))}: ${identifierFor(file)},`,
 )
 
 mkdirSync(OUT_DIR, { recursive: true })
@@ -64,10 +60,6 @@ export declare const items: Record<string, unknown>
 `,
 )
 
-const catalog = JSON.parse(
-  readFileSync(resolve(OUT_DIR, 'registry.json'), 'utf8'),
-)
-console.log(
-  `registry build complete: ${itemFiles.length + 1} items → ${OUT_DIR}`,
-)
+const catalog = JSON.parse(readFileSync(resolve(OUT_DIR, 'registry.json'), 'utf8'))
+console.log(`registry build complete: ${itemFiles.length + 1} items → ${OUT_DIR}`)
 console.log(`catalog: ${catalog.name} — homepage ${catalog.homepage}`)

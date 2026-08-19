@@ -1,4 +1,4 @@
-import { DragAndDrop as FoldkitDragAndDrop } from "@foldkit/ui"
+import { DragAndDrop as FoldkitDragAndDrop } from '@foldkit/ui'
 
 // Re-export the @foldkit/ui DragAndDrop surface. Drag and drop is heavily
 // consumer-driven: you own the item/container data model, and this module
@@ -28,13 +28,12 @@ export type DraggableConfig<M> = FoldkitDragAndDrop.DraggableConfig<M>
 export type DraggableMessage = FoldkitDragAndDrop.DraggableMessage
 
 export const dragCardClass =
-  "cursor-grab rounded-lg border border-border bg-card px-3 py-2 text-sm text-card-foreground shadow-sm transition-opacity select-none active:cursor-grabbing data-[dragging]:opacity-40 data-[keyboard-dragging]:ring-2 data-[keyboard-dragging]:ring-ring"
+  'cursor-grab rounded-lg border border-border bg-card px-3 py-2 text-sm text-card-foreground shadow-sm transition-opacity select-none active:cursor-grabbing data-[dragging]:opacity-40 data-[keyboard-dragging]:ring-2 data-[keyboard-dragging]:ring-ring'
 
-export const dragDropPlaceholderClass =
-  "h-9 rounded-lg border-2 border-dashed border-primary/50"
+export const dragDropPlaceholderClass = 'h-9 rounded-lg border-2 border-dashed border-primary/50'
 
 export const dragContainerClass =
-  "flex min-h-[120px] flex-col gap-1.5 rounded-lg border-2 border-transparent bg-muted/50 p-2 transition-colors data-[drop-target]:border-dashed data-[drop-target]:border-primary/50"
+  'flex min-h-[120px] flex-col gap-1.5 rounded-lg border-2 border-transparent bg-muted/50 p-2 transition-colors data-[drop-target]:border-dashed data-[drop-target]:border-primary/50'
 
 export const dragGhostClass =
-  "rounded-lg border border-primary bg-card px-3 py-2 text-sm text-card-foreground shadow-lg"
+  'rounded-lg border border-primary bg-card px-3 py-2 text-sm text-card-foreground shadow-lg'

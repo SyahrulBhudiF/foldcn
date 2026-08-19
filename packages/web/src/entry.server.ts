@@ -7,7 +7,7 @@ import { view } from './view'
 
 export const prerenderPaths: ReadonlyArray<string> = [
   '/',
-  ...items.map(item => `/components/${item.name}`),
+  ...items.map((item) => `/components/${item.name}`),
 ]
 
 export const renderPage = (request: Request): Promise<Server.EntryResult> =>

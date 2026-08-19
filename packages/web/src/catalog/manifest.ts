@@ -5,7 +5,7 @@ import style from '@foldcn/registry/registry/default/style/registry.json'
 
 import type { RegistryGroupJson } from './types'
 
-export const uiGroup = ui as RegistryGroupJson
-export const libGroup = lib as RegistryGroupJson
-export const blocksGroup = blocks as RegistryGroupJson
-export const styleGroup = style as RegistryGroupJson
+export const uiGroup = ui satisfies RegistryGroupJson
+export const libGroup = lib satisfies RegistryGroupJson
+export const blocksGroup = blocks satisfies RegistryGroupJson
+export const styleGroup = style satisfies RegistryGroupJson

@@ -1,11 +1,11 @@
-import { Runtime } from "foldkit";
+import { Runtime } from 'foldkit'
 
-import { Message, ChangedUrl, ClickedLink } from "./message";
-import { Model } from "./model";
-import { init } from "./init";
-import { subscriptions } from "./subscriptions";
-import { update } from "./update";
-import { view } from "./view";
+import { Message, ChangedUrl, ClickedLink } from './message'
+import { Model } from './model'
+import { init } from './init'
+import { subscriptions } from './subscriptions'
+import { update } from './update'
+import { view } from './view'
 
 const application = Runtime.makeApplication({
   Model,
@@ -13,16 +13,16 @@ const application = Runtime.makeApplication({
   update,
   view,
   subscriptions,
-  container: document.getElementById("root"),
+  container: document.getElementById('root'),
   routing: {
     onUrlRequest: (request) => ClickedLink({ request }),
     onUrlChange: (url) => ChangedUrl({ url }),
   },
   devTools: {
-    show: "Always",
-    mode: { development: "TimeTravel", production: "Inspect" },
+    show: 'Always',
+    mode: { development: 'TimeTravel', production: 'Inspect' },
     Message,
   },
-});
+})
 
-Runtime.hydrate(application, { buildId: import.meta.env.FOLDKIT_BUILD_ID });
+Runtime.hydrate(application, { buildId: import.meta.env.FOLDKIT_BUILD_ID })
