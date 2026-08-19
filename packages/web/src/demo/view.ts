@@ -67,6 +67,8 @@ const views = {
  *  of them. */
 export type DemoItemName = keyof typeof views
 
+export const isDemoItemName = (name: string): name is DemoItemName => name in views
+
 export type DemoViewInputs = Readonly<{ itemName: DemoItemName }>
 
 /** The demo submodel: renders whichever component the current route names.

@@ -67,13 +67,17 @@ export const icon = <M>(
   hOrClass: HtmlBuilder<M> | string,
   maybeH?: HtmlBuilder<M>,
 ): Html => {
-  const h = maybeH ?? (hOrClass as HtmlBuilder<M>)
-  const className = maybeH ? (hOrClass as string) : defaultIconClass
+  const render = (h: HtmlBuilder<M>, className: string): Html =>
+    h.svg(
+      svgAttributes(className, h),
+      node.map(([tag, attrs]) => svgElement(tag, h)(nodeToAttributes(attrs, h))),
+    )
 
-  return h.svg(
-    svgAttributes(className, h),
-    node.map(([tag, attrs]) => svgElement(tag, h)(nodeToAttributes(attrs, h))),
-  )
+  if (typeof hOrClass === 'string') {
+    if (maybeH === undefined) throw new Error('HtmlBuilder is required when passing an icon class')
+    return render(maybeH, hOrClass)
+  }
+  return render(hOrClass, defaultIconClass)
 }
 
 export const checkIcon = <M>(h: HtmlBuilder<M>, className?: string): Html =>
