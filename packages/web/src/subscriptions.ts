@@ -1,10 +1,11 @@
 import { Effect, Option, Queue, Schema as S, Stream } from 'effect'
 import { Subscription } from 'foldkit'
 
-import { ChangedSystemTheme, type Message } from './message'
+import { subscriptions as demoSubscriptions } from './demo/subscriptions'
+import { ChangedSystemTheme, GotDemoMessage, type Message } from './message'
 import type { Model } from './model'
 
-export const subscriptions = Subscription.make<Model, Message>()((entry) => ({
+const systemThemeSubscriptions = Subscription.make<Model, Message>()((entry) => ({
   systemTheme: entry(
     { isSystemPreference: S.Boolean },
     {
@@ -40,3 +41,13 @@ export const subscriptions = Subscription.make<Model, Message>()((entry) => ({
     },
   ),
 }))
+
+const demoLiftedSubscriptions = Subscription.lift(demoSubscriptions)<Model, Message>({
+  toChildModel: (model) => model.demo,
+  toParentMessage: (message) => GotDemoMessage({ message }),
+})
+
+export const subscriptions = Subscription.aggregate<Model, Message>()(
+  systemThemeSubscriptions,
+  demoLiftedSubscriptions,
+)
