@@ -37,7 +37,7 @@
       "name": "card",
       "type": "registry:ui",
       "title": "Card",
-      "description": "Styled card container with header, content and footer. A pure layout primitive.",
+      "description": "Composable card primitives — Card, CardHeader, CardTitle, CardDescription, CardAction, CardContent, CardFooter. A pure layout primitive.",
       "registryDependencies": ["@foldcn/utils"],
       "files": [{ "path": "card.ts", "type": "registry:ui" }]
     },

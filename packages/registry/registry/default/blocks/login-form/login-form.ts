@@ -1,7 +1,7 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { button } from '@/components/ui/button'
-import { card } from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import { input } from '@/components/ui/input'
 
 export type LoginFormConfig<M> = Readonly<{
@@ -21,12 +21,14 @@ export const loginForm = <M>(config: LoginFormConfig<M>, h: HtmlBuilder<M>): Htm
   h.div(
     [h.Class('flex min-h-svh w-full items-center justify-center p-4')],
     [
-      card<M>(
-        {
-          title: 'Welcome back',
-          maybeDescription: 'Enter your email below to login to your account',
-          className: 'w-full max-w-md',
-          content: [
+      Card<M>(
+        { className: 'w-full max-w-md' },
+        [
+          Card.header<M>({}, [
+            Card.title<M>({}, ['Welcome back'], h),
+            Card.description<M>({}, ['Enter your email below to login to your account'], h),
+          ], h),
+          Card.content<M>({}, [
             h.div(
               [h.Class('grid gap-4')],
               [
@@ -68,8 +70,8 @@ export const loginForm = <M>(config: LoginFormConfig<M>, h: HtmlBuilder<M>): Htm
                 ),
               ],
             ),
-          ],
-          footer: [
+          ], h),
+          Card.footer<M>({}, [
             h.p(
               [h.Class('text-sm text-muted-foreground')],
               [
@@ -80,8 +82,8 @@ export const loginForm = <M>(config: LoginFormConfig<M>, h: HtmlBuilder<M>): Htm
                 ),
               ],
             ),
-          ],
-        },
+          ], h),
+        ],
         h,
       ),
     ],
