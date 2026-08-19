@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="foldcn — a shadcn-style component registry for Foldkit. Copy-paste styled components built on @foldkit/ui, themed with Tailwind CSS variables."
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <link href="/src/styles.css" rel="stylesheet" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23181818'/%3E%3Cpath d='M9 22V10l7 8 7-8v12' stroke='white' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+    />
+    <title>foldcn — Foldkit component registry</title>
+    <script>
+      // Apply the stored theme (or default to the system preference) before
+      // first paint so the prerendered page doesn't flash the wrong mode.
+      ;(function () {
+        var preference =
+          typeof localStorage !== 'undefined'
+            ? localStorage.getItem('foldcn-theme')
+            : null
+        var dark =
+          preference === 'dark'
+            ? true
+            : preference === 'light'
+              ? false
+              : window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (dark) document.documentElement.classList.add('dark')
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./src/entry.ts"></script>
+  </body>
+</html>

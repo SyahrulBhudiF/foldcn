@@ -1,22 +1,23 @@
 {
   "name": "foldcn",
   "version": "0.1.0",
-  "description": "A shadcn-style registry of styled components for Foldkit, built on @foldkit/ui.",
-  "type": "module",
   "private": true,
+  "type": "module",
+  "description": "A shadcn-style registry of styled components for Foldkit, built on @foldkit/ui.",
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "build": "pnpm dlx shadcn@latest build",
-    "validate": "pnpm dlx shadcn@latest registry validate foldcn/foldcn"
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "validate": "turbo run validate",
+    "deploy": "alchemy deploy --stage prod --yes"
   },
   "devDependencies": {
-    "@foldkit/ui": "^0.148.0",
-    "@types/node": "^22.10.0",
-    "clsx": "^2.1.1",
+    "@effect/platform-node": "4.0.0-rc.109",
+    "alchemy": "2.0.0-beta.72",
     "effect": "4.0.0-rc.109",
-    "foldkit": "^0.148.0",
-    "lucide": "^1.32.0",
-    "tailwind-merge": "^3.6.0",
-    "typescript": "^5.9.0"
-  }
+    "turbo": "^2.10.11",
+    "typescript": "^7.0.2"
+  },
+  "packageManager": "pnpm@11.22.0"
 }

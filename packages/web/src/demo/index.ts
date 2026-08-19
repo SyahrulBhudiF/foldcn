@@ -1,0 +1,6 @@
+export { Model, type Model as DemoModel } from './model'
+export { Message, type Message as DemoMessage } from './message'
+export { init } from './init'
+export { update, filteredRows } from './update'
+export { subscriptions } from './subscriptions'
+export { view } from './view'

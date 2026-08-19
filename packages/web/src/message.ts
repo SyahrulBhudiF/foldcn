@@ -1,0 +1,49 @@
+import { Schema as S } from 'effect'
+import { m } from 'foldkit/message'
+import { Url } from 'foldkit'
+import { UrlRequest } from 'foldkit/navigation'
+
+import { Message as DemoMessage } from './demo/message'
+import { ResolvedTheme, ThemePreference } from './model'
+
+// routing
+export const ClickedLink = m('ClickedLink', { request: UrlRequest })
+export const ChangedUrl = m('ChangedUrl', { url: Url.Url })
+
+// demo harness
+export const GotDemoMessage = m('GotDemoMessage', { message: DemoMessage })
+
+// theme
+export const SelectedThemePreference = m('SelectedThemePreference', {
+  preference: ThemePreference,
+})
+export const ChangedSystemTheme = m('ChangedSystemTheme', {
+  theme: ResolvedTheme,
+})
+export const CompletedApplyTheme = m('CompletedApplyTheme')
+export const CompletedSaveThemePreference = m('CompletedSaveThemePreference')
+
+// clipboard
+export const ClickedCopy = m('ClickedCopy', { value: S.String })
+export const CompletedCopy = m('CompletedCopy', { value: S.String })
+
+// navigation completions
+export const CompletedNavigateInternal = m('CompletedNavigateInternal')
+export const CompletedLoadExternal = m('CompletedLoadExternal')
+export const CompletedScrollToTop = m('CompletedScrollToTop')
+
+export const Message = S.Union([
+  ClickedLink,
+  ChangedUrl,
+  GotDemoMessage,
+  SelectedThemePreference,
+  ChangedSystemTheme,
+  CompletedApplyTheme,
+  CompletedSaveThemePreference,
+  ClickedCopy,
+  CompletedCopy,
+  CompletedNavigateInternal,
+  CompletedLoadExternal,
+  CompletedScrollToTop,
+])
+export type Message = typeof Message.Type

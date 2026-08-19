@@ -1,4 +1,7 @@
 node_modules/
-public/r/
+dist/
+.turbo/
+.alchemy/
+public/
 *.tgz
 .DS_Store

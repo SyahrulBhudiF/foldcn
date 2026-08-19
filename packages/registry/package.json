@@ -1,0 +1,32 @@
+{
+  "name": "@foldcn/registry",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The foldcn registry: shadcn-style manifests and self-contained Foldkit component sources. The web app consumes these sources directly.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "validate": "pnpm dlx shadcn@latest registry validate foldcn/foldcn",
+    "typecheck": "tsc --noEmit"
+  },
+  "exports": {
+    ".": "./registry.json",
+    "./registry.json": "./registry.json",
+    "./components.json": "./components.json",
+    "./registry/default/ui/registry.json": "./registry/default/ui/registry.json",
+    "./registry/default/lib/registry.json": "./registry/default/lib/registry.json",
+    "./registry/default/blocks/registry.json": "./registry/default/blocks/registry.json",
+    "./registry/default/style/registry.json": "./registry/default/style/registry.json",
+    "./src/*": "./registry/default/*"
+  },
+  "devDependencies": {
+    "@foldkit/ui": "^0.148.0",
+    "@types/node": "^26.2.0",
+    "clsx": "^2.1.1",
+    "effect": "4.0.0-rc.109",
+    "foldkit": "^0.148.0",
+    "lucide": "^1.32.0",
+    "tailwind-merge": "^3.6.0",
+    "typescript": "^7.0.2"
+  }
+}
