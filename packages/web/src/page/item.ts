@@ -1,7 +1,7 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import * as Demo from '../demo'
-import type { DemoItemName } from '../demo/view'
+import { isDemoItemName } from '../demo/view'
 import { itemByName } from '../catalog'
 import type { Item, MaybeTheme } from '../catalog/types'
 import { GotDemoMessage, type Message } from '../message'
@@ -156,7 +156,7 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                               slotId: 'demo-harness',
                               model: model.demo,
                               view: Demo.view,
-                              viewInputs: { itemName: item.name as DemoItemName },
+                              viewInputs: { itemName: isDemoItemName(item.name) ? item.name : 'button' },
                               toParentMessage: (message) => GotDemoMessage({ message }),
                             }),
                           ],
