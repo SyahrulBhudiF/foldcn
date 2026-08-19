@@ -75,12 +75,10 @@ export const make = <A, I>(payloadSchema: S.Codec<A, I>) => {
       ],
       [
         h.div([], config.toContent(entry)),
-        h.button([...handlers.dismiss, h.Class(cn(toastDismissButtonClass))], [xIcon(h, 'size-4')]),
+        h.button([...handlers.dismiss, h.Class(cn(toastDismissButtonClass))], [xIcon(h)]),
       ],
     )
   }
 
   return { ...Bound, entryView }
 }
-
-export type BoundToast<A, I> = ReturnType<typeof make<A, I>>

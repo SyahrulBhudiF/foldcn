@@ -69,7 +69,7 @@ export const select = <M>(config: SelectConfig<M>, h: HtmlBuilder<M>): Html =>
                       'pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground',
                     ),
                   ],
-                  [chevronDownIcon(h, 'size-4')],
+                  [chevronDownIcon(h)],
                 ),
               ],
             ),

@@ -80,7 +80,7 @@ export const styledViewInputs = <M>(
           onNone: () => h.span([h.Class(datePickerPlaceholderClass)], ['Pick a date']),
           onSome: (date) => h.span([], [formatTriggerLabel(date)]),
         }),
-        chevronDownIcon(h, 'size-4'),
+        chevronDownIcon(h),
       ],
     ),
   toCalendarView: calendarToView(h),
