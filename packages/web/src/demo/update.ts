@@ -84,8 +84,6 @@ const reorderColumns = (
 export type UpdateReturn = readonly [Model, ReadonlyArray<Command.Command<Message>>]
 const withUpdateReturn = M.withReturnType<UpdateReturn>()
 
-// --- out-message folds ---
-
 const foldNoOp =
   <Out>(): ((out: Out) => Update.Step<Model, Message>) =>
   () =>
@@ -245,8 +243,6 @@ const foldDragAndDropOutMessage = M.type<DragAndDrop.OutMessage>().pipe(
     Cancelled: () => (model) => [model, []],
   }),
 )
-
-// --- child folds ---
 
 const foldDialog = Update.foldChild({
   update: Dialog.update,

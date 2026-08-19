@@ -22,8 +22,6 @@ export type InitConfig = FoldkitTabs.InitConfig
 export type ViewInputs<Value extends string = string> = FoldkitTabs.ViewInputs<Value>
 export type RenderInfo<Value extends string = string> = FoldkitTabs.RenderInfo<Value>
 
-// --- Variant system (mirrors shadcn-ui cva pattern) ---
-
 export type TabsListVariant = 'default' | 'line'
 
 const tabsListBaseClass =

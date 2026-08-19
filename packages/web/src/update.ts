@@ -27,8 +27,6 @@ const PackageManagerTabs = Tabs.create<PackageManager>()
 type UpdateReturn = readonly [Model, ReadonlyArray<Command.Command<Message>>]
 const withUpdateReturn = M.withReturnType<UpdateReturn>()
 
-// --- commands ---
-
 const ApplyTheme = Command.define('ApplyTheme', {
   args: { theme: ResolvedTheme },
   messages: [CompletedApplyTheme],

@@ -60,8 +60,6 @@ export const fileDropView = (model: Model, h: HtmlBuilder<Message>): Html =>
     ],
   )
 
-// --- drag and drop (sortable kanban columns) ---
-
 const findDraggedCard = (
   columns: ReadonlyArray<DemoColumn>,
   maybeItemId: Option.Option<string>,

@@ -17,8 +17,6 @@ import type { Model, PackageManager, ThemePreference } from '../model'
 import { arrowRightIcon, computerIcon, moonIcon, sunIcon } from '../site-icons'
 import { componentCount } from '../catalog'
 
-// --- theme selector ---
-
 const THEME_OPTIONS: ReadonlyArray<{
   preference: ThemePreference
   label: string
@@ -56,8 +54,6 @@ export const themeSelector = (model: Model, h: HtmlBuilder<Message>): Html =>
       )
     }),
   )
-
-// --- header / footer ---
 
 export const headerView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.header(
@@ -138,8 +134,6 @@ export const footerView = (h: HtmlBuilder<Message>): Html =>
     ],
   )
 
-// --- install / copy / code primitives ---
-
 export const copyButton = (
   h: HtmlBuilder<Message>,
   value: string,
@@ -196,8 +190,6 @@ export const sectionLink = (h: HtmlBuilder<Message>, href: string, label: string
     ],
     [label, arrowRightIcon(h, 'size-3.5')],
   )
-
-// --- install tabs ---
 
 const PackageManagerTabs = Tabs.create<PackageManager>()
 
