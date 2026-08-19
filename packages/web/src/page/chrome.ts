@@ -18,7 +18,7 @@ import {
 } from '../message'
 import type { Model, PackageManager, ThemePreference } from '../model'
 
-import { componentCount } from '../catalog'
+import { categoryGroups, componentCount } from '../catalog'
 
 const THEME_OPTIONS: ReadonlyArray<{
   preference: ThemePreference
@@ -106,6 +106,56 @@ export const headerView = (model: Model, h: HtmlBuilder<Message>): Html =>
               ),
               themeSelector(model, h),
             ],
+          ),
+        ],
+      ),
+    ],
+  )
+
+export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html =>
+  h.aside(
+    [h.Class('hidden w-[220px] shrink-0 lg:block'), h.AriaLabel('Sidebar')],
+    [
+      h.div(
+        [h.Class('sticky top-10 h-[calc(100vh-2.5rem)] overflow-y-auto border-r border-border py-6 pr-4')],
+        [
+          h.nav(
+            [h.Class('flex flex-col gap-6'), h.AriaLabel('Components')],
+            categoryGroups.map((group) => {
+              const sortedItems = [...group.items].sort((a, b) =>
+                a.title.localeCompare(b.title),
+              )
+              return h.div([h.Class('flex flex-col gap-2')], [
+                h.h3(
+                  [h.Class('px-2 text-xs font-semibold tracking-wide text-muted-foreground')],
+                  [group.label],
+                ),
+                h.ul(
+                  [h.Class('flex flex-col gap-0.5')],
+                  sortedItems.map((item) => {
+                    const isActive =
+                      model.route._tag === 'Item' && model.route.name === item.name
+                    return h.li([], [
+                      h.a(
+                        [
+                          h.Href(`/components/${item.name}`),
+                          h.Class(
+                            clsx(
+                              'flex rounded-md px-2 py-1.5 text-sm transition-colors',
+                              isActive
+                                ? 'bg-muted font-medium text-foreground'
+                                : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground',
+                            ),
+                          ),
+                          ...(isActive ? [h.AriaCurrent('page')] : []),
+                        ],
+                        [item.title],
+                      ),
+                    ])
+                  }),
+                ),
+              ])
+            }),
           ),
         ],
       ),
