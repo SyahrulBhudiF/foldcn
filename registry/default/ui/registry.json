@@ -1,0 +1,213 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "items": [
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Styled button with variants and sizes, built on the @foldkit/ui Button helper.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "button.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "Styled text input with label and description, built on the @foldkit/ui Input helper.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "input.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "Textarea",
+      "description": "Styled multi-line textarea with label and description, built on the @foldkit/ui Textarea helper.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "textarea.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "description": "Styled native select with label, chevron and description, built on the @foldkit/ui Select helper.",
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
+      "files": [{ "path": "select.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "Styled card container with header, content and footer. A pure layout primitive.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "card.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "Styled checkbox with label, indeterminate state and description, built on the @foldkit/ui Checkbox helper.",
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
+      "files": [{ "path": "checkbox.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "Styled switch toggle with label and description, built on the @foldkit/ui Switch helper.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "switch.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "fieldset",
+      "type": "registry:ui",
+      "title": "Fieldset",
+      "description": "Styled fieldset with legend and description, built on the @foldkit/ui Fieldset helper.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "fieldset.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "disclosure",
+      "type": "registry:ui",
+      "title": "Disclosure",
+      "description": "Styled collapsible section with animated panel support, built on the @foldkit/ui Disclosure helper.",
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
+      "files": [{ "path": "disclosure.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "nav",
+      "type": "registry:ui",
+      "title": "Nav",
+      "description": "Styled navigation landmark with current-page marking, built on the @foldkit/ui Nav helper.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "nav.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "Styled modal dialog with backdrop, focus trapping and animations, built on the @foldkit/ui Dialog submodel.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "dialog.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "Styled floating panel with trigger, built on the @foldkit/ui Popover submodel.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "popover.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "Styled tooltip with trigger and hover/focus reveal, built on the @foldkit/ui Tooltip submodel.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "tooltip.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "menu",
+      "type": "registry:ui",
+      "title": "Menu",
+      "description": "Styled dropdown menu with keyboard navigation and typeahead, built on the @foldkit/ui Menu submodel.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "menu.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "listbox",
+      "type": "registry:ui",
+      "title": "Listbox",
+      "description": "Styled custom select with single and multi selection, built on the @foldkit/ui Listbox submodel.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "listbox.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "combobox",
+      "type": "registry:ui",
+      "title": "Combobox",
+      "description": "Styled autocomplete input with filtering, built on the @foldkit/ui Combobox submodel.",
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
+      "files": [{ "path": "combobox.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "Styled tabbed interface with keyboard navigation, built on the @foldkit/ui Tabs submodel.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "tabs.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "radio-group",
+      "type": "registry:ui",
+      "title": "Radio Group",
+      "description": "Styled radio options with roving tabindex, built on the @foldkit/ui RadioGroup submodel.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "radio-group.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "slider",
+      "type": "registry:ui",
+      "title": "Slider",
+      "description": "Styled numeric range slider, built on the @foldkit/ui Slider submodel.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "slider.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "calendar",
+      "type": "registry:ui",
+      "title": "Calendar",
+      "description": "Styled inline calendar grid with locale support, built on the @foldkit/ui Calendar submodel.",
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
+      "files": [{ "path": "calendar.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:ui",
+      "title": "Date Picker",
+      "description": "Styled date picker combining trigger, popover and calendar, built on the @foldkit/ui DatePicker submodel.",
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons", "@foldcn/calendar"],
+      "files": [{ "path": "date-picker.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "toast",
+      "type": "registry:ui",
+      "title": "Toast",
+      "description": "Styled transient notification stack with auto-dismiss, built on the @foldkit/ui Toast component.",
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
+      "files": [{ "path": "toast.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "animation",
+      "type": "registry:ui",
+      "title": "Animation",
+      "description": "Styled enter/leave animation coordinator, built on the @foldkit/ui Animation submodel.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "animation.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "drag-and-drop",
+      "type": "registry:ui",
+      "title": "Drag and Drop",
+      "description": "Styled sortable lists and cross-container movement, built on the @foldkit/ui DragAndDrop submodel.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "drag-and-drop.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "file-drop",
+      "type": "registry:ui",
+      "title": "File Drop",
+      "description": "Styled file input with drag-and-drop support, built on the @foldkit/ui FileDrop submodel.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "file-drop.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "virtual-list",
+      "type": "registry:ui",
+      "title": "Virtual List",
+      "description": "Styled virtualized list for large datasets, built on the @foldkit/ui VirtualList submodel.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "virtual-list.ts", "type": "registry:ui" }]
+    }
+  ]
+}

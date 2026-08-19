@@ -1,0 +1,22 @@
+{
+  "name": "foldcn",
+  "version": "0.1.0",
+  "description": "A shadcn-style registry of styled components for Foldkit, built on @foldkit/ui.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "pnpm dlx shadcn@latest build",
+    "validate": "pnpm dlx shadcn@latest registry validate foldcn/foldcn"
+  },
+  "devDependencies": {
+    "@foldkit/ui": "^0.148.0",
+    "@types/node": "^22.10.0",
+    "clsx": "^2.1.1",
+    "effect": "4.0.0-rc.109",
+    "foldkit": "^0.148.0",
+    "lucide": "^1.32.0",
+    "tailwind-merge": "^3.6.0",
+    "typescript": "^5.9.0"
+  }
+}
