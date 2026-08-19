@@ -47,37 +47,47 @@ export const homeView = (model: Model, h: HtmlBuilder<Message>): Html =>
         [h.Class('border-b border-border')],
         [
           h.div(
-            [h.Class('mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-24')],
+            [h.Class('mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-12')],
             [
               h.div(
                 [h.Class('mx-auto max-w-3xl text-center')],
                 [
-                  h.span(
+                  // Logo and name
+                  h.div(
+                    [h.Class('flex items-center justify-center gap-3')],
                     [
-                      h.Class(
-                        'inline-flex items-center gap-2 rounded-full border border-border bg-muted/40 px-3 py-1 text-xs font-medium text-muted-foreground',
+                      h.span(
+                        [
+                          h.Class(
+                            'flex size-10 items-center justify-center rounded-lg bg-foreground text-background',
+                          ),
+                        ],
+                        [h.span([h.Class('text-lg leading-none font-black')], ['F'])],
                       ),
+                      h.span([h.Class('text-2xl font-bold tracking-tight')], ['foldcn']),
                     ],
-                    ['The registry for Foldkit'],
                   ),
+                  // Headline
                   h.h1(
-                    [h.Class('mt-6 text-balance text-4xl font-bold tracking-tight sm:text-6xl')],
+                    [h.Class('mt-6 text-balance text-4xl font-bold tracking-tight sm:text-5xl')],
                     [
-                      'Copy-paste UI components for ',
+                      'shadcn components\nfor ',
                       h.span([h.Class('text-primary')], ['Foldkit.']),
                     ],
                   ),
+                  // Subtitle
                   h.p(
-                    [h.Class('mt-6 text-pretty text-lg text-muted-foreground')],
+                    [h.Class('mt-4 text-pretty text-lg text-muted-foreground')],
                     [
-                      'A shadcn-style registry of ',
+                      'A registry of ',
                       String(componentCount),
-                      ' accessible components and blocks — built with @foldkit/ui and Tailwind CSS v4. Add one command, then own the source.',
+                      ' copy-paste components built with @foldkit/ui, Foldkit TEA architecture, and Tailwind CSS.',
                     ],
                   ),
-                  h.div([h.Class('mx-auto mt-10 max-w-xl')], [installTabs(h, model, 'foldcn')]),
+                  // Install command
+                  h.div([h.Class('mx-auto mt-8 max-w-xl')], [installTabs(h, model, 'foldcn')]),
                   h.p(
-                    [h.Class('mt-4 text-sm text-muted-foreground')],
+                    [h.Class('mt-3 text-sm text-muted-foreground')],
                     [
                       'or ',
                       h.a(
@@ -91,18 +101,19 @@ export const homeView = (model: Model, h: HtmlBuilder<Message>): Html =>
                       ' first.',
                     ],
                   ),
+                  // Stats
                   h.div(
                     [
                       h.Class(
-                        'mt-10 flex items-center justify-center gap-6 text-sm text-muted-foreground',
+                        'mt-6 flex items-center justify-center gap-6 text-sm text-muted-foreground',
                       ),
                     ],
                     [
                       h.span([], [`${componentCount} components`]),
                       h.span([h.Role('separator'), h.Class('h-4 w-px bg-border')], []),
-                      h.span([], ['Foldkit · Elm architecture, no React']),
+                      h.span([], ['@foldkit/ui']),
                       h.span([h.Role('separator'), h.Class('h-4 w-px bg-border')], []),
-                      h.span([], ['Tailwind v4']),
+                      h.span([], ['Tailwind CSS']),
                     ],
                   ),
                 ],
@@ -115,7 +126,7 @@ export const homeView = (model: Model, h: HtmlBuilder<Message>): Html =>
       // category sections
       ...categoryGroups.map((group) =>
         h.section(
-          [h.Class('mx-auto w-full max-w-6xl px-4 py-10 sm:px-6')],
+          [h.Class('mx-auto w-full max-w-6xl px-4 py-8 sm:px-6')],
           [
             h.div(
               [h.Class('mb-6 max-w-2xl')],

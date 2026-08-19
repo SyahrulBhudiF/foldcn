@@ -32,7 +32,7 @@ export const themeSelector = (model: Model, h: HtmlBuilder<Message>): Html =>
     [
       h.Role('group'),
       h.AriaLabel('Theme preference'),
-      h.Class('flex items-center gap-0.5 rounded-lg border border-border bg-muted/40 p-0.5'),
+      h.Class('flex items-center gap-0.5 rounded-md border border-border bg-muted/40 p-0.5'),
     ],
     THEME_OPTIONS.map(({ preference, label, icon }) => {
       const isActive = Option.exists(model.maybeThemePreference, (p) => p === preference)
@@ -41,7 +41,7 @@ export const themeSelector = (model: Model, h: HtmlBuilder<Message>): Html =>
           h.AriaPressed(String(isActive)),
           h.Class(
             clsx(
-              'rounded-md p-2 transition cursor-pointer',
+              'rounded p-1.5 transition cursor-pointer',
               isActive
                 ? 'bg-background text-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground',
@@ -62,7 +62,7 @@ export const headerView = (model: Model, h: HtmlBuilder<Message>): Html =>
       h.div(
         [
           h.Class(
-            'mx-auto flex h-14 w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6',
+            'mx-auto flex h-10 w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6',
           ),
         ],
         [
@@ -72,10 +72,10 @@ export const headerView = (model: Model, h: HtmlBuilder<Message>): Html =>
               h.span(
                 [
                   h.Class(
-                    'flex size-6 items-center justify-center rounded-md bg-foreground text-background',
+                    'flex size-5 items-center justify-center rounded bg-foreground text-background',
                   ),
                 ],
-                [h.span([h.Class('text-[13px] leading-none font-black')], ['F'])],
+                [h.span([h.Class('text-[11px] leading-none font-black')], ['F'])],
               ),
               h.span([], ['foldcn']),
             ],
@@ -85,12 +85,21 @@ export const headerView = (model: Model, h: HtmlBuilder<Message>): Html =>
             [
               h.a(
                 [
+                  h.Href('/'),
+                  h.Class(
+                    'hidden text-sm text-muted-foreground transition-colors hover:text-foreground sm:block',
+                  ),
+                ],
+                ['Docs'],
+              ),
+              h.a(
+                [
                   h.Href('/components/button'),
                   h.Class(
                     'hidden text-sm text-muted-foreground transition-colors hover:text-foreground sm:block',
                   ),
                 ],
-                ['Browse components'],
+                ['Components'],
               ),
               themeSelector(model, h),
             ],
@@ -125,10 +134,9 @@ export const footerView = (h: HtmlBuilder<Message>): Html =>
                 ],
                 ['Foldkit'],
               ),
-              '.',
+              '. Built on @foldkit/ui with Foldkit TEA and Tailwind CSS.',
             ],
           ),
-          h.p([], ['Built on @foldkit/ui with Tailwind CSS v4.']),
         ],
       ),
     ],
