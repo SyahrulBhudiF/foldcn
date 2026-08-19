@@ -23,7 +23,6 @@ import {
   ToggledSwitchEmail,
   ToggledSwitchTfa,
   UpdatedInputValue,
-  UpdatedSelectValue,
   UpdatedTextareaValue,
   type Message,
 } from '../message'
@@ -177,15 +176,24 @@ export const fieldsetView = (model: Model, h: HtmlBuilder<Message>): Html =>
           },
           h,
         ),
-        select.select<Message>(
-          {
-            id: 'fieldset-country',
-            label: 'Country',
-            value: 'en',
-            onChange: (value) => UpdatedSelectValue({ value }),
-            options: LANGUAGE_OPTIONS.map(([value, label]) => h.option([h.Value(value)], [label])),
-          },
-          h,
+        h.div(
+          [h.Class(select.selectWrapperClass)],
+          [
+            select.selectLabel('Country', h),
+            h.submodel({
+              slotId: model.select.id,
+              model: model.select,
+              view: LanguageSelect.view,
+              viewInputs: select.styledViewInputs<Message, { value: string; label: string }, string>({
+                options: LANGUAGE_OPTIONS.map(([value, label]) => ({ value, label })),
+                maybeSelectedValue: model.maybeSelectValue,
+                itemToValue: (item) => item.value,
+                itemToLabel: (item) => item.label,
+                label: 'Country',
+              }, h),
+              toParentMessage: (message) => GotSelectMessage({ message }),
+            }),
+          ],
         ),
       ],
     },
