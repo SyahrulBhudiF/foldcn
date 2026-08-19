@@ -81,15 +81,13 @@ const NavigateInternal = Command.define('NavigateInternal', {
 })
 
 const ScrollToTop = Command.define('ScrollToTop', {
-  args: {},
   messages: [CompletedScrollToTop],
-  execute: () =>
-    Effect.sync(() => {
-      if (typeof window !== 'undefined') {
-        window.scrollTo(0, 0)
-      }
-      return CompletedScrollToTop()
-    }),
+  execute: Effect.sync(() => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo(0, 0)
+    }
+    return CompletedScrollToTop()
+  }),
 })
 
 const LoadExternal = Command.define('LoadExternal', {

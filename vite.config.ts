@@ -9,6 +9,9 @@ export default defineConfig({
   },
   lint: {
     ignorePatterns: ['.turbo/**', 'dist/**', '**/*.d.ts'],
+    options: {
+      typeAware: true,
+    },
     plugins: ['typescript'],
     rules: {
       'no-unused-vars': [
