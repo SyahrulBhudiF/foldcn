@@ -41,7 +41,7 @@ export type SelectOption = Readonly<{ value: string; label: string }>
 export type SelectViewInputsConfig<Item, Value extends string = string> = Readonly<{
   options: ReadonlyArray<Item>
   maybeSelectedValue: Option.Option<Value>
-  itemToValue?: (item: Item) => Value
+  itemToValue: (item: Item) => Value
   itemToLabel: (item: Item) => string
   label: string
   placeholder?: string
@@ -61,7 +61,7 @@ export const styledViewInputs = <M, Item, Value extends string = string>(
   config: SelectViewInputsConfig<Item, Value>,
   h: HtmlBuilder<M>,
 ): ViewInputs<Item, Value> => {
-  const itemToValue = config.itemToValue ?? ((item: Item) => String(item) as Value)
+  const itemToValue = config.itemToValue
   return {
     items: config.options,
     maybeSelectedValue: config.maybeSelectedValue,
@@ -74,8 +74,10 @@ export const styledViewInputs = <M, Item, Value extends string = string>(
           [h.Class('min-w-0 flex-1 truncate text-left')],
           [Option.match(config.maybeSelectedValue, {
         onNone: () => config.placeholder ?? 'Select an option',
-            onSome: (value) =>
-              config.itemToLabel(config.options.find((item) => itemToValue(item) === value) as Item),
+            onSome: (value) => {
+              const item = config.options.find((item) => itemToValue(item) === value)
+              return item === undefined ? config.placeholder ?? 'Select an option' : config.itemToLabel(item)
+            },
           })],
         ),
         selectChevron(h),
