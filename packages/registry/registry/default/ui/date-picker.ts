@@ -7,6 +7,7 @@ import type { HtmlBuilder } from 'foldkit/html'
 import { icon } from '@/lib/icons'
 import { ChevronDown } from 'lucide'
 import { cn } from '@/lib/utils'
+import { childAttributes } from 'foldkit/html'
 import { calendarToView } from '@/ui/calendar'
 
 // Re-export the @foldkit/ui DatePicker submodel surface.
@@ -26,10 +27,13 @@ export type InitConfig = FoldkitDatePicker.InitConfig
 export type ViewInputs = FoldkitDatePicker.ViewInputs
 
 export const datePickerTriggerClass =
-  'flex h-10 min-w-48 items-center justify-between gap-2 whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50'
+  'flex h-10 min-w-48 items-center justify-between gap-2 whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground shadow-sm outline-none transition-[color,box-shadow] hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=\'size-\'])]:size-4'
 
 export const datePickerPanelClass =
-  'z-50 rounded-xl border border-border bg-popover p-4 text-popover-foreground shadow-md outline-none'
+  'z-50 rounded-xl border border-border bg-popover p-4 text-popover-foreground shadow-md outline-hidden data-[placement=bottom]:slide-in-from-top-2 data-[placement=left]:slide-in-from-right-2 data-[placement=right]:slide-in-from-left-2 data-[placement=top]:slide-in-from-bottom-2'
+
+export const datePickerPanelAnimatedClass =
+  'z-50 rounded-xl border border-border bg-popover p-4 text-popover-foreground shadow-md outline-hidden data-[placement=bottom]:slide-in-from-top-2 data-[placement=left]:slide-in-from-right-2 data-[placement=right]:slide-in-from-left-2 data-[placement=top]:slide-in-from-bottom-2 data-[enter]:animate-in data-[enter]:fade-in-0 data-[enter]:zoom-in-95 data-[leave]:animate-out data-[leave]:fade-out-0 data-[leave]:zoom-out-95'
 
 export const datePickerBackdropClass = 'fixed inset-0 z-0'
 
@@ -50,6 +54,7 @@ export type StyledViewInputs = Readonly<{
   maybeSelectedDate: Option.Option<CalendarDate>
   anchor?: AnchorConfig
   isDisabled?: boolean
+  isAnimated?: boolean
   name?: string
   className?: string
   triggerClass?: string
@@ -70,8 +75,14 @@ export const styledViewInputs = <M>(
   isDisabled: viewInputs.isDisabled,
   name: viewInputs.name,
   className: cn(datePickerWrapperClass, viewInputs.wrapperClass),
+  attributes: childAttributes([h.DataAttribute('slot', 'date-picker')]),
   triggerClassName: cn(datePickerTriggerClass, viewInputs.triggerClass),
-  panelClassName: cn(datePickerPanelClass, viewInputs.panelClass),
+  triggerAttributes: childAttributes([h.DataAttribute('slot', 'date-picker-trigger')]),
+  panelClassName: cn(
+    viewInputs.isAnimated === true ? datePickerPanelAnimatedClass : datePickerPanelClass,
+    viewInputs.panelClass,
+  ),
+  panelAttributes: childAttributes([h.DataAttribute('slot', 'date-picker-content')]),
   backdropClassName: cn(datePickerBackdropClass, viewInputs.backdropClass),
   triggerContent: (maybeDate) =>
     h.div(

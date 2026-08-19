@@ -55,7 +55,11 @@ export const input = <M>(config: InputConfig<M>, h: HtmlBuilder<M>): Html =>
               [...attributes.label, h.Class(cn(inputLabelClass, config.labelClass))],
               [config.label],
             ),
-            h.input([...attributes.input, h.Class(cn(inputClass, config.className))]),
+            h.input([
+              ...attributes.input,
+              h.DataAttribute('slot', 'input'),
+              h.Class(cn(inputClass, config.className)),
+            ]),
             config.maybeDescription === undefined
               ? h.empty
               : h.span(

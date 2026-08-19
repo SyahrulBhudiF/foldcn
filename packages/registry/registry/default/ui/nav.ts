@@ -4,7 +4,11 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 import { cn } from '@/lib/utils'
 
 export const navClass =
-  'flex items-center gap-1 rounded-lg border border-border bg-card p-1 shadow-sm'
+  'flex items-center rounded-lg border border-border bg-card p-1 shadow-sm'
+
+export const navListClass = 'flex flex-1 list-none items-center justify-center gap-1'
+
+export const navItemClass = 'relative'
 
 export const navLinkClass =
   'relative inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-[background-color,color,box-shadow,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring data-[current]:bg-primary data-[current]:text-primary-foreground data-[current]:shadow-sm active:translate-y-0 active:scale-[.98] motion-reduce:transform-none motion-reduce:transition-none'
@@ -21,8 +25,10 @@ export type NavConfig<M, Value extends string = string> = Readonly<{
 }>
 
 /** Styled navigation landmark built on the @foldkit/ui Nav helper. The
- *  current destination is marked with `aria-current` and styled via the
- *  `data-current` attribute. */
+ *  current destination is marked with `aria-current="page"` and styled via
+ *  the `data-current` attribute. Items render inside a list (`ul`/`li`),
+ *  mirroring the structure of the shadcn navigation-menu and breadcrumb
+ *  primitives. */
 export const nav = <M, Value extends string = string>(
   config: NavConfig<M, Value>,
   h: HtmlBuilder<M>,
@@ -34,16 +40,31 @@ export const nav = <M, Value extends string = string>(
     isItemCurrent: config.isItemCurrent,
     toView: ({ nav: navAttributes, items }) =>
       h.nav(
-        [...navAttributes, h.Class(cn(navClass, config.className))],
-        items.map((item, index) =>
-          h.a(
-            [
-              ...item.link,
-              ...(config.onItemClick === undefined ? [] : [h.OnClick(config.onItemClick(item.value, index))]),
-              h.Class(cn(navLinkClass, config.linkClass)),
-            ],
-            [config.toLabel(item.value, index)],
+        [
+          ...navAttributes,
+          h.DataAttribute('slot', 'nav'),
+          h.Class(cn(navClass, config.className)),
+        ],
+        [
+          h.ul(
+            [h.DataAttribute('slot', 'nav-list'), h.Class(cn(navListClass))],
+            items.map((item, index) =>
+              h.li(
+                [h.DataAttribute('slot', 'nav-item'), h.Class(cn(navItemClass))],
+                [
+                  h.a(
+                    [
+                      ...item.link,
+                      ...(config.onItemClick === undefined ? [] : [h.OnClick(config.onItemClick(item.value, index))]),
+                      h.DataAttribute('slot', 'nav-link'),
+                      h.Class(cn(navLinkClass, config.linkClass)),
+                    ],
+                    [config.toLabel(item.value, index)],
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
   })

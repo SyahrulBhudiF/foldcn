@@ -1,5 +1,5 @@
 import { Animation as FoldkitAnimation } from '@foldkit/ui'
-import type { Html } from 'foldkit/html'
+import type { ChildAttribute, Html, TagName } from 'foldkit/html'
 
 import { cn } from '@/lib/utils'
 
@@ -15,16 +15,44 @@ export type Message = typeof Message.Type
 export const OutMessage = FoldkitAnimation.OutMessage
 export type OutMessage = typeof OutMessage.Type
 
+export const TransitionState = FoldkitAnimation.TransitionState
+export type TransitionState = typeof TransitionState.Type
+export const Showed = FoldkitAnimation.Showed
+export type Showed = typeof Showed.Type
+export const Hid = FoldkitAnimation.Hid
+export type Hid = typeof Hid.Type
+export const StartedLeaveAnimating = FoldkitAnimation.StartedLeaveAnimating
+export type StartedLeaveAnimating = typeof StartedLeaveAnimating.Type
+export const TransitionedOut = FoldkitAnimation.TransitionedOut
+export type TransitionedOut = typeof TransitionedOut.Type
+export const CompletedWaitForPaint = FoldkitAnimation.CompletedWaitForPaint
+export type CompletedWaitForPaint = typeof CompletedWaitForPaint.Type
+export const EndedAnimation = FoldkitAnimation.EndedAnimation
+export type EndedAnimation = typeof EndedAnimation.Type
+
+export const WaitForPaint = FoldkitAnimation.WaitForPaint
+export const WaitForAnimationSettled = FoldkitAnimation.WaitForAnimationSettled
+export const defaultLeaveCommand = FoldkitAnimation.defaultLeaveCommand
+
 export type InitConfig = FoldkitAnimation.InitConfig
 export type ViewInputs = FoldkitAnimation.ViewInputs
 
+// Mirrors the shadcn dialog enter/leave utilities (tw-animate-css):
+// `animate-in`/`animate-out` keyed off the Foldkit Animation coordinator's
+// `data-enter`/`data-leave` attributes (never `data-state`). `duration-200`
+// matches the dialog panel and accordion 0.2s ease-out timing. The
+// `fade-in-0`/`zoom-in-95` pair reproduces the reference dialog content
+// animation (fade + subtle scale), decoupled from the `animateSize` grid
+// height animation that the view handles via inline `grid-template-rows`.
 export const animationContentClass =
-  'rounded-lg border border-border bg-card p-4 text-card-foreground shadow-sm transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] data-[closed]:opacity-0 data-[closed]:scale-95 data-[closed]:-translate-y-2 motion-reduce:transition-none motion-reduce:transform-none'
+  'rounded-lg border border-border bg-card p-4 text-card-foreground shadow-sm duration-200 data-[enter]:animate-in data-[enter]:fade-in-0 data-[enter]:zoom-in-95 data-[leave]:animate-out data-[leave]:fade-out-0 data-[leave]:zoom-out-95'
 
 export type StyledViewInputs = Readonly<{
   content: Html
   className?: string
   animateSize?: boolean
+  attributes?: ReadonlyArray<ChildAttribute>
+  element?: TagName
 }>
 
 /** Build styled `Animation.ViewInputs` with foldcn's enter/leave classes. */
@@ -32,4 +60,6 @@ export const styledViewInputs = (viewInputs: StyledViewInputs): ViewInputs => ({
   content: viewInputs.content,
   className: cn(animationContentClass, viewInputs.className),
   animateSize: viewInputs.animateSize,
+  attributes: viewInputs.attributes,
+  element: viewInputs.element,
 })

@@ -38,7 +38,7 @@ export const tabsListClass = (variant: TabsListVariant = 'default') =>
   cn(tabsListBaseClass, tabsListVariantClasses[variant])
 
 export const tabsTriggerClass = cn(
-  "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap text-foreground/60 transition-all group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap text-foreground/60 transition-all group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   'group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-[selected]:bg-transparent dark:group-data-[variant=line]/tabs-list:data-[selected]:border-transparent dark:group-data-[variant=line]/tabs-list:data-[selected]:bg-transparent',
   'data-[selected]:bg-background data-[selected]:text-foreground dark:data-[selected]:border-input dark:data-[selected]:bg-input/30 dark:data-[selected]:text-foreground',
   "after:absolute after:content-[''] after:bottom-[-1px] after:left-0 after:h-0.5 after:w-full after:bg-foreground after:opacity-0 after:transition-opacity group-data-[orientation=vertical]/tabs:after:-right-1 group-data-[orientation=vertical]/tabs:after:bottom-auto group-data-[orientation=vertical]/tabs:after:left-auto group-data-[orientation=vertical]/tabs:after:h-full group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-[selected]:after:opacity-100",
@@ -61,21 +61,33 @@ export const list = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Html | string>,
   h: HtmlBuilder<M>,
-): Html => h.div([h.Class(cn(tabsListClass(), config.className))], children)
+): Html =>
+  h.div(
+    [h.DataAttribute('slot', 'tabs-list'), h.Class(cn(tabsListClass(), config.className))],
+    children,
+  )
 
 /** Individual tab trigger button. */
 export const trigger = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Html | string>,
   h: HtmlBuilder<M>,
-): Html => h.button([h.Class(cn(tabsTriggerClass, config.className))], children)
+): Html =>
+  h.button(
+    [h.DataAttribute('slot', 'tabs-trigger'), h.Class(cn(tabsTriggerClass, config.className))],
+    children,
+  )
 
 /** Tab content panel wrapper. */
 export const content = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Html | string>,
   h: HtmlBuilder<M>,
-): Html => h.div([h.Class(cn(tabsContentClass, config.className))], children)
+): Html =>
+  h.div(
+    [h.DataAttribute('slot', 'tabs-content'), h.Class(cn(tabsContentClass, config.className))],
+    children,
+  )
 
 // --- styledViewInputs factory ---
 
@@ -111,17 +123,26 @@ export const styledViewInputs = <M, Value extends string = string>(
     orientation: viewInputs.orientation,
     toView: ({ tablist, tabs, activeIndex }) =>
       h.div(
-        [h.Class(isVertical ? 'flex w-full gap-2' : '')],
+        [
+          h.DataAttribute('slot', 'tabs'),
+          h.DataAttribute('orientation', isVertical ? 'vertical' : 'horizontal'),
+          h.Class(cn('group/tabs flex', isVertical ? 'w-full gap-2' : 'flex-col', viewInputs.variant === 'line' ? '' : '')),
+        ],
         [
           h.div(
             [
               ...tablist,
+              h.DataAttribute('slot', 'tabs-list'),
               h.Attribute('data-variant', variant),
               h.Class(cn(tabsListClass(variant), viewInputs.listClass)),
             ],
             tabs.map((tab) =>
               h.button(
-                [...tab.tab, h.Class(cn(tabsTriggerClass, viewInputs.triggerClass))],
+                [
+                  ...tab.tab,
+                  h.DataAttribute('slot', 'tabs-trigger'),
+                  h.Class(cn(tabsTriggerClass, viewInputs.triggerClass)),
+                ],
                 [h.span([], [tab.value])],
               ),
             ),
@@ -130,7 +151,11 @@ export const styledViewInputs = <M, Value extends string = string>(
             .filter((tab) => tab.index === activeIndex)
             .map((tab) =>
               h.div(
-                [...tab.panel, h.Class(cn(tabsContentClass, viewInputs.contentClass))],
+                [
+                  ...tab.panel,
+                  h.DataAttribute('slot', 'tabs-content'),
+                  h.Class(cn(tabsContentClass, viewInputs.contentClass)),
+                ],
                 [viewInputs.panel(tab.value, { tablist, tabs, activeIndex }, h)],
               ),
             ),

@@ -1,5 +1,6 @@
 import { VirtualList as FoldkitVirtualList } from '@foldkit/ui'
-import type { Html } from 'foldkit/html'
+import type { Html, HtmlBuilder } from 'foldkit/html'
+import { childAttributes } from 'foldkit/html'
 
 import { cn } from '@/lib/utils'
 
@@ -17,7 +18,7 @@ export type InitConfig = FoldkitVirtualList.InitConfig
 export type ViewInputs<Item> = FoldkitVirtualList.ViewInputs<Item>
 
 export const virtualListContainerClass =
-  'h-96 w-full overflow-auto overscroll-none rounded-lg border border-border bg-card shadow-sm'
+  'group/virtual-list relative h-96 w-full overflow-auto overscroll-none rounded-lg border border-border bg-card shadow-sm outline-none transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 data-[slot=virtual-list]:rounded-lg'
 
 export const virtualListRowClass =
   'grid grid-cols-[2rem_1fr_5rem] items-center gap-3 border-b border-border px-4 py-3'
@@ -32,11 +33,17 @@ export type StyledViewInputs<Item> = Readonly<{
 }>
 
 /** Build styled `VirtualList.ViewInputs` with foldcn's container classes. */
-export const styledViewInputs = <Item>(viewInputs: StyledViewInputs<Item>): ViewInputs<Item> => ({
+export const styledViewInputs = <Item>(
+  viewInputs: StyledViewInputs<Item>,
+  h?: HtmlBuilder<unknown>,
+): ViewInputs<Item> => ({
   items: viewInputs.items,
   itemToKey: viewInputs.itemToKey,
   itemToView: viewInputs.itemToView,
   itemToRowHeightPx: viewInputs.itemToRowHeightPx,
   overscan: viewInputs.overscan,
   containerClassName: cn(virtualListContainerClass, viewInputs.containerClass),
+  ...(h !== undefined
+    ? { containerAttributes: childAttributes([h.DataAttribute('slot', 'virtual-list')]) }
+    : {}),
 })

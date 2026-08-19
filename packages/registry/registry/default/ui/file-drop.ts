@@ -22,21 +22,21 @@ export type ViewInputs = FoldkitFileDrop.ViewInputs
 export type FileDropAttributes = FoldkitFileDrop.FileDropAttributes
 
 export const fileDropClass =
-  'flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-card px-6 py-10 text-center text-card-foreground transition-colors hover:border-primary/50 data-[drag-over]:border-primary data-[drag-over]:bg-accent data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50'
+  'group/file-drop flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-card px-6 py-10 text-center text-card-foreground outline-none transition-colors hover:border-primary/50 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[drag-over]:border-primary data-[drag-over]:bg-accent data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50'
 
 export const fileDropPrimaryTextClass = 'text-base font-medium'
 
 export const fileDropSecondaryTextClass = 'text-sm text-muted-foreground'
 
 export const fileRowClass =
-  'flex items-center justify-between gap-3 rounded-lg border border-border bg-card px-3 py-2'
+  'group/file-row flex items-center justify-between gap-3 rounded-lg border border-border bg-card px-3 py-2'
 
 export const fileNameClass = 'truncate text-sm font-medium'
 
 export const fileSizeClass = 'text-xs text-muted-foreground'
 
 export const fileRemoveButtonClass =
-  'text-sm text-muted-foreground transition-colors hover:text-destructive cursor-pointer'
+  'inline-flex items-center justify-center rounded-md text-sm text-muted-foreground outline-none transition-colors hover:text-destructive focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0'
 
 export type StyledViewInputs = Readonly<{
   multiple?: boolean
@@ -57,7 +57,11 @@ export const styledViewInputs = <M>(
   accept: viewInputs.accept,
   toView: (attributes) =>
     h.label(
-      [...attributes.root, h.Class(cn(fileDropClass, viewInputs.className))],
+      [
+        ...attributes.root,
+        h.DataAttribute('slot', 'file-drop'),
+        h.Class(cn(fileDropClass, viewInputs.className)),
+      ],
       [...viewInputs.content, h.input(attributes.input)],
     ),
 })

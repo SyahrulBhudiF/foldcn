@@ -12,7 +12,7 @@ export const switchSizes: Record<SwitchSize, string> = {
 }
 
 const switchBase =
-  'peer group/switch inline-flex shrink-0 cursor-pointer items-center rounded-full border border-transparent bg-input shadow-xs transition-[background-color,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 data-[checked]:bg-primary dark:bg-input/80 motion-reduce:transition-none'
+  'peer group/switch relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-transparent bg-input shadow-xs transition-[background-color,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] outline-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 data-disabled:cursor-not-allowed data-disabled:opacity-50 data-[checked]:bg-primary dark:bg-input/80 motion-reduce:transition-none'
 
 export const switchClass = switchBase
 
@@ -25,11 +25,11 @@ export const switchThumbSizes: Record<SwitchSize, string> = {
 }
 
 export const switchLabelClass =
-  'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
+  'text-sm font-medium leading-none group-data-[disabled]/field:cursor-not-allowed group-data-[disabled]/field:opacity-70'
 
 export const switchDescriptionClass = 'text-sm text-muted-foreground'
 
-export const switchWrapperClass = 'flex items-center gap-3'
+export const switchWrapperClass = 'group/field flex items-center gap-3'
 
 export const switchTextWrapperClass = 'flex flex-col gap-1'
 
@@ -65,16 +65,22 @@ export const switch_ = <M>(config: SwitchConfig<M>, h: HtmlBuilder<M>): Html =>
       value: config.value,
       toView: (attributes) =>
         h.div(
-          [h.Class(cn(switchWrapperClass, config.wrapperClass))],
+          [
+            h.Class(cn(switchWrapperClass, config.wrapperClass)),
+            ...(config.isDisabled ? [h.DataAttribute('disabled', '')] : []),
+          ],
           [
             h.button(
               [
                 ...attributes.button,
-                h.Class(cn(switchClass, switchSizes[config.size ?? 'default'], config.className)),
+                h.DataAttribute('slot', 'switch'),
                 h.DataAttribute('size', config.size ?? 'default'),
+                ...(config.isChecked ? [] : [h.DataAttribute('unchecked', '')]),
+                h.Class(cn(switchClass, switchSizes[config.size ?? 'default'], config.className)),
               ],
               [
                 h.span([
+                  h.DataAttribute('slot', 'switch-thumb'),
                   h.Class(
                     cn(
                       switchThumbClass,

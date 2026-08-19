@@ -26,16 +26,16 @@ export type ViewInputs = FoldkitSlider.ViewInputs
 export type SliderAttributes = FoldkitSlider.SliderAttributes
 
 export const sliderRootClass =
-  'relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col'
+  'relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-40 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col'
 
 export const sliderTrackClass =
-  'relative grow overflow-hidden rounded-full bg-muted h-1.5 w-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5'
+  'relative grow overflow-hidden select-none rounded-full bg-muted h-1.5 w-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5'
 
 export const sliderFilledTrackClass =
-  'absolute bg-primary h-full w-full data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full'
+  'absolute select-none bg-primary h-full w-full data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full'
 
 export const sliderThumbClass =
-  'block size-4 shrink-0 rounded-full border border-primary bg-white shadow-sm ring-ring/50 transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50'
+  'block size-4 shrink-0 select-none rounded-full border border-primary bg-white shadow-sm ring-ring/50 transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50'
 
 export const sliderLabelClass = 'text-sm font-medium'
 

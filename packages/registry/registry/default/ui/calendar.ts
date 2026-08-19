@@ -5,6 +5,7 @@ import type { ChildAttribute, Html, HtmlBuilder } from 'foldkit/html'
 
 import { icon } from '@/lib/icons'
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide'
+import { cn } from '@/lib/utils'
 
 // Re-export the @foldkit/ui Calendar submodel surface.
 
@@ -27,7 +28,7 @@ export type YearsModeAttributes = FoldkitCalendar.YearsModeAttributes
 export type Week = FoldkitCalendar.Week
 
 export const calendarContainerClass =
-  'inline-flex flex-col gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm select-none min-w-[304px] min-h-[324px]'
+  'cn-calendar group/calendar inline-flex flex-col gap-3 rounded-xl border border-border bg-background p-4 text-foreground shadow-sm select-none min-w-[304px] min-h-[324px] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent'
 
 export const calendarHeaderClass = 'flex items-center justify-between gap-2'
 
@@ -37,19 +38,19 @@ export const calendarHeadingButtonClass =
 export const calendarHeadingTextClass = 'text-sm font-semibold tabular-nums'
 
 export const calendarNavButtonClass =
-  'inline-flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer'
+  'inline-flex size-8 select-none items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer [&>svg]:rtl:rotate-180'
 
 export const calendarGridClass = 'flex flex-col gap-1 outline-none'
 
 export const calendarRowClass = 'grid grid-cols-7 gap-1'
 
 export const calendarColumnHeaderClass =
-  'py-1 text-center text-xs font-medium uppercase tracking-wide text-muted-foreground'
+  'py-1 text-center text-[0.8rem] font-normal text-muted-foreground select-none'
 
 export const calendarCellClass = 'group flex items-center justify-center'
 
 export const calendarDayButtonClass =
-  'flex size-9 items-center justify-center rounded-full text-sm tabular-nums transition-colors cursor-pointer hover:bg-accent hover:text-accent-foreground group-data-[today]:ring-1 group-data-[today]:ring-ring group-data-[selected]:bg-primary group-data-[selected]:text-primary-foreground group-data-[selected]:hover:bg-primary group-data-[focused]:outline-2 group-data-[focused]:outline-offset-2 group-data-[focused]:outline-ring group-data-[outside-month]:text-muted-foreground group-data-[disabled]:pointer-events-none group-data-[disabled]:opacity-40'
+  'flex size-9 select-none items-center justify-center rounded-full text-sm tabular-nums transition-colors cursor-pointer hover:bg-accent hover:text-accent-foreground group-data-[today]:ring-1 group-data-[today]:ring-ring group-data-[selected]:bg-primary group-data-[selected]:text-primary-foreground group-data-[selected]:hover:bg-primary group-data-[focused]:outline-2 group-data-[focused]:outline-offset-2 group-data-[focused]:outline-ring group-data-[outside-month]:text-muted-foreground group-data-[disabled]:pointer-events-none group-data-[disabled]:opacity-50'
 
 export const calendarMonthYearGridClass = 'grid flex-1 grid-cols-3 grid-rows-4 gap-1 outline-none'
 
@@ -72,20 +73,44 @@ const headingButton = <M>(
     [heading.text, icon(h, ChevronDown, 'size-3')],
   )
 
-const weekRow = <M>(week: Week, h: HtmlBuilder<M>): Html =>
+const weekRow = <M>(
+  week: Week,
+  showOutsideDays: boolean,
+  h: HtmlBuilder<M>,
+): Html =>
   h.div(
     [...week.attributes, h.Class(calendarRowClass)],
     week.cells.map((cell) =>
       h.div(
         [...cell.cellAttributes, h.Class(calendarCellClass)],
-        [h.button([...cell.buttonAttributes, h.Class(calendarDayButtonClass)], [cell.label])],
+        [
+          h.button(
+            [
+              ...cell.buttonAttributes,
+              h.Class(
+                showOutsideDays || cell.isInViewMonth
+                  ? calendarDayButtonClass
+                  : cn(calendarDayButtonClass, 'invisible pointer-events-none'),
+              ),
+            ],
+            [cell.label],
+          ),
+        ],
       ),
     ),
   )
 
-const daysView = <M>(days: DaysModeAttributes, h: HtmlBuilder<M>): Html =>
+const daysView = <M>(
+  days: DaysModeAttributes,
+  h: HtmlBuilder<M>,
+  options: CalendarViewOptions | undefined,
+): Html =>
   h.div(
-    [...days.root, h.Class(calendarContainerClass)],
+    [
+      h.DataAttribute('slot', 'calendar'),
+      ...days.root,
+      h.Class(cn(calendarContainerClass, options?.containerClass)),
+    ],
     [
       h.div(
         [h.Class(calendarHeaderClass)],
@@ -104,15 +129,23 @@ const daysView = <M>(days: DaysModeAttributes, h: HtmlBuilder<M>): Html =>
               h.div([...header.attributes, h.Class(calendarColumnHeaderClass)], [header.name]),
             ),
           ),
-          ...days.weeks.map((week) => weekRow(week, h)),
+          ...days.weeks.map((week) => weekRow(week, options?.showOutsideDays ?? true, h)),
         ],
       ),
     ],
   )
 
-const monthsView = <M>(months: MonthsModeAttributes, h: HtmlBuilder<M>): Html =>
+const monthsView = <M>(
+  months: MonthsModeAttributes,
+  h: HtmlBuilder<M>,
+  options: CalendarViewOptions | undefined,
+): Html =>
   h.div(
-    [...months.root, h.Class(calendarContainerClass)],
+    [
+      h.DataAttribute('slot', 'calendar'),
+      ...months.root,
+      h.Class(cn(calendarContainerClass, options?.containerClass)),
+    ],
     [
       h.div(
         [h.Class(`${calendarHeaderClass} justify-center`)],
@@ -135,9 +168,17 @@ const monthsView = <M>(months: MonthsModeAttributes, h: HtmlBuilder<M>): Html =>
     ],
   )
 
-const yearsView = <M>(years: YearsModeAttributes, h: HtmlBuilder<M>): Html =>
+const yearsView = <M>(
+  years: YearsModeAttributes,
+  h: HtmlBuilder<M>,
+  options: CalendarViewOptions | undefined,
+): Html =>
   h.div(
-    [...years.root, h.Class(calendarContainerClass)],
+    [
+      h.DataAttribute('slot', 'calendar'),
+      ...years.root,
+      h.Class(cn(calendarContainerClass, options?.containerClass)),
+    ],
     [
       h.div(
         [h.Class(calendarHeaderClass)],
@@ -164,19 +205,28 @@ const yearsView = <M>(years: YearsModeAttributes, h: HtmlBuilder<M>): Html =>
     ],
   )
 
+export type CalendarViewOptions = Readonly<{
+  containerClass?: string
+  showOutsideDays?: boolean
+}>
+
 export type StyledViewInputs = Readonly<{
   maybeSelectedDate: Option.Option<CalendarDate>
   containerClass?: string
+  showOutsideDays?: boolean
 }>
 
 /** Styled calendar `toView` callback for the Days/Months/Years modes. Shared
  *  with the date picker's popover panel. */
-export const calendarToView = <M>(h: HtmlBuilder<M>): ((attributes: CalendarAttributes) => Html) =>
+export const calendarToView = <M>(
+  h: HtmlBuilder<M>,
+  options?: CalendarViewOptions,
+): ((attributes: CalendarAttributes) => Html) =>
   M.type<CalendarAttributes>().pipe(
     M.tagsExhaustive({
-      Days: (days) => daysView(days, h),
-      Months: (months) => monthsView(months, h),
-      Years: (years) => yearsView(years, h),
+      Days: (days) => daysView(days, h, options),
+      Months: (months) => monthsView(months, h, options),
+      Years: (years) => yearsView(years, h, options),
     }),
   )
 
@@ -186,5 +236,8 @@ export const styledViewInputs = <M>(
   h: HtmlBuilder<M>,
 ): ViewInputs => ({
   maybeSelectedDate: viewInputs.maybeSelectedDate,
-  toView: calendarToView(h),
+  toView: calendarToView(h, {
+    containerClass: viewInputs.containerClass,
+    showOutsideDays: viewInputs.showOutsideDays ?? true,
+  }),
 })

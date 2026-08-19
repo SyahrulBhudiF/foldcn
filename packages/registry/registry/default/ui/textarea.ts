@@ -55,7 +55,11 @@ export const textarea = <M>(config: TextareaConfig<M>, h: HtmlBuilder<M>): Html 
               [...attributes.label, h.Class(cn(textareaLabelClass, config.labelClass))],
               [config.label],
             ),
-            h.textarea([...attributes.textarea, h.Class(cn(textareaClass, config.className))]),
+            h.textarea([
+              ...attributes.textarea,
+              h.DataAttribute('slot', 'textarea'),
+              h.Class(cn(textareaClass, config.className)),
+            ]),
             config.maybeDescription === undefined
               ? h.empty
               : h.span(
