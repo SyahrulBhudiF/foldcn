@@ -22,6 +22,8 @@ export type InitConfig = FoldkitTabs.InitConfig
 export type ViewInputs<Value extends string = string> = FoldkitTabs.ViewInputs<Value>
 export type RenderInfo<Value extends string = string> = FoldkitTabs.RenderInfo<Value>
 
+// --- Class constants ---
+
 export type TabsListVariant = 'default' | 'line'
 
 const tabsListBaseClass =
@@ -44,6 +46,38 @@ export const tabsTriggerClass = cn(
 )
 
 export const tabsContentClass = 'flex-1 outline-none'
+
+// --- Composable sub-components ---
+//
+// Use inside `styledViewInputs` panel callbacks:
+//
+//   panel: (tab, render, h) =>
+//     Tabs.content({}, [h.p([], [`${tab} content`])], h)
+
+type StyleConfig = Readonly<{ className?: string }>
+
+/** Tab list wrapper. */
+export const list = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Html | string>,
+  h: HtmlBuilder<M>,
+): Html => h.div([h.Class(cn(tabsListClass(), config.className))], children)
+
+/** Individual tab trigger button. */
+export const trigger = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Html | string>,
+  h: HtmlBuilder<M>,
+): Html => h.button([h.Class(cn(tabsTriggerClass, config.className))], children)
+
+/** Tab content panel wrapper. */
+export const content = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Html | string>,
+  h: HtmlBuilder<M>,
+): Html => h.div([h.Class(cn(tabsContentClass, config.className))], children)
+
+// --- styledViewInputs factory ---
 
 export type StyledViewInputs<M, Value extends string = string> = Readonly<{
   tabs: ReadonlyArray<Value>

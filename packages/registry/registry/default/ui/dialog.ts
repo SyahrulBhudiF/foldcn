@@ -28,6 +28,8 @@ export const view = FoldkitDialog.view
 export type InitConfig = FoldkitDialog.InitConfig
 export type RenderInfo = FoldkitDialog.RenderInfo
 
+// --- Class constants ---
+
 export const dialogClass = 'bg-transparent p-0 open:flex items-center justify-center'
 
 export const dialogBackdropClass =
@@ -47,6 +49,65 @@ export const dialogHeaderClass = 'flex flex-col gap-2 text-center sm:text-left'
 
 export const dialogFooterClass = 'flex flex-col-reverse gap-2 sm:flex-row sm:justify-end'
 
+// --- Composable sub-components ---
+//
+// These abstract away element types, base classes, and attribute spreading.
+// Use inside `styledViewInputs` content callbacks:
+//
+//   content: (render, h) => [
+//     Dialog.header({}, [
+//       Dialog.title(render.title, {}, ['Title'], h),
+//       Dialog.description(render.description, {}, ['Subtitle'], h),
+//     ], h),
+//     Dialog.content({}, [/* ... */], h),
+//     Dialog.footer({}, [button(...)], h),
+//   ]
+
+type StyleConfig = Readonly<{ className?: string }>
+
+/** Dialog header wrapper. */
+export const header = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html => h.div([h.Class(cn(dialogHeaderClass, config.className))], children)
+
+/** Dialog title — merges with the submodel's title attributes. */
+export const title = <M>(
+  attributes: ReadonlyArray<Attribute<M> | ChildAttribute>,
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.h2([...attributes, h.Class(cn(dialogTitleClass, config.className))], children)
+
+/** Dialog description — merges with the submodel's description attributes. */
+export const description = <M>(
+  attributes: ReadonlyArray<Attribute<M> | ChildAttribute>,
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.p([...attributes, h.Class(cn(dialogDescriptionClass, config.className))], children)
+
+/** Dialog footer wrapper. */
+export const footer = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html => h.div([h.Class(cn(dialogFooterClass, config.className))], children)
+
+/** Close button — merges with the submodel's closeButton attributes. */
+export const closeButton = <M>(
+  attributes: ReadonlyArray<Attribute<M> | ChildAttribute>,
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.button([...attributes, h.Class(cn(dialogCloseButtonClass, config.className))], children)
+
+// --- styledViewInputs factory ---
+
 export type DialogContent<M> = Readonly<{
   closeButton: ReadonlyArray<Attribute<M> | ChildAttribute>
   title: ReadonlyArray<Attribute<M> | ChildAttribute>
@@ -55,7 +116,8 @@ export type DialogContent<M> = Readonly<{
 
 export type StyledViewInputs<M> = Readonly<{
   /** Panel content. Receives the close-button, title and description
-   *  attribute bundles to spread onto your own elements. */
+   *  attribute bundles to spread onto your own elements, or pass to
+   *  Dialog.title / Dialog.description / Dialog.closeButton helpers. */
   content: (render: DialogContent<M>, h: HtmlBuilder<M>) => ReadonlyArray<Child>
   className?: string
   backdropClass?: string

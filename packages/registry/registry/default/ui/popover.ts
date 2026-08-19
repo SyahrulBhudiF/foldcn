@@ -27,6 +27,8 @@ export const view = FoldkitPopover.view
 export type InitConfig = FoldkitPopover.InitConfig
 export type RenderInfo = FoldkitPopover.RenderInfo
 
+// --- Class constants ---
+
 export const popoverTriggerClass =
   'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50'
 
@@ -36,6 +38,49 @@ export const popoverContentClass =
 export const popoverBackdropClass = 'fixed inset-0 z-0'
 
 export const popoverWrapperClass = 'relative inline-block'
+
+export const popoverHeaderClass = 'flex flex-col gap-1 text-sm'
+
+export const popoverTitleClass = 'font-medium'
+
+export const popoverDescriptionClass = 'text-muted-foreground'
+
+// --- Composable sub-components ---
+//
+// Use inside `styledViewInputs` content arrays:
+//
+//   content: [
+//     Popover.header({}, [
+//       Popover.title({}, ['Title'], h),
+//       Popover.description({}, ['Subtitle'], h),
+//     ], h),
+//     h.p([], ['Custom content']),
+//   ]
+
+type StyleConfig = Readonly<{ className?: string }>
+
+/** Popover header wrapper. */
+export const header = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html => h.div([h.Class(cn(popoverHeaderClass, config.className))], children)
+
+/** Popover title. */
+export const title = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html => h.div([h.Class(cn(popoverTitleClass, config.className))], children)
+
+/** Popover description. */
+export const description = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html => h.p([h.Class(cn(popoverDescriptionClass, config.className))], children)
+
+// --- styledViewInputs factory ---
 
 export type PopoverContent = Readonly<{
   button: ReadonlyArray<Child>
