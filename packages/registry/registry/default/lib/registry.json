@@ -15,6 +15,20 @@
       ]
     },
     {
+      "name": "code-block",
+      "type": "registry:lib",
+      "title": "Code Block",
+      "description": "Syntax-highlighted code block with file header and copy button, powered by @tanstack/highlight.",
+      "dependencies": ["@tanstack/highlight"],
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [
+        {
+          "path": "code-block.ts",
+          "type": "registry:lib"
+        }
+      ]
+    },
+    {
       "name": "icons",
       "type": "registry:lib",
       "title": "Icons",

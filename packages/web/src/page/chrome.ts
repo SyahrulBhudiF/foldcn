@@ -2,6 +2,7 @@ import { clsx } from 'clsx'
 import { Option } from 'effect'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
+import { codeBlock as registryCodeBlock } from '@foldcn/registry/src/lib/code-block'
 import { button } from '@foldcn/registry/src/ui/button'
 
 import {
@@ -158,24 +159,14 @@ export const codeBlock = (
   path: string,
   code: string,
 ): Html =>
-  h.div(
-    [h.Class('overflow-hidden rounded-lg border border-border bg-card')],
-    [
-      h.div(
-        [h.Class('flex items-center justify-between gap-3 border-b border-border px-4 py-2')],
-        [
-          h.code([h.Class('truncate font-mono text-xs text-muted-foreground')], [path]),
-          h.span([h.Class('flex items-center gap-2')], [
-            h.span([h.Class('text-xs text-muted-foreground')], [`${code.split('\n').length} lines`]),
-            copyButton(h, code, model.maybeCopiedValue),
-          ]),
-        ],
-      ),
-      h.pre(
-        [h.Class('max-h-[520px] overflow-auto p-4 text-[13px] leading-relaxed text-foreground')],
-        [h.code([h.Class('font-mono')], [code])],
-      ),
-    ],
+  registryCodeBlock(
+    {
+      path,
+      code,
+      onCopy: ClickedCopy({ value: code }),
+      isCopied: Option.exists(model.maybeCopiedValue, v => v === code),
+    },
+    h,
   )
 
 export const sectionLink = (

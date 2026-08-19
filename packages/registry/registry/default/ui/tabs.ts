@@ -22,20 +22,30 @@ export type InitConfig = FoldkitTabs.InitConfig
 export type ViewInputs<Value extends string = string> = FoldkitTabs.ViewInputs<Value>
 export type RenderInfo<Value extends string = string> = FoldkitTabs.RenderInfo<Value>
 
-export const tabsListClass =
-  "group/tabs-list inline-flex w-fit items-center justify-center rounded-lg bg-muted p-[3px] text-muted-foreground group-data-[orientation=horizontal]/tabs:h-9 group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col data-[variant=line]:rounded-none"
+// --- Variant system (mirrors shadcn-ui cva pattern) ---
 
-export const tabsTriggerClass =
-  "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap text-foreground/60 transition-all group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-sm dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-[state=active]:bg-background data-[state=active]:text-foreground dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 dark:data-[state=active]:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-right-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-[state=active]:after:opacity-100 group-data-[variant=line]/tabs-list:data-[state=active]:shadow-none group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-[state=active]:bg-transparent dark:group-data-[variant=line]/tabs-list:data-[state=active]:border-transparent dark:group-data-[variant=line]/tabs-list:data-[state=active]:bg-transparent"
+export type TabsListVariant = "default" | "line"
 
-export const tabsListVerticalClass =
-  "group/tabs-list inline-flex w-fit items-center justify-center rounded-lg bg-muted p-[3px] text-muted-foreground group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col data-[variant=line]:rounded-none"
+const tabsListBaseClass =
+  "group/tabs-list inline-flex w-fit items-center justify-center rounded-lg p-[3px] text-muted-foreground group-data-[orientation=horizontal]/tabs:h-9 group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col data-[variant=line]:rounded-none"
 
-export const tabsTriggerVerticalClass =
-  "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap text-foreground/60 transition-all group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-sm group-data-[variant=line]/tabs-list:data-[state=active]:shadow-none group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-[state=active]:bg-transparent dark:group-data-[variant=line]/tabs-list:data-[state=active]:border-transparent dark:group-data-[variant=line]/tabs-list:data-[state=active]:bg-transparent dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-[state=active]:bg-background data-[state=active]:text-foreground dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 dark:data-[state=active]:text-foreground after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-right-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-[state=active]:after:opacity-100"
+const tabsListVariantClasses: Record<TabsListVariant, string> = {
+  default: "bg-muted",
+  line: "gap-1 bg-transparent",
+}
 
-export const tabsContentClass =
-  "flex-1 outline-none"
+export const tabsListClass = (variant: TabsListVariant = "default") =>
+  cn(tabsListBaseClass, tabsListVariantClasses[variant])
+
+export const tabsTriggerClass = cn(
+  "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap text-foreground/60 transition-all group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-[selected]:bg-transparent dark:group-data-[variant=line]/tabs-list:data-[selected]:border-transparent dark:group-data-[variant=line]/tabs-list:data-[selected]:bg-transparent",
+  "data-[selected]:bg-background data-[selected]:text-foreground dark:data-[selected]:border-input dark:data-[selected]:bg-input/30 dark:data-[selected]:text-foreground",
+  "after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-right-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-[selected]:after:opacity-100",
+  "group-data-[variant=default]/tabs-list:data-[selected]:shadow-sm group-data-[variant=line]/tabs-list:data-[selected]:shadow-none",
+)
+
+export const tabsContentClass = "flex-1 outline-none"
 
 export type StyledViewInputs<M, Value extends string = string> = Readonly<{
   tabs: ReadonlyArray<Value>
@@ -47,6 +57,7 @@ export type StyledViewInputs<M, Value extends string = string> = Readonly<{
   panel: (tab: Value, render: RenderInfo<Value>, h: HtmlBuilder<M>) => Html
   isTabDisabled?: (value: Value, index: number) => boolean
   orientation?: "Horizontal" | "Vertical"
+  variant?: TabsListVariant
   listClass?: string
   triggerClass?: string
   contentClass?: string
@@ -59,6 +70,7 @@ export const styledViewInputs = <M, Value extends string = string>(
   h: HtmlBuilder<M>,
 ): ViewInputs<Value> => {
   const isVertical = viewInputs.orientation === "Vertical"
+  const variant = viewInputs.variant ?? "default"
   return {
     tabs: viewInputs.tabs,
     selectedValue: viewInputs.selectedValue,
@@ -72,23 +84,14 @@ export const styledViewInputs = <M, Value extends string = string>(
           h.div(
             [
               ...tablist,
-              h.Class(
-                cn(
-                  isVertical ? tabsListVerticalClass : tabsListClass,
-                  viewInputs.listClass,
-                ),
-              ),
+              h.Attribute("data-variant", variant),
+              h.Class(cn(tabsListClass(variant), viewInputs.listClass)),
             ],
             tabs.map(tab =>
               h.button(
                 [
                   ...tab.tab,
-                  h.Class(
-                    cn(
-                      isVertical ? tabsTriggerVerticalClass : tabsTriggerClass,
-                      viewInputs.triggerClass,
-                    ),
-                  ),
+                  h.Class(cn(tabsTriggerClass, viewInputs.triggerClass)),
                 ],
                 [h.span([], [tab.value])],
               ),

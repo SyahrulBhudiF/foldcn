@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@foldkit/ui": "^0.148.0",
+    "@tanstack/highlight": "^0.0.10",
     "@types/node": "^26.2.0",
     "clsx": "^2.1.1",
     "effect": "4.0.0-rc.109",
