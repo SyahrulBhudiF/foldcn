@@ -22,7 +22,7 @@ import * as Slider from '@foldcn/registry/src/ui/slider'
 import * as Tooltip from '@foldcn/registry/src/ui/tooltip'
 import * as VirtualList from '@foldcn/registry/src/ui/virtual-list'
 
-import { CityCombobox, DemoMenu, DemoTabs, ItemListbox, PlanRadioGroup } from './bundles'
+import { CityCombobox, DemoMenu, DemoTabs, ItemListbox, LanguageSelect, PlanRadioGroup } from './bundles'
 import { INITIAL_ROWS } from './init'
 import {
   GotAnimationMessage,
@@ -38,6 +38,7 @@ import {
   GotRadioGroupMessage,
   GotSliderRatingMessage,
   GotSliderVolumeMessage,
+  GotSelectMessage,
   GotTabsMessage,
   GotToastMessage,
   GotTooltipMessage,
@@ -126,6 +127,15 @@ const foldListboxOutMessage = M.type<FoldkitListbox.OutMessage<ListboxItem>>().p
     Selected:
       ({ value }) =>
       (model) => [evo(model, { maybeListboxValue: () => Option.some(value) }), []],
+  }),
+)
+
+const foldSelectOutMessage = M.type<FoldkitListbox.OutMessage<string>>().pipe(
+  M.withReturnType<Update.Step<Model, Message>>(),
+  M.tagsExhaustive({
+    Selected:
+      ({ value }) =>
+      (model) => [evo(model, { maybeSelectValue: () => Option.some(value) }), []],
   }),
 )
 
@@ -284,6 +294,14 @@ const foldListbox = Update.foldChild({
   foldOutMessage: foldListboxOutMessage,
 })
 
+const foldSelect = Update.foldChild({
+  update: LanguageSelect.update,
+  read: (model: Model) => Option.some(model.select),
+  write: (model, next) => evo(model, { select: () => next }),
+  toParentMessage: (message) => GotSelectMessage({ message }),
+  foldOutMessage: foldSelectOutMessage,
+})
+
 const foldCombobox = Update.foldChild({
   update: CityCombobox.update,
   read: (model: Model) => Option.some(model.combobox),
@@ -388,6 +406,7 @@ export const update = (model: Model, message: Message): UpdateReturn =>
       GotTooltipMessage: ({ message }) => foldTooltip(model, message),
       GotMenuMessage: ({ message }) => foldMenu(model, message),
       GotListboxMessage: ({ message }) => foldListbox(model, message),
+      GotSelectMessage: ({ message }) => foldSelect(model, message),
       GotComboboxMessage: ({ message }) => foldCombobox(model, message),
       GotTabsMessage: ({ message }) => foldTabs(model, message),
       GotRadioGroupMessage: ({ message }) => foldRadioGroup(model, message),

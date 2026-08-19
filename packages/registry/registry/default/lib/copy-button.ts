@@ -34,6 +34,6 @@ export const copyButton = <M>(config: CopyButtonConfig<M>, h: HtmlBuilder<M>): H
       isDisabled: config.isCopied,
       className: config.className,
     },
-    config.isCopied ? checkIcon(h, 'size-4') : copyIcon(h, 'size-4'),
+    config.isCopied ? checkIcon(h) : copyIcon(h),
     h,
   )

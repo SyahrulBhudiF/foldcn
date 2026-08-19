@@ -12,6 +12,7 @@ import * as Listbox from '@foldcn/registry/src/ui/listbox'
 import * as Menu from '@foldcn/registry/src/ui/menu'
 import * as Popover from '@foldcn/registry/src/ui/popover'
 import * as RadioGroup from '@foldcn/registry/src/ui/radio-group'
+import * as Select from '@foldcn/registry/src/ui/select'
 import * as Slider from '@foldcn/registry/src/ui/slider'
 import * as Tabs from '@foldcn/registry/src/ui/tabs'
 import * as Tooltip from '@foldcn/registry/src/ui/tooltip'
@@ -30,6 +31,7 @@ export const GotTabsMessage = m('GotTabsMessage', { message: Tabs.Message })
 export const GotRadioGroupMessage = m('GotRadioGroupMessage', { message: RadioGroup.Message })
 export const GotSliderRatingMessage = m('GotSliderRatingMessage', { message: Slider.Message })
 export const GotSliderVolumeMessage = m('GotSliderVolumeMessage', { message: Slider.Message })
+export const GotSelectMessage = m('GotSelectMessage', { message: Select.Message })
 export const GotCalendarMessage = m('GotCalendarMessage', { message: Calendar.Message })
 export const GotDatePickerMessage = m('GotDatePickerMessage', { message: DatePicker.Message })
 export const GotToastMessage = m('GotToastMessage', { message: Toast.Message })
@@ -92,6 +94,7 @@ export const Message = S.Union([
   GotRadioGroupMessage,
   GotSliderRatingMessage,
   GotSliderVolumeMessage,
+  GotSelectMessage,
   GotCalendarMessage,
   GotDatePickerMessage,
   GotToastMessage,

@@ -12,6 +12,7 @@ import * as Listbox from '@foldcn/registry/src/ui/listbox'
 import * as Menu from '@foldcn/registry/src/ui/menu'
 import * as Popover from '@foldcn/registry/src/ui/popover'
 import * as RadioGroup from '@foldcn/registry/src/ui/radio-group'
+import * as Select from '@foldcn/registry/src/ui/select'
 import * as Slider from '@foldcn/registry/src/ui/slider'
 import * as Tabs from '@foldcn/registry/src/ui/tabs'
 import * as Tooltip from '@foldcn/registry/src/ui/tooltip'
@@ -85,6 +86,8 @@ export const Model = S.Struct({
   menu: Menu.Model,
   listbox: Listbox.Model,
   maybeListboxValue: S.Option(ListboxItem),
+  select: Select.Model,
+  maybeSelectValue: S.Option(S.String),
   combobox: Combobox.Model,
   maybeComboboxValue: S.Option(City),
   tabs: Tabs.Model,
