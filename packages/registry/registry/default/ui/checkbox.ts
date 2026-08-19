@@ -5,18 +5,6 @@ import { icon } from '@/lib/icons'
 import { Check, Minus } from 'lucide'
 import { cn } from '@/lib/utils'
 
-export const checkboxClass =
-  'peer size-4 shrink-0 rounded-[4px] border border-input shadow-xs transition-shadow outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[checked]:border-primary data-[checked]:bg-primary data-[checked]:text-primary-foreground dark:bg-input/30 dark:aria-invalid:ring-destructive/40 dark:data-[checked]:bg-primary'
-
-export const checkboxLabelClass =
-  'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
-
-export const checkboxDescriptionClass = 'text-sm text-muted-foreground'
-
-export const checkboxWrapperClass = 'flex flex-col gap-1'
-
-export const checkboxRowClass = 'flex items-center gap-2'
-
 export type CheckboxConfig<M> = Readonly<{
   id: string
   isChecked: boolean
@@ -49,21 +37,51 @@ export const checkbox = <M>(config: CheckboxConfig<M>, h: HtmlBuilder<M>): Html 
       value: config.value,
       toView: (attributes) =>
         h.div(
-          [h.Class(cn(checkboxWrapperClass, config.wrapperClass))],
+          [h.Class(cn('flex flex-col gap-1', config.wrapperClass))],
           [
             h.div(
-              [h.Class(checkboxRowClass)],
+              [h.Class('flex items-center gap-2')],
               [
                 h.button(
-                  [...attributes.checkbox, h.Class(checkboxClass)],
-                  config.isIndeterminate === true
-                    ? [icon(h, Minus, 'size-3')]
-                    : config.isChecked
-                      ? [icon(h, Check, 'size-3')]
-                      : [],
+                  [
+                    ...attributes.checkbox,
+                    h.DataAttribute('slot', 'checkbox'),
+                    h.Class(
+                      cn(
+                        'peer grid size-4 shrink-0 place-content-center rounded-[4px] border border-input shadow-xs transition-shadow outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 data-[disabled]:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[checked]:border-primary data-[checked]:bg-primary data-[checked]:text-primary-foreground data-[indeterminate]:border-primary data-[indeterminate]:bg-primary data-[indeterminate]:text-primary-foreground dark:bg-input/30 dark:aria-invalid:ring-destructive/40 dark:data-[checked]:bg-primary dark:data-[indeterminate]:bg-primary',
+                        config.className,
+                      ),
+                    ),
+                  ],
+                  config.isChecked || config.isIndeterminate === true
+                    ? [
+                        h.span(
+                          [
+                            h.DataAttribute('slot', 'checkbox-indicator'),
+                            h.Class('grid place-content-center text-current transition-none'),
+                          ],
+                          [
+                            icon(
+                              h,
+                              config.isIndeterminate === true ? Minus : Check,
+                              'size-3.5',
+                            ),
+                          ],
+                        ),
+                      ]
+                    : [],
                 ),
+                ...(attributes.hiddenInput.length > 0 ? [h.input([...attributes.hiddenInput])] : []),
                 h.label(
-                  [...attributes.label, h.Class(cn(checkboxLabelClass, config.labelClass))],
+                  [
+                    ...attributes.label,
+                    h.Class(
+                      cn(
+                        'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 peer-aria-disabled:cursor-not-allowed peer-aria-disabled:opacity-70 peer-data-[disabled]:opacity-70',
+                        config.labelClass,
+                      ),
+                    ),
+                  ],
                   [config.label],
                 ),
               ],
@@ -73,7 +91,7 @@ export const checkbox = <M>(config: CheckboxConfig<M>, h: HtmlBuilder<M>): Html 
               : h.p(
                   [
                     ...attributes.description,
-                    h.Class(cn(checkboxDescriptionClass, config.descriptionClass)),
+                    h.Class(cn('text-sm text-muted-foreground', config.descriptionClass)),
                   ],
                   [config.maybeDescription],
                 ),
