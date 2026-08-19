@@ -85,7 +85,7 @@
       "name": "dialog",
       "type": "registry:ui",
       "title": "Dialog",
-      "description": "Styled modal dialog with backdrop, focus trapping and animations, built on the @foldkit/ui Dialog submodel.",
+      "description": "Composable modal dialog — Dialog.header, Dialog.title, Dialog.description, Dialog.footer, Dialog.closeButton. Built on the @foldkit/ui Dialog submodel.",
       "registryDependencies": ["@foldcn/utils"],
       "files": [{ "path": "dialog.ts", "type": "registry:ui" }]
     },
@@ -93,7 +93,7 @@
       "name": "popover",
       "type": "registry:ui",
       "title": "Popover",
-      "description": "Styled floating panel with trigger, built on the @foldkit/ui Popover submodel.",
+      "description": "Composable floating panel — Popover.header, Popover.title, Popover.description. Built on the @foldkit/ui Popover submodel.",
       "registryDependencies": ["@foldcn/utils"],
       "files": [{ "path": "popover.ts", "type": "registry:ui" }]
     },
@@ -133,7 +133,7 @@
       "name": "tabs",
       "type": "registry:ui",
       "title": "Tabs",
-      "description": "Styled tabbed interface with keyboard navigation, built on the @foldkit/ui Tabs submodel.",
+      "description": "Composable tabbed interface — Tabs.list, Tabs.trigger, Tabs.content. Built on the @foldkit/ui Tabs submodel.",
       "registryDependencies": ["@foldcn/utils"],
       "files": [{ "path": "tabs.ts", "type": "registry:ui" }]
     },
