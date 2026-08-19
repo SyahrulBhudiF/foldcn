@@ -13,6 +13,7 @@ import {
   ClickedCopy,
   GotInstallTabsMessage,
   SelectedThemePreference,
+  ToggledCodeBlock,
   type Message,
 } from '../message'
 import type { Model, PackageManager, ThemePreference } from '../model'
@@ -186,6 +187,28 @@ export const codeBlock = (
       code,
       onCopy: ClickedCopy({ value: code }),
       isCopied: Option.exists(model.maybeCopiedValue, (v) => v === code),
+    },
+    h,
+  )
+
+export const collapsibleCodeBlock = (
+  h: HtmlBuilder<Message>,
+  model: Model,
+  id: string,
+  path: string,
+  code: string,
+  className?: string,
+): Html =>
+  registryCodeBlock<Message>(
+    {
+      path,
+      code,
+      onCopy: ClickedCopy({ value: code }),
+      isCopied: Option.exists(model.maybeCopiedValue, (v) => v === code),
+      isCollapsible: true,
+      isExpanded: model.expandedCodeBlocks.has(id),
+      onToggle: ToggledCodeBlock({ id }),
+      className,
     },
     h,
   )

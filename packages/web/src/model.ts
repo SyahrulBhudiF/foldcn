@@ -22,5 +22,7 @@ export const Model = S.Struct({
   demo: DemoModelSchema,
   installTabs: InstallTabsModel,
   selectedPackageManager: PackageManager,
+  /** Ids of collapsible code blocks that are currently expanded. */
+  expandedCodeBlocks: S.ReadonlySet(S.String),
 })
 export type Model = typeof Model.Type

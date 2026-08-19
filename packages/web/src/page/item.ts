@@ -7,7 +7,8 @@ import type { Item } from '../catalog/types'
 import { GotDemoMessage, type Message } from '../message'
 import type { Model } from '../model'
 
-import { codeBlock, installTabs } from './chrome'
+import { demoExampleByName } from '../demo/examples'
+import { collapsibleCodeBlock, installTabs } from './chrome'
 import { notFoundView } from './home'
 
 const categoryLabel = (category: Item['category']): string =>
@@ -83,41 +84,58 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
               ]
             : []),
 
-          // preview
+          // preview + demo code (stacked vertically, per design: [preview/demo code] then [source])
           ...(demoName !== undefined
-            ? [
-                h.div(
-                  [h.Class('mt-10 overflow-hidden rounded-xl border border-border bg-background')],
-                  [
-                    h.div(
-                      [
-                        h.Class(
-                          'flex items-center justify-between border-b border-border px-4 py-2.5',
-                        ),
-                      ],
-                      [
-                        h.span([h.Class('text-xs font-medium text-muted-foreground')], ['Preview']),
-                        h.span(
-                          [h.Class('flex items-center gap-1.5 text-xs text-muted-foreground')],
-                          ['Interactive demo'],
-                        ),
-                      ],
-                    ),
-                    h.div(
-                      [h.Class('flex min-h-[260px] items-center justify-center p-6')],
-                      [
-                        h.submodel({
-                          slotId: 'demo-harness',
-                          model: model.demo,
-                          view: Demo.view,
-                          viewInputs: { itemName: demoName! },
-                          toParentMessage: (message) => GotDemoMessage({ message }),
-                        }),
-                      ],
-                    ),
-                  ],
-                ),
-              ]
+            ? (() => {
+                const demoExample = demoExampleByName[demoName]
+                return [
+                  h.div(
+                    [h.Class('mt-10 overflow-hidden rounded-xl border border-border bg-background')],
+                    [
+                      h.div(
+                        [
+                          h.Class(
+                            'flex items-center justify-between border-b border-border px-4 py-2.5',
+                          ),
+                        ],
+                        [
+                          h.span([h.Class('text-xs font-medium text-muted-foreground')], ['Preview']),
+                          h.span(
+                            [h.Class('flex items-center gap-1.5 text-xs text-muted-foreground')],
+                            ['Interactive demo'],
+                          ),
+                        ],
+                      ),
+                      h.div(
+                        [h.Class('flex min-h-[260px] items-center justify-center p-6')],
+                        [
+                          h.submodel({
+                            slotId: 'demo-harness',
+                            model: model.demo,
+                            view: Demo.view,
+                            viewInputs: { itemName: demoName! },
+                            toParentMessage: (message) => GotDemoMessage({ message }),
+                          }),
+                        ],
+                      ),
+                      // Demo usage code — collapsible with gradient preview, collapsed by default.
+                      // Only rendered when we have a curated example for this demo.
+                      ...(demoExample !== undefined
+                        ? [
+                            collapsibleCodeBlock(
+                              h,
+                              model,
+                              `demo:${demoName}`,
+                              demoExample.path,
+                              demoExample.code,
+                              'rounded-none border-x-0 border-b-0 border-t',
+                            ),
+                          ]
+                        : []),
+                    ],
+                  ),
+                ]
+              })()
             : []),
 
           // install
@@ -133,7 +151,7 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
             ],
           ),
 
-          // source
+          // source — collapsible with same gradient preview, collapsed by default
           ...(item.maybeSource
             ? [
                 h.div(
@@ -146,7 +164,13 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                         'The component ships as plain source — no build step, no wrapper. Copy it and make it yours.',
                       ],
                     ),
-                    codeBlock(h, model, item.maybeSource.path, item.maybeSource.code),
+                    collapsibleCodeBlock(
+                      h,
+                      model,
+                      `source:${item.name}`,
+                      item.maybeSource.path,
+                      item.maybeSource.code,
+                    ),
                   ],
                 ),
               ]

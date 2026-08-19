@@ -41,6 +41,16 @@ export type CodeBlockConfig<M> = Readonly<{
   isCopied?: boolean
   /** Additional class names for the outer wrapper. */
   className?: string
+  /** When true, the code body collapses to a short preview with a fade + Show/Hide toggle. */
+  isCollapsible?: boolean
+  /** Whether the collapsible body is expanded. Ignored when isCollapsible is false. */
+  isExpanded?: boolean
+  /** Message dispatched when the user toggles collapsed/expanded. */
+  onToggle?: M
+  /** Minimum lines before the collapse affordance appears (default: 8). */
+  collapseThreshold?: number
+  /** Max height when collapsed (default: "max-h-36" ≈ 144px). */
+  collapsedHeightClass?: string
 }>
 
 const LANG_BY_EXT: Record<string, string> = {
@@ -92,10 +102,74 @@ export const codeBlock = <M>(config: CodeBlockConfig<M>, h: HtmlBuilder<M>): Htm
   const lang = config.lang ?? inferLang(config.path)
   const result = highlight(config.code, { lang })
   const lineCount = config.code.split('\n').length
+  const isCollapsible = config.isCollapsible === true
+  const isExpanded = config.isExpanded === true
+  const threshold = config.collapseThreshold ?? 8
+  const shouldCollapse = isCollapsible && lineCount > threshold
+  const isCollapsed = shouldCollapse && !isExpanded
+  const collapsedHeightClass = config.collapsedHeightClass ?? 'max-h-36'
 
   // TanStack Highlight emits <pre class="th-code th-code--{lang}" data-language="{lang}">
   // with inner <span class="th-token th-{token}"> for each tokenized range.
   // The theme CSS (createThemeCss) maps th-* classes to CSS custom properties.
+  const codeBody = shouldCollapse
+    ? // Collapsible: wrap the highlighted <pre> in a relative container so we
+      // can clip it and overlay a gradient + toggle when collapsed.
+      h.div(
+        [
+          h.Class(cn('relative', isCollapsed && `overflow-hidden ${collapsedHeightClass}`)),
+        ],
+        [
+          h.div([h.InnerHTML(result.html)]),
+          // Fade overlay — only when collapsed. Uses the code background token
+          // so it blends in both light and dark themes.
+          ...(isCollapsed
+            ? [
+                h.div(
+                  [
+                    h.Class(
+                      'pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[var(--th-background)] to-transparent',
+                    ),
+                  ],
+                  [],
+                ),
+                h.div(
+                  [h.Class('absolute inset-x-0 bottom-3 flex justify-center')],
+                  [
+                    h.button(
+                      [
+                        h.Class(
+                          'rounded-full border border-border bg-background px-3.5 py-1.5 text-xs font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer',
+                        ),
+                        h.AriaLabel('Show full code'),
+                        ...(config.onToggle !== undefined ? [h.OnClick(config.onToggle)] : []),
+                      ],
+                      ['Show code'],
+                    ),
+                  ],
+                ),
+              ]
+            : [
+                h.div(
+                  [h.Class('absolute inset-x-0 bottom-3 flex justify-center')],
+                  [
+                    h.button(
+                      [
+                        h.Class(
+                          'rounded-full border border-border bg-background px-3.5 py-1.5 text-xs font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer',
+                        ),
+                        h.AriaLabel('Hide code'),
+                        ...(config.onToggle !== undefined ? [h.OnClick(config.onToggle)] : []),
+                      ],
+                      ['Hide code'],
+                    ),
+                  ],
+                ),
+              ]),
+        ],
+      )
+    : h.div([h.InnerHTML(result.html)])
+
   return h.div(
     [h.Class(cn(codeBlockWrapperClass, config.className))],
     [
@@ -121,9 +195,7 @@ export const codeBlock = <M>(config: CodeBlockConfig<M>, h: HtmlBuilder<M>): Htm
           ),
         ],
       ),
-      // Highlighted code body — the pre.th-code from highlight() is injected
-      // via InnerHTML. Theme CSS provides background, padding, and token colors.
-      h.div([h.InnerHTML(result.html)]),
+      codeBody,
     ],
   )
 }

@@ -72,6 +72,7 @@ export const init = (url: Url.Url): InitReturn => {
       demo,
       installTabs,
       selectedPackageManager: readStoredPackageManager(),
+      expandedCodeBlocks: new Set<string>(),
     },
     Command.mapMessages(demoCommands, (message) => GotDemoMessage({ message })),
   ]

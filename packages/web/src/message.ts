@@ -28,6 +28,9 @@ export const CompletedSaveThemePreference = m('CompletedSaveThemePreference')
 export const ClickedCopy = m('ClickedCopy', { value: S.String })
 export const CompletedCopy = m('CompletedCopy', { value: S.String })
 
+// collapsible code blocks
+export const ToggledCodeBlock = m('ToggledCodeBlock', { id: S.String })
+
 // install tabs
 export const GotInstallTabsMessage = m('GotInstallTabsMessage', {
   message: InstallTabsMessage,
@@ -49,6 +52,7 @@ export const Message = S.Union([
   CompletedSaveThemePreference,
   ClickedCopy,
   CompletedCopy,
+  ToggledCodeBlock,
   GotInstallTabsMessage,
   CompletedSavePackageManager,
   CompletedNavigateInternal,

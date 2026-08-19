@@ -190,6 +190,15 @@ export const update = (model: Model, message: Message): UpdateReturn =>
           ? [model, []]
           : [evo(model, { maybeCopiedValue: () => Option.some(value) }), [CopyText({ value })]],
       CompletedCopy: () => [evo(model, { maybeCopiedValue: () => Option.none() }), []],
+      ToggledCodeBlock: ({ id }) => [
+        evo(model, {
+          expandedCodeBlocks: () =>
+            model.expandedCodeBlocks.has(id)
+              ? new Set([...model.expandedCodeBlocks].filter((v) => v !== id))
+              : new Set([...model.expandedCodeBlocks, id]),
+        }),
+        [],
+      ],
       CompletedNavigateInternal: () => [model, []],
       CompletedLoadExternal: () => [model, []],
       CompletedScrollToTop: () => [model, []],
