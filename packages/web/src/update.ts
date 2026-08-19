@@ -140,11 +140,11 @@ const foldInstallTabs = (model: Model, message: Tabs.Message): UpdateReturn => {
           return [
             evo(model, {
               installTabs: () => next,
-              selectedPackageManager: () => outMessage.value as PackageManager,
+              selectedPackageManager: () => outMessage.value satisfies PackageManager,
             }),
             [
               ...mappedCommands,
-              SavePackageManager({ packageManager: outMessage.value as PackageManager }),
+              SavePackageManager({ packageManager: outMessage.value satisfies PackageManager }),
             ],
           ]
       }

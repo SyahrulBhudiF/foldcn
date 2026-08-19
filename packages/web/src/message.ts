@@ -5,7 +5,7 @@ import { UrlRequest } from 'foldkit/navigation'
 
 import { Message as DemoMessage } from './demo/message'
 import { Message as InstallTabsMessage } from '@foldkit/ui/tabs'
-import { PackageManager, ResolvedTheme, ThemePreference } from './model'
+import { ResolvedTheme, ThemePreference } from './model'
 
 // routing
 export const ClickedLink = m('ClickedLink', { request: UrlRequest })

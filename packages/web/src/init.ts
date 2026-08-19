@@ -5,7 +5,7 @@ import * as Tabs from '@foldkit/ui/tabs'
 
 import * as Demo from './demo'
 import { parseRoute } from './route'
-import { GotDemoMessage, GotInstallTabsMessage, type Message } from './message'
+import { GotDemoMessage, type Message } from './message'
 import { Model, type PackageManager, ResolvedTheme, type ThemePreference as TP } from './model'
 
 export const THEME_STORAGE_KEY = 'foldcn-theme'
@@ -37,7 +37,7 @@ const readStoredPackageManager = (): PackageManager =>
           raw === null ? Option.none() : Option.some(fromStoredPackageManager(raw)),
         ),
         Option.match({
-          onNone: () => 'npm' as PackageManager,
+          onNone: () => 'npm' satisfies PackageManager,
           onSome: (parsed) => (parsed === undefined ? 'npm' : parsed),
         }),
       )

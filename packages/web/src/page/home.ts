@@ -70,10 +70,7 @@ export const homeView = (model: Model, h: HtmlBuilder<Message>): Html =>
                   // Headline
                   h.h1(
                     [h.Class('mt-6 text-balance text-4xl font-bold tracking-tight sm:text-5xl')],
-                    [
-                      'shadcn components\nfor ',
-                      h.span([h.Class('text-primary')], ['Foldkit.']),
-                    ],
+                    ['shadcn components\nfor ', h.span([h.Class('text-primary')], ['Foldkit.'])],
                   ),
                   // Subtitle
                   h.p(
