@@ -47,7 +47,7 @@ import {
 } from './message'
 import type { City, DemoColumn, DemoTab, ListboxItem, Model, Plan } from './model'
 import { Toast } from './toast'
-import { VIRTUAL_LIST_ROW_COUNT } from './views/lists'
+import { VIRTUAL_LIST_ROW_COUNT } from './views/virtual-list'
 
 const reorderColumns = (
   columns: ReadonlyArray<DemoColumn>,

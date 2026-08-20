@@ -14,11 +14,7 @@ export const sliderView = (model: Model, h: HtmlBuilder<Message>): Html =>
         model: model.sliderRating,
         view: slider.view,
         viewInputs: slider.styledViewInputs(
-          {
-            value: model.sliderRatingValue,
-            label: 'Rating',
-            formatValue: (value) => `${value} / 10`,
-          },
+          { value: model.sliderRatingValue, label: 'Rating', formatValue: (value) => `${value} / 10` },
           h,
         ),
         toParentMessage: (message) => GotSliderRatingMessage({ message }),

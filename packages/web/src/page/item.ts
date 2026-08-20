@@ -124,20 +124,15 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                               }),
                             ],
                           ),
-                          // Demo usage code — collapsible with gradient preview, collapsed by default.
-                          // Only rendered when we have a curated example for this demo.
-                          ...(demoExample !== undefined
-                            ? [
-                                collapsibleCodeBlock(
-                                  h,
-                                  model,
-                                  `demo:${demoName}`,
-                                  demoExample.path,
-                                  demoExample.code,
-                                  'rounded-none border-x-0 border-b-0 border-t',
-                                ),
-                              ]
-                            : []),
+                          // Demo usage code — the actual view source, imported ?raw.
+                          collapsibleCodeBlock(
+                            h,
+                            model,
+                            `demo:${demoName}`,
+                            demoExample.path,
+                            demoExample.code,
+                            'rounded-none border-x-0 border-b-0 border-t',
+                          ),
                         ],
                       ),
                     ]

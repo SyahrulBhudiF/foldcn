@@ -208,6 +208,118 @@
       "description": "Styled virtualized list for large datasets, built on the @foldkit/ui VirtualList submodel.",
       "registryDependencies": ["@foldcn/utils"],
       "files": [{ "path": "virtual-list.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "Styled inline badge with variant support, built as a themed span.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "badge.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "Skeleton",
+      "description": "Styled pulsing placeholder block.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "skeleton.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "separator",
+      "type": "registry:ui",
+      "title": "Separator",
+      "description": "Styled divider with horizontal/vertical orientation.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "separator.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "kbd",
+      "type": "registry:ui",
+      "title": "Kbd",
+      "description": "Styled keyboard key(s) with grouping support.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "kbd.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "avatar",
+      "type": "registry:ui",
+      "title": "Avatar",
+      "description": "Styled avatar with image, fallback, badge and grouping.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "avatar.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "aspect-ratio",
+      "type": "registry:ui",
+      "title": "Aspect Ratio",
+      "description": "Styled aspect-ratio box wrapper.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "aspect-ratio.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "alert",
+      "type": "registry:ui",
+      "title": "Alert",
+      "description": "Styled alert with title and description sub-builders.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "alert.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "empty",
+      "type": "registry:ui",
+      "title": "Empty",
+      "description": "Styled empty state with header, media, title, description and content.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "empty.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "spinner",
+      "type": "registry:ui",
+      "title": "Spinner",
+      "description": "Styled loading spinner (Loader2 icon in a status wrapper).",
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
+      "files": [{ "path": "spinner.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "marker",
+      "type": "registry:ui",
+      "title": "Marker",
+      "description": "Styled marker with icon and content sub-builders and variant support.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "marker.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "item",
+      "type": "registry:ui",
+      "title": "Item",
+      "description": "Styled flexible list row with media, title, description, actions, header and footer.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "item.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "direction",
+      "type": "registry:ui",
+      "title": "Direction",
+      "description": "Text-direction wrapper (ltr/rtl) carrying a data-slot surface.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "direction.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "label",
+      "type": "registry:ui",
+      "title": "Label",
+      "description": "Styled form label with optional for association.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "label.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "progress",
+      "type": "registry:ui",
+      "title": "Progress",
+      "description": "Styled progress bar with value-driven indicator.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "progress.ts", "type": "registry:ui" }]
     }
   ]
 }

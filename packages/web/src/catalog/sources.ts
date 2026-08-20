@@ -29,6 +29,20 @@ import toastSource from '@foldcn/registry/src/ui/toast.ts?raw'
 import tooltipSource from '@foldcn/registry/src/ui/tooltip.ts?raw'
 import utilsSource from '@foldcn/registry/src/lib/utils.ts?raw'
 import virtualListSource from '@foldcn/registry/src/ui/virtual-list.ts?raw'
+import alertSource from '@foldcn/registry/src/ui/alert.ts?raw'
+import aspectRatioSource from '@foldcn/registry/src/ui/aspect-ratio.ts?raw'
+import avatarSource from '@foldcn/registry/src/ui/avatar.ts?raw'
+import badgeSource from '@foldcn/registry/src/ui/badge.ts?raw'
+import directionSource from '@foldcn/registry/src/ui/direction.ts?raw'
+import emptySource from '@foldcn/registry/src/ui/empty.ts?raw'
+import itemSource from '@foldcn/registry/src/ui/item.ts?raw'
+import kbdSource from '@foldcn/registry/src/ui/kbd.ts?raw'
+import labelSource from '@foldcn/registry/src/ui/label.ts?raw'
+import markerSource from '@foldcn/registry/src/ui/marker.ts?raw'
+import progressSource from '@foldcn/registry/src/ui/progress.ts?raw'
+import separatorSource from '@foldcn/registry/src/ui/separator.ts?raw'
+import skeletonSource from '@foldcn/registry/src/ui/skeleton.ts?raw'
+import spinnerSource from '@foldcn/registry/src/ui/spinner.ts?raw'
 
 import dataTableSource from '@foldcn/registry/src/blocks/data-table/data-table.ts?raw'
 import loginFormSource from '@foldcn/registry/src/blocks/login-form/login-form.ts?raw'
@@ -77,6 +91,20 @@ export const sourceByItem: Readonly<Record<string, SourceEntry>> = {
     path: 'registry/default/ui/virtual-list.ts',
     code: virtualListSource,
   },
+  alert: { path: 'registry/default/ui/alert.ts', code: alertSource },
+  'aspect-ratio': { path: 'registry/default/ui/aspect-ratio.ts', code: aspectRatioSource },
+  avatar: { path: 'registry/default/ui/avatar.ts', code: avatarSource },
+  badge: { path: 'registry/default/ui/badge.ts', code: badgeSource },
+  direction: { path: 'registry/default/ui/direction.ts', code: directionSource },
+  empty: { path: 'registry/default/ui/empty.ts', code: emptySource },
+  item: { path: 'registry/default/ui/item.ts', code: itemSource },
+  kbd: { path: 'registry/default/ui/kbd.ts', code: kbdSource },
+  label: { path: 'registry/default/ui/label.ts', code: labelSource },
+  marker: { path: 'registry/default/ui/marker.ts', code: markerSource },
+  progress: { path: 'registry/default/ui/progress.ts', code: progressSource },
+  separator: { path: 'registry/default/ui/separator.ts', code: separatorSource },
+  skeleton: { path: 'registry/default/ui/skeleton.ts', code: skeletonSource },
+  spinner: { path: 'registry/default/ui/spinner.ts', code: spinnerSource },
   'data-table': {
     path: 'registry/default/blocks/data-table/data-table.ts',
     code: dataTableSource,

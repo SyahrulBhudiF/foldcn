@@ -3,31 +3,51 @@ import type { Html } from 'foldkit/html'
 
 import type { Message } from './message'
 import type { Model } from './model'
-import { animationView, toastView } from './views/notify'
-import { buttonView, cardView, disclosureView, navView } from './views/helpers'
-import {
-  checkboxView,
-  fieldsetView,
-  iconsView,
-  inputView,
-  selectView,
-  switchView,
-  textareaView,
-} from './views/forms'
-import {
-  comboboxView,
-  dialogView,
-  listboxView,
-  menuView,
-  popoverView,
-  tooltipView,
-} from './views/floating'
-import { radioGroupView, tabsView } from './views/selection'
-import { sliderView } from './views/range'
-import { calendarView, datePickerView } from './views/calendar'
-import { dragAndDropView, fileDropView } from './views/upload'
-import { virtualListView } from './views/lists'
-import { dataTableView, loginFormView, settingsPageView } from './views/blocks'
+
+import { animationView } from './views/animation'
+import { alertView } from './views/alert'
+import { aspectRatioView } from './views/aspect-ratio'
+import { avatarView } from './views/avatar'
+import { badgeView } from './views/badge'
+import { buttonView } from './views/button'
+import { calendarView } from './views/calendar'
+import { cardView } from './views/card'
+import { checkboxView } from './views/checkbox'
+import { comboboxView } from './views/combobox'
+import { dataTableView } from './views/data-table'
+import { datePickerView } from './views/date-picker'
+import { dialogView } from './views/dialog'
+import { directionView } from './views/direction'
+import { disclosureView } from './views/disclosure'
+import { dragAndDropView } from './views/drag-and-drop'
+import { emptyView } from './views/empty'
+import { fieldsetView } from './views/fieldset'
+import { fileDropView } from './views/file-drop'
+import { iconsView } from './views/icons'
+import { inputView } from './views/input'
+import { itemView } from './views/item'
+import { kbdView } from './views/kbd'
+import { labelView } from './views/label'
+import { listboxView } from './views/listbox'
+import { loginFormView } from './views/login-form'
+import { markerView } from './views/marker'
+import { menuView } from './views/menu'
+import { navView } from './views/nav'
+import { popoverView } from './views/popover'
+import { progressView } from './views/progress'
+import { radioGroupView } from './views/radio-group'
+import { selectView } from './views/select'
+import { separatorView } from './views/separator'
+import { settingsPageView } from './views/settings-page'
+import { skeletonView } from './views/skeleton'
+import { sliderView } from './views/slider'
+import { spinnerView } from './views/spinner'
+import { switchView } from './views/switch'
+import { tabsView } from './views/tabs'
+import { textareaView } from './views/textarea'
+import { toastView } from './views/toast'
+import { tooltipView } from './views/tooltip'
+import { virtualListView } from './views/virtual-list'
 
 const views = {
   button: buttonView,
@@ -57,6 +77,20 @@ const views = {
   'file-drop': fileDropView,
   'virtual-list': virtualListView,
   'drag-and-drop': dragAndDropView,
+  badge: badgeView,
+  skeleton: skeletonView,
+  separator: separatorView,
+  kbd: kbdView,
+  avatar: avatarView,
+  'aspect-ratio': aspectRatioView,
+  alert: alertView,
+  empty: emptyView,
+  spinner: spinnerView,
+  marker: markerView,
+  item: itemView,
+  direction: directionView,
+  label: labelView,
+  progress: progressView,
   'login-form': loginFormView,
   'settings-page': settingsPageView,
   'data-table': dataTableView,
@@ -71,8 +105,7 @@ export const isDemoItemName = (name: string): name is DemoItemName => name in vi
 
 export type DemoViewInputs = Readonly<{ itemName: DemoItemName }>
 
-export const hasDemo = (name: string): name is DemoItemName =>
-  name in views
+export const hasDemo = (name: string): name is DemoItemName => name in views
 
 /** The demo submodel: renders whichever component the current route names.
  *  Embedded by the root under one slot, so one demo model/reducer backs all
