@@ -292,7 +292,7 @@ export const installTabs = (h: HtmlBuilder<Message>, model: Model, componentName
     view: PackageManagerTabs.view,
     viewInputs: tabsStyledViewInputs<Message, PackageManager>(
       {
-        tabs: ['npm', 'pnpm', 'bun'],
+        tabs: ['pnpm', 'npm', 'bun'],
         selectedValue: model.selectedPackageManager,
         ariaLabel: 'Package manager',
         variant: 'line',

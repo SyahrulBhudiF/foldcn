@@ -30,15 +30,15 @@ const fromStoredPackageManager = (raw: string): PackageManager | undefined =>
 
 const readStoredPackageManager = (): PackageManager =>
   typeof localStorage === 'undefined'
-    ? 'npm'
+    ? 'pnpm'
     : pipe(
         Option.some(localStorage.getItem(PACKAGE_MANAGER_STORAGE_KEY)),
         Option.flatMap((raw) =>
           raw === null ? Option.none() : Option.some(fromStoredPackageManager(raw)),
         ),
         Option.match({
-          onNone: () => 'npm' satisfies PackageManager,
-          onSome: (parsed) => (parsed === undefined ? 'npm' : parsed),
+          onNone: () => 'pnpm' satisfies PackageManager,
+          onSome: (parsed) => (parsed === undefined ? 'pnpm' : parsed),
         }),
       )
 
