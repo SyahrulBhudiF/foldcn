@@ -81,6 +81,8 @@ export const Model = S.Struct({
   isSwitchTfaChecked: S.Boolean,
   isDisclosureBasicOpen: S.Boolean,
   isDisclosureAnimatedOpen: S.Boolean,
+  accordionOpen: S.Array(S.Boolean),
+  isCollapsibleOpen: S.Boolean,
 
   // stateful submodels
   dialog: Dialog.Model,

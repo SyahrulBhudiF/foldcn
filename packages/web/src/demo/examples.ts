@@ -38,6 +38,15 @@ import settingsPageViewSource from './views/settings-page.ts?raw'
 import skeletonViewSource from './views/skeleton.ts?raw'
 import sliderViewSource from './views/slider.ts?raw'
 import spinnerViewSource from './views/spinner.ts?raw'
+import alertDialogViewSource from './views/alert-dialog.ts?raw'
+import sheetViewSource from './views/sheet.ts?raw'
+import drawerViewSource from './views/drawer.ts?raw'
+import hoverCardViewSource from './views/hover-card.ts?raw'
+import accordionViewSource from './views/accordion.ts?raw'
+import collapsibleViewSource from './views/collapsible.ts?raw'
+import contextMenuViewSource from './views/context-menu.ts?raw'
+import menubarViewSource from './views/menubar.ts?raw'
+import sonnerViewSource from './views/sonner.ts?raw'
 import switchViewSource from './views/switch.ts?raw'
 import tabsViewSource from './views/tabs.ts?raw'
 import textareaViewSource from './views/textarea.ts?raw'
@@ -116,6 +125,15 @@ export const demoExampleByName: Readonly<Record<DemoItemName, DemoExample>> = {
   skeleton: { path: 'src/demo/views/skeleton.ts', code: skeletonViewSource },
   slider: { path: 'src/demo/views/slider.ts', code: sliderViewSource },
   spinner: { path: 'src/demo/views/spinner.ts', code: spinnerViewSource },
+  'alert-dialog': { path: 'src/demo/views/alert-dialog.ts', code: alertDialogViewSource },
+  sheet: { path: 'src/demo/views/sheet.ts', code: sheetViewSource },
+  drawer: { path: 'src/demo/views/drawer.ts', code: drawerViewSource },
+  'hover-card': { path: 'src/demo/views/hover-card.ts', code: hoverCardViewSource },
+  accordion: { path: 'src/demo/views/accordion.ts', code: accordionViewSource },
+  collapsible: { path: 'src/demo/views/collapsible.ts', code: collapsibleViewSource },
+  'context-menu': { path: 'src/demo/views/context-menu.ts', code: contextMenuViewSource },
+  menubar: { path: 'src/demo/views/menubar.ts', code: menubarViewSource },
+  sonner: { path: 'src/demo/views/sonner.ts', code: sonnerViewSource },
   switch: { path: 'src/demo/views/switch.ts', code: switchViewSource },
   tabs: { path: 'src/demo/views/tabs.ts', code: tabsViewSource },
   textarea: { path: 'src/demo/views/textarea.ts', code: textareaViewSource },

@@ -43,6 +43,8 @@ import {
   GotToastMessage,
   GotTooltipMessage,
   GotVirtualListMessage,
+  ToggledAccordion,
+  ToggledCollapsible,
   Message,
 } from './message'
 import type { City, DemoColumn, DemoTab, ListboxItem, Model, Plan } from './model'
@@ -439,6 +441,16 @@ export const update = (model: Model, message: Message): UpdateReturn =>
       ],
       ToggledDisclosureAnimated: ({ isOpen }) => [
         evo(model, { isDisclosureAnimatedOpen: () => isOpen }),
+        [],
+      ],
+      ToggledAccordion: ({ index, isOpen }) => [
+        evo(model, {
+          accordionOpen: (arr) => arr.map((value, i) => (i === index ? isOpen : value)),
+        }),
+        [],
+      ],
+      ToggledCollapsible: ({ isOpen }) => [
+        evo(model, { isCollapsibleOpen: () => isOpen }),
         [],
       ],
 

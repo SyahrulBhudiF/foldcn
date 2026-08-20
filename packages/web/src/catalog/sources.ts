@@ -43,6 +43,15 @@ import progressSource from '@foldcn/registry/src/ui/progress.ts?raw'
 import separatorSource from '@foldcn/registry/src/ui/separator.ts?raw'
 import skeletonSource from '@foldcn/registry/src/ui/skeleton.ts?raw'
 import spinnerSource from '@foldcn/registry/src/ui/spinner.ts?raw'
+import alertDialogSource from '@foldcn/registry/src/ui/alert-dialog.ts?raw'
+import sheetSource from '@foldcn/registry/src/ui/sheet.ts?raw'
+import drawerSource from '@foldcn/registry/src/ui/drawer.ts?raw'
+import hoverCardSource from '@foldcn/registry/src/ui/hover-card.ts?raw'
+import accordionSource from '@foldcn/registry/src/ui/accordion.ts?raw'
+import collapsibleSource from '@foldcn/registry/src/ui/collapsible.ts?raw'
+import contextMenuSource from '@foldcn/registry/src/ui/context-menu.ts?raw'
+import menubarSource from '@foldcn/registry/src/ui/menubar.ts?raw'
+import sonnerSource from '@foldcn/registry/src/ui/sonner.ts?raw'
 
 import dataTableSource from '@foldcn/registry/src/blocks/data-table/data-table.ts?raw'
 import loginFormSource from '@foldcn/registry/src/blocks/login-form/login-form.ts?raw'
@@ -105,6 +114,15 @@ export const sourceByItem: Readonly<Record<string, SourceEntry>> = {
   separator: { path: 'registry/default/ui/separator.ts', code: separatorSource },
   skeleton: { path: 'registry/default/ui/skeleton.ts', code: skeletonSource },
   spinner: { path: 'registry/default/ui/spinner.ts', code: spinnerSource },
+  'alert-dialog': { path: 'registry/default/ui/alert-dialog.ts', code: alertDialogSource },
+  sheet: { path: 'registry/default/ui/sheet.ts', code: sheetSource },
+  drawer: { path: 'registry/default/ui/drawer.ts', code: drawerSource },
+  'hover-card': { path: 'registry/default/ui/hover-card.ts', code: hoverCardSource },
+  accordion: { path: 'registry/default/ui/accordion.ts', code: accordionSource },
+  collapsible: { path: 'registry/default/ui/collapsible.ts', code: collapsibleSource },
+  'context-menu': { path: 'registry/default/ui/context-menu.ts', code: contextMenuSource },
+  menubar: { path: 'registry/default/ui/menubar.ts', code: menubarSource },
+  sonner: { path: 'registry/default/ui/sonner.ts', code: sonnerSource },
   'data-table': {
     path: 'registry/default/blocks/data-table/data-table.ts',
     code: dataTableSource,

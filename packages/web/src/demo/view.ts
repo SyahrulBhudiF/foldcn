@@ -42,6 +42,15 @@ import { settingsPageView } from './views/settings-page'
 import { skeletonView } from './views/skeleton'
 import { sliderView } from './views/slider'
 import { spinnerView } from './views/spinner'
+import { alertDialogView } from './views/alert-dialog'
+import { sheetView } from './views/sheet'
+import { drawerView } from './views/drawer'
+import { hoverCardView } from './views/hover-card'
+import { accordionView } from './views/accordion'
+import { collapsibleView } from './views/collapsible'
+import { contextMenuView } from './views/context-menu'
+import { menubarView } from './views/menubar'
+import { sonnerView } from './views/sonner'
 import { switchView } from './views/switch'
 import { tabsView } from './views/tabs'
 import { textareaView } from './views/textarea'
@@ -86,6 +95,15 @@ const views = {
   alert: alertView,
   empty: emptyView,
   spinner: spinnerView,
+  'alert-dialog': alertDialogView,
+  sheet: sheetView,
+  drawer: drawerView,
+  'hover-card': hoverCardView,
+  accordion: accordionView,
+  collapsible: collapsibleView,
+  'context-menu': contextMenuView,
+  menubar: menubarView,
+  sonner: sonnerView,
   marker: markerView,
   item: itemView,
   direction: directionView,

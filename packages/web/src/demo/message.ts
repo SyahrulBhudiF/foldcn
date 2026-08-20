@@ -50,6 +50,8 @@ export const ToggledSwitchEmail = m('ToggledSwitchEmail', { isChecked: S.Boolean
 export const ToggledSwitchTfa = m('ToggledSwitchTfa', { isChecked: S.Boolean })
 export const ToggledDisclosureBasic = m('ToggledDisclosureBasic', { isOpen: S.Boolean })
 export const ToggledDisclosureAnimated = m('ToggledDisclosureAnimated', { isOpen: S.Boolean })
+export const ToggledAccordion = m('ToggledAccordion', { index: S.Number, isOpen: S.Boolean })
+export const ToggledCollapsible = m('ToggledCollapsible', { isOpen: S.Boolean })
 
 // dialog
 export const ClickedOpenDialog = m('ClickedOpenDialog')
@@ -114,6 +116,8 @@ export const Message = S.Union([
   ToggledSwitchTfa,
   ToggledDisclosureBasic,
   ToggledDisclosureAnimated,
+  ToggledAccordion,
+  ToggledCollapsible,
   ClickedOpenDialog,
   ClickedShowInfoToast,
   ClickedShowSuccessToast,

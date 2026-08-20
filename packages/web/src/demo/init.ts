@@ -57,6 +57,8 @@ export const init = (): [Model, ReadonlyArray<Command.Command<Message>>] => [
     isSwitchTfaChecked: false,
     isDisclosureBasicOpen: false,
     isDisclosureAnimatedOpen: false,
+    accordionOpen: [false, false, false],
+    isCollapsibleOpen: false,
 
     dialog: Dialog.init({ id: 'dialog-demo' }),
     popover: Popover.init({ id: 'popover-demo' }),
