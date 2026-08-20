@@ -1,145 +1,123 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { categoryGroups, componentCount } from '../catalog'
-import type { Item } from '../catalog/types'
-import { icon } from '@foldcn/registry/src/lib/icons'
-import { ArrowRight } from 'lucide'
+import { componentCount } from '../catalog'
 import type { Message } from '../message'
 import type { Model } from '../model'
-import { installTabs } from './chrome'
-
-const card = (item: Item, h: HtmlBuilder<Message>): Html =>
-  h.a(
-    [
-      h.Href(`/components/${item.name}`),
-      h.Class(
-        'group flex flex-col gap-3 rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary/40 hover:shadow-sm',
-      ),
-    ],
-    [
-      h.div(
-        [h.Class('flex items-center justify-between gap-3')],
-        [
-          h.span(
-            [h.Class('rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground')],
-            [item.type],
-          ),
-          icon(
-            h,
-            ArrowRight,
-            'size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-foreground',
-          ),
-        ],
-      ),
-      h.span([h.Class('text-lg font-semibold tracking-tight')], [item.title]),
-      h.p([h.Class('line-clamp-2 text-sm text-muted-foreground')], [item.description]),
-      h.code(
-        [h.Class('truncate rounded bg-muted/50 px-2 py-1 font-mono text-xs text-muted-foreground')],
-        [item.install],
-      ),
-    ],
-  )
 
 export const homeView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
     [h.Class('flex-1')],
     [
-      // hero
-      h.section(
-        [h.Class('border-b border-border')],
+      h.div(
         [
-          h.div(
-            [h.Class('mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-12')],
+          h.Class(
+            'mx-auto w-full max-w-3xl px-4 py-10 font-mono text-[15px] leading-[1.7] text-muted-foreground sm:px-6',
+          ),
+        ],
+        [
+          h.h1(
             [
-              h.div(
-                [h.Class('mx-auto max-w-3xl text-center')],
+              h.Class(
+                'whitespace-pre-line text-3xl font-bold leading-[1.2] tracking-[-0.01em] text-foreground before:content-[\'#_\'] before:font-normal before:text-muted-foreground',
+              ),
+            ],
+            ['shadcn components\nfor Foldkit.'],
+          ),
+          h.p(
+            [h.Class('mt-5')],
+            [
+              'A registry of ',
+              String(componentCount),
+              ' copy-paste components built with @foldkit/ui, Foldkit TEA architecture, and Tailwind CSS.',
+            ],
+          ),
+          h.div(
+            [
+              h.Class(
+                'mt-5 overflow-x-auto whitespace-pre rounded-[6px] bg-muted px-4 py-[0.875rem] font-mono text-[0.85em] leading-[1.6] text-foreground',
+              ),
+            ],
+            ['```sh\nnpx shadcn@latest add @foldcn/foldcn\n```'],
+          ),
+          h.p([h.Class('mt-5')], [
+            'or ',
+            h.a(
+              [
+                h.Href('https://foldkit.dev'),
+                h.Rel('noopener noreferrer'),
+                h.Class(
+                  'text-foreground underline decoration-1 decoration-border underline-offset-[3px] hover:decoration-foreground',
+                ),
+              ],
+              ['learn Foldkit'],
+            ),
+            ' first.',
+          ]),
+          h.h2(
+            [
+              h.Class(
+                'mt-10 text-[1.375rem] font-semibold leading-[1.25] text-foreground before:content-[\'##_\'] before:font-normal before:text-muted-foreground',
+              ),
+            ],
+            ['Get started'],
+          ),
+          h.p([h.Class('mt-5')], [
+            'Two steps: register the ',
+            h.code(
+              [
+                h.Class(
+                  'font-mono text-[0.9em]',
+                ),
+              ],
+              ['@foldcn'],
+            ),
+            ' namespace, then install the base style (the command above) to write the theme variables and core dependencies into your project.',
+          ]),
+          h.ol(
+            [h.Class('mt-5 list-decimal pl-5')],
+            [
+              h.li(
+                [h.Class('mt-[0.375rem]')],
                 [
-                  // Logo and name
-                  h.div(
-                    [h.Class('flex items-center justify-center gap-3')],
-                    [
-                      h.span(
-                        [
-                          h.Class(
-                            'flex size-10 items-center justify-center rounded-lg bg-foreground text-background',
-                          ),
-                        ],
-                        [h.span([h.Class('text-lg leading-none font-black')], ['F'])],
-                      ),
-                      h.span([h.Class('text-2xl font-bold tracking-tight')], ['foldcn']),
-                    ],
-                  ),
-                  // Headline
-                  h.h1(
-                    [h.Class('mt-6 text-balance text-4xl font-bold tracking-tight sm:text-5xl')],
-                    ['shadcn components\nfor ', h.span([h.Class('text-primary')], ['Foldkit.'])],
-                  ),
-                  // Subtitle
-                  h.p(
-                    [h.Class('mt-4 text-pretty text-lg text-muted-foreground')],
-                    [
-                      'A registry of ',
-                      String(componentCount),
-                      ' copy-paste components built with @foldkit/ui, Foldkit TEA architecture, and Tailwind CSS.',
-                    ],
-                  ),
-                  // Install command
-                  h.div([h.Class('mx-auto mt-8 max-w-xl')], [installTabs(h, model, 'foldcn')]),
-                  h.p(
-                    [h.Class('mt-3 text-sm text-muted-foreground')],
-                    [
-                      'or ',
-                      h.a(
-                        [
-                          h.Href('https://foldkit.dev'),
-                          h.Class('underline underline-offset-4 hover:text-foreground'),
-                          h.Rel('noopener noreferrer'),
-                        ],
-                        ['learn Foldkit'],
-                      ),
-                      ' first.',
-                    ],
-                  ),
-                  // Stats
+                  h.div([], ['Register the namespace']),
                   h.div(
                     [
                       h.Class(
-                        'mt-6 flex items-center justify-center gap-6 text-sm text-muted-foreground',
+                        'mt-2 overflow-x-auto whitespace-pre rounded-[6px] bg-muted px-4 py-[0.875rem] font-mono text-[0.85em] leading-[1.6] text-foreground',
                       ),
                     ],
                     [
-                      h.span([], [`${componentCount} components`]),
-                      h.span([h.Role('separator'), h.Class('h-4 w-px bg-border')], []),
-                      h.span([], ['@foldkit/ui']),
-                      h.span([h.Role('separator'), h.Class('h-4 w-px bg-border')], []),
-                      h.span([], ['Tailwind CSS']),
+                      '```sh\nnpx shadcn@latest registry add @foldcn=https://foldcn.elianiva.com/r/{name}.json\n```',
+                    ],
+                  ),
+                ],
+              ),
+              h.li(
+                [h.Class('mt-[0.375rem]')],
+                [
+                  h.div([], ['Install the base style']),
+                  h.p(
+                    [h.Class('mt-2')],
+                    [
+                      'Use the command above — it writes the theme variables and core dependencies into your project.',
                     ],
                   ),
                 ],
               ),
             ],
           ),
-        ],
-      ),
-
-      // category sections
-      ...categoryGroups.map((group) =>
-        h.section(
-          [h.Class('mx-auto w-full max-w-6xl px-4 py-8 sm:px-6')],
-          [
-            h.div(
-              [h.Class('mb-6 max-w-2xl')],
+          h.p([h.Class('mt-5')], [
+            h.a(
               [
-                h.h2([h.Class('text-2xl font-semibold tracking-tight')], [group.label]),
-                h.p([h.Class('mt-2 text-sm text-muted-foreground')], [group.description]),
+                h.Href('/docs'),
+                h.Class(
+                  'text-foreground underline decoration-1 decoration-border underline-offset-[3px] hover:decoration-foreground',
+                ),
               ],
+              [`Browse all ${componentCount} components`],
             ),
-            h.div(
-              [h.Class('grid gap-4 sm:grid-cols-2 lg:grid-cols-3')],
-              [...group.items.map((item) => card(item, h))],
-            ),
-          ],
-        ),
+          ]),
+        ],
       ),
     ],
   )

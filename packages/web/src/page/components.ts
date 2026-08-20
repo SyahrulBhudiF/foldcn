@@ -1,0 +1,99 @@
+import type { Html, HtmlBuilder } from 'foldkit/html'
+
+import { items } from '../catalog'
+import type { Category, Item } from '../catalog/types'
+import type { Message } from '../message'
+import type { Model } from '../model'
+import { sidebarView } from './chrome'
+
+const GROUP_ORDER: ReadonlyArray<{
+  category: Category
+  label: string
+  description: string
+}> = [
+  {
+    category: 'Base',
+    label: 'Base',
+    description: 'The foundation: theme variables, base CSS, and core dependencies.',
+  },
+  {
+    category: 'Lib',
+    label: 'Lib',
+    description: 'Utilities and helpers used across the registry.',
+  },
+  {
+    category: 'Components',
+    label: 'Components',
+    description: 'The styled primitives: stateless helpers and stateful submodels.',
+  },
+  {
+    category: 'Blocks',
+    label: 'Blocks',
+    description: 'Composed pages that combine primitives into ready-to-use sections.',
+  },
+]
+
+const row = (item: Item, h: HtmlBuilder<Message>): Html =>
+  h.li(
+    [h.Class('mt-[0.375rem]')],
+    [
+      h.a(
+        [
+          h.Href(`/docs/${item.name}`),
+          h.Class(
+            'text-foreground underline decoration-1 decoration-border underline-offset-[3px] hover:decoration-foreground',
+          ),
+        ],
+        [item.title],
+      ),
+      ' — ',
+      item.description,
+    ],
+  )
+
+export const componentsIndexView = (model: Model, h: HtmlBuilder<Message>): Html =>
+  h.div(
+    [h.Class('mx-auto flex w-full max-w-6xl flex-1')],
+    [
+      sidebarView(model, h),
+      h.div(
+        [
+          h.Class(
+            'mx-auto w-full max-w-3xl px-4 py-10 font-mono text-[15px] leading-[1.7] text-muted-foreground sm:px-6',
+          ),
+        ],
+        [
+          h.h1(
+            [
+              h.Class(
+                'text-3xl font-bold leading-[1.2] tracking-[-0.01em] text-foreground before:content-[\'#_\'] before:font-normal before:text-muted-foreground',
+              ),
+            ],
+            ['Components'],
+          ),
+          h.p(
+            [h.Class('mt-5')],
+            [
+              'Every item in the foldcn registry — copy-paste source built on @foldkit/ui with Foldkit TEA and Tailwind CSS.',
+            ],
+          ),
+          ...GROUP_ORDER.flatMap((group) => {
+            const groupItems = items.filter((item) => item.category === group.category)
+            if (groupItems.length === 0) return []
+            return [
+              h.h2(
+                [
+                  h.Class(
+                    'mt-10 text-[1.375rem] font-semibold leading-[1.25] text-foreground before:content-[\'##_\'] before:font-normal before:text-muted-foreground',
+                  ),
+                ],
+                [group.label],
+              ),
+              h.p([h.Class('mt-5')], [group.description]),
+              h.ul([h.Class('mt-5 list-disc pl-5')], groupItems.map((item) => row(item, h))),
+            ]
+          }),
+        ],
+      ),
+    ],
+  )

@@ -35,7 +35,9 @@ export const themeSelector = (model: Model, h: HtmlBuilder<Message>): Html =>
     [
       h.Role('group'),
       h.AriaLabel('Theme preference'),
-      h.Class('flex items-center gap-0.5 rounded-md border border-border bg-muted/40 p-0.5'),
+      h.Class(
+        'flex items-center gap-0.5 rounded-md border border-border bg-muted/40 p-0.5 font-sans',
+      ),
     ],
     THEME_OPTIONS.map(({ preference, label, icon }) => {
       const isActive = Option.exists(model.maybeThemePreference, (p) => p === preference)
@@ -60,7 +62,7 @@ export const themeSelector = (model: Model, h: HtmlBuilder<Message>): Html =>
 
 export const headerView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.header(
-    [h.Class('sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur')],
+    [h.Class('py-4 font-mono')],
     [
       h.div(
         [
@@ -88,21 +90,12 @@ export const headerView = (model: Model, h: HtmlBuilder<Message>): Html =>
             [
               h.a(
                 [
-                  h.Href('/'),
+                  h.Href('/docs'),
                   h.Class(
                     'hidden text-sm text-muted-foreground transition-colors hover:text-foreground sm:block',
                   ),
                 ],
                 ['Docs'],
-              ),
-              h.a(
-                [
-                  h.Href('/components/button'),
-                  h.Class(
-                    'hidden text-sm text-muted-foreground transition-colors hover:text-foreground sm:block',
-                  ),
-                ],
-                ['Components'],
               ),
               themeSelector(model, h),
             ],
@@ -114,47 +107,54 @@ export const headerView = (model: Model, h: HtmlBuilder<Message>): Html =>
 
 export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.aside(
-    [h.Class('hidden w-[220px] shrink-0 lg:block'), h.AriaLabel('Sidebar')],
+    [h.Class('hidden w-[220px] shrink-0 font-mono lg:block'), h.AriaLabel('Sidebar')],
     [
       h.div(
-        [h.Class('sticky top-10 h-[calc(100vh-2.5rem)] overflow-y-auto border-r border-border py-6 pr-4')],
+        [
+          h.Class(
+            'sticky top-10 h-[calc(100vh-2.5rem)] overflow-y-auto border-r border-border py-6 pr-4',
+          ),
+        ],
         [
           h.nav(
             [h.Class('flex flex-col gap-6'), h.AriaLabel('Components')],
             categoryGroups.map((group) => {
-              const sortedItems = [...group.items].sort((a, b) =>
-                a.title.localeCompare(b.title),
-              )
-              return h.div([h.Class('flex flex-col gap-2')], [
-                h.h3(
-                  [h.Class('px-2 text-xs font-semibold tracking-wide text-muted-foreground')],
-                  [group.label],
-                ),
-                h.ul(
-                  [h.Class('flex flex-col gap-0.5')],
-                  sortedItems.map((item) => {
-                    const isActive =
-                      model.route._tag === 'Item' && model.route.name === item.name
-                    return h.li([], [
-                      h.a(
+              const sortedItems = [...group.items].sort((a, b) => a.title.localeCompare(b.title))
+              return h.div(
+                [h.Class('flex flex-col gap-2')],
+                [
+                  h.h3(
+                    [h.Class('px-2 text-xs font-semibold tracking-wide text-foreground')],
+                    [group.label],
+                  ),
+                  h.ul(
+                    [h.Class('flex flex-col gap-0.5')],
+                    sortedItems.map((item) => {
+                      const isActive = model.route._tag === 'Item' && model.route.name === item.name
+                      return h.li(
+                        [],
                         [
-                          h.Href(`/components/${item.name}`),
-                          h.Class(
-                            clsx(
-                              'flex rounded-md px-2 py-1.5 text-sm transition-colors',
-                              isActive
-                                ? 'bg-muted font-medium text-foreground'
-                                : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground',
-                            ),
+                          h.a(
+                            [
+                              h.Href(`/docs/${item.name}`),
+                              h.Class(
+                                clsx(
+                                  'flex rounded-md px-2 py-1.5 text-sm transition-colors',
+                                  isActive
+                                    ? 'bg-muted font-medium text-foreground'
+                                    : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground',
+                                ),
+                              ),
+                              ...(isActive ? [h.AriaCurrent('page')] : []),
+                            ],
+                            [item.title],
                           ),
-                          ...(isActive ? [h.AriaCurrent('page')] : []),
                         ],
-                        [item.title],
-                      ),
-                    ])
-                  }),
-                ),
-              ])
+                      )
+                    }),
+                  ),
+                ],
+              )
             }),
           ),
         ],
@@ -164,7 +164,7 @@ export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html =>
 
 export const footerView = (h: HtmlBuilder<Message>): Html =>
   h.footer(
-    [h.Class('border-t border-border')],
+    [h.Class('border-t border-border font-mono')],
     [
       h.div(
         [
