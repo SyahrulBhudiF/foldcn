@@ -47,6 +47,17 @@ import collapsibleViewSource from './views/collapsible.ts?raw'
 import contextMenuViewSource from './views/context-menu.ts?raw'
 import menubarViewSource from './views/menubar.ts?raw'
 import sonnerViewSource from './views/sonner.ts?raw'
+import buttonGroupViewSource from './views/button-group.ts?raw'
+import inputGroupViewSource from './views/input-group.ts?raw'
+import toggleViewSource from './views/toggle.ts?raw'
+import toggleGroupViewSource from './views/toggle-group.ts?raw'
+import inputOtpViewSource from './views/input-otp.ts?raw'
+import breadcrumbViewSource from './views/breadcrumb.ts?raw'
+import navigationMenuViewSource from './views/navigation-menu.ts?raw'
+import sidebarViewSource from './views/sidebar.ts?raw'
+import tableViewSource from './views/table.ts?raw'
+import commandViewSource from './views/command.ts?raw'
+import resizableViewSource from './views/resizable.ts?raw'
 import switchViewSource from './views/switch.ts?raw'
 import tabsViewSource from './views/tabs.ts?raw'
 import textareaViewSource from './views/textarea.ts?raw'
@@ -134,6 +145,17 @@ export const demoExampleByName: Readonly<Record<DemoItemName, DemoExample>> = {
   'context-menu': { path: 'src/demo/views/context-menu.ts', code: contextMenuViewSource },
   menubar: { path: 'src/demo/views/menubar.ts', code: menubarViewSource },
   sonner: { path: 'src/demo/views/sonner.ts', code: sonnerViewSource },
+  'button-group': { path: 'src/demo/views/button-group.ts', code: buttonGroupViewSource },
+  'input-group': { path: 'src/demo/views/input-group.ts', code: inputGroupViewSource },
+  toggle: { path: 'src/demo/views/toggle.ts', code: toggleViewSource },
+  'toggle-group': { path: 'src/demo/views/toggle-group.ts', code: toggleGroupViewSource },
+  'input-otp': { path: 'src/demo/views/input-otp.ts', code: inputOtpViewSource },
+  breadcrumb: { path: 'src/demo/views/breadcrumb.ts', code: breadcrumbViewSource },
+  'navigation-menu': { path: 'src/demo/views/navigation-menu.ts', code: navigationMenuViewSource },
+  sidebar: { path: 'src/demo/views/sidebar.ts', code: sidebarViewSource },
+  table: { path: 'src/demo/views/table.ts', code: tableViewSource },
+  command: { path: 'src/demo/views/command.ts', code: commandViewSource },
+  resizable: { path: 'src/demo/views/resizable.ts', code: resizableViewSource },
   switch: { path: 'src/demo/views/switch.ts', code: switchViewSource },
   tabs: { path: 'src/demo/views/tabs.ts', code: tabsViewSource },
   textarea: { path: 'src/demo/views/textarea.ts', code: textareaViewSource },

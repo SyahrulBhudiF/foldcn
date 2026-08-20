@@ -83,6 +83,11 @@ export const Model = S.Struct({
   isDisclosureAnimatedOpen: S.Boolean,
   accordionOpen: S.Array(S.Boolean),
   isCollapsibleOpen: S.Boolean,
+  isToggleOn: S.Boolean,
+  toggleGroupValue: S.Array(S.String),
+  otp: S.String,
+  commandSearch: S.String,
+  resizablePercent: S.Number,
 
   // stateful submodels
   dialog: Dialog.Model,

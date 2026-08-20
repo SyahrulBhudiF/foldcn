@@ -45,6 +45,11 @@ import {
   GotVirtualListMessage,
   ToggledAccordion,
   ToggledCollapsible,
+  ToggledToggle,
+  SelectedToggleGroup,
+  UpdatedOtp,
+  UpdatedCommandSearch,
+  ResizedSplit,
   Message,
 } from './message'
 import type { City, DemoColumn, DemoTab, ListboxItem, Model, Plan } from './model'
@@ -453,6 +458,11 @@ export const update = (model: Model, message: Message): UpdateReturn =>
         evo(model, { isCollapsibleOpen: () => isOpen }),
         [],
       ],
+      ToggledToggle: ({ isPressed }) => [evo(model, { isToggleOn: () => isPressed }), []],
+      SelectedToggleGroup: ({ value }) => [evo(model, { toggleGroupValue: () => value }), []],
+      UpdatedOtp: ({ value }) => [evo(model, { otp: () => value }), []],
+      UpdatedCommandSearch: ({ value }) => [evo(model, { commandSearch: () => value }), []],
+      ResizedSplit: ({ percent }) => [evo(model, { resizablePercent: () => percent }), []],
 
       ClickedOpenDialog: () => {
         const [next, commands] = Dialog.open(model.dialog)

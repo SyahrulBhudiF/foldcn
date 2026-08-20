@@ -392,6 +392,94 @@
       "description": "Stacked auto-dismissing notifications, built on the @foldkit/ui Toast submodel.",
       "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [{ "path": "sonner.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "button-group",
+      "type": "registry:ui",
+      "title": "Button Group",
+      "description": "Connected run of buttons forming a single segmented control, built on the @foldkit/ui Button helper.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "button-group.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "input-group",
+      "type": "registry:ui",
+      "title": "Input Group",
+      "description": "Shared bordered box with text/icon add-ons around a connected input, built on the @foldkit/ui Input helper.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "input-group.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "toggle",
+      "type": "registry:ui",
+      "title": "Toggle",
+      "description": "Two-state toggle button marked with aria-pressed and data-state.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "toggle.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "toggle-group",
+      "type": "registry:ui",
+      "title": "Toggle Group",
+      "description": "Connected group of toggles with shared single or multiple selection.",
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
+      "files": [{ "path": "toggle-group.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "input-otp",
+      "type": "registry:ui",
+      "title": "Input OTP",
+      "description": "Row of single-character slots backed by one combined value.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "input-otp.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "breadcrumb",
+      "type": "registry:ui",
+      "title": "Breadcrumb",
+      "description": "Presentational breadcrumb landmark with list, link, page and separator builders.",
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
+      "files": [{ "path": "breadcrumb.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "navigation-menu",
+      "type": "registry:ui",
+      "title": "Navigation Menu",
+      "description": "Presentational top-level navigation bar with trigger and content builders.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "navigation-menu.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "sidebar",
+      "type": "registry:ui",
+      "title": "Sidebar",
+      "description": "Presentational sidebar layout — provider, rail, menu, group and inset builders.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "sidebar.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "table",
+      "type": "registry:ui",
+      "title": "Table",
+      "description": "Presentational table with header, body, footer, row, head, cell and caption builders.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "table.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "command",
+      "type": "registry:ui",
+      "title": "Command",
+      "description": "Presentational command-palette surface with input, list, group and item builders.",
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
+      "files": [{ "path": "command.ts", "type": "registry:ui" }]
+    },
+    {
+      "name": "resizable",
+      "type": "registry:ui",
+      "title": "Resizable",
+      "description": "Two-pane split with a draggable, keyboard-accessible handle.",
+      "registryDependencies": ["@foldcn/utils"],
+      "files": [{ "path": "resizable.ts", "type": "registry:ui" }]
     }
   ]
 }

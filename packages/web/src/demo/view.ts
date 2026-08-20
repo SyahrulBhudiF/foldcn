@@ -51,6 +51,17 @@ import { collapsibleView } from './views/collapsible'
 import { contextMenuView } from './views/context-menu'
 import { menubarView } from './views/menubar'
 import { sonnerView } from './views/sonner'
+import { buttonGroupView } from './views/button-group'
+import { inputGroupView } from './views/input-group'
+import { toggleView } from './views/toggle'
+import { toggleGroupView } from './views/toggle-group'
+import { inputOtpView } from './views/input-otp'
+import { breadcrumbView } from './views/breadcrumb'
+import { navigationMenuView } from './views/navigation-menu'
+import { sideBarView } from './views/sidebar'
+import { tableView } from './views/table'
+import { commandView } from './views/command'
+import { resizableView } from './views/resizable'
 import { switchView } from './views/switch'
 import { tabsView } from './views/tabs'
 import { textareaView } from './views/textarea'
@@ -104,6 +115,17 @@ const views = {
   'context-menu': contextMenuView,
   menubar: menubarView,
   sonner: sonnerView,
+  'button-group': buttonGroupView,
+  'input-group': inputGroupView,
+  toggle: toggleView,
+  'toggle-group': toggleGroupView,
+  'input-otp': inputOtpView,
+  breadcrumb: breadcrumbView,
+  'navigation-menu': navigationMenuView,
+  sidebar: sideBarView,
+  table: tableView,
+  command: commandView,
+  resizable: resizableView,
   marker: markerView,
   item: itemView,
   direction: directionView,

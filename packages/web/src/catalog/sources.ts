@@ -52,6 +52,17 @@ import collapsibleSource from '@foldcn/registry/src/ui/collapsible.ts?raw'
 import contextMenuSource from '@foldcn/registry/src/ui/context-menu.ts?raw'
 import menubarSource from '@foldcn/registry/src/ui/menubar.ts?raw'
 import sonnerSource from '@foldcn/registry/src/ui/sonner.ts?raw'
+import buttonGroupSource from '@foldcn/registry/src/ui/button-group.ts?raw'
+import inputGroupSource from '@foldcn/registry/src/ui/input-group.ts?raw'
+import toggleSource from '@foldcn/registry/src/ui/toggle.ts?raw'
+import toggleGroupSource from '@foldcn/registry/src/ui/toggle-group.ts?raw'
+import inputOtpSource from '@foldcn/registry/src/ui/input-otp.ts?raw'
+import breadcrumbSource from '@foldcn/registry/src/ui/breadcrumb.ts?raw'
+import navigationMenuSource from '@foldcn/registry/src/ui/navigation-menu.ts?raw'
+import sidebarSource from '@foldcn/registry/src/ui/sidebar.ts?raw'
+import tableSource from '@foldcn/registry/src/ui/table.ts?raw'
+import commandSource from '@foldcn/registry/src/ui/command.ts?raw'
+import resizableSource from '@foldcn/registry/src/ui/resizable.ts?raw'
 
 import dataTableSource from '@foldcn/registry/src/blocks/data-table/data-table.ts?raw'
 import loginFormSource from '@foldcn/registry/src/blocks/login-form/login-form.ts?raw'
@@ -123,6 +134,17 @@ export const sourceByItem: Readonly<Record<string, SourceEntry>> = {
   'context-menu': { path: 'registry/default/ui/context-menu.ts', code: contextMenuSource },
   menubar: { path: 'registry/default/ui/menubar.ts', code: menubarSource },
   sonner: { path: 'registry/default/ui/sonner.ts', code: sonnerSource },
+  'button-group': { path: 'registry/default/ui/button-group.ts', code: buttonGroupSource },
+  'input-group': { path: 'registry/default/ui/input-group.ts', code: inputGroupSource },
+  toggle: { path: 'registry/default/ui/toggle.ts', code: toggleSource },
+  'toggle-group': { path: 'registry/default/ui/toggle-group.ts', code: toggleGroupSource },
+  'input-otp': { path: 'registry/default/ui/input-otp.ts', code: inputOtpSource },
+  breadcrumb: { path: 'registry/default/ui/breadcrumb.ts', code: breadcrumbSource },
+  'navigation-menu': { path: 'registry/default/ui/navigation-menu.ts', code: navigationMenuSource },
+  sidebar: { path: 'registry/default/ui/sidebar.ts', code: sidebarSource },
+  table: { path: 'registry/default/ui/table.ts', code: tableSource },
+  command: { path: 'registry/default/ui/command.ts', code: commandSource },
+  resizable: { path: 'registry/default/ui/resizable.ts', code: resizableSource },
   'data-table': {
     path: 'registry/default/blocks/data-table/data-table.ts',
     code: dataTableSource,

@@ -52,6 +52,11 @@ export const ToggledDisclosureBasic = m('ToggledDisclosureBasic', { isOpen: S.Bo
 export const ToggledDisclosureAnimated = m('ToggledDisclosureAnimated', { isOpen: S.Boolean })
 export const ToggledAccordion = m('ToggledAccordion', { index: S.Number, isOpen: S.Boolean })
 export const ToggledCollapsible = m('ToggledCollapsible', { isOpen: S.Boolean })
+export const ToggledToggle = m('ToggledToggle', { isPressed: S.Boolean })
+export const SelectedToggleGroup = m('SelectedToggleGroup', { value: S.Array(S.String) })
+export const UpdatedOtp = m('UpdatedOtp', { value: S.String })
+export const UpdatedCommandSearch = m('UpdatedCommandSearch', { value: S.String })
+export const ResizedSplit = m('ResizedSplit', { percent: S.Number })
 
 // dialog
 export const ClickedOpenDialog = m('ClickedOpenDialog')
@@ -118,6 +123,11 @@ export const Message = S.Union([
   ToggledDisclosureAnimated,
   ToggledAccordion,
   ToggledCollapsible,
+  ToggledToggle,
+  SelectedToggleGroup,
+  UpdatedOtp,
+  UpdatedCommandSearch,
+  ResizedSplit,
   ClickedOpenDialog,
   ClickedShowInfoToast,
   ClickedShowSuccessToast,
