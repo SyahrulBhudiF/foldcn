@@ -17,7 +17,7 @@ export type Message = typeof Message.Type
 export const OutMessage = FoldkitDialog.OutMessage
 export type OutMessage = typeof OutMessage.Type
 
-export const init = FoldkitDialog.init
+export const init = (config: InitConfig): Model => FoldkitDialog.init({ isAnimated: true, ...config })
 export const update = FoldkitDialog.update
 export const open = FoldkitDialog.open
 export const close = FoldkitDialog.close

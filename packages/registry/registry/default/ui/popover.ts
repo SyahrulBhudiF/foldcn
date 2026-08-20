@@ -17,7 +17,7 @@ export type Message = typeof Message.Type
 export const OutMessage = FoldkitPopover.OutMessage
 export type OutMessage = typeof OutMessage.Type
 
-export const init = FoldkitPopover.init
+export const init = (config: InitConfig): Model => FoldkitPopover.init({ isAnimated: true, ...config })
 export const update = FoldkitPopover.update
 export const open = FoldkitPopover.open
 export const close = FoldkitPopover.close
@@ -161,7 +161,7 @@ export const styledViewInputs = <M>(
                   ...panel,
                   h.Class(
                     cn(
-                      viewInputs.isAnimated === true ? popoverContentAnimatedClass : popoverContentClass,
+                      viewInputs.isAnimated !== false ? popoverContentAnimatedClass : popoverContentClass,
                       viewInputs.contentClass,
                     ),
                   ),

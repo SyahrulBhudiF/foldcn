@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils'
 
 export const create = FoldkitCombobox.create
 export const Multi = FoldkitCombobox.Multi
-export const init = FoldkitCombobox.init
+export const init = (config: InitConfig): Model => FoldkitCombobox.init({ isAnimated: true, ...config })
 export const inputId = FoldkitCombobox.inputId
 export const Model = FoldkitCombobox.Model
 export type Model = typeof Model.Type
@@ -37,10 +37,10 @@ export const comboboxButtonClass =
   'absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground transition-colors hover:text-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4'
 
 export const comboboxItemsClass =
-  'z-50 min-w-56 overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md outline-hidden data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95'
+  'z-50 min-w-56 overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md outline-hidden data-[placement=bottom]:slide-in-from-top-2 data-[placement=left]:slide-in-from-right-2 data-[placement=right]:slide-in-from-left-2 data-[placement=top]:slide-in-from-bottom-2'
 
 export const comboboxItemsAnimatedClass =
-  'z-50 min-w-56 overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md outline-hidden data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95'
+  'z-50 min-w-56 overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md outline-hidden data-[placement=bottom]:slide-in-from-top-2 data-[placement=left]:slide-in-from-right-2 data-[placement=right]:slide-in-from-left-2 data-[placement=top]:slide-in-from-bottom-2 data-[enter]:animate-in data-[enter]:fade-in-0 data-[enter]:zoom-in-95 data-[leave]:animate-out data-[leave]:fade-out-0 data-[leave]:zoom-out-95'
 
 export const comboboxItemClass =
   "relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none data-[active]:bg-accent data-[active]:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[selected]:font-medium data-[readonly]:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
@@ -128,7 +128,7 @@ const common = <Item extends string>(config: CommonConfig<Item>) => ({
   groupToHeading: config.groupToHeading,
   inputClassName: cn(comboboxInputClass, config.inputClass),
   itemsClassName: cn(
-    config.isAnimated === true ? comboboxItemsAnimatedClass : comboboxItemsClass,
+    config.isAnimated !== false ? comboboxItemsAnimatedClass : comboboxItemsClass,
     config.itemsClass,
   ),
   itemsScrollClassName: config.itemsScrollClass ?? comboboxItemsScrollClass,

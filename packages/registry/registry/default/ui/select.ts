@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
 //   export const LanguageSelect = Select.create<{ value: string; label: string }, string>()
 
 export const create = FoldkitListbox.create
-export const init = FoldkitListbox.init
+export const init = (config: InitConfig): Model => FoldkitListbox.init({ isAnimated: true, ...config })
 export const buttonId = FoldkitListbox.buttonId
 export const Model = FoldkitListbox.Model
 export type Model = typeof Model.Type
@@ -33,7 +33,7 @@ export const selectTriggerClass =
   'flex h-9 w-full items-center justify-between gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm whitespace-nowrap shadow-xs outline-none transition-[color,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 disabled:pointer-events-none data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:ring-[3px] data-[invalid]:border-destructive data-[invalid]:ring-destructive/20 data-[invalid]:ring-[3px] dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:ring-destructive/40 dark:aria-invalid:border-destructive/50 dark:data-[invalid]:ring-destructive/40 dark:data-[invalid]:border-destructive/50 data-[size=sm]:h-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4 [&_svg:not([class*="text-"])]:text-muted-foreground motion-reduce:transition-none'
 
 export const selectItemsClass =
-  'z-50 max-h-96 min-w-[var(--button-width)] overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-md outline-none'
+  'z-50 max-h-96 min-w-[var(--button-width)] overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-md outline-none data-[placement=bottom]:slide-in-from-top-2 data-[placement=left]:slide-in-from-right-2 data-[placement=right]:slide-in-from-left-2 data-[placement=top]:slide-in-from-bottom-2 data-[enter]:animate-in data-[enter]:fade-in-0 data-[enter]:zoom-in-95 data-[leave]:animate-out data-[leave]:fade-out-0 data-[leave]:zoom-out-95'
 
 export const selectItemClass =
   'relative flex w-full cursor-default items-center rounded-sm py-1.5 pr-8 pl-2 text-sm outline-none select-none transition-colors duration-150 ease-out data-[active]:bg-accent data-[active]:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[selected]:font-medium motion-reduce:transition-none'

@@ -12,7 +12,7 @@ import { calendarToView } from '@/ui/calendar'
 
 // Re-export the @foldkit/ui DatePicker submodel surface.
 
-export const init = FoldkitDatePicker.init
+export const init = (config: InitConfig): Model => FoldkitDatePicker.init({ isAnimated: true, ...config })
 export const update = FoldkitDatePicker.update
 export const view = FoldkitDatePicker.view
 export const Model = FoldkitDatePicker.Model
@@ -79,7 +79,7 @@ export const styledViewInputs = <M>(
   triggerClassName: cn(datePickerTriggerClass, viewInputs.triggerClass),
   triggerAttributes: childAttributes([h.DataAttribute('slot', 'date-picker-trigger')]),
   panelClassName: cn(
-    viewInputs.isAnimated === true ? datePickerPanelAnimatedClass : datePickerPanelClass,
+    viewInputs.isAnimated !== false ? datePickerPanelAnimatedClass : datePickerPanelClass,
     viewInputs.panelClass,
   ),
   panelAttributes: childAttributes([h.DataAttribute('slot', 'date-picker-content')]),

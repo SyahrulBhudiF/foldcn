@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 // bar/trigger styling and a `viewInputs` helper for the per-trigger menus.
 
 export const create = FoldkitMenu.create
-export const init = FoldkitMenu.init
+export const init = (config: InitConfig): Model => FoldkitMenu.init({ isAnimated: true, ...config })
 export const buttonId = FoldkitMenu.buttonId
 export const Model = FoldkitMenu.Model
 export type Model = typeof Model.Type
@@ -88,7 +88,7 @@ export const viewInputs = <Item extends string>(
   ariaLabelledBy: config.ariaLabelledBy,
   buttonClassName: cn(menubarTriggerClass, config.triggerClass),
   itemsClassName: cn(
-    config.isAnimated === true ? menubarContentAnimatedClass : menubarContentClass,
+    config.isAnimated !== false ? menubarContentAnimatedClass : menubarContentClass,
     config.itemsClass,
   ),
   itemToConfig: (item, context) => {

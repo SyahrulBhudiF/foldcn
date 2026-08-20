@@ -281,4 +281,14 @@ pre.th-code {
   body {
     @apply bg-background text-foreground;
   }
+  /* Hold the animation's end state while leaving. tw-animate-css leaves
+     `animation-fill-mode` at `none`, so after a leave animation (e.g.
+     `fade-out-0`) the element snaps back to full opacity for the frame
+     before foldcn's async `CloseDialog` removes it — a black flash of
+     the overlay. `data-leave` is emitted by the Animation submodel for
+     the whole exit, so pinning the fill mode here keeps the panel/
+     backdrop invisible until it is unmounted. */
+  [data-leave] {
+    --tw-animation-fill-mode: both;
+  }
 }

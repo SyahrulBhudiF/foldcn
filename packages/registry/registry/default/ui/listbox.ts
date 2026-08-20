@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
 
 export const create = FoldkitListbox.create
 export const Multi = FoldkitListbox.Multi
-export const init = FoldkitListbox.init
+export const init = (config: InitConfig): Model => FoldkitListbox.init({ isAnimated: true, ...config })
 export const buttonId = FoldkitListbox.buttonId
 export const Model = FoldkitListbox.Model
 export type Model = typeof Model.Type
@@ -91,7 +91,7 @@ const common = <Item>(config: CommonConfig<Item>) => ({
   groupToHeading: config.groupToHeading,
   buttonClassName: cn(listboxTriggerClass, config.triggerClass),
   itemsClassName: cn(
-    config.isAnimated === true ? listboxItemsAnimatedClass : listboxItemsClass,
+    config.isAnimated !== false ? listboxItemsAnimatedClass : listboxItemsClass,
     config.itemsClass,
   ),
   itemToConfig: (item: Item, context: Parameters<CommonConfig<Item>['itemToConfig']>[1]) => {

@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 // behavior.)
 
 export const create = FoldkitMenu.create
-export const init = FoldkitMenu.init
+export const init = (config: InitConfig): Model => FoldkitMenu.init({ isAnimated: true, ...config })
 export const buttonId = FoldkitMenu.buttonId
 export const Model = FoldkitMenu.Model
 export type Model = typeof Model.Type
@@ -105,7 +105,7 @@ export const viewInputs = <Item extends string>(
   ariaLabelledBy: config.ariaLabelledBy,
   buttonClassName: cn(contextMenuTriggerClass, config.triggerClass),
   itemsClassName: cn(
-    config.isAnimated === true ? contextMenuItemsAnimatedClass : contextMenuItemsClass,
+    config.isAnimated !== false ? contextMenuItemsAnimatedClass : contextMenuItemsClass,
     config.itemsClass,
   ),
   itemToConfig: (item, context) => {

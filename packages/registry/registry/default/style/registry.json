@@ -132,6 +132,9 @@
           },
           "body": {
             "@apply bg-background text-foreground": {}
+          },
+          "[data-leave]": {
+            "--tw-animation-fill-mode": "both"
           }
         }
       }

@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 //   export const ActionMenu = Menu.create<"Edit" | "Delete">()
 
 export const create = FoldkitMenu.create
-export const init = FoldkitMenu.init
+export const init = (config: InitConfig): Model => FoldkitMenu.init({ isAnimated: true, ...config })
 export const buttonId = FoldkitMenu.buttonId
 export const Model = FoldkitMenu.Model
 export type Model = typeof Model.Type
@@ -109,7 +109,7 @@ export const viewInputs = <Item extends string>(
   ariaLabelledBy: config.ariaLabelledBy,
   buttonClassName: cn(menuTriggerClass, config.triggerClass),
   itemsClassName: cn(
-    config.isAnimated === true ? menuItemsAnimatedClass : menuItemsClass,
+    config.isAnimated !== false ? menuItemsAnimatedClass : menuItemsClass,
     config.itemsClass,
   ),
   itemToConfig: (item, context) => {
