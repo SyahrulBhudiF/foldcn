@@ -30,6 +30,7 @@
     "@foldkit/vite-plugin": "^0.16.0",
     "@types/node": "^26.2.0",
     "happy-dom": "^20.11.2",
+    "node-html-markdown": "^2.0.0",
     "portless": "^0.15.5",
     "tsx": "^4.23.12",
     "typescript": "^7.0.2",
