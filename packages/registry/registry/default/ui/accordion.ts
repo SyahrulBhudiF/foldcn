@@ -17,16 +17,13 @@ export const buttonId = FoldkitDisclosure.buttonId
 export const accordionItemClass = 'border-b last:border-b-0'
 
 export const accordionTriggerClass =
-  'group/accordion-trigger flex flex-1 items-center justify-between py-4 text-left text-sm font-medium transition-all hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 [&[aria-expanded=true]>svg]:rotate-180'
+  'group/accordion-trigger flex w-full items-center justify-between gap-2 py-4 text-left text-sm font-medium transition-all hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 [&[aria-expanded=true]>svg]:rotate-180'
 
-export const accordionContentClass =
-  'overflow-hidden pb-4 text-sm text-muted-foreground'
+export const accordionContentClass = 'overflow-hidden pb-4 text-sm text-muted-foreground'
 
-export const accordionAnimatedContentClass =
-  'overflow-hidden pb-4 text-sm text-muted-foreground'
+export const accordionAnimatedContentClass = 'overflow-hidden pb-4 text-sm text-muted-foreground'
 
-export const accordionChevronClass =
-  'size-4 shrink-0 text-muted-foreground transition-transform'
+export const accordionChevronClass = 'size-4 shrink-0 text-muted-foreground transition-transform'
 
 export const accordionWrapperClass = 'w-full'
 
@@ -59,10 +56,17 @@ export const accordionItem = <M>(config: AccordionItemConfig<M>, h: HtmlBuilder<
       ariaLabelledBy: config.ariaLabelledBy,
       toView: ({ button, panel, animatePanel }) =>
         h.div(
-          [h.Class(cn(accordionWrapperClass, config.wrapperClass)), h.DataAttribute('slot', 'accordion-item')],
+          [
+            h.Class(cn(accordionItemClass, accordionWrapperClass, config.wrapperClass)),
+            h.DataAttribute('slot', 'accordion-item'),
+          ],
           [
             h.button(
-              [...button, h.Class(cn(accordionTriggerClass, config.triggerClass)), h.DataAttribute('slot', 'accordion-trigger')],
+              [
+                ...button,
+                h.Class(cn(accordionTriggerClass, config.triggerClass)),
+                h.DataAttribute('slot', 'accordion-trigger'),
+              ],
               [
                 h.span([], [config.title]),
                 h.span([h.Class(accordionChevronClass)], [icon(h, ChevronDown)]),
@@ -71,13 +75,21 @@ export const accordionItem = <M>(config: AccordionItemConfig<M>, h: HtmlBuilder<
             config.isAnimated === true
               ? animatePanel(
                   h.div(
-                    [...panel, h.Class(cn(accordionAnimatedContentClass, config.contentClass)), h.DataAttribute('slot', 'accordion-content')],
+                    [
+                      ...panel,
+                      h.Class(cn(accordionAnimatedContentClass, config.contentClass)),
+                      h.DataAttribute('slot', 'accordion-content'),
+                    ],
                     [config.content],
                   ),
                 )
               : config.isOpen
                 ? h.div(
-                    [...panel, h.Class(cn(accordionContentClass, config.contentClass)), h.DataAttribute('slot', 'accordion-content')],
+                    [
+                      ...panel,
+                      h.Class(cn(accordionContentClass, config.contentClass)),
+                      h.DataAttribute('slot', 'accordion-content'),
+                    ],
                     [config.content],
                   )
                 : h.empty,

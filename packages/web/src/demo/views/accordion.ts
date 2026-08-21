@@ -15,7 +15,8 @@ const ITEMS = [
   {
     id: 'accordion-animation',
     title: 'Is it animated?',
-    content: 'Open and close are instant by default; pass isAnimated to smooth the panel transition.',
+    content:
+      'Open and close are instant by default; pass isAnimated to smooth the panel transition.',
   },
   {
     id: 'accordion-controlled',
@@ -27,7 +28,7 @@ const ITEMS = [
 
 export const accordionView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
-    [h.Class('flex w-full flex-col')],
+    [h.Class('flex w-full flex-col self-start')],
     ITEMS.map((item, index) =>
       accordionItem<Message>(
         {
@@ -36,6 +37,7 @@ export const accordionView = (model: Model, h: HtmlBuilder<Message>): Html =>
           onToggle: (isOpen) => ToggledAccordion({ index, isOpen }),
           title: item.title,
           content: item.content,
+          isAnimated: item.id === 'accordion-animation',
         },
         h,
       ),
