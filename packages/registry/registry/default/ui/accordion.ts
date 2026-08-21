@@ -25,7 +25,7 @@ export const accordionAnimatedContentClass = 'overflow-hidden pb-4 text-sm text-
 
 export const accordionChevronClass = 'size-4 shrink-0 text-muted-foreground transition-transform'
 
-export const accordionWrapperClass = 'w-full'
+export const accordionWrapperClass = 'w-full self-start'
 
 export type AccordionType = 'single' | 'multiple'
 
