@@ -41,3 +41,31 @@
 .cn-button {
   @apply aria-disabled:pointer-events-none aria-disabled:opacity-50 data-disabled:pointer-events-none data-disabled:opacity-50;
 }
+
+/* checkbox: component string styles native :disabled; foldkit emits
+ * aria-disabled/data-disabled instead. */
+.cn-checkbox {
+  @apply aria-disabled:cursor-not-allowed aria-disabled:opacity-50 data-disabled:cursor-not-allowed data-disabled:opacity-50;
+}
+
+/* radio-group item: same native-:disabled delta as checkbox. */
+.cn-radio-group-item {
+  @apply aria-disabled:cursor-not-allowed aria-disabled:opacity-50 data-disabled:cursor-not-allowed data-disabled:opacity-50;
+}
+
+/* slider thumb: same native-:disabled delta (foldkit emits aria-disabled on
+ * the thumb while dragging is gated in the helper). */
+.cn-slider-thumb {
+  @apply aria-disabled:pointer-events-none aria-disabled:opacity-50 data-disabled:pointer-events-none data-disabled:opacity-50;
+}
+
+/* sheet: upstream keys enter/exit motion on data-starting-style/
+ * data-ending-style, which foldkit cannot emit — mapped to its
+ * data-enter/data-leave transition windows instead. */
+.cn-sheet-overlay {
+  @apply data-enter:opacity-0 data-leave:opacity-0;
+}
+
+.cn-sheet-content {
+  @apply data-enter:opacity-0 data-leave:opacity-0 data-[side=bottom]:data-enter:translate-y-[2.5rem] data-[side=bottom]:data-leave:translate-y-[2.5rem] data-[side=left]:data-enter:translate-x-[-2.5rem] data-[side=left]:data-leave:translate-x-[-2.5rem] data-[side=right]:data-enter:translate-x-[2.5rem] data-[side=right]:data-leave:translate-x-[2.5rem] data-[side=top]:data-enter:translate-y-[-2.5rem] data-[side=top]:data-leave:translate-y-[-2.5rem];
+}

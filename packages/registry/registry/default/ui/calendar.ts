@@ -27,35 +27,56 @@ export type MonthsModeAttributes = FoldkitCalendar.MonthsModeAttributes
 export type YearsModeAttributes = FoldkitCalendar.YearsModeAttributes
 export type Week = FoldkitCalendar.Week
 
-export const calendarContainerClass =
-  'cn-calendar group/calendar inline-flex flex-col gap-3 rounded-xl border border-border bg-background p-4 text-foreground shadow-sm select-none min-w-[304px] min-h-[324px] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent'
+// Derived from the shadcn v4 BASE registry:
+// apps/v4/registry/bases/base/ui/calendar.tsx. Class strings are identical
+// to upstream; visual tokens live in the style item's `cn-*` layer
+// (--cell-size / --cell-radius come from the cn-calendar token).
+//
+// foldcn gaps vs upstream: Days/Months/Years drill navigation instead of
+// dropdown captions, single-date selection only (no ranges/week numbers),
+// and state hooks ride on the cell's group data attrs (data-today/
+// data-selected/data-focused/data-outside-month/data-disabled) rather than
+// react-day-picker modifiers.
 
-export const calendarHeaderClass = 'flex items-center justify-between gap-2'
+/** Upstream root + months strings combined (foldcn renders one container). */
+export const calendarContainerClass =
+  'cn-calendar group/calendar relative flex w-fit flex-col gap-4 bg-background select-none in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent'
+
+/** Upstream nav + month_caption anatomy (foldcn keeps the header in flow). */
+export const calendarHeaderClass =
+  'flex h-(--cell-size) w-full items-center justify-between gap-1 px-(--cell-size)'
 
 export const calendarHeadingButtonClass =
-  'inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-semibold tabular-nums transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer'
+  'cn-calendar-caption-label flex cursor-pointer items-center gap-1 rounded-(--cell-radius) text-sm font-medium select-none [&>svg]:size-3.5 [&>svg]:text-muted-foreground'
 
-export const calendarHeadingTextClass = 'text-sm font-semibold tabular-nums'
+export const calendarHeadingTextClass = 'cn-calendar-caption text-sm font-medium select-none'
 
+/** Upstream nav button: Button ghost icon at cell size. */
 export const calendarNavButtonClass =
-  'inline-flex size-8 select-none items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer [&>svg]:rtl:rotate-180'
+  'cn-button cn-button-variant-ghost cn-button-size-icon size-(--cell-size) cursor-pointer p-0 select-none aria-disabled:opacity-50 [&>svg]:rtl:rotate-180'
 
-export const calendarGridClass = 'flex flex-col gap-1 outline-none'
+export const calendarGridClass = 'flex w-full flex-col outline-none'
 
-export const calendarRowClass = 'grid grid-cols-7 gap-1'
+/** Upstream week string. */
+export const calendarRowClass = 'mt-2 flex w-full'
 
+/** Upstream weekday string. */
 export const calendarColumnHeaderClass =
-  'py-1 text-center text-[0.8rem] font-normal text-muted-foreground select-none'
+  'flex-1 rounded-(--cell-radius) py-1 text-center text-[0.8rem] font-normal text-muted-foreground select-none'
 
-export const calendarCellClass = 'group flex items-center justify-center'
+/** Upstream day-cell string. */
+export const calendarCellClass =
+  'group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none'
 
+/** Upstream DayButton string (ghost icon button base) plus foldcn's
+ *  group-scoped state hooks. */
 export const calendarDayButtonClass =
-  'flex size-9 select-none items-center justify-center rounded-full text-sm tabular-nums transition-colors cursor-pointer hover:bg-accent hover:text-accent-foreground group-data-[today]:ring-1 group-data-[today]:ring-ring group-data-[selected]:bg-primary group-data-[selected]:text-primary-foreground group-data-[selected]:hover:bg-primary group-data-[focused]:outline-2 group-data-[focused]:outline-offset-2 group-data-[focused]:outline-ring group-data-[outside-month]:text-muted-foreground group-data-[disabled]:pointer-events-none group-data-[disabled]:opacity-50'
+  'cn-button cn-button-variant-ghost cn-button-size-icon cn-calendar-day-button relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 group-data-[selected]:rounded-(--cell-radius) group-data-[selected]:bg-primary group-data-[selected]:text-primary-foreground group-data-[today]:bg-muted group-data-[today]:text-foreground group-data-[outside-month]:text-muted-foreground group-data-[disabled]:pointer-events-none group-data-[disabled]:opacity-50 dark:hover:text-foreground [&>span]:text-xs [&>span]:opacity-70'
 
 export const calendarMonthYearGridClass = 'grid flex-1 grid-cols-3 grid-rows-4 gap-1 outline-none'
 
 export const calendarMonthYearButtonClass =
-  'flex h-full w-full items-center justify-center rounded-md text-sm tabular-nums transition-colors cursor-pointer hover:bg-accent hover:text-accent-foreground group-data-[today]:ring-1 group-data-[today]:ring-ring group-data-[selected]:bg-primary group-data-[selected]:text-primary-foreground group-data-[selected]:hover:bg-primary group-data-[focused]:outline-2 group-data-[focused]:outline-offset-2 group-data-[focused]:outline-ring group-data-[disabled]:pointer-events-none group-data-[disabled]:opacity-40'
+  'flex h-full w-full cursor-pointer items-center justify-center rounded-(--cell-radius) text-sm tabular-nums transition-colors hover:bg-accent hover:text-accent-foreground group-data-[today]:bg-muted group-data-[today]:text-foreground group-data-[selected]:bg-primary group-data-[selected]:text-primary-foreground group-data-[selected]:hover:bg-primary group-data-[focused]:border-ring group-data-[focused]:ring-[3px] group-data-[focused]:ring-ring/50 group-data-[disabled]:pointer-events-none group-data-[disabled]:opacity-40'
 
 const navButton = <M>(
   attributes: ReadonlyArray<ChildAttribute>,

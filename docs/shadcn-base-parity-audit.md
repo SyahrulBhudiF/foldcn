@@ -1,5 +1,14 @@
 # foldcn ↔ shadcn/ui v4 `bases/base/ui` parity audit
 
+> **Status (post-migration):** every file in `packages/registry/registry/default/ui/*.ts`
+> now derives from `bases/base/ui` per `docs/deriving-from-base.md` — class strings are
+> the upstream `cn-*` token compositions, resolved by the generated `style/cn-tokens.css`
+> plus hand-written deltas in `style/cn-compat.css`. The verdicts below were written
+> against the **pre-migration legacy port** and are kept for the functional-gap analysis
+> only; class-material diffs (radius/surface/ring columns) are resolved as of this
+> branch. Primitive-level gaps (menus without submenu/checkbox kinds, static sidebar,
+> presentational command, click-vs-hover popover family) still stand.
+
 Reference: `/Users/elianiva/Development/repos/shadcn-ui/ui/apps/v4/registry/bases/base/ui` (Base UI–backed registry), with `cn-*` tokens resolved via `registry/styles/style-nova.css`. Lineage checked against `registry/new-york-v4/ui` (legacy inline-class registry).
 
 ## Headline
