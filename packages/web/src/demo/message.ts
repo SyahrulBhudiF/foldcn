@@ -8,6 +8,7 @@ import * as DatePicker from '@foldcn/registry/src/ui/date-picker'
 import * as Dialog from '@foldcn/registry/src/ui/dialog'
 import * as DragAndDrop from '@foldcn/registry/src/ui/drag-and-drop'
 import * as FileDrop from '@foldcn/registry/src/ui/file-drop'
+import * as HoverCard from '@foldcn/registry/src/ui/hover-card'
 import * as Listbox from '@foldcn/registry/src/ui/listbox'
 import * as Menu from '@foldcn/registry/src/ui/menu'
 import * as Popover from '@foldcn/registry/src/ui/popover'
@@ -23,6 +24,7 @@ import { Toast } from './toast'
 // child submodel message wrappers
 export const GotDialogMessage = m('GotDialogMessage', { message: Dialog.Message })
 export const GotPopoverMessage = m('GotPopoverMessage', { message: Popover.Message })
+export const GotHoverCardMessage = m('GotHoverCardMessage', { message: HoverCard.Message })
 export const GotTooltipMessage = m('GotTooltipMessage', { message: Tooltip.Message })
 export const GotMenuMessage = m('GotMenuMessage', { message: Menu.Message })
 export const GotListboxMessage = m('GotListboxMessage', { message: Listbox.Message })
@@ -96,6 +98,7 @@ export const UpdatedTableSearch = m('UpdatedTableSearch', { value: S.String })
 export const Message = S.Union([
   GotDialogMessage,
   GotPopoverMessage,
+  GotHoverCardMessage,
   GotTooltipMessage,
   GotMenuMessage,
   GotListboxMessage,

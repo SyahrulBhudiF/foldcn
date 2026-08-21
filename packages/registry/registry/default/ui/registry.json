@@ -349,7 +349,7 @@
       "name": "hover-card",
       "type": "registry:ui",
       "title": "Hover Card",
-      "description": "Card-styled floating panel, built on the @foldkit/ui Popover submodel.",
+      "description": "Card-styled floating panel that opens on hover and closes with a grace period. Built on the @foldkit/ui Popover submodel.",
       "registryDependencies": ["@foldcn/utils"],
       "files": [{ "path": "hover-card.ts", "type": "registry:ui" }]
     },

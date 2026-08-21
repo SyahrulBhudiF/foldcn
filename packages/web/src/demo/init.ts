@@ -8,6 +8,7 @@ import * as DatePicker from '@foldcn/registry/src/ui/date-picker'
 import * as Dialog from '@foldcn/registry/src/ui/dialog'
 import * as DragAndDrop from '@foldcn/registry/src/ui/drag-and-drop'
 import * as FileDrop from '@foldcn/registry/src/ui/file-drop'
+import * as HoverCard from '@foldcn/registry/src/ui/hover-card'
 import * as Listbox from '@foldcn/registry/src/ui/listbox'
 import * as Menu from '@foldcn/registry/src/ui/menu'
 import * as Popover from '@foldcn/registry/src/ui/popover'
@@ -67,6 +68,7 @@ export const init = (): [Model, ReadonlyArray<Command.Command<Message>>] => [
 
     dialog: Dialog.init({ id: 'dialog-demo' }),
     popover: Popover.init({ id: 'popover-demo' }),
+    hoverCard: HoverCard.init({ id: 'hover-card-demo' }),
     tooltip: Tooltip.init({ id: 'tooltip-demo' }),
     menu: Menu.init({ id: 'menu-demo' }),
     listbox: Listbox.init({ id: 'listbox-demo' }),

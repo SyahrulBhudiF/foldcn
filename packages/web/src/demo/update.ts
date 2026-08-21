@@ -17,6 +17,7 @@ import * as DatePicker from '@foldcn/registry/src/ui/date-picker'
 import * as Dialog from '@foldcn/registry/src/ui/dialog'
 import * as DragAndDrop from '@foldcn/registry/src/ui/drag-and-drop'
 import * as FileDrop from '@foldcn/registry/src/ui/file-drop'
+import * as HoverCard from '@foldcn/registry/src/ui/hover-card'
 import * as Popover from '@foldcn/registry/src/ui/popover'
 import * as Slider from '@foldcn/registry/src/ui/slider'
 import * as Tooltip from '@foldcn/registry/src/ui/tooltip'
@@ -32,6 +33,7 @@ import {
   GotDialogMessage,
   GotDragAndDropMessage,
   GotFileDropMessage,
+  GotHoverCardMessage,
   GotListboxMessage,
   GotMenuMessage,
   GotPopoverMessage,
@@ -277,6 +279,14 @@ const foldPopover = Update.foldChild({
   foldOutMessage: foldPopoverOutMessage,
 })
 
+const foldHoverCard = Update.foldChild({
+  update: HoverCard.update,
+  read: (model: Model) => Option.some(model.hoverCard),
+  write: (model, next) => evo(model, { hoverCard: () => next }),
+  toParentMessage: (message) => GotHoverCardMessage({ message }),
+  foldOutMessage: () => (model) => [model, []],
+})
+
 const foldTooltip = Update.foldChild({
   update: Tooltip.update,
   read: (model: Model) => Option.some(model.tooltip),
@@ -410,6 +420,7 @@ export const update = (model: Model, message: Message): UpdateReturn =>
     M.tagsExhaustive({
       GotDialogMessage: ({ message }) => foldDialog(model, message),
       GotPopoverMessage: ({ message }) => foldPopover(model, message),
+      GotHoverCardMessage: ({ message }) => foldHoverCard(model, message),
       GotTooltipMessage: ({ message }) => foldTooltip(model, message),
       GotMenuMessage: ({ message }) => foldMenu(model, message),
       GotListboxMessage: ({ message }) => foldListbox(model, message),
