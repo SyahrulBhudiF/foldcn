@@ -1,0 +1,43 @@
+/* Hand-maintained foldkit compatibility deltas — merged into the style item's
+ * "@layer components" by scripts/sync-cn-tokens.mjs --inject, and imported
+ * after cn-tokens.css everywhere else. Do not regenerate this file.
+ *
+ * Convention: keep component class strings identical to the upstream base
+ * registry files; where foldkit cannot reproduce a Base UI attribute that
+ * upstream tokens rely on, add the adapted rule here instead of editing the
+ * component.
+ *
+ * Known foldkit deltas:
+ *  - Controls: Foldkit helpers emit `aria-disabled="true"` + `data-disabled`
+ *    and never the native `disabled` attribute (they stay focusable on
+ *    purpose). Upstream tokens style `disabled:` only, so each affected
+ *    control token needs aria-/data- twins below.
+ */
+
+/* Upstream defines cn-font-heading app-side (shadcn docs globals.css).
+ * Point it at your heading font; font-sans keeps the default look. */
+.cn-font-heading {
+  @apply font-sans;
+}
+
+/* Upstream rewrites this marker to rtl:rotate-180 at install time via the
+ * shadcn CLI (transform-rtl.ts). foldcn ships it as a real rule instead. */
+.cn-rtl-flip {
+  @apply rtl:rotate-180;
+}
+
+/* App-level utility from upstream (shadcn packages/shadcn/src/tailwind.css,
+ * also defined in the docs app globals) referenced by sidebar/command tokens. */
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* button: native :disabled never matches under foldkit. */
+.cn-button {
+  @apply aria-disabled:pointer-events-none aria-disabled:opacity-50 data-disabled:pointer-events-none data-disabled:opacity-50;
+}
