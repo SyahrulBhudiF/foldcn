@@ -27,6 +27,19 @@ export const accordionChevronClass = 'size-4 shrink-0 text-muted-foreground tran
 
 export const accordionWrapperClass = 'w-full'
 
+export type AccordionType = 'single' | 'multiple'
+
+/** Computes the next open-state array for an accordion group. */
+export const nextAccordionOpen = (
+  current: ReadonlyArray<boolean>,
+  index: number,
+  isOpen: boolean,
+  type: AccordionType = 'multiple',
+): ReadonlyArray<boolean> =>
+  type === 'single' && isOpen
+    ? current.map((_, itemIndex) => itemIndex === index)
+    : current.map((value, itemIndex) => (itemIndex === index ? isOpen : value))
+
 export type AccordionItemConfig<M> = Readonly<{
   id: string
   isOpen: boolean
@@ -41,6 +54,34 @@ export type AccordionItemConfig<M> = Readonly<{
   contentClass?: string
   wrapperClass?: string
 }>
+
+export type AccordionConfig<M> = Readonly<{
+  type?: AccordionType
+  value: ReadonlyArray<boolean>
+  items: ReadonlyArray<Omit<AccordionItemConfig<M>, 'isOpen' | 'onToggle'>>
+  onValueChange: (value: ReadonlyArray<boolean>) => M
+  className?: string
+}>
+
+/** Renders a controlled accordion group with single or multiple open items. */
+export const accordion = <M>(config: AccordionConfig<M>, h: HtmlBuilder<M>): Html => {
+  const type = config.type ?? 'multiple'
+
+  return h.div(
+    [h.Class(cn(accordionWrapperClass, config.className)), h.DataAttribute('slot', 'accordion')],
+    config.items.map((item, index) =>
+      accordionItem<M>(
+        {
+          ...item,
+          isOpen: config.value[index] ?? false,
+          onToggle: (isOpen) =>
+            config.onValueChange(nextAccordionOpen(config.value, index, isOpen, type)),
+        },
+        h,
+      ),
+    ),
+  )
+}
 
 /** Styled accordion item built on the @foldkit/ui Disclosure helper. Mirrors
  *  the shadcn `accordion` trigger/content pair: a full-width trigger with a

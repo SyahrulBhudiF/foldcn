@@ -448,12 +448,7 @@ export const update = (model: Model, message: Message): UpdateReturn =>
         evo(model, { isDisclosureAnimatedOpen: () => isOpen }),
         [],
       ],
-      ToggledAccordion: ({ index, isOpen }) => [
-        evo(model, {
-          accordionOpen: (arr) => arr.map((value, i) => (i === index ? isOpen : value)),
-        }),
-        [],
-      ],
+      ToggledAccordion: ({ value }) => [evo(model, { accordionOpen: () => value }), []],
       ToggledCollapsible: ({ isOpen }) => [
         evo(model, { isCollapsibleOpen: () => isOpen }),
         [],
