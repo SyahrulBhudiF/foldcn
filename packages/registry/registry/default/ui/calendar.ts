@@ -42,7 +42,7 @@ export const calendarNavButtonClass =
 
 export const calendarGridClass = 'flex flex-col gap-1 outline-none'
 
-export const calendarRowClass = 'grid grid-cols-7 gap-1'
+export const calendarRowClass = 'grid grid-cols-7 gap-x-2 gap-y-1'
 
 export const calendarColumnHeaderClass =
   'py-1 text-center text-[0.8rem] font-normal text-muted-foreground select-none'
@@ -50,12 +50,12 @@ export const calendarColumnHeaderClass =
 export const calendarCellClass = 'group flex items-center justify-center'
 
 export const calendarDayButtonClass =
-  'flex size-9 select-none items-center justify-center rounded-full text-sm tabular-nums transition-colors cursor-pointer hover:bg-accent hover:text-accent-foreground group-data-[today]:ring-1 group-data-[today]:ring-ring group-data-[selected]:bg-primary group-data-[selected]:text-primary-foreground group-data-[selected]:hover:bg-primary group-data-[focused]:outline-2 group-data-[focused]:outline-offset-2 group-data-[focused]:outline-ring group-data-[outside-month]:text-muted-foreground group-data-[disabled]:pointer-events-none group-data-[disabled]:opacity-50'
+  'flex size-9 select-none items-center justify-center rounded-full text-sm tabular-nums transition-colors cursor-pointer hover:bg-accent hover:text-accent-foreground group-data-[today]:ring-1 group-data-[today]:ring-ring group-data-[selected]:bg-primary group-data-[selected]:text-primary-foreground group-data-[selected]:hover:bg-primary group-data-[selected]:hover:text-primary-foreground group-data-[focused]:outline-2 group-data-[focused]:outline-offset-2 group-data-[focused]:outline-ring group-data-[outside-month]:text-muted-foreground group-data-[disabled]:pointer-events-none group-data-[disabled]:opacity-50'
 
-export const calendarMonthYearGridClass = 'grid flex-1 grid-cols-3 grid-rows-4 gap-1 outline-none'
+export const calendarMonthYearGridClass = 'grid flex-1 grid-cols-3 grid-rows-4 gap-2 outline-none'
 
 export const calendarMonthYearButtonClass =
-  'flex h-full w-full items-center justify-center rounded-md text-sm tabular-nums transition-colors cursor-pointer hover:bg-accent hover:text-accent-foreground group-data-[today]:ring-1 group-data-[today]:ring-ring group-data-[selected]:bg-primary group-data-[selected]:text-primary-foreground group-data-[selected]:hover:bg-primary group-data-[focused]:outline-2 group-data-[focused]:outline-offset-2 group-data-[focused]:outline-ring group-data-[disabled]:pointer-events-none group-data-[disabled]:opacity-40'
+  'flex h-full w-full items-center justify-center rounded-md text-sm tabular-nums transition-colors cursor-pointer hover:bg-accent hover:text-accent-foreground group-data-[today]:ring-1 group-data-[today]:ring-ring group-data-[selected]:bg-primary group-data-[selected]:text-primary-foreground group-data-[selected]:hover:bg-primary group-data-[selected]:hover:text-primary-foreground group-data-[focused]:outline-2 group-data-[focused]:outline-offset-2 group-data-[focused]:outline-ring group-data-[disabled]:pointer-events-none group-data-[disabled]:opacity-40'
 
 const navButton = <M>(
   attributes: ReadonlyArray<ChildAttribute>,
@@ -73,11 +73,7 @@ const headingButton = <M>(
     [heading.text, icon(h, ChevronDown, 'size-3')],
   )
 
-const weekRow = <M>(
-  week: Week,
-  showOutsideDays: boolean,
-  h: HtmlBuilder<M>,
-): Html =>
+const weekRow = <M>(week: Week, showOutsideDays: boolean, h: HtmlBuilder<M>): Html =>
   h.div(
     [...week.attributes, h.Class(calendarRowClass)],
     week.cells.map((cell) =>
