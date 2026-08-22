@@ -35,7 +35,7 @@ export const accordionContentInnerClass =
   'cn-accordion-content-inner h-(--accordion-panel-height) data-ending-style:h-0 data-starting-style:h-0 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4'
 
 export const accordionChevronClass =
-  'cn-accordion-trigger-icon pointer-events-none size-4 shrink-0 transition-transform'
+  'cn-accordion-trigger-icon pointer-events-none size-4 shrink-0 transition-transform group-aria-expanded/accordion-trigger:rotate-180'
 
 export type AccordionType = 'single' | 'multiple'
 
