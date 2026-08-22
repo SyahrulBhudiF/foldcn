@@ -13,7 +13,11 @@ export const aspectRatioView = (model: Model, h: HtmlBuilder<Message>): Html =>
         { ratio: 16 / 9 },
         [
           h.div(
-            [h.Class('flex h-full w-full items-center justify-center rounded-lg border bg-muted text-sm text-muted-foreground')],
+            [
+              h.Class(
+                'flex h-full w-full items-center justify-center rounded-lg border bg-muted text-sm text-muted-foreground',
+              ),
+            ],
             ['16 / 9'],
           ),
         ],

@@ -137,7 +137,13 @@ export const styledViewInputs = <M, Value extends string = string>(
           h.DataAttribute('slot', 'tabs'),
           h.DataAttribute('orientation', isVertical ? 'vertical' : 'horizontal'),
           ...(isVertical ? [h.DataAttribute('vertical', '')] : [h.DataAttribute('horizontal', '')]),
-          h.Class(cn('group/tabs flex', isVertical ? 'w-full gap-2' : 'flex-col', viewInputs.variant === 'line' ? '' : '')),
+          h.Class(
+            cn(
+              'group/tabs flex',
+              isVertical ? 'w-full gap-2' : 'flex-col',
+              viewInputs.variant === 'line' ? '' : '',
+            ),
+          ),
         ],
         [
           h.div(

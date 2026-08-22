@@ -48,7 +48,9 @@ export type ResizableConfig<M> = Readonly<{
 /** A two-pane layout with a draggable split handle. */
 export const resizable = <M>(config: ResizableConfig<M>, h: HtmlBuilder<M>): Html => {
   const isHorizontal = (config.direction ?? 'horizontal') === 'horizontal'
-  const firstStyle: Record<string, string> = isHorizontal ? { width: `${config.value}%` } : { height: `${config.value}%` }
+  const firstStyle: Record<string, string> = isHorizontal
+    ? { width: `${config.value}%` }
+    : { height: `${config.value}%` }
   const secondStyle: Record<string, string> = isHorizontal
     ? { width: `${100 - config.value}%` }
     : { height: `${100 - config.value}%` }
@@ -86,18 +88,29 @@ export const resizable = <M>(config: ResizableConfig<M>, h: HtmlBuilder<M>): Htm
   return h.div(
     [
       h.Class(
-        cn(isHorizontal ? resizableContainerClass : resizableContainerVerticalClass, config.className),
+        cn(
+          isHorizontal ? resizableContainerClass : resizableContainerVerticalClass,
+          config.className,
+        ),
       ),
       h.DataAttribute('slot', 'resizable'),
     ],
     [
       h.div(
-        [h.Style(firstStyle), h.Class(cn(resizablePanelClass, config.firstPane.className)), h.DataAttribute('slot', 'resizable-panel')],
+        [
+          h.Style(firstStyle),
+          h.Class(cn(resizablePanelClass, config.firstPane.className)),
+          h.DataAttribute('slot', 'resizable-panel'),
+        ],
         [config.firstPane.content],
       ),
       handle,
       h.div(
-        [h.Style(secondStyle), h.Class(cn(resizablePanelClass, config.secondPane.className)), h.DataAttribute('slot', 'resizable-panel')],
+        [
+          h.Style(secondStyle),
+          h.Class(cn(resizablePanelClass, config.secondPane.className)),
+          h.DataAttribute('slot', 'resizable-panel'),
+        ],
         [config.secondPane.content],
       ),
     ],

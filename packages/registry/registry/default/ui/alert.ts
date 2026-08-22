@@ -60,7 +60,10 @@ const alertDescription = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.Class(cn(alertDescriptionClass, config.className)), h.DataAttribute('slot', 'alert-description')],
+    [
+      h.Class(cn(alertDescriptionClass, config.className)),
+      h.DataAttribute('slot', 'alert-description'),
+    ],
     children,
   )
 
@@ -71,7 +74,10 @@ const alertAction = <M>(
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.div([h.Class(cn(alertActionClass, config.className)), h.DataAttribute('slot', 'alert-action')], children)
+  h.div(
+    [h.Class(cn(alertActionClass, config.className)), h.DataAttribute('slot', 'alert-action')],
+    children,
+  )
 
 /** Styled alert — `Alert.title`, `Alert.description` and `Alert.action`
  *  sub-builders. Derived from the shadcn v4 BASE registry `alert.tsx`. */

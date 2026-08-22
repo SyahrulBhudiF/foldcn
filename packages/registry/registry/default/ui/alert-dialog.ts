@@ -25,7 +25,8 @@ export type Message = typeof Message.Type
 export const OutMessage = FoldkitDialog.OutMessage
 export type OutMessage = typeof OutMessage.Type
 
-export const init = (config: InitConfig): Model => FoldkitDialog.init({ isAnimated: true, ...config })
+export const init = (config: InitConfig): Model =>
+  FoldkitDialog.init({ isAnimated: true, ...config })
 export const update = FoldkitDialog.update
 export const open = FoldkitDialog.open
 export const close = FoldkitDialog.close
@@ -61,8 +62,7 @@ export const alertDialogFooterClass =
   'cn-alert-dialog-footer flex flex-col-reverse gap-2 group-data-[size=sm]/alert-dialog-content:grid group-data-[size=sm]/alert-dialog-content:grid-cols-2 sm:flex-row sm:justify-end'
 
 /** Upstream renders Cancel via `<Button variant="outline" size="default">`. */
-export const alertDialogCancelClass =
-  'cn-button cn-button-variant-outline cn-button-size-default'
+export const alertDialogCancelClass = 'cn-button cn-button-variant-outline cn-button-size-default'
 
 /** Upstream renders Action via `<Button>` (default variant). */
 export const alertDialogActionClass = 'cn-button cn-button-variant-default cn-button-size-default'
@@ -83,7 +83,10 @@ export const header = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.DataAttribute('slot', 'alert-dialog-header'), h.Class(cn(alertDialogHeaderClass, config.className))],
+    [
+      h.DataAttribute('slot', 'alert-dialog-header'),
+      h.Class(cn(alertDialogHeaderClass, config.className)),
+    ],
     children,
   )
 
@@ -94,7 +97,10 @@ export const media = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.DataAttribute('slot', 'alert-dialog-media'), h.Class(cn(alertDialogMediaClass, config.className))],
+    [
+      h.DataAttribute('slot', 'alert-dialog-media'),
+      h.Class(cn(alertDialogMediaClass, config.className)),
+    ],
     children,
   )
 
@@ -137,7 +143,10 @@ export const footer = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.DataAttribute('slot', 'alert-dialog-footer'), h.Class(cn(alertDialogFooterClass, config.className))],
+    [
+      h.DataAttribute('slot', 'alert-dialog-footer'),
+      h.Class(cn(alertDialogFooterClass, config.className)),
+    ],
     children,
   )
 
@@ -149,7 +158,11 @@ export const closeButton = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.button(
-    [...attributes, h.DataAttribute('slot', 'alert-dialog-close'), h.Class(cn(alertDialogCloseButtonClass, config.className))],
+    [
+      ...attributes,
+      h.DataAttribute('slot', 'alert-dialog-close'),
+      h.Class(cn(alertDialogCloseButtonClass, config.className)),
+    ],
     children,
   )
 
@@ -162,7 +175,11 @@ export const actionButton = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.button(
-    [...attributes, h.DataAttribute('slot', 'alert-dialog-action'), h.Class(cn(alertDialogActionClass, config.className))],
+    [
+      ...attributes,
+      h.DataAttribute('slot', 'alert-dialog-action'),
+      h.Class(cn(alertDialogActionClass, config.className)),
+    ],
     children,
   )
 
@@ -174,7 +191,11 @@ export const cancelButton = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.button(
-    [...attributes, h.DataAttribute('slot', 'alert-dialog-cancel'), h.Class(cn(alertDialogCancelClass, config.className))],
+    [
+      ...attributes,
+      h.DataAttribute('slot', 'alert-dialog-cancel'),
+      h.Class(cn(alertDialogCancelClass, config.className)),
+    ],
     children,
   )
 

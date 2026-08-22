@@ -55,9 +55,12 @@ export const slice = defineSlice({
       evo(model, { isDisclosureBasicOpen: () => isOpen }),
       [],
     ],
-    ToggledDisclosureAnimated: (
-      { isOpen }: typeof ToggledDisclosureAnimated.Type,
-    ): UpdateReturn => [evo(model, { isDisclosureAnimatedOpen: () => isOpen }), []],
+    ToggledDisclosureAnimated: ({
+      isOpen,
+    }: typeof ToggledDisclosureAnimated.Type): UpdateReturn => [
+      evo(model, { isDisclosureAnimatedOpen: () => isOpen }),
+      [],
+    ],
   }),
   samples: [ToggledDisclosureBasic({ isOpen: true }), ToggledDisclosureAnimated({ isOpen: true })],
 })

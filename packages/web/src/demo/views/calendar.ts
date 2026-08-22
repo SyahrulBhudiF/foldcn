@@ -42,9 +42,9 @@ const foldCalendar = Update.foldChild({
 })
 
 const fields = {
-    calendar: calendar.Model,
-    maybeSelectedDate: S.Option(FoldkitCalendar.CalendarDate),
-  }
+  calendar: calendar.Model,
+  maybeSelectedDate: S.Option(FoldkitCalendar.CalendarDate),
+}
 
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type

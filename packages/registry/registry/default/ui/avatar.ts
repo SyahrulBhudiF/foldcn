@@ -54,14 +54,12 @@ const avatarContainer = <M>(
   )
 
 const avatarImage = <M>(config: AvatarImageConfig, h: HtmlBuilder<M>): Html =>
-  h.img(
-    [
-      h.Src(config.src),
-      ...(config.alt === undefined ? [] : [h.Alt(config.alt)]),
-      h.Class(cn(avatarImageClass, config.className)),
-      h.DataAttribute('slot', 'avatar-image'),
-    ],
-  )
+  h.img([
+    h.Src(config.src),
+    ...(config.alt === undefined ? [] : [h.Alt(config.alt)]),
+    h.Class(cn(avatarImageClass, config.className)),
+    h.DataAttribute('slot', 'avatar-image'),
+  ])
 
 const avatarFallback = <M>(
   config: StyleConfig,
@@ -69,7 +67,10 @@ const avatarFallback = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.span(
-    [h.Class(cn(avatarFallbackClass, config.className)), h.DataAttribute('slot', 'avatar-fallback')],
+    [
+      h.Class(cn(avatarFallbackClass, config.className)),
+      h.DataAttribute('slot', 'avatar-fallback'),
+    ],
     children,
   )
 
@@ -99,7 +100,10 @@ const avatarGroupCount = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.Class(cn(avatarGroupCountClass, config.className)), h.DataAttribute('slot', 'avatar-group-count')],
+    [
+      h.Class(cn(avatarGroupCountClass, config.className)),
+      h.DataAttribute('slot', 'avatar-group-count'),
+    ],
     children,
   )
 

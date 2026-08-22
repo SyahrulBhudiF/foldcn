@@ -60,10 +60,10 @@ export const dialogView = (model: Model, h: HtmlBuilder<Message>): Html =>
     ],
   )
 
-const foldNoOp =
-  (): ((out: Dialog.OutMessage) => Update.Step<State, unknown>) =>
-  () =>
-  (model) => [model, []]
+const foldNoOp = (): ((out: Dialog.OutMessage) => Update.Step<State, unknown>) => () => (model) => [
+  model,
+  [],
+]
 
 const foldDialogOutMessage = M.type<Dialog.OutMessage>().pipe(
   M.withReturnType<Update.Step<State, unknown>>(),

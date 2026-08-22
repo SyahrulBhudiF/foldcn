@@ -24,7 +24,11 @@ export const sliderView = (model: Model, h: HtmlBuilder<Message>): Html =>
         model: model.sliderRating,
         view: slider.view,
         viewInputs: slider.styledViewInputs(
-          { value: model.sliderRatingValue, label: 'Rating', formatValue: (value) => `${value} / 10` },
+          {
+            value: model.sliderRatingValue,
+            label: 'Rating',
+            formatValue: (value) => `${value} / 10`,
+          },
           h,
         ),
         toParentMessage: (message) => GotSliderRatingMessage({ message }),
@@ -51,8 +55,7 @@ const foldRatingOutMessage = M.type<slider.OutMessage>().pipe(
   M.tagsExhaustive({
     ChangedValue:
       ({ value }) =>
-      (model) =>
-        [evo(model, { sliderRatingValue: () => value }), []],
+      (model) => [evo(model, { sliderRatingValue: () => value }), []],
   }),
 )
 
@@ -61,8 +64,7 @@ const foldVolumeOutMessage = M.type<slider.OutMessage>().pipe(
   M.tagsExhaustive({
     ChangedValue:
       ({ value }) =>
-      (model) =>
-        [evo(model, { sliderVolumeValue: () => value }), []],
+      (model) => [evo(model, { sliderVolumeValue: () => value }), []],
   }),
 )
 
@@ -83,11 +85,11 @@ const foldVolume = Update.foldChild({
 })
 
 const fields = {
-    sliderRating: slider.Model,
-    sliderRatingValue: S.Number,
-    sliderVolume: slider.Model,
-    sliderVolumeValue: S.Number,
-  }
+  sliderRating: slider.Model,
+  sliderRatingValue: S.Number,
+  sliderVolume: slider.Model,
+  sliderVolumeValue: S.Number,
+}
 
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type
@@ -121,4 +123,3 @@ export const slice = defineSlice({
   // there are no top-level samples to feed update().
   subscriptions,
 })
-

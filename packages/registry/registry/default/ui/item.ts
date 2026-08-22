@@ -85,7 +85,11 @@ const itemGroup = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.Role('list'), h.Class(cn(itemGroupClass, config.className)), h.DataAttribute('slot', 'item-group')],
+    [
+      h.Role('list'),
+      h.Class(cn(itemGroupClass, config.className)),
+      h.DataAttribute('slot', 'item-group'),
+    ],
     children,
   )
 
@@ -140,14 +144,20 @@ const itemContent = <M>(
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.div([h.Class(cn(itemContentClass, config.className)), h.DataAttribute('slot', 'item-content')], children)
+  h.div(
+    [h.Class(cn(itemContentClass, config.className)), h.DataAttribute('slot', 'item-content')],
+    children,
+  )
 
 const itemTitle = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.div([h.Class(cn(itemTitleClass, config.className)), h.DataAttribute('slot', 'item-title')], children)
+  h.div(
+    [h.Class(cn(itemTitleClass, config.className)), h.DataAttribute('slot', 'item-title')],
+    children,
+  )
 
 const itemDescription = <M>(
   config: StyleConfig,
@@ -155,7 +165,10 @@ const itemDescription = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.Class(cn(itemDescriptionClass, config.className)), h.DataAttribute('slot', 'item-description')],
+    [
+      h.Class(cn(itemDescriptionClass, config.className)),
+      h.DataAttribute('slot', 'item-description'),
+    ],
     children,
   )
 
@@ -164,21 +177,30 @@ const itemActions = <M>(
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.div([h.Class(cn(itemActionsClass, config.className)), h.DataAttribute('slot', 'item-actions')], children)
+  h.div(
+    [h.Class(cn(itemActionsClass, config.className)), h.DataAttribute('slot', 'item-actions')],
+    children,
+  )
 
 const itemHeader = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.div([h.Class(cn(itemHeaderClass, config.className)), h.DataAttribute('slot', 'item-header')], children)
+  h.div(
+    [h.Class(cn(itemHeaderClass, config.className)), h.DataAttribute('slot', 'item-header')],
+    children,
+  )
 
 const itemFooter = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.div([h.Class(cn(itemFooterClass, config.className)), h.DataAttribute('slot', 'item-footer')], children)
+  h.div(
+    [h.Class(cn(itemFooterClass, config.className)), h.DataAttribute('slot', 'item-footer')],
+    children,
+  )
 
 /** Styled item — a flexible list row with `Item.group`, `Item.separator`,
  *  `Item.media`, `Item.content`, `Item.title`, `Item.description`,

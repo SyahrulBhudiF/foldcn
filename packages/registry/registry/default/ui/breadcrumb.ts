@@ -28,12 +28,15 @@ export const breadcrumbPageClass = 'cn-breadcrumb-page font-normal text-foregrou
 
 export const breadcrumbSeparatorClass = 'cn-breadcrumb-separator [&>svg]:size-3.5 shrink-0'
 
-export const breadcrumbEllipsisClass =
-  'cn-breadcrumb-ellipsis flex items-center justify-center'
+export const breadcrumbEllipsisClass = 'cn-breadcrumb-ellipsis flex items-center justify-center'
 
 type StyleConfig = Readonly<{ className?: string }>
 
-const breadcrumbContainer = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
+const breadcrumbContainer = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
   h.nav(
     [
       h.AriaLabel('breadcrumb'),
@@ -43,10 +46,18 @@ const breadcrumbContainer = <M>(config: StyleConfig, children: ReadonlyArray<Chi
     children,
   )
 
-const breadcrumbList = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
+const breadcrumbList = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
   h.ol([h.Class(cn(breadcrumbListClass)), h.DataAttribute('slot', 'breadcrumb-list')], children)
 
-const breadcrumbItem = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
+const breadcrumbItem = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
   h.li([h.Class(cn(breadcrumbItemClass)), h.DataAttribute('slot', 'breadcrumb-item')], children)
 
 const breadcrumbLink = <M>(
@@ -54,7 +65,13 @@ const breadcrumbLink = <M>(
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.a([h.Class(cn(breadcrumbLinkClass, config.className)), h.DataAttribute('slot', 'breadcrumb-link')], children)
+  h.a(
+    [
+      h.Class(cn(breadcrumbLinkClass, config.className)),
+      h.DataAttribute('slot', 'breadcrumb-link'),
+    ],
+    children,
+  )
 
 type BreadcrumbPageConfig = Readonly<{ className?: string; isCurrent?: boolean }>
 
@@ -65,7 +82,7 @@ const breadcrumbPage = <M>(
 ): Html =>
   h.span(
     [
-      ...(config.isCurrent ?? false
+      ...((config.isCurrent ?? false)
         ? [h.Role('link'), h.AriaDisabled(true), h.AriaCurrent('page')]
         : []),
       h.Class(cn(breadcrumbPageClass, config.className)),

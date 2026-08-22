@@ -66,7 +66,7 @@ export const componentsIndexView = (model: Model, h: HtmlBuilder<Message>): Html
           h.h1(
             [
               h.Class(
-                'text-3xl font-bold leading-[1.2] tracking-[-0.01em] text-foreground before:content-[\'#_\'] before:font-normal before:text-muted-foreground',
+                "text-3xl font-bold leading-[1.2] tracking-[-0.01em] text-foreground before:content-['#_'] before:font-normal before:text-muted-foreground",
               ),
             ],
             ['Components'],
@@ -84,13 +84,16 @@ export const componentsIndexView = (model: Model, h: HtmlBuilder<Message>): Html
               h.h2(
                 [
                   h.Class(
-                    'mt-10 text-[1.375rem] font-semibold leading-[1.25] text-foreground before:content-[\'##_\'] before:font-normal before:text-muted-foreground',
+                    "mt-10 text-[1.375rem] font-semibold leading-[1.25] text-foreground before:content-['##_'] before:font-normal before:text-muted-foreground",
                   ),
                 ],
                 [group.label],
               ),
               h.p([h.Class('mt-5')], [group.description]),
-              h.ul([h.Class('mt-5 list-disc pl-5')], groupItems.map((item) => row(item, h))),
+              h.ul(
+                [h.Class('mt-5 list-disc pl-5')],
+                groupItems.map((item) => row(item, h)),
+              ),
             ]
           }),
         ],

@@ -38,10 +38,10 @@ export const loginFormView = (model: Model, h: HtmlBuilder<Message>): Html =>
   )
 
 const fields = {
-    loginEmail: S.String,
-    loginPassword: S.String,
-    loginSubmitted: S.Boolean,
-  }
+  loginEmail: S.String,
+  loginPassword: S.String,
+  loginSubmitted: S.Boolean,
+}
 
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type

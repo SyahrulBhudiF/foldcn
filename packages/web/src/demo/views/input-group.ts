@@ -1,6 +1,10 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { inputGroup, inputGroupText, inputGroupInput } from '@foldcn/registry/styles/default/ui/input-group'
+import {
+  inputGroup,
+  inputGroupText,
+  inputGroupInput,
+} from '@foldcn/registry/styles/default/ui/input-group'
 import { icon } from '@foldcn/registry/styles/default/lib/icons'
 import { Mail, Lock } from 'lucide'
 

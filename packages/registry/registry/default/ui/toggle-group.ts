@@ -82,7 +82,9 @@ export const toggleGroup = <M>(
       h.DataAttribute('spacing', String(spacing)),
       h.DataAttribute('variant', config.variant ?? 'default'),
       h.DataAttribute('size', config.size ?? 'default'),
-      ...(orientation === 'vertical' ? [h.DataAttribute('vertical', '')] : [h.DataAttribute('horizontal', '')]),
+      ...(orientation === 'vertical'
+        ? [h.DataAttribute('vertical', '')]
+        : [h.DataAttribute('horizontal', '')]),
       h.Style({ '--gap': String(spacing) }),
     ],
     items.map((item) =>

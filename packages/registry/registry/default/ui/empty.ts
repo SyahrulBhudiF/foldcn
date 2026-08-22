@@ -49,7 +49,10 @@ const emptyHeader = <M>(
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.div([h.Class(cn(emptyHeaderClass, config.className)), h.DataAttribute('slot', 'empty-header')], children)
+  h.div(
+    [h.Class(cn(emptyHeaderClass, config.className)), h.DataAttribute('slot', 'empty-header')],
+    children,
+  )
 
 const emptyMedia = <M>(
   config: EmptyMediaConfig,
@@ -58,7 +61,9 @@ const emptyMedia = <M>(
 ): Html =>
   h.div(
     [
-      h.Class(cn(emptyMediaClass, emptyMediaVariants[config.variant ?? 'default'], config.className)),
+      h.Class(
+        cn(emptyMediaClass, emptyMediaVariants[config.variant ?? 'default'], config.className),
+      ),
       h.DataAttribute('slot', 'empty-icon'),
       h.DataAttribute('variant', config.variant ?? 'default'),
     ],
@@ -70,7 +75,10 @@ const emptyTitle = <M>(
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.div([h.Class(cn(emptyTitleClass, config.className)), h.DataAttribute('slot', 'empty-title')], children)
+  h.div(
+    [h.Class(cn(emptyTitleClass, config.className)), h.DataAttribute('slot', 'empty-title')],
+    children,
+  )
 
 const emptyDescription = <M>(
   config: StyleConfig,
@@ -78,7 +86,10 @@ const emptyDescription = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.Class(cn(emptyDescriptionClass, config.className)), h.DataAttribute('slot', 'empty-description')],
+    [
+      h.Class(cn(emptyDescriptionClass, config.className)),
+      h.DataAttribute('slot', 'empty-description'),
+    ],
     children,
   )
 
@@ -87,7 +98,10 @@ const emptyContent = <M>(
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.div([h.Class(cn(emptyContentClass, config.className)), h.DataAttribute('slot', 'empty-content')], children)
+  h.div(
+    [h.Class(cn(emptyContentClass, config.className)), h.DataAttribute('slot', 'empty-content')],
+    children,
+  )
 
 /** Styled empty state — `Empty.header`, `Empty.media`, `Empty.title`,
  *  `Empty.description`, `Empty.content` sub-builders. Mirrors the shadcn v4

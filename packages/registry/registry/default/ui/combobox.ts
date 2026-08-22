@@ -15,7 +15,8 @@ import { cn } from '@/lib/utils'
 
 export const create = FoldkitCombobox.create
 export const Multi = FoldkitCombobox.Multi
-export const init = (config: InitConfig): Model => FoldkitCombobox.init({ isAnimated: true, ...config })
+export const init = (config: InitConfig): Model =>
+  FoldkitCombobox.init({ isAnimated: true, ...config })
 export const inputId = FoldkitCombobox.inputId
 export const Model = FoldkitCombobox.Model
 export type Model = typeof Model.Type
@@ -47,15 +48,15 @@ export const comboboxInputClass =
 export const comboboxButtonClass =
   'absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground transition-colors hover:text-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4'
 
-export const comboboxItemsClass =
-  'cn-combobox-content z-50 min-w-56 overflow-hidden outline-hidden'
+export const comboboxItemsClass = 'cn-combobox-content z-50 min-w-56 overflow-hidden outline-hidden'
 
 export const comboboxItemsAnimatedClass = comboboxItemsClass
 
 export const comboboxItemClass =
   'cn-combobox-item relative flex w-full cursor-default select-none outline-hidden data-active:bg-accent data-active:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-selected:font-medium data-readonly:pointer-events-none'
 
-export const comboboxGroupHeadingClass = 'cn-dropdown-menu-label px-2 py-1.5 text-xs font-medium text-muted-foreground'
+export const comboboxGroupHeadingClass =
+  'cn-dropdown-menu-label px-2 py-1.5 text-xs font-medium text-muted-foreground'
 
 export const comboboxSeparatorClass = 'cn-dropdown-menu-separator -mx-1 my-1 h-px'
 

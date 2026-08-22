@@ -54,12 +54,19 @@ export type CommandInputConfig<M> = Readonly<{
 
 type StyleConfig = Readonly<{ className?: string }>
 
-const commandContainer = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
+const commandContainer = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
   h.div([h.Class(cn(commandClass, config.className)), h.DataAttribute('slot', 'command')], children)
 
 const commandInput = <M>(config: CommandInputConfig<M>, h: HtmlBuilder<M>): Html =>
   h.div(
-    [h.Class('flex items-center border-b px-2.5'), h.DataAttribute('slot', 'command-input-wrapper')],
+    [
+      h.Class('flex items-center border-b px-2.5'),
+      h.DataAttribute('slot', 'command-input-wrapper'),
+    ],
     [
       icon(h, Search, 'size-4 shrink-0 opacity-50'),
       h.input([
@@ -68,20 +75,36 @@ const commandInput = <M>(config: CommandInputConfig<M>, h: HtmlBuilder<M>): Html
         ...(config.isDisabled === true ? [h.Disabled(true)] : []),
         ...(config.placeholder === undefined ? [] : [h.Placeholder(config.placeholder)]),
         ...(config.onInput === undefined ? [] : [h.OnInput(config.onInput)]),
-        h.Class(cn(commandInputClass, 'border-0 shadow-none focus-visible:ring-0', config.className)),
+        h.Class(
+          cn(commandInputClass, 'border-0 shadow-none focus-visible:ring-0', config.className),
+        ),
         h.DataAttribute('slot', 'command-input'),
       ]),
     ],
   )
 
-const commandList = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
-  h.div([h.Class(cn(commandListClass)), h.DataAttribute('slot', 'command-list')], children)
+const commandList = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html => h.div([h.Class(cn(commandListClass)), h.DataAttribute('slot', 'command-list')], children)
 
-const commandEmpty = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
+const commandEmpty = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
   h.div([h.Class(cn(commandEmptyClass)), h.DataAttribute('slot', 'command-empty')], children)
 
-const commandGroup = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
-  h.div([h.Class(cn(commandGroupClass)), h.DataAttribute('slot', 'command-group'), h.Role('group')], children)
+const commandGroup = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.div(
+    [h.Class(cn(commandGroupClass)), h.DataAttribute('slot', 'command-group'), h.Role('group')],
+    children,
+  )
 
 const commandItem = <M>(
   config: StyleConfig & Readonly<{ isSelected?: boolean; isDisabled?: boolean }>,
@@ -100,10 +123,26 @@ const commandItem = <M>(
   )
 
 const commandSeparator = <M>(config: StyleConfig, h: HtmlBuilder<M>): Html =>
-  h.div([h.Class(cn(commandSeparatorClass, config.className)), h.DataAttribute('slot', 'command-separator')], [])
+  h.div(
+    [
+      h.Class(cn(commandSeparatorClass, config.className)),
+      h.DataAttribute('slot', 'command-separator'),
+    ],
+    [],
+  )
 
-const commandShortcut = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
-  h.span([h.Class(cn(commandShortcutClass, config.className)), h.DataAttribute('slot', 'command-shortcut')], children)
+const commandShortcut = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.span(
+    [
+      h.Class(cn(commandShortcutClass, config.className)),
+      h.DataAttribute('slot', 'command-shortcut'),
+    ],
+    children,
+  )
 
 /** Composable command palette — `Command` is the container, with sub-builders
  *  as properties. */

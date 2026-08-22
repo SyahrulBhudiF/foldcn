@@ -72,18 +72,14 @@ export const checkbox = <M>(config: CheckboxConfig<M>, h: HtmlBuilder<M>): Html 
                             h.DataAttribute('slot', 'checkbox-indicator'),
                             h.Class(checkboxIndicatorClass),
                           ],
-                          [
-                            icon(
-                              h,
-                              config.isIndeterminate === true ? Minus : Check,
-                              'size-3.5',
-                            ),
-                          ],
+                          [icon(h, config.isIndeterminate === true ? Minus : Check, 'size-3.5')],
                         ),
                       ]
                     : [],
                 ),
-                ...(attributes.hiddenInput.length > 0 ? [h.input([...attributes.hiddenInput])] : []),
+                ...(attributes.hiddenInput.length > 0
+                  ? [h.input([...attributes.hiddenInput])]
+                  : []),
                 h.label(
                   [
                     ...attributes.label,

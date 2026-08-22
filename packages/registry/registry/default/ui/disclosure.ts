@@ -16,8 +16,7 @@ export const disclosurePanelClass =
 export const disclosureAnimatedPanelClass =
   'overflow-hidden rounded-b-lg border-x border-b border-t-0 border-border bg-card px-4 py-3 text-sm text-muted-foreground [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4'
 
-export const disclosureChevronClass =
-  'size-4 shrink-0 text-muted-foreground pointer-events-none'
+export const disclosureChevronClass = 'size-4 shrink-0 text-muted-foreground pointer-events-none'
 
 export const disclosureWrapperClass = 'w-full'
 
@@ -75,7 +74,10 @@ export const disclosure = <M>(config: DisclosureConfig<M>, h: HtmlBuilder<M>): H
                         h.span(
                           [
                             h.Class(
-                              cn(disclosureChevronClass, 'group-aria-expanded/disclosure-trigger:hidden'),
+                              cn(
+                                disclosureChevronClass,
+                                'group-aria-expanded/disclosure-trigger:hidden',
+                              ),
                             ),
                           ],
                           [icon(h, ChevronDown)],

@@ -114,11 +114,7 @@ const defaultOptionRow = <M, Value extends string>(
     [h.Class(cn('flex w-full items-center gap-2', optionClass))],
     [
       h.button(
-        [
-          ...info.option,
-          h.DataAttribute('slot', 'radio-group-item'),
-          h.Class(radioItemClass),
-        ],
+        [...info.option, h.DataAttribute('slot', 'radio-group-item'), h.Class(radioItemClass)],
         info.isSelected
           ? [
               h.span(
@@ -128,9 +124,14 @@ const defaultOptionRow = <M, Value extends string>(
             ]
           : [],
       ),
-      h.span([...info.label, h.DataAttribute('slot', 'radio-group-item-label'), h.Class(radioItemLabelClass)], [
-        labelText,
-      ]),
+      h.span(
+        [
+          ...info.label,
+          h.DataAttribute('slot', 'radio-group-item-label'),
+          h.Class(radioItemLabelClass),
+        ],
+        [labelText],
+      ),
       ...(maybeDescriptionText === undefined
         ? []
         : [

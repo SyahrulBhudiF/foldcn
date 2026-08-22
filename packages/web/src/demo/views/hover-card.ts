@@ -31,9 +31,12 @@ export const hoverCardView = (model: Model, h: HtmlBuilder<Message>): Html =>
             ],
             h,
           ),
-          h.p([h.Class('text-sm text-muted-foreground')], [
-            'Components are copy-paste HTML-builder factories, themed with Tailwind CSS variables.',
-          ]),
+          h.p(
+            [h.Class('text-sm text-muted-foreground')],
+            [
+              'Components are copy-paste HTML-builder factories, themed with Tailwind CSS variables.',
+            ],
+          ),
         ],
       },
       h,
@@ -42,9 +45,7 @@ export const hoverCardView = (model: Model, h: HtmlBuilder<Message>): Html =>
   })
 
 const foldNoOp =
-  (): ((out: HoverCard.OutMessage) => Update.Step<State, unknown>) =>
-  () =>
-  (model) => [model, []]
+  (): ((out: HoverCard.OutMessage) => Update.Step<State, unknown>) => () => (model) => [model, []]
 
 const foldHoverCardOutMessage = M.type<HoverCard.OutMessage>().pipe(
   M.withReturnType<Update.Step<State, unknown>>(),

@@ -15,8 +15,7 @@ export type MarkerVariant = (typeof markerVariantKeys)[number]
 
 export const markerVariants: Record<MarkerVariant, string> = {
   default: 'cn-marker-variant-default',
-  separator:
-    'cn-marker-variant-separator',
+  separator: 'cn-marker-variant-separator',
   border: 'cn-marker-variant-border',
 }
 
@@ -48,7 +47,11 @@ const markerIcon = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.span(
-    [h.Class(cn(markerIconClass, config.className)), h.AriaHidden(true), h.DataAttribute('slot', 'marker-icon')],
+    [
+      h.Class(cn(markerIconClass, config.className)),
+      h.AriaHidden(true),
+      h.DataAttribute('slot', 'marker-icon'),
+    ],
     children,
   )
 

@@ -74,9 +74,9 @@ const foldAnimation = Update.foldChild({
 })
 
 const fields = {
-    animation: animation.Model,
-    isAnimationShowing: S.Boolean,
-  }
+  animation: animation.Model,
+  isAnimationShowing: S.Boolean,
+}
 
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type

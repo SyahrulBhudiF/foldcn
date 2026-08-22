@@ -82,9 +82,10 @@ const hButton = (h: HtmlBuilder<Message>, label: string, message: Message): Html
   )
 
 const foldNoOp =
-  (): ((out: typeof Toast.OutMessage.Type) => Update.Step<State, unknown>) =>
-  () =>
-  (model) => [model, []]
+  (): ((out: typeof Toast.OutMessage.Type) => Update.Step<State, unknown>) => () => (model) => [
+    model,
+    [],
+  ]
 
 const foldToastOutMessage = M.type<typeof Toast.OutMessage.Type>().pipe(
   M.withReturnType<Update.Step<State, unknown>>(),
@@ -137,12 +138,7 @@ export const slice = defineSlice({
     GotToastMessage: (payload: typeof GotToastMessage.Type): UpdateReturn =>
       foldToast(model, payload.message),
     ClickedShowInfoToast: (): UpdateReturn =>
-      showToast(
-        model,
-        'Info',
-        'Changes saved',
-        Option.some('Your preferences have been updated.'),
-      ),
+      showToast(model, 'Info', 'Changes saved', Option.some('Your preferences have been updated.')),
     ClickedShowSuccessToast: (): UpdateReturn =>
       showToast(
         model,

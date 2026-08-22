@@ -32,14 +32,14 @@ export type ViewInputs<Item extends string = string> = FoldkitMenu.ViewInputs<It
 export type ItemConfig = FoldkitMenu.ItemConfig
 export type GroupHeading = FoldkitMenu.GroupHeading
 
-export const menubarClass = 'cn-menubar flex h-9 items-center gap-1 rounded-md border bg-background p-1 shadow-xs'
+export const menubarClass =
+  'cn-menubar flex h-9 items-center gap-1 rounded-md border bg-background p-1 shadow-xs'
 
 /** Upstream menubar trigger token string. */
 export const menubarTriggerClass =
   'cn-menubar-trigger flex items-center justify-center rounded-sm px-1.5 py-[2px] text-sm font-medium outline-hidden select-none transition-colors hover:bg-muted aria-expanded:bg-muted data-open:bg-muted'
 
-export const menubarContentClass =
-  'cn-menubar-content z-50 min-w-36 overflow-hidden outline-hidden'
+export const menubarContentClass = 'cn-menubar-content z-50 min-w-36 overflow-hidden outline-hidden'
 
 export const menubarContentAnimatedClass = menubarContentClass
 
@@ -48,7 +48,8 @@ export const menubarItemClass =
 
 export const menubarSeparatorClass = 'cn-dropdown-menu-separator -mx-1 my-1 h-px'
 
-export const menubarHeadingClass = 'cn-dropdown-menu-label px-2 py-1.5 text-xs font-medium text-muted-foreground'
+export const menubarHeadingClass =
+  'cn-dropdown-menu-label px-2 py-1.5 text-xs font-medium text-muted-foreground'
 
 export const menubarShortcutClass = 'ml-auto text-xs tracking-widest text-muted-foreground'
 

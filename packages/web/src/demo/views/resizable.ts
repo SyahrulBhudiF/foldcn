@@ -20,7 +20,11 @@ export const resizableView = (model: Model, h: HtmlBuilder<Message>): Html =>
           onValueChange: (percent) => ResizedSplit({ percent }),
           firstPane: {
             content: h.div(
-              [h.Class('flex h-full items-center justify-center p-4 text-sm text-muted-foreground')],
+              [
+                h.Class(
+                  'flex h-full items-center justify-center p-4 text-sm text-muted-foreground',
+                ),
+              ],
               ['Sidebar'],
             ),
             className: 'bg-muted/30',

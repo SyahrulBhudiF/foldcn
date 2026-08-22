@@ -30,11 +30,11 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 
 ## Scorecard (52 compared pairs)
 
-| Verdict | Count | Components |
-|---|---|---|
-| MATCHES | 4 | label, separator, spinner, kbd |
-| MINOR DIFFS | 18 | input, textarea, checkbox, avatar, card, skeleton, popover, tooltip, tabs, breadcrumb, toggle, item, fieldset↔field, slider, aspect-ratio, direction, marker, table |
-| MAJOR DIFFS | 30 | button, switch, radio-group, select, menu, context-menu, menubar, combobox, command, dialog, alert-dialog, sheet, drawer, hover-card, accordion, collapsible, navigation-menu, toggle-group, alert, badge, empty, progress, input-group, input-otp, button-group, calendar, resizable, sonner, toast, sidebar |
+| Verdict     | Count | Components                                                                                                                                                                                                                                                                                                    |
+| ----------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| MATCHES     | 4     | label, separator, spinner, kbd                                                                                                                                                                                                                                                                                |
+| MINOR DIFFS | 18    | input, textarea, checkbox, avatar, card, skeleton, popover, tooltip, tabs, breadcrumb, toggle, item, fieldset↔field, slider, aspect-ratio, direction, marker, table                                                                                                                                           |
+| MAJOR DIFFS | 30    | button, switch, radio-group, select, menu, context-menu, menubar, combobox, command, dialog, alert-dialog, sheet, drawer, hover-card, accordion, collapsible, navigation-menu, toggle-group, alert, badge, empty, progress, input-group, input-otp, button-group, calendar, resizable, sonner, toast, sidebar |
 
 ### Not covered (no counterpart)
 
@@ -53,7 +53,7 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 6. **context-menu — not a context menu.** Opens on activation at a fixed anchor; no right-click/pointer-position anchoring.
 7. **menubar — no menubar behavior.** Each trigger is an independent Menu bundle; no ArrowLeft/Right traversal, no open-on-hover-of-next-trigger.
 8. **command — pure markup.** No filtering, arrow-key nav, Enter-to-select, roving tabindex, or Dialog wrapper; `[cmdk-group-heading]` selectors in its classes match nothing.
-9. **toast/sonner — no swipe-to-dismiss, no stack expansion** (index-based scale/peek choreography absent); hover-pause restarts the *full* duration on resume. foldcn emits literal `cn-toast` but defines no such rule in its CSS (inert class).
+9. **toast/sonner — no swipe-to-dismiss, no stack expansion** (index-based scale/peek choreography absent); hover-pause restarts the _full_ duration on resume. foldcn emits literal `cn-toast` but defines no such rule in its CSS (inert class).
 10. **sidebar — static paint only (~13 of 24 parts).** No provider state, collapse modes (`offcanvas|icon|none`), side/variant props, mobile Sheet path, cookie persistence, ⌘/Ctrl+B shortcut, tooltips, rail, or RTL handling.
 11. **avatar — no image loading/error fallback chain** (stateless `<img>`; base swaps to Fallback automatically).
 12. **Inert/dead classes:** `peer-disabled:*` on input/textarea labels (no `.peer` sibling exists); command's cmdk selectors (above).
@@ -69,6 +69,7 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 ## Per-component notes (condensed)
 
 ### Forms
+
 - **button — MAJOR.** Variant/size keys identical; defaults identical. Diffs: destructive solid vs soft-tinted; outline lacks `aria-expanded:*` and explicit `border-border`, keeps legacy `shadow-xs`; ghost/secondary hover colors differ; size scale h-9/8/10 vs h-8/7/9(+xs h-6); missing `has-data-[icon=inline-*]` padding hooks and `in-data-[slot=button-group]:rounded-lg`; plus the disabled bug above.
 - **input / textarea — MINOR.** Legacy strings verbatim; base differs in h-8, rounded-lg, px-2.5, `disabled:bg-input/50 dark:disabled:bg-input/80`, `dark:aria-invalid:border-destructive/50`; foldcn adds `shadow-xs` + selection colors. API superset (label/description wrapper baked in).
 - **checkbox — MINOR.** Anatomy/hit-area match. Diffs: unchecked track `bg-input/90`+`shadow-xs` vs transparent; `transition-shadow` vs `transition-colors`; missing `aria-invalid:aria-checked:border-primary` precedence and Field integration hooks.
@@ -76,6 +77,7 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 - **radio-group — MAJOR.** Paradigm clash: foldcn renders p-4 option cards (checked = border color only); exports circle/dot indicator classes but `styledViewInputs` renders neither. Keyboard is richer (PageUp/PageDown, readonly navigate mode); attr names diverge (`data-checked` vs `data-state=checked`).
 
 ### Menus & selection
+
 - **select — MAJOR.** Flat options only (no groups/labels/separators/scroll arrows); activedescendant focus vs item focus; h-9/rounded-md vs h-8/rounded-lg material. Native `<select>` export ≈ base native-select.
 - **menu ↔ dropdown-menu — MAJOR.** Plain items only (no checkbox/radio/sub/destructive/inset); panel `min-w-48 rounded-md border` vs `min-w-32 rounded-lg ring-foreground/10`; zero data-slots; shortcut not accent-on-focus.
 - **context-menu — MAJOR.** Same gaps as menu + no pointer anchoring (bug #6).
@@ -84,12 +86,14 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 - **command — MAJOR.** Presentational only (bug #8); item selection `bg-accent` vs base `bg-muted`.
 
 ### Overlays
+
 - **dialog / alert-dialog / sheet / drawer — MAJOR.** Shared FoldkitDialog engine vs four distinct base primitives. Scrim `black/50` vs `black/10`+blur; panel `border bg-background rounded-lg p-6 shadow-lg sm:max-w-lg` vs `bg-popover ring-foreground/10 rounded-xl p-4 sm:max-w-sm`; footer plain vs muted attached band; title lg/semibold vs base/medium+heading font; duration 200 vs 100; no data-slots; alert-dialog missing Media part + `size` prop; drawer is a static bottom dialog vs gesture drawer (drag/snap/axes). Interaction set otherwise strong (focus trap, scroll lock, Esc, backdrop close, focus targeting).
 - **popover — MINOR.** Same anatomy incl. slots; chrome `border p-4 rounded-md w-72` vs `ring p-2.5 gap-2.5 rounded-lg`; enter-only animation (unmount kills exit).
 - **tooltip — MINOR.** Deliberate mirror; radius xl vs md, kbd radius, no exit animation, no closeDelay concept.
 - **hover-card — MAJOR.** Click vs hover (bug #5).
 
 ### Disclosure & navigation
+
 - **accordion — MAJOR.** Array-of-controlled-items; no single/multiple root semantics (no multi-open); grid-rows animation vs `animate-accordion-down/up`; single rotating chevron vs icon swap; legacy py-4/ring-2 metrics.
 - **collapsible — MAJOR.** Re-exports Disclosure with an opinionated card skin and `disclosure*` slot names; base ships unstyled parts.
 - **tabs — MINOR.** Full keyboard/activation parity (roving tabindex, orientation, automatic/manual). Diffs: `data-selected` vs `data-active`; h-9 vs h-8 list; line underline offset.
@@ -99,6 +103,7 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 - **toggle-group — MAJOR.** Always-joined bordered strip vs loose flex joining only at `spacing=0`; no spacing/orientation props; item defaults outline+sm vs default+default.
 
 ### Display
+
 - **alert — MAJOR.** Legacy density (`px-4 py-3`, icon col calc) vs base `px-2.5 py-2`, link underlines, `AlertAction` slot + `pr-18`.
 - **avatar — MINOR.** Fallback/badge/group visuals match; missing inset border overlay, `object-cover`, fallback chain (bug #11).
 - **badge — MAJOR.** `rounded-full` vs `rounded-4xl` + fixed h-5; destructive solid vs tinted; outline/ghost hover accent vs muted; missing icon-padding hooks.
@@ -111,6 +116,7 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 - **progress — MAJOR.** See bug #2; also track `h-2 bg-primary/20` vs `h-1 bg-muted` split root/track/indicator architecture.
 
 ### Composite inputs
+
 - **input-group — MAJOR.** Only Group/Text/Input; no Addon/Button/Textarea parts, no `role=group`, no frame-level invalid/disabled states, addon-click-focus missing.
 - **input-otp — MAJOR.** Standalone cells vs joined pill; no Group/Slot/Separator parts; onComplete quirk (bug #4).
 - **button-group — MAJOR.** Outer-frame model vs child corner-cutting; no orientation/Text/Separator, no `role=group`.
@@ -120,6 +126,7 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 - **calendar — MAJOR.** Days/Months/Years drill grids vs react-day-picker dropdown captions; circular day cells vs banded square range cells; single-date only (no ranges/week numbers); today ring vs bg-muted.
 
 ### Misc
+
 - **table — MINOR.** Slots identical. foldcn adds `border-collapse *:border-border` (in neither registry); misses `has-aria-expanded:bg-muted/50`; head `text-muted-foreground` vs base `text-foreground`; keeps legacy checkbox translate-y.
 - **resizable — MAJOR.** Hand-rolled 2-pane percentage splitter (hidden range input) vs react-resizable-panels: no min/max/collapsible/N-panes, no hit-area/focus-ring on handle, slot named `resizable` not `resizable-panel-group`.
 - **sidebar — MAJOR.** See bug #10; also content double-padding, separator `-mx-2 my-2` vs `mx-2`, menu gap-1 vs gap-0.

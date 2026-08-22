@@ -15,7 +15,7 @@ type Child = Html | string
 // identical to upstream; visual styling lives in the central foldcn style definition.
 
 export const buttonGroupClass =
-  'cn-button-group flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 [&>[data-slot=select-trigger]:not([class*=\'w-\'])]:w-fit [&>input]:flex-1'
+  "cn-button-group flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1"
 
 export const buttonGroupOrientationClasses = {
   horizontal:
@@ -46,9 +46,7 @@ export const buttonGroup = <M>(
   return h.div(
     [
       h.Role('group'),
-      h.Class(
-        cn(buttonGroupClass, buttonGroupOrientationClasses[orientation], config.className),
-      ),
+      h.Class(cn(buttonGroupClass, buttonGroupOrientationClasses[orientation], config.className)),
       h.DataAttribute('slot', 'button-group'),
       h.DataAttribute('orientation', orientation),
       h.DataAttribute(orientation, ''),
@@ -64,7 +62,10 @@ export const buttonGroupText = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.DataAttribute('slot', 'button-group-text'), h.Class(cn(buttonGroupTextClass, config.className))],
+    [
+      h.DataAttribute('slot', 'button-group-text'),
+      h.Class(cn(buttonGroupTextClass, config.className)),
+    ],
     children,
   )
 

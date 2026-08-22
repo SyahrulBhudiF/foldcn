@@ -38,7 +38,9 @@ const progressIndicator = <M>(value: number | undefined, h: HtmlBuilder<M>): Htm
       h.Class(progressIndicatorClass),
       h.DataAttribute('slot', 'progress-indicator'),
       // Undefined = indeterminate: empty track until primitives can animate.
-      h.Style({ transform: `translateX(-${100 - (value === undefined ? 0 : clampValue(value))}%)` }),
+      h.Style({
+        transform: `translateX(-${100 - (value === undefined ? 0 : clampValue(value))}%)`,
+      }),
     ],
     [],
   )
@@ -68,7 +70,10 @@ export const progressLabel = <M>(
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.span([h.Class(cn(progressLabelClass, config.className)), h.DataAttribute('slot', 'progress-label')], children)
+  h.span(
+    [h.Class(cn(progressLabelClass, config.className)), h.DataAttribute('slot', 'progress-label')],
+    children,
+  )
 
 /** Static value readout (consumer-owned text, e.g. "3 of 5"). */
 export const progressValue = <M>(
@@ -76,11 +81,20 @@ export const progressValue = <M>(
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.span([h.Class(cn(progressValueClass, config.className)), h.DataAttribute('slot', 'progress-value')], children)
+  h.span(
+    [h.Class(cn(progressValueClass, config.className)), h.DataAttribute('slot', 'progress-value')],
+    children,
+  )
 
 export const Progress = Object.assign(progress, {
   track: <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
-    h.div([h.Class(cn(progressTrackClass, config.className)), h.DataAttribute('slot', 'progress-track')], children),
+    h.div(
+      [
+        h.Class(cn(progressTrackClass, config.className)),
+        h.DataAttribute('slot', 'progress-track'),
+      ],
+      children,
+    ),
   indicator: progressIndicator,
   label: progressLabel,
   value: progressValue,

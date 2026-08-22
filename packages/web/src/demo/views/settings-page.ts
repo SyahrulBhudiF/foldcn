@@ -54,14 +54,14 @@ export const settingsPageView = (model: Model, h: HtmlBuilder<Message>): Html =>
   )
 
 const fields = {
-    settingsName: S.String,
-    settingsEmail: S.String,
-    settingsBio: S.String,
-    settingsLanguage: S.String,
-    settingsEmailNotifs: S.Boolean,
-    settingsTfa: S.Boolean,
-    settingsSaved: S.Boolean,
-  }
+  settingsName: S.String,
+  settingsEmail: S.String,
+  settingsBio: S.String,
+  settingsLanguage: S.String,
+  settingsEmailNotifs: S.Boolean,
+  settingsTfa: S.Boolean,
+  settingsSaved: S.Boolean,
+}
 
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type
@@ -103,9 +103,12 @@ export const slice = defineSlice({
       evo(model, { settingsLanguage: () => value }),
       [],
     ],
-    ToggledSettingsEmailNotifs: (
-      { isChecked }: typeof ToggledSettingsEmailNotifs.Type,
-    ): UpdateReturn => [evo(model, { settingsEmailNotifs: () => isChecked }), []],
+    ToggledSettingsEmailNotifs: ({
+      isChecked,
+    }: typeof ToggledSettingsEmailNotifs.Type): UpdateReturn => [
+      evo(model, { settingsEmailNotifs: () => isChecked }),
+      [],
+    ],
     ToggledSettingsTfa: ({ isChecked }: typeof ToggledSettingsTfa.Type): UpdateReturn => [
       evo(model, { settingsTfa: () => isChecked }),
       [],

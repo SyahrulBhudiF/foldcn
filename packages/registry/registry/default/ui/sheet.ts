@@ -18,7 +18,8 @@ export type Message = typeof Message.Type
 export const OutMessage = FoldkitDialog.OutMessage
 export type OutMessage = typeof OutMessage.Type
 
-export const init = (config: InitConfig): Model => FoldkitDialog.init({ isAnimated: true, ...config })
+export const init = (config: InitConfig): Model =>
+  FoldkitDialog.init({ isAnimated: true, ...config })
 export const update = FoldkitDialog.update
 export const open = FoldkitDialog.open
 export const close = FoldkitDialog.close
@@ -99,7 +100,11 @@ export const title = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.h2(
-    [...attributes, h.DataAttribute('slot', 'sheet-title'), h.Class(cn(sheetTitleClass, config.className))],
+    [
+      ...attributes,
+      h.DataAttribute('slot', 'sheet-title'),
+      h.Class(cn(sheetTitleClass, config.className)),
+    ],
     children,
   )
 
@@ -135,7 +140,11 @@ export const closeButton = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.button(
-    [...attributes, h.DataAttribute('slot', 'sheet-close'), h.Class(cn(sheetCloseButtonClass, config.className))],
+    [
+      ...attributes,
+      h.DataAttribute('slot', 'sheet-close'),
+      h.Class(cn(sheetCloseButtonClass, config.className)),
+    ],
     children,
   )
 
@@ -183,6 +192,6 @@ export const styledViewInputs = <M>(
               ),
             ]
           : [],
-      )
+      ),
   }
 }

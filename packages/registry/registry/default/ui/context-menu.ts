@@ -48,7 +48,8 @@ export const contextMenuItemClass =
 
 export const contextMenuSeparatorClass = 'cn-context-menu-separator -mx-1 my-1 h-px'
 
-export const contextMenuHeadingClass = 'cn-context-menu-label px-2 py-1.5 text-xs font-medium text-muted-foreground'
+export const contextMenuHeadingClass =
+  'cn-context-menu-label px-2 py-1.5 text-xs font-medium text-muted-foreground'
 
 export const contextMenuShortcutClass =
   'cn-context-menu-shortcut ml-auto text-xs tracking-widest text-muted-foreground'

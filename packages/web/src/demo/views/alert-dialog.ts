@@ -61,9 +61,7 @@ export const alertDialogView = (model: Model, h: HtmlBuilder<Message>): Html =>
   )
 
 const foldNoOp =
-  (): ((out: AlertDialog.OutMessage) => Update.Step<State, unknown>) =>
-  () =>
-  (model) => [model, []]
+  (): ((out: AlertDialog.OutMessage) => Update.Step<State, unknown>) => () => (model) => [model, []]
 
 const foldAlertDialogOutMessage = M.type<AlertDialog.OutMessage>().pipe(
   M.withReturnType<Update.Step<State, unknown>>(),

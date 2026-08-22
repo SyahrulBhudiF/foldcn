@@ -89,8 +89,7 @@ export default {
     // already-Markdown `.md`, the manifest `.txt`, or binary assets), and only
     // when the client prefers Markdown. This powers both
     // `curl -H "Accept: text/markdown"` and the `/path.md` URL convention.
-    const wantsMarkdown =
-      !/\.(md|txt)$/i.test(url.pathname) && prefersMarkdown(request)
+    const wantsMarkdown = !/\.(md|txt)$/i.test(url.pathname) && prefersMarkdown(request)
     const assetUrl = wantsMarkdown ? new URL(markdownPathFor(url.pathname), request.url) : url
 
     const res = await env.ASSETS.fetch(new Request(assetUrl.toString(), request))

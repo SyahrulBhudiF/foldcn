@@ -125,7 +125,10 @@ export const styledViewInputs = <M>(
                     h.DataAttribute('side', side),
                     h.Class(cn(tooltipContentClass, viewInputs.contentClass)),
                   ],
-                  [viewInputs.content, h.div([h.DataAttribute('side', side), h.Class(tooltipArrowClass)], [])],
+                  [
+                    viewInputs.content,
+                    h.div([h.DataAttribute('side', side), h.Class(tooltipArrowClass)], []),
+                  ],
                 ),
               ]
             : []),

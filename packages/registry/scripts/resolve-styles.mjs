@@ -34,7 +34,15 @@
  *
  * Usage: node scripts/resolve-styles.mjs
  */
-import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import {
+  cpSync,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { Node, Project } from 'ts-morph'
@@ -267,10 +275,11 @@ function assertNoTokenLiterals(file, output) {
 
 // --- CLI entry ---------------------------------------------------------------
 
-const isMain =
-  process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href
+const isMain = process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href
 
 if (isMain) {
   const written = resolveStyles()
-  console.log(`resolve-styles: emitted ${written.length} transformed files for ${STYLES.map((s) => s.name).join(', ')}`)
+  console.log(
+    `resolve-styles: emitted ${written.length} transformed files for ${STYLES.map((s) => s.name).join(', ')}`,
+  )
 }

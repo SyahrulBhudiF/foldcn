@@ -17,7 +17,8 @@ export type Message = typeof Message.Type
 export const OutMessage = FoldkitDialog.OutMessage
 export type OutMessage = typeof OutMessage.Type
 
-export const init = (config: InitConfig): Model => FoldkitDialog.init({ isAnimated: true, ...config })
+export const init = (config: InitConfig): Model =>
+  FoldkitDialog.init({ isAnimated: true, ...config })
 export const update = FoldkitDialog.update
 export const open = FoldkitDialog.open
 export const close = FoldkitDialog.close
@@ -59,7 +60,8 @@ export const dialogDescriptionClass = 'cn-dialog-description'
 
 export const dialogHeaderClass = 'cn-dialog-header flex flex-col'
 
-export const dialogFooterClass = 'cn-dialog-footer flex flex-col-reverse gap-2 sm:flex-row sm:justify-end'
+export const dialogFooterClass =
+  'cn-dialog-footer flex flex-col-reverse gap-2 sm:flex-row sm:justify-end'
 
 // --- Composable sub-components ---
 //
@@ -83,7 +85,10 @@ export const header = <M>(
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.div([h.DataAttribute('slot', 'dialog-header'), h.Class(cn(dialogHeaderClass, config.className))], children)
+  h.div(
+    [h.DataAttribute('slot', 'dialog-header'), h.Class(cn(dialogHeaderClass, config.className))],
+    children,
+  )
 
 /** Dialog title — merges with the submodel's title attributes. */
 export const title = <M>(
@@ -93,7 +98,11 @@ export const title = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.h2(
-    [...attributes, h.DataAttribute('slot', 'dialog-title'), h.Class(cn(dialogTitleClass, config.className))],
+    [
+      ...attributes,
+      h.DataAttribute('slot', 'dialog-title'),
+      h.Class(cn(dialogTitleClass, config.className)),
+    ],
     children,
   )
 
@@ -119,7 +128,10 @@ export const footer = <M>(
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.div([h.DataAttribute('slot', 'dialog-footer'), h.Class(cn(dialogFooterClass, config.className))], children)
+  h.div(
+    [h.DataAttribute('slot', 'dialog-footer'), h.Class(cn(dialogFooterClass, config.className))],
+    children,
+  )
 
 /** Close button — merges with the submodel's closeButton attributes. */
 export const closeButton = <M>(
@@ -129,7 +141,11 @@ export const closeButton = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.button(
-    [...attributes, h.DataAttribute('slot', 'dialog-close'), h.Class(cn(dialogCloseButtonClass, config.className))],
+    [
+      ...attributes,
+      h.DataAttribute('slot', 'dialog-close'),
+      h.Class(cn(dialogCloseButtonClass, config.className)),
+    ],
     children,
   )
 
@@ -160,7 +176,11 @@ export const styledViewInputs = <M>(
 ): FoldkitDialog.ViewInputs => ({
   toView: ({ dialog, backdrop, panel, closeButton, title, description, isVisible }) =>
     h.dialog(
-      [...dialog, h.DataAttribute('slot', 'dialog'), h.Class(cn(dialogClass, viewInputs.className))],
+      [
+        ...dialog,
+        h.DataAttribute('slot', 'dialog'),
+        h.Class(cn(dialogClass, viewInputs.className)),
+      ],
       isVisible
         ? [
             h.div([

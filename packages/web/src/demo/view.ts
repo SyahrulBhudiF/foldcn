@@ -16,7 +16,9 @@ const VIEW_NAME_PATTERN = /^[a-zA-Z]+View$/
 const extractView = (moduleExports: Record<string, unknown>, file: string): DemoView => {
   const names = Object.keys(moduleExports).filter((name) => VIEW_NAME_PATTERN.test(name))
   if (names.length === 0)
-    throw new Error(`Demo view module "${file}" must export exactly one *View function; found none.`)
+    throw new Error(
+      `Demo view module "${file}" must export exactly one *View function; found none.`,
+    )
   if (names.length > 1)
     throw new Error(
       `Demo view module "${file}" must export exactly one *View function; found ${names.length}: ${names.join(', ')}.`,

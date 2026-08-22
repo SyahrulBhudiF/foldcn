@@ -20,7 +20,8 @@ const ITEMS = [
   {
     id: 'accordion-animation',
     title: 'Is it animated?',
-    content: 'Open and close are instant by default; pass isAnimated to smooth the panel transition.',
+    content:
+      'Open and close are instant by default; pass isAnimated to smooth the panel transition.',
   },
   {
     id: 'accordion-controlled',
@@ -59,7 +60,8 @@ export const slice = defineSlice({
   handlers: (model: State) => ({
     ToggledAccordion: (payload: typeof ToggledAccordion.Type): UpdateReturn => [
       evo(model, {
-        accordionOpen: (arr) => arr.map((value, i) => (i === payload.index ? payload.isOpen : value)),
+        accordionOpen: (arr) =>
+          arr.map((value, i) => (i === payload.index ? payload.isOpen : value)),
       }),
       [],
     ],

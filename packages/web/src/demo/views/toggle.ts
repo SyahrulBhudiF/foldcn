@@ -26,7 +26,11 @@ export const toggleView = (model: Model, h: HtmlBuilder<Message>): Html =>
         h,
       ),
       toggle<Message>({ isPressed: false, ariaLabel: 'Toggle italic' }, 'Italic', h),
-      toggle<Message>({ variant: 'outline', isPressed: true, ariaLabel: 'Toggle underline' }, 'On', h),
+      toggle<Message>(
+        { variant: 'outline', isPressed: true, ariaLabel: 'Toggle underline' },
+        'On',
+        h,
+      ),
     ],
   )
 

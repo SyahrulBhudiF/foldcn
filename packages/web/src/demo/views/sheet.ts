@@ -47,7 +47,10 @@ export const sheetView = (model: Model, h: HtmlBuilder<Message>): Html =>
                 [
                   Sheet.closeButton(closeButton, {}, ['Cancel'], h),
                   h.button(
-                    [...closeButton, h.Class('rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground')],
+                    [
+                      ...closeButton,
+                      h.Class('rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground'),
+                    ],
                     ['Save changes'],
                   ),
                 ],
@@ -62,10 +65,10 @@ export const sheetView = (model: Model, h: HtmlBuilder<Message>): Html =>
     ],
   )
 
-const foldNoOp =
-  (): ((out: Sheet.OutMessage) => Update.Step<State, unknown>) =>
-  () =>
-  (model) => [model, []]
+const foldNoOp = (): ((out: Sheet.OutMessage) => Update.Step<State, unknown>) => () => (model) => [
+  model,
+  [],
+]
 
 const foldSheetOutMessage = M.type<Sheet.OutMessage>().pipe(
   M.withReturnType<Update.Step<State, unknown>>(),

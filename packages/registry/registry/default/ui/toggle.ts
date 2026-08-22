@@ -49,7 +49,9 @@ export const toggle = <M>(config: ToggleConfig<M>, label: Html | string, h: Html
       h.Type('button'),
       ...(config.ariaLabel === undefined ? [] : [h.AriaLabel(config.ariaLabel)]),
       ...(config.isDisabled === true ? [h.Disabled(true)] : []),
-      ...(config.onToggle === undefined ? [] : [h.OnClick(config.onToggle(!Boolean(config.isPressed)))]),
+      ...(config.onToggle === undefined
+        ? []
+        : [h.OnClick(config.onToggle(!Boolean(config.isPressed)))]),
       h.DataAttribute('slot', 'toggle'),
       h.DataAttribute('state', config.isPressed === true ? 'on' : 'off'),
       ...(config.isPressed === true ? [h.AriaPressed('true')] : [h.AriaPressed('false')]),

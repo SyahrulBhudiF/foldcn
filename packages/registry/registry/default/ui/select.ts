@@ -13,7 +13,8 @@ import { cn } from '@/lib/utils'
 //   export const LanguageSelect = Select.create<{ value: string; label: string }, string>()
 
 export const create = FoldkitListbox.create
-export const init = (config: InitConfig): Model => FoldkitListbox.init({ isAnimated: true, ...config })
+export const init = (config: InitConfig): Model =>
+  FoldkitListbox.init({ isAnimated: true, ...config })
 export const buttonId = FoldkitListbox.buttonId
 export const Model = FoldkitListbox.Model
 export type Model = typeof Model.Type
@@ -156,8 +157,11 @@ export const styledViewInputs = <M, Item, Value extends string = string>(
 export const selectLabel = <M>(label: string, h: HtmlBuilder<M>, className?: string): Html =>
   h.label([h.Class(cn(selectLabelClass, className))], [label])
 
-export const selectDescription = <M>(description: string, h: HtmlBuilder<M>, className?: string): Html =>
-  h.span([h.Class(cn(selectDescriptionClass, className))], [description])
+export const selectDescription = <M>(
+  description: string,
+  h: HtmlBuilder<M>,
+  className?: string,
+): Html => h.span([h.Class(cn(selectDescriptionClass, className))], [description])
 
 export const selectChevron = <M>(h: HtmlBuilder<M>): Html =>
   h.span([h.Class('shrink-0 text-muted-foreground')], [icon(h, ChevronDown, 'size-4')])
@@ -217,7 +221,9 @@ export const select = <M>(config: SelectConfig<M>, h: HtmlBuilder<M>): Html =>
                 h.span(
                   [
                     h.DataAttribute('slot', 'native-select-icon'),
-                    h.Class('pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 select-none'),
+                    h.Class(
+                      'pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 select-none',
+                    ),
                   ],
                   [selectChevron(h)],
                 ),

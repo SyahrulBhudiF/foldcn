@@ -11,11 +11,7 @@ export const kbdView = (model: Model, h: HtmlBuilder<Message>): Html =>
     [
       Kbd<Message>({}, ['Ctrl'], h),
       Kbd<Message>({}, ['Shift'], h),
-      Kbd.group<Message>(
-        {},
-        [Kbd<Message>({}, ['⌘'], h), Kbd<Message>({}, ['K'], h)],
-        h,
-      ),
+      Kbd.group<Message>({}, [Kbd<Message>({}, ['⌘'], h), Kbd<Message>({}, ['K'], h)], h),
     ],
   )
 

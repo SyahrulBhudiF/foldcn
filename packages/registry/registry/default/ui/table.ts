@@ -32,32 +32,80 @@ export const tableCaptionClass = 'cn-table-caption'
 
 type StyleConfig = Readonly<{ className?: string }>
 
-const tableContainer = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
+const tableContainer = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
   h.div(
     [h.Class(cn(tableContainerClass)), h.DataAttribute('slot', 'table-container')],
-    [h.table([h.Class(cn(tableClass, config.className)), h.DataAttribute('slot', 'table')], children)],
+    [
+      h.table(
+        [h.Class(cn(tableClass, config.className)), h.DataAttribute('slot', 'table')],
+        children,
+      ),
+    ],
   )
 
-const tableHeader = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
+const tableHeader = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
   h.thead([h.Class(cn(tableHeaderClass)), h.DataAttribute('slot', 'table-header')], children)
 
-const tableBody = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
-  h.tbody([h.Class(cn(tableBodyClass)), h.DataAttribute('slot', 'table-body')], children)
+const tableBody = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html => h.tbody([h.Class(cn(tableBodyClass)), h.DataAttribute('slot', 'table-body')], children)
 
-const tableFooter = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
+const tableFooter = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
   h.tfoot([h.Class(cn(tableFooterClass)), h.DataAttribute('slot', 'table-footer')], children)
 
-const tableRow = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
-  h.tr([h.Class(cn(tableRowClass, config.className)), h.DataAttribute('slot', 'table-row')], children)
+const tableRow = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.tr(
+    [h.Class(cn(tableRowClass, config.className)), h.DataAttribute('slot', 'table-row')],
+    children,
+  )
 
-const tableHead = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
-  h.th([h.Class(cn(tableHeadClass, config.className)), h.DataAttribute('slot', 'table-head')], children)
+const tableHead = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.th(
+    [h.Class(cn(tableHeadClass, config.className)), h.DataAttribute('slot', 'table-head')],
+    children,
+  )
 
-const tableCell = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
-  h.td([h.Class(cn(tableCellClass, config.className)), h.DataAttribute('slot', 'table-cell')], children)
+const tableCell = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.td(
+    [h.Class(cn(tableCellClass, config.className)), h.DataAttribute('slot', 'table-cell')],
+    children,
+  )
 
-const tableCaption = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
-  h.caption([h.Class(cn(tableCaptionClass, config.className)), h.DataAttribute('slot', 'table-caption')], children)
+const tableCaption = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.caption(
+    [h.Class(cn(tableCaptionClass, config.className)), h.DataAttribute('slot', 'table-caption')],
+    children,
+  )
 
 /** Composable table — `Table` is the container, with sub-builders as
  *  properties: `Table.header`, `Table.body`, `Table.footer`, `Table.row`,

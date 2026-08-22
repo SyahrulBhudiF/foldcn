@@ -3,7 +3,11 @@ import { evo } from 'foldkit/struct'
 import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { button, buttonSizeKeys, buttonVariantKeys } from '@foldcn/registry/styles/default/ui/button'
+import {
+  button,
+  buttonSizeKeys,
+  buttonVariantKeys,
+} from '@foldcn/registry/styles/default/ui/button'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message } from '../assemble'
@@ -26,7 +30,9 @@ export const buttonView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
       h.div(
         [h.Class('flex flex-wrap items-center gap-3')],
-        buttonSizeKeys.map((size) => button<Message>({ size, onClick: ClickedButtonDemo() }, size, h)),
+        buttonSizeKeys.map((size) =>
+          button<Message>({ size, onClick: ClickedButtonDemo() }, size, h),
+        ),
       ),
       h.p(
         [h.Class('text-sm text-muted-foreground')],

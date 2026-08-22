@@ -14,13 +14,8 @@
         "tailwind-merge",
         "lucide"
       ],
-      "devDependencies": [
-        "tw-animate-css"
-      ],
-      "registryDependencies": [
-        "@foldcn/utils",
-        "@foldcn/icons"
-      ],
+      "devDependencies": ["tw-animate-css"],
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [],
       "cssVars": {
         "theme": {

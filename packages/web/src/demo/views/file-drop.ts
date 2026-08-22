@@ -62,9 +62,7 @@ export const fileDropView = (model: Model, h: HtmlBuilder<Message>): Html =>
   )
 
 const foldNoOp =
-  (): ((out: fileDrop.OutMessage) => Update.Step<State, unknown>) =>
-  () =>
-  (model) => [model, []]
+  (): ((out: fileDrop.OutMessage) => Update.Step<State, unknown>) => () => (model) => [model, []]
 
 const foldFileDropOutMessage = M.type<fileDrop.OutMessage>().pipe(
   M.withReturnType<Update.Step<State, unknown>>(),
@@ -85,9 +83,9 @@ const foldFileDrop = Update.foldChild({
 })
 
 const fields = {
-    fileDrop: fileDrop.Model,
-    fileDropFiles: S.Array(File.File),
-  }
+  fileDrop: fileDrop.Model,
+  fileDropFiles: S.Array(File.File),
+}
 
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type

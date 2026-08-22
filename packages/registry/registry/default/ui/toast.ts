@@ -40,7 +40,7 @@ export const toastTitleClass = 'text-sm font-medium'
 export const toastDescriptionClass = 'text-sm text-muted-foreground'
 
 export const toastDismissButtonClass =
-  'absolute right-2 top-2 rounded-md p-1 text-muted-foreground opacity-70 transition-opacity hover:text-foreground hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0 cursor-pointer after:absolute after:-inset-2 after:content-[\'\']'
+  "absolute right-2 top-2 rounded-md p-1 text-muted-foreground opacity-70 transition-opacity hover:text-foreground hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0 cursor-pointer after:absolute after:-inset-2 after:content-['']"
 
 const variantIconNode = (variant: Variant) => {
   switch (variant) {
@@ -65,15 +65,9 @@ export const toastIcon = <M>(h: HtmlBuilder<M>, variant: Variant): Html =>
   h.span(
     [
       h.DataAttribute('slot', 'toast-icon'),
-      h.Class('shrink-0 [&_svg]:pointer-events-none [&_svg:not([class*=\'size-\'])]:size-4'),
+      h.Class("shrink-0 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4"),
     ],
-    [
-      icon(
-        h,
-        variantIconNode(variant),
-        cn('size-4 shrink-0', toastVariantClass(variant)),
-      ),
-    ],
+    [icon(h, variantIconNode(variant), cn('size-4 shrink-0', toastVariantClass(variant)))],
   )
 
 /** Spinner icon for ad-hoc loading toasts. Not driven by `Variant` — use
@@ -83,7 +77,7 @@ export const toastLoadingIcon = <M>(h: HtmlBuilder<M>): Html =>
   h.span(
     [
       h.DataAttribute('slot', 'toast-icon'),
-      h.Class('shrink-0 [&_svg]:pointer-events-none [&_svg:not([class*=\'size-\'])]:size-4'),
+      h.Class("shrink-0 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4"),
     ],
     [icon(h, LoaderCircle, 'size-4 shrink-0 animate-spin')],
   )

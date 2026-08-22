@@ -29,18 +29,21 @@ export const selectView = (model: Model, h: HtmlBuilder<Message>): Html =>
         slotId: model.select.id,
         model: model.select,
         view: LanguageSelect.view,
-        viewInputs: select.styledViewInputs<Message, { value: string; label: string }, string>({
-          options: LANGUAGE_OPTIONS.map(([value, label]) => ({ value, label })),
-          maybeSelectedValue: model.maybeSelectValue,
-          itemToValue: (item) => item.value,
-          itemToLabel: (item) => item.label,
-          label: 'Language',
-          description: 'Choose your interface language.',
-          isInvalid: false,
-        }, h),
+        viewInputs: select.styledViewInputs<Message, { value: string; label: string }, string>(
+          {
+            options: LANGUAGE_OPTIONS.map(([value, label]) => ({ value, label })),
+            maybeSelectedValue: model.maybeSelectValue,
+            itemToValue: (item) => item.value,
+            itemToLabel: (item) => item.label,
+            label: 'Language',
+            description: 'Choose your interface language.',
+            isInvalid: false,
+          },
+          h,
+        ),
         toParentMessage: (message) => GotSelectMessage({ message }),
       }),
-      select.selectDescription('Choose your interface language.', h)
+      select.selectDescription('Choose your interface language.', h),
     ],
   )
 
@@ -62,9 +65,9 @@ const foldSelect = Update.foldChild({
 })
 
 const fields = {
-    select: select.Model,
-    maybeSelectValue: S.Option(S.String),
-  }
+  select: select.Model,
+  maybeSelectValue: S.Option(S.String),
+}
 
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type

@@ -52,15 +52,15 @@ Worked example: `ui/button.ts` vs upstream `button.tsx`.
 
 ## State attribute mapping
 
-| Base UI emits            | foldkit emits                                   | What to do |
-| ------------------------ | ----------------------------------------------- | ---------- |
-| `data-open` (persistent) | `data-open` (same name, also present during leave) | nothing |
-| `data-open:<enter anim>` | `data-enter` / `data-leave` transition windows  | handled mechanically by `resolve-styles.mjs` |
-| `data-closed:<exit anim>`| same                                            | handled mechanically by `resolve-styles.mjs` |
-| `data-starting-style` / `data-ending-style` | nothing equivalent           | adapt at migration time (transition-based tokens: sheet, drawer, select) |
-| `data-side="bottom"`     | `data-placement="bottom-start"`                 | emit `data-side` yourself when building the view (values derive from anchor placement); logical sides (`inline-start/end`) have no foldkit equivalent |
-| native `disabled`        | `aria-disabled` + `data-disabled` (stays focusable) | add aria-/data- twins in `cn-compat.css` |
-| `data-highlighted` / `focus:` item states | `data-active`                  | keep foldkit's attr, adjust the variant prefix in the copied string |
+| Base UI emits                               | foldkit emits                                       | What to do                                                                                                                                            |
+| ------------------------------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `data-open` (persistent)                    | `data-open` (same name, also present during leave)  | nothing                                                                                                                                               |
+| `data-open:<enter anim>`                    | `data-enter` / `data-leave` transition windows      | handled mechanically by `resolve-styles.mjs`                                                                                                          |
+| `data-closed:<exit anim>`                   | same                                                | handled mechanically by `resolve-styles.mjs`                                                                                                          |
+| `data-starting-style` / `data-ending-style` | nothing equivalent                                  | adapt at migration time (transition-based tokens: sheet, drawer, select)                                                                              |
+| `data-side="bottom"`                        | `data-placement="bottom-start"`                     | emit `data-side` yourself when building the view (values derive from anchor placement); logical sides (`inline-start/end`) have no foldkit equivalent |
+| native `disabled`                           | `aria-disabled` + `data-disabled` (stays focusable) | add aria-/data- twins in `cn-compat.css`                                                                                                              |
+| `data-highlighted` / `focus:` item states   | `data-active`                                       | keep foldkit's attr, adjust the variant prefix in the copied string                                                                                   |
 
 The resolve step rewrites exactly this pattern inside style-map values (the
 vendored CSS itself is never touched):

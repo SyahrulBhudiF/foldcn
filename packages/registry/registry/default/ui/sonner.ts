@@ -41,7 +41,7 @@ export const sonnerTitleClass = 'text-sm font-medium'
 export const sonnerDescriptionClass = 'text-sm text-muted-foreground'
 
 export const sonnerDismissButtonClass =
-  'absolute right-2 top-2 rounded-md p-1 text-muted-foreground opacity-70 transition-opacity hover:text-foreground hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0 cursor-pointer after:absolute after:-inset-2 after:content-[\'\']'
+  "absolute right-2 top-2 rounded-md p-1 text-muted-foreground opacity-70 transition-opacity hover:text-foreground hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0 cursor-pointer after:absolute after:-inset-2 after:content-['']"
 
 const variantIconNode = (variant: Variant) => {
   switch (variant) {
@@ -60,13 +60,19 @@ const variantIconNode = (variant: Variant) => {
 
 export const toastIcon = <M>(h: HtmlBuilder<M>, variant: Variant): Html =>
   h.span(
-    [h.DataAttribute('slot', 'toast-icon'), h.Class('shrink-0 [&_svg]:pointer-events-none [&_svg:not([class*=\'size-\'])]:size-4')],
+    [
+      h.DataAttribute('slot', 'toast-icon'),
+      h.Class("shrink-0 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4"),
+    ],
     [icon(h, variantIconNode(variant), cn('size-4 shrink-0', toastVariantClass(variant)))],
   )
 
 export const toastLoadingIcon = <M>(h: HtmlBuilder<M>): Html =>
   h.span(
-    [h.DataAttribute('slot', 'toast-icon'), h.Class('shrink-0 [&_svg]:pointer-events-none [&_svg:not([class*=\'size-\'])]:size-4')],
+    [
+      h.DataAttribute('slot', 'toast-icon'),
+      h.Class("shrink-0 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4"),
+    ],
     [icon(h, LoaderCircle, 'size-4 shrink-0 animate-spin')],
   )
 
@@ -90,13 +96,24 @@ export const make = <A, I>(payloadSchema: S.Codec<A, I>) => {
     return h.div(
       [
         h.DataAttribute('slot', 'toast'),
-        h.Class(cn('cn-toast group/toast relative flex w-full items-center gap-3 overflow-hidden', sonnerEntryClass, config.className)),
+        h.Class(
+          cn(
+            'cn-toast group/toast relative flex w-full items-center gap-3 overflow-hidden',
+            sonnerEntryClass,
+            config.className,
+          ),
+        ),
       ],
       [
         toastIcon(h, entry.variant),
         h.div([h.Class('flex min-w-0 flex-1 flex-col gap-1')], config.toContent(entry)),
         h.button(
-          [...handlers.dismiss, h.Class(cn(sonnerDismissButtonClass)), h.AriaLabel('Close toast'), h.DataAttribute('slot', 'toast-close')],
+          [
+            ...handlers.dismiss,
+            h.Class(cn(sonnerDismissButtonClass)),
+            h.AriaLabel('Close toast'),
+            h.DataAttribute('slot', 'toast-close'),
+          ],
           [icon(h, X)],
         ),
       ],

@@ -34,24 +34,16 @@ export const gapsByItem: Readonly<Record<string, ReadonlyArray<string>>> = {
   avatar: [
     'No automatic image-error fallback swap — conditionally render the fallback yourself when the image fails.',
   ],
-  drawer: [
-    'Bottom-docked modal with handle visuals — no drag/snap gestures.',
-  ],
+  drawer: ['Bottom-docked modal with handle visuals — no drag/snap gestures.'],
   resizable: [
     'Two-pane percentage splitter — no min/max constraints, collapsible panes, or N-pane layouts.',
   ],
   'navigation-menu': [
     'Presentational navigation bar — no viewport, indicator, or popup management.',
   ],
-  calendar: [
-    'Single-date selection — no ranges or week numbers.',
-  ],
-  slider: [
-    'Single thumb, horizontal orientation only.',
-  ],
-  combobox: [
-    'Filtering is owned by your model — no built-in chips UI for multi-select.',
-  ],
+  calendar: ['Single-date selection — no ranges or week numbers.'],
+  slider: ['Single thumb, horizontal orientation only.'],
+  combobox: ['Filtering is owned by your model — no built-in chips UI for multi-select.'],
   menu: [
     'Flat items only — no submenu, checkbox-item, radio-item, or destructive variants (foldkit menu primitives do not have those kinds yet).',
   ],

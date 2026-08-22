@@ -116,9 +116,7 @@ export const codeBlock = <M>(config: CodeBlockConfig<M>, h: HtmlBuilder<M>): Htm
     ? // Collapsible: wrap the highlighted <pre> in a relative container so we
       // can clip it and overlay a gradient + toggle when collapsed.
       h.div(
-        [
-          h.Class(cn('relative', isCollapsed && `overflow-hidden ${collapsedHeightClass}`)),
-        ],
+        [h.Class(cn('relative', isCollapsed && `overflow-hidden ${collapsedHeightClass}`))],
         [
           h.div([h.InnerHTML(result.html)]),
           // Fade overlay — only when collapsed. Uses the code background token

@@ -48,13 +48,20 @@ export const fieldsetView = (model: Model, h: HtmlBuilder<Message>): Html =>
               slotId: model.select.id,
               model: model.select,
               view: LanguageSelect.view,
-              viewInputs: select.styledViewInputs<Message, { value: string; label: string }, string>({
-                options: LANGUAGE_OPTIONS.map(([value, label]) => ({ value, label })),
-                maybeSelectedValue: model.maybeSelectValue,
-                itemToValue: (item) => item.value,
-                itemToLabel: (item) => item.label,
-                label: 'Country',
-              }, h),
+              viewInputs: select.styledViewInputs<
+                Message,
+                { value: string; label: string },
+                string
+              >(
+                {
+                  options: LANGUAGE_OPTIONS.map(([value, label]) => ({ value, label })),
+                  maybeSelectedValue: model.maybeSelectValue,
+                  itemToValue: (item) => item.value,
+                  itemToLabel: (item) => item.label,
+                  label: 'Country',
+                },
+                h,
+              ),
               toParentMessage: (message) => GotSelectMessage({ message }),
             }),
           ],
@@ -82,10 +89,10 @@ const foldSelect = Update.foldChild({
 })
 
 const fields = {
-    inputValue: S.String,
-    select: select.Model,
-    maybeSelectValue: S.Option(S.String),
-  }
+  inputValue: S.String,
+  select: select.Model,
+  maybeSelectValue: S.Option(S.String),
+}
 
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type

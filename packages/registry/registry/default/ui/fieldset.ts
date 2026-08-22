@@ -23,7 +23,8 @@ export const fieldsetClass =
 
 // --- FieldLegend ---
 
-export const fieldsetLegendClass = 'cn-field-legend mb-1.5 font-medium data-[variant=legend]:text-base data-[variant=label]:text-sm'
+export const fieldsetLegendClass =
+  'cn-field-legend mb-1.5 font-medium data-[variant=legend]:text-base data-[variant=label]:text-sm'
 
 // --- FieldGroup ---
 
@@ -129,8 +130,7 @@ export const fieldGroup = <M>(
 
 /** A single field row: label + content + description + error. */
 export const field = <M>(
-  config: StyleConfig &
-    Readonly<{ orientation?: FieldOrientation; isInvalid?: boolean }>,
+  config: StyleConfig & Readonly<{ orientation?: FieldOrientation; isInvalid?: boolean }>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html => {
@@ -141,9 +141,7 @@ export const field = <M>(
       h.DataAttribute('slot', 'field'),
       h.DataAttribute('orientation', orientation),
       ...(config.isInvalid === true ? [h.DataAttribute('invalid', 'true')] : []),
-      h.Class(
-        cn(fieldBaseClass, fieldOrientationClasses[orientation], config.className),
-      ),
+      h.Class(cn(fieldBaseClass, fieldOrientationClasses[orientation], config.className)),
     ],
     children,
   )
@@ -165,7 +163,8 @@ export const label = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
-): Html => h.label([h.DataAttribute('slot', 'label'), h.Class(cn(labelClass, config.className))], children)
+): Html =>
+  h.label([h.DataAttribute('slot', 'label'), h.Class(cn(labelClass, config.className))], children)
 
 /** Label for a field; optionally associates with its control via `for`. */
 export const fieldLabel = <M>(
@@ -221,7 +220,11 @@ export const fieldSeparator = <M>(
       h.Class(cn(fieldSeparatorClass, config.className)),
     ],
     [
-      h.div([h.Role('separator'), h.DataAttribute('horizontal', ''), h.Class(cn(fieldSeparatorLineClass))]),
+      h.div([
+        h.Role('separator'),
+        h.DataAttribute('horizontal', ''),
+        h.Class(cn(fieldSeparatorLineClass)),
+      ]),
       ...(hasContent
         ? [
             h.span(

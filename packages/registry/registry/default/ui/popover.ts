@@ -23,7 +23,8 @@ export type Message = typeof Message.Type
 export const OutMessage = FoldkitPopover.OutMessage
 export type OutMessage = typeof OutMessage.Type
 
-export const init = (config: InitConfig): Model => FoldkitPopover.init({ isAnimated: true, ...config })
+export const init = (config: InitConfig): Model =>
+  FoldkitPopover.init({ isAnimated: true, ...config })
 export const update = FoldkitPopover.update
 export const open = FoldkitPopover.open
 export const close = FoldkitPopover.close
@@ -106,7 +107,10 @@ export const description = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.p(
-    [h.DataAttribute('slot', 'popover-description'), h.Class(cn(popoverDescriptionClass, config.className))],
+    [
+      h.DataAttribute('slot', 'popover-description'),
+      h.Class(cn(popoverDescriptionClass, config.className)),
+    ],
     children,
   )
 
@@ -148,49 +152,48 @@ export const styledViewInputs = <M>(
 ): FoldkitPopover.ViewInputs => {
   const anchor = { ...POPOVER_ANCHOR, ...viewInputs.anchor }
   return {
-  anchor,
-  isDisabled: viewInputs.isDisabled,
-  focusSelector: viewInputs.focusSelector,
-  ariaLabel: viewInputs.ariaLabel,
-  ariaLabelledBy: viewInputs.ariaLabelledBy,
-  toView: ({ button, panel, backdrop, isVisible }) =>
-    h.div(
-      [
-        h.Class(cn(popoverWrapperClass, viewInputs.wrapperClass)),
-        h.DataAttribute('slot', 'popover'),
-      ],
-      [
-        h.button(
-          [
-            ...button,
-            h.Class(cn(popoverTriggerClass, viewInputs.triggerClass)),
-            h.DataAttribute('slot', 'popover-trigger'),
-          ],
-          [viewInputs.trigger],
-        ),
-        ...(isVisible
-          ? [
-              h.div([...backdrop, h.Class(cn(popoverBackdropClass, viewInputs.backdropClass))]),
-              h.div(
-                [
-                  ...panel,
-                  h.DataAttribute('slot', 'popover-content'),
-                  h.DataAttribute(
-                    'side',
-                    placementToSide(anchor.placement ?? 'bottom'),
-                  ),
-                  h.Class(
-                    cn(
-                      viewInputs.isAnimated !== false ? popoverContentAnimatedClass : popoverContentClass,
-                      viewInputs.contentClass,
+    anchor,
+    isDisabled: viewInputs.isDisabled,
+    focusSelector: viewInputs.focusSelector,
+    ariaLabel: viewInputs.ariaLabel,
+    ariaLabelledBy: viewInputs.ariaLabelledBy,
+    toView: ({ button, panel, backdrop, isVisible }) =>
+      h.div(
+        [
+          h.Class(cn(popoverWrapperClass, viewInputs.wrapperClass)),
+          h.DataAttribute('slot', 'popover'),
+        ],
+        [
+          h.button(
+            [
+              ...button,
+              h.Class(cn(popoverTriggerClass, viewInputs.triggerClass)),
+              h.DataAttribute('slot', 'popover-trigger'),
+            ],
+            [viewInputs.trigger],
+          ),
+          ...(isVisible
+            ? [
+                h.div([...backdrop, h.Class(cn(popoverBackdropClass, viewInputs.backdropClass))]),
+                h.div(
+                  [
+                    ...panel,
+                    h.DataAttribute('slot', 'popover-content'),
+                    h.DataAttribute('side', placementToSide(anchor.placement ?? 'bottom')),
+                    h.Class(
+                      cn(
+                        viewInputs.isAnimated !== false
+                          ? popoverContentAnimatedClass
+                          : popoverContentClass,
+                        viewInputs.contentClass,
+                      ),
                     ),
-                  ),
-                ],
-                viewInputs.content,
-              ),
-            ]
-          : []),
-      ],
-    ),
+                  ],
+                  viewInputs.content,
+                ),
+              ]
+            : []),
+        ],
+      ),
   }
 }

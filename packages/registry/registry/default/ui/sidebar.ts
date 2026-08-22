@@ -19,8 +19,7 @@ type Child = Html | string
 // model), and no rail hot-spot. The aside keeps a hand-written string because
 // upstream's visible-panel classes live inside its collapse-state container.
 
-export const sidebarProviderClass =
-  'flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar'
+export const sidebarProviderClass = 'flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar'
 
 export const sidebarClass =
   'flex h-svh w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground [--sidebar-width:16rem]'
@@ -64,31 +63,77 @@ export const sidebarTriggerClass =
 
 type StyleConfig = Readonly<{ className?: string }>
 
-const sidebarProvider = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
-  h.div([h.Class(cn(sidebarProviderClass, config.className)), h.DataAttribute('slot', 'sidebar-provider')], children)
+const sidebarProvider = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.div(
+    [
+      h.Class(cn(sidebarProviderClass, config.className)),
+      h.DataAttribute('slot', 'sidebar-provider'),
+    ],
+    children,
+  )
 
 const sidebar = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
-  h.aside([h.Class(cn(sidebarClass, config.className)), h.DataAttribute('slot', 'sidebar')], children)
+  h.aside(
+    [h.Class(cn(sidebarClass, config.className)), h.DataAttribute('slot', 'sidebar')],
+    children,
+  )
 
-const sidebarHeader = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
+const sidebarHeader = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
   h.div([h.Class(cn(sidebarHeaderClass)), h.DataAttribute('slot', 'sidebar-header')], children)
 
-const sidebarContent = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
+const sidebarContent = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
   h.div([h.Class(cn(sidebarContentClass)), h.DataAttribute('slot', 'sidebar-content')], children)
 
-const sidebarFooter = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
+const sidebarFooter = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
   h.div([h.Class(cn(sidebarFooterClass)), h.DataAttribute('slot', 'sidebar-footer')], children)
 
-const sidebarGroup = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
+const sidebarGroup = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
   h.div([h.Class(cn(sidebarGroupClass)), h.DataAttribute('slot', 'sidebar-group')], children)
 
-const sidebarGroupLabel = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
-  h.div([h.Class(cn(sidebarGroupLabelClass, config.className)), h.DataAttribute('slot', 'sidebar-group-label')], children)
+const sidebarGroupLabel = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.div(
+    [
+      h.Class(cn(sidebarGroupLabelClass, config.className)),
+      h.DataAttribute('slot', 'sidebar-group-label'),
+    ],
+    children,
+  )
 
-const sidebarMenu = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
-  h.ul([h.Class(cn(sidebarMenuClass)), h.DataAttribute('slot', 'sidebar-menu')], children)
+const sidebarMenu = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html => h.ul([h.Class(cn(sidebarMenuClass)), h.DataAttribute('slot', 'sidebar-menu')], children)
 
-const sidebarMenuItem = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
+const sidebarMenuItem = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
   h.li([h.Class(cn(sidebarMenuItemClass)), h.DataAttribute('slot', 'sidebar-menu-item')], children)
 
 const sidebarMenuButton = <M>(
@@ -106,15 +151,36 @@ const sidebarMenuButton = <M>(
     children,
   )
 
-const sidebarInset = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
-  h.div([h.Class(cn(sidebarInsetClass, config.className)), h.DataAttribute('slot', 'sidebar-inset')], children)
+const sidebarInset = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.div(
+    [h.Class(cn(sidebarInsetClass, config.className)), h.DataAttribute('slot', 'sidebar-inset')],
+    children,
+  )
 
 const sidebarSeparator = <M>(config: StyleConfig, h: HtmlBuilder<M>): Html =>
-  h.div([h.Class(cn(sidebarSeparatorClass, config.className)), h.DataAttribute('slot', 'sidebar-separator')], [])
+  h.div(
+    [
+      h.Class(cn(sidebarSeparatorClass, config.className)),
+      h.DataAttribute('slot', 'sidebar-separator'),
+    ],
+    [],
+  )
 
-const sidebarTrigger = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
+const sidebarTrigger = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
   h.button(
-    [h.Type('button'), h.Class(cn(sidebarTriggerClass, config.className)), h.DataAttribute('slot', 'sidebar-trigger')],
+    [
+      h.Type('button'),
+      h.Class(cn(sidebarTriggerClass, config.className)),
+      h.DataAttribute('slot', 'sidebar-trigger'),
+    ],
     children,
   )
 

@@ -20,7 +20,8 @@ export type Message = typeof Message.Type
 export const OutMessage = FoldkitPopover.OutMessage
 export type OutMessage = typeof OutMessage.Type
 
-export const init = (config: InitConfig): Model => FoldkitPopover.init({ isAnimated: true, ...config })
+export const init = (config: InitConfig): Model =>
+  FoldkitPopover.init({ isAnimated: true, ...config })
 export const update = FoldkitPopover.update
 export const open = FoldkitPopover.open
 export const close = FoldkitPopover.close
@@ -116,44 +117,47 @@ export const styledViewInputs = <M>(
   const side = (anchor.placement ?? 'bottom').split('-')[0] || 'bottom'
   return {
     anchor,
-  isDisabled: viewInputs.isDisabled,
-  focusSelector: viewInputs.focusSelector,
-  ariaLabel: viewInputs.ariaLabel,
-  ariaLabelledBy: viewInputs.ariaLabelledBy,
-  toView: ({ button, panel, backdrop, isVisible }) =>
-    h.div(
-      [h.Class(cn(hoverCardWrapperClass, viewInputs.wrapperClass)), h.DataAttribute('slot', 'hover-card')],
-      [
-        h.button(
-          [
-            ...button,
-            h.Class(cn(hoverCardTriggerClass, viewInputs.triggerClass)),
-            h.DataAttribute('slot', 'hover-card-trigger'),
-          ],
-          [viewInputs.trigger],
-        ),
-        ...(isVisible
-          ? [
-              h.div([...backdrop, h.Class(cn(hoverCardBackdropClass, viewInputs.backdropClass))]),
-              h.div(
-                [
-                  ...panel,
-                  h.Class(
-                    cn(
-                      viewInputs.isAnimated !== false
-                        ? hoverCardContentAnimatedClass
-                        : hoverCardContentClass,
-                      viewInputs.contentClass,
+    isDisabled: viewInputs.isDisabled,
+    focusSelector: viewInputs.focusSelector,
+    ariaLabel: viewInputs.ariaLabel,
+    ariaLabelledBy: viewInputs.ariaLabelledBy,
+    toView: ({ button, panel, backdrop, isVisible }) =>
+      h.div(
+        [
+          h.Class(cn(hoverCardWrapperClass, viewInputs.wrapperClass)),
+          h.DataAttribute('slot', 'hover-card'),
+        ],
+        [
+          h.button(
+            [
+              ...button,
+              h.Class(cn(hoverCardTriggerClass, viewInputs.triggerClass)),
+              h.DataAttribute('slot', 'hover-card-trigger'),
+            ],
+            [viewInputs.trigger],
+          ),
+          ...(isVisible
+            ? [
+                h.div([...backdrop, h.Class(cn(hoverCardBackdropClass, viewInputs.backdropClass))]),
+                h.div(
+                  [
+                    ...panel,
+                    h.Class(
+                      cn(
+                        viewInputs.isAnimated !== false
+                          ? hoverCardContentAnimatedClass
+                          : hoverCardContentClass,
+                        viewInputs.contentClass,
+                      ),
                     ),
-                  ),
-                  h.DataAttribute('slot', 'hover-card-content'),
-                  h.DataAttribute('side', side),
-                ],
-                viewInputs.content,
-              ),
-            ]
-          : []),
-      ],
-    ),
+                    h.DataAttribute('slot', 'hover-card-content'),
+                    h.DataAttribute('side', side),
+                  ],
+                  viewInputs.content,
+                ),
+              ]
+            : []),
+        ],
+      ),
   }
 }

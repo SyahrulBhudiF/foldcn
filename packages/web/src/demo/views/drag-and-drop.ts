@@ -271,9 +271,9 @@ const DRAG_COLUMNS: ReadonlyArray<DemoColumn> = [
 ]
 
 const fields = {
-    dragAndDrop: DragAndDrop.Model,
-    dragColumns: S.Array(DemoColumn),
-  }
+  dragAndDrop: DragAndDrop.Model,
+  dragColumns: S.Array(DemoColumn),
+}
 
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type
@@ -304,4 +304,3 @@ export const slice = defineSlice({
   // parent-side samples to feed update().
   subscriptions,
 })
-

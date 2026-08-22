@@ -12,7 +12,8 @@ import { calendarToView } from '@/ui/calendar'
 
 // Re-export the @foldkit/ui DatePicker submodel surface.
 
-export const init = (config: InitConfig): Model => FoldkitDatePicker.init({ isAnimated: true, ...config })
+export const init = (config: InitConfig): Model =>
+  FoldkitDatePicker.init({ isAnimated: true, ...config })
 export const update = FoldkitDatePicker.update
 export const view = FoldkitDatePicker.view
 export const Model = FoldkitDatePicker.Model
@@ -27,7 +28,7 @@ export type InitConfig = FoldkitDatePicker.InitConfig
 export type ViewInputs = FoldkitDatePicker.ViewInputs
 
 export const datePickerTriggerClass =
-  'flex h-10 min-w-48 items-center justify-between gap-2 whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground shadow-sm outline-none transition-[color,box-shadow] hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=\'size-\'])]:size-4'
+  "flex h-10 min-w-48 items-center justify-between gap-2 whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground shadow-sm outline-none transition-[color,box-shadow] hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
 
 export const datePickerPanelClass =
   'z-50 rounded-xl border border-border bg-popover p-4 text-popover-foreground shadow-md outline-hidden data-[placement=bottom]:slide-in-from-top-2 data-[placement=left]:slide-in-from-right-2 data-[placement=right]:slide-in-from-left-2 data-[placement=top]:slide-in-from-bottom-2'

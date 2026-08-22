@@ -3,8 +3,7 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { cn } from '@/lib/utils'
 
-export const navClass =
-  'flex items-center rounded-lg border border-border bg-card p-1 shadow-sm'
+export const navClass = 'flex items-center rounded-lg border border-border bg-card p-1 shadow-sm'
 
 export const navListClass = 'flex flex-1 list-none items-center justify-center gap-1'
 
@@ -40,11 +39,7 @@ export const nav = <M, Value extends string = string>(
     isItemCurrent: config.isItemCurrent,
     toView: ({ nav: navAttributes, items }) =>
       h.nav(
-        [
-          ...navAttributes,
-          h.DataAttribute('slot', 'nav'),
-          h.Class(cn(navClass, config.className)),
-        ],
+        [...navAttributes, h.DataAttribute('slot', 'nav'), h.Class(cn(navClass, config.className))],
         [
           h.ul(
             [h.DataAttribute('slot', 'nav-list'), h.Class(cn(navListClass))],
@@ -55,7 +50,9 @@ export const nav = <M, Value extends string = string>(
                   h.a(
                     [
                       ...item.link,
-                      ...(config.onItemClick === undefined ? [] : [h.OnClick(config.onItemClick(item.value, index))]),
+                      ...(config.onItemClick === undefined
+                        ? []
+                        : [h.OnClick(config.onItemClick(item.value, index))]),
                       h.DataAttribute('slot', 'nav-link'),
                       h.Class(cn(navLinkClass, config.linkClass)),
                     ],

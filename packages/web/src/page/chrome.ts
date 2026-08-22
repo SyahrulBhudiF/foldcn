@@ -6,6 +6,7 @@ import * as Tabs from '@foldkit/ui/tabs'
 import { codeBlock as registryCodeBlock } from '@foldcn/registry/styles/default/lib/code-block'
 import { copyButton as registryCopyButton } from '@foldcn/registry/styles/default/lib/copy-button'
 import { icon } from '@foldcn/registry/styles/default/lib/icons'
+import { badge } from '@foldcn/registry/styles/default/ui/badge'
 import { styledViewInputs as tabsStyledViewInputs } from '@foldcn/registry/styles/default/ui/tabs'
 import { ArrowRight, Computer, Moon, Sun } from 'lucide'
 
@@ -19,6 +20,16 @@ import {
 import type { Model, PackageManager, ThemePreference } from '../model'
 
 import { categoryGroups, componentCount } from '../catalog'
+import { gapsByItem } from '../catalog/gaps'
+import {
+  parityIcon,
+  parityLabel,
+  parityStatus,
+  parityTitle,
+  parityTitleForItem,
+  parityVariant,
+  type ParityStatus,
+} from '../catalog/parity'
 
 const THEME_OPTIONS: ReadonlyArray<{
   preference: ThemePreference
@@ -105,8 +116,30 @@ export const headerView = (model: Model, h: HtmlBuilder<Message>): Html =>
     ],
   )
 
-export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html =>
-  h.aside(
+const parityBadge = (status: ParityStatus, h: HtmlBuilder<Message>): Html =>
+  badge<Message>(
+    { variant: parityVariant[status], className: 'h-5 shrink-0 gap-1 px-1.5' },
+    [icon(h, parityIcon[status], 'size-3'), h.span([h.Class('sr-only')], [parityLabel[status]])],
+    h,
+  )
+
+const parityLegendBadge = (status: ParityStatus, h: HtmlBuilder<Message>): Html =>
+  badge<Message>(
+    { variant: parityVariant[status], className: 'h-5 gap-1 px-2 text-xs' },
+    [icon(h, parityIcon[status], 'size-3'), parityLabel[status]],
+    h,
+  )
+
+export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html => {
+  const componentsGroup = categoryGroups.find((g) => g.category === 'Components')
+  const components = componentsGroup?.items ?? []
+  const counts = {
+    full: components.filter((i) => parityStatus(i.name) === 'full').length,
+    diverged: components.filter((i) => parityStatus(i.name) === 'diverged').length,
+    'foldcn-only': components.filter((i) => parityStatus(i.name) === 'foldcn-only').length,
+  } as const
+
+  return h.aside(
     [h.Class('hidden w-[220px] shrink-0 font-mono lg:block'), h.AriaLabel('Sidebar')],
     [
       h.div(
@@ -116,10 +149,55 @@ export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html =>
           ),
         ],
         [
+          h.div(
+            [h.Class('mb-6 rounded-lg border border-border bg-muted/20 px-3 py-3')],
+            [
+              h.p(
+                [h.Class('text-xs font-semibold tracking-wide text-foreground')],
+                ['Parity with shadcn/ui'],
+              ),
+              h.ul(
+                [h.Class('mt-2 flex flex-col gap-2')],
+                [
+                  h.li(
+                    [h.Class('flex items-center justify-between gap-2')],
+                    [
+                      parityLegendBadge('full', h),
+                      h.span(
+                        [h.Class('text-xs tabular-nums text-muted-foreground')],
+                        [String(counts.full)],
+                      ),
+                    ],
+                  ),
+                  h.li(
+                    [h.Class('flex items-center justify-between gap-2')],
+                    [
+                      parityLegendBadge('diverged', h),
+                      h.span(
+                        [h.Class('text-xs tabular-nums text-muted-foreground')],
+                        [String(counts.diverged)],
+                      ),
+                    ],
+                  ),
+                  h.li(
+                    [h.Class('flex items-center justify-between gap-2')],
+                    [
+                      parityLegendBadge('foldcn-only', h),
+                      h.span(
+                        [h.Class('text-xs tabular-nums text-muted-foreground')],
+                        [String(counts['foldcn-only'])],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
           h.nav(
             [h.Class('flex flex-col gap-6'), h.AriaLabel('Components')],
             categoryGroups.map((group) => {
               const sortedItems = [...group.items].sort((a, b) => a.title.localeCompare(b.title))
+              const isComponentsGroup = group.category === 'Components'
               return h.div(
                 [h.Class('flex flex-col gap-2')],
                 [
@@ -131,6 +209,15 @@ export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html =>
                     [h.Class('flex flex-col gap-0.5')],
                     sortedItems.map((item) => {
                       const isActive = model.route._tag === 'Item' && model.route.name === item.name
+                      const status: ParityStatus | null = isComponentsGroup
+                        ? parityStatus(item.name)
+                        : null
+                      const badgeTitle =
+                        status === null
+                          ? ''
+                          : status === 'diverged'
+                            ? (gapsByItem[item.name]?.[0] ?? parityTitle.diverged)
+                            : parityTitleForItem(item.name)
                       return h.li(
                         [],
                         [
@@ -139,15 +226,24 @@ export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html =>
                               h.Href(`/docs/${item.name}`),
                               h.Class(
                                 clsx(
-                                  'flex rounded-md px-2 py-1.5 text-sm transition-colors',
+                                  'flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm transition-colors',
                                   isActive
                                     ? 'bg-muted font-medium text-foreground'
                                     : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground',
                                 ),
                               ),
                               ...(isActive ? [h.AriaCurrent('page')] : []),
+                              ...(status !== null
+                                ? [
+                                    h.Title(badgeTitle),
+                                    h.AriaLabel(`${item.title} — ${badgeTitle}`),
+                                  ]
+                                : []),
                             ],
-                            [item.title],
+                            [
+                              h.span([h.Class('truncate')], [item.title]),
+                              status !== null ? parityBadge(status, h) : h.span([], []),
+                            ],
                           ),
                         ],
                       )
@@ -161,6 +257,7 @@ export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+}
 
 export const footerView = (h: HtmlBuilder<Message>): Html =>
   h.footer(

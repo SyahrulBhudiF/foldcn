@@ -18,10 +18,10 @@ export const homeView = (model: Model, h: HtmlBuilder<Message>): Html =>
           h.h1(
             [
               h.Class(
-                'whitespace-pre-line text-3xl font-bold leading-[1.2] tracking-[-0.01em] text-foreground before:content-[\'#_\'] before:font-normal before:text-muted-foreground',
+                "whitespace-pre-line text-3xl font-bold leading-[1.2] tracking-[-0.01em] text-foreground before:content-['#_'] before:font-normal before:text-muted-foreground",
               ),
             ],
-            ['shadcn components\nfor Foldkit.'],
+            ['shadcn components for Foldkit.'],
           ),
           h.p(
             [h.Class('mt-5')],
@@ -39,40 +39,39 @@ export const homeView = (model: Model, h: HtmlBuilder<Message>): Html =>
             ],
             ['```sh\nnpx shadcn@latest add @foldcn/foldcn\n```'],
           ),
-          h.p([h.Class('mt-5')], [
-            'or ',
-            h.a(
-              [
-                h.Href('https://foldkit.dev'),
-                h.Rel('noopener noreferrer'),
-                h.Class(
-                  'text-foreground underline decoration-1 decoration-border underline-offset-[3px] hover:decoration-foreground',
-                ),
-              ],
-              ['learn Foldkit'],
-            ),
-            ' first.',
-          ]),
+          h.p(
+            [h.Class('mt-5')],
+            [
+              'or ',
+              h.a(
+                [
+                  h.Href('https://foldkit.dev'),
+                  h.Rel('noopener noreferrer'),
+                  h.Class(
+                    'text-foreground underline decoration-1 decoration-border underline-offset-[3px] hover:decoration-foreground',
+                  ),
+                ],
+                ['learn Foldkit'],
+              ),
+              ' first.',
+            ],
+          ),
           h.h2(
             [
               h.Class(
-                'mt-10 text-[1.375rem] font-semibold leading-[1.25] text-foreground before:content-[\'##_\'] before:font-normal before:text-muted-foreground',
+                "mt-10 text-[1.375rem] font-semibold leading-[1.25] text-foreground before:content-['##_'] before:font-normal before:text-muted-foreground",
               ),
             ],
             ['Get started'],
           ),
-          h.p([h.Class('mt-5')], [
-            'Two steps: register the ',
-            h.code(
-              [
-                h.Class(
-                  'font-mono text-[0.9em]',
-                ),
-              ],
-              ['@foldcn'],
-            ),
-            ' namespace, then install the base style (the command above) to write the theme variables and core dependencies into your project.',
-          ]),
+          h.p(
+            [h.Class('mt-5')],
+            [
+              'Two steps: register the ',
+              h.code([h.Class('font-mono text-[0.9em]')], ['@foldcn']),
+              ' namespace, then install the base style (the command above) to write the theme variables and core dependencies into your project.',
+            ],
+          ),
           h.ol(
             [h.Class('mt-5 list-decimal pl-5')],
             [
@@ -106,17 +105,20 @@ export const homeView = (model: Model, h: HtmlBuilder<Message>): Html =>
               ),
             ],
           ),
-          h.p([h.Class('mt-5')], [
-            h.a(
-              [
-                h.Href('/docs'),
-                h.Class(
-                  'text-foreground underline decoration-1 decoration-border underline-offset-[3px] hover:decoration-foreground',
-                ),
-              ],
-              [`Browse all ${componentCount} components`],
-            ),
-          ]),
+          h.p(
+            [h.Class('mt-5')],
+            [
+              h.a(
+                [
+                  h.Href('/docs'),
+                  h.Class(
+                    'text-foreground underline decoration-1 decoration-border underline-offset-[3px] hover:decoration-foreground',
+                  ),
+                ],
+                [`Browse all ${componentCount} components`],
+              ),
+            ],
+          ),
         ],
       ),
     ],

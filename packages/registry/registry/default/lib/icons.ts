@@ -69,4 +69,3 @@ export const icon = <M>(h: HtmlBuilder<M>, node: IconNode, className = defaultIc
     svgAttributes(className, h),
     node.map(([tag, attrs]) => svgElement(tag, h)(nodeToAttributes(attrs, h))),
   )
-

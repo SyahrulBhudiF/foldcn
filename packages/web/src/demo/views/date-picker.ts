@@ -43,9 +43,9 @@ const foldDatePicker = Update.foldChild({
 })
 
 const fields = {
-    datePicker: datePicker.Model,
-    maybePickedDate: S.Option(FoldkitCalendar.CalendarDate),
-  }
+  datePicker: datePicker.Model,
+  maybePickedDate: S.Option(FoldkitCalendar.CalendarDate),
+}
 
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type

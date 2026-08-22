@@ -23,9 +23,10 @@ export const commandView = (model: Model, h: HtmlBuilder<Message>): Html => {
     return Command.group(
       {},
       [
-        h.div([h.Class(commandGroupHeadingClass), h.DataAttribute('slot', 'command-group-heading')], [
-          group.group,
-        ]),
+        h.div(
+          [h.Class(commandGroupHeadingClass), h.DataAttribute('slot', 'command-group-heading')],
+          [group.group],
+        ),
         ...items.map((item) => Command.item({}, [item], h)),
       ],
       h,
@@ -36,7 +37,11 @@ export const commandView = (model: Model, h: HtmlBuilder<Message>): Html => {
     {},
     [
       Command.input(
-        { value: model.commandSearch, onInput: (value) => UpdatedCommandSearch({ value }), placeholder: 'Type a command or search…' },
+        {
+          value: model.commandSearch,
+          onInput: (value) => UpdatedCommandSearch({ value }),
+          placeholder: 'Type a command or search…',
+        },
         h,
       ),
       Command.list({}, [...groups, Command.empty({}, ['No results found.'], h)], h),

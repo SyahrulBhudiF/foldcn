@@ -20,7 +20,8 @@ type Child = Html | string
 export const navigationMenuClass =
   'cn-navigation-menu group/navigation-menu relative flex max-w-max flex-1 items-center justify-center'
 
-export const navigationMenuListClass = 'cn-navigation-menu-list flex flex-1 list-none items-center justify-center'
+export const navigationMenuListClass =
+  'cn-navigation-menu-list flex flex-1 list-none items-center justify-center'
 
 export const navigationMenuItemClass = 'cn-navigation-menu-item relative'
 
@@ -37,24 +38,51 @@ export const navigationMenuViewportClass = 'cn-navigation-menu-positioner isolat
 
 type StyleConfig = Readonly<{ className?: string }>
 
-const navigationMenuContainer = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
+const navigationMenuContainer = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
   h.nav(
-    [h.Class(cn(navigationMenuClass, config.className)), h.DataAttribute('slot', 'navigation-menu')],
+    [
+      h.Class(cn(navigationMenuClass, config.className)),
+      h.DataAttribute('slot', 'navigation-menu'),
+    ],
     children,
   )
 
-const navigationMenuList = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
-  h.ul([h.Class(cn(navigationMenuListClass)), h.DataAttribute('slot', 'navigation-menu-list')], children)
+const navigationMenuList = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.ul(
+    [h.Class(cn(navigationMenuListClass)), h.DataAttribute('slot', 'navigation-menu-list')],
+    children,
+  )
 
-const navigationMenuItem = <M>(config: StyleConfig, children: ReadonlyArray<Child>, h: HtmlBuilder<M>): Html =>
-  h.li([h.Class(cn(navigationMenuItemClass)), h.DataAttribute('slot', 'navigation-menu-item')], children)
+const navigationMenuItem = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.li(
+    [h.Class(cn(navigationMenuItemClass)), h.DataAttribute('slot', 'navigation-menu-item')],
+    children,
+  )
 
 const navigationMenuLink = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.a([h.Class(cn(navigationMenuLinkClass, config.className)), h.DataAttribute('slot', 'navigation-menu-link')], children)
+  h.a(
+    [
+      h.Class(cn(navigationMenuLinkClass, config.className)),
+      h.DataAttribute('slot', 'navigation-menu-link'),
+    ],
+    children,
+  )
 
 const navigationMenuTrigger = <M>(
   config: StyleConfig,
@@ -62,7 +90,11 @@ const navigationMenuTrigger = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.button(
-    [h.Type('button'), h.Class(cn(navigationMenuTriggerClass, config.className)), h.DataAttribute('slot', 'navigation-menu-trigger')],
+    [
+      h.Type('button'),
+      h.Class(cn(navigationMenuTriggerClass, config.className)),
+      h.DataAttribute('slot', 'navigation-menu-trigger'),
+    ],
     children,
   )
 
@@ -71,7 +103,13 @@ const navigationMenuContent = <M>(
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.div([h.Class(cn(navigationMenuContentClass, config.className)), h.DataAttribute('slot', 'navigation-menu-content')], children)
+  h.div(
+    [
+      h.Class(cn(navigationMenuContentClass, config.className)),
+      h.DataAttribute('slot', 'navigation-menu-content'),
+    ],
+    children,
+  )
 
 /** Composable navigation menu — `NavigationMenu` is the container, with
  *  sub-builders as properties: `NavigationMenu.list`, `NavigationMenu.item`,

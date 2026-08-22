@@ -31,15 +31,13 @@ export const accordionTriggerClass =
 
 export const accordionContentClass = 'cn-accordion-content overflow-hidden text-sm'
 
-export const accordionAnimatedContentClass =
-  'overflow-hidden pb-4 text-sm text-muted-foreground'
+export const accordionAnimatedContentClass = 'overflow-hidden pb-4 text-sm text-muted-foreground'
 
 export const accordionContentInnerClass =
   'cn-accordion-content-inner h-(--accordion-panel-height) data-ending-style:h-0 data-starting-style:h-0 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4'
 
 export const accordionChevronClass =
   'cn-accordion-trigger-icon pointer-events-none size-4 shrink-0 transition-transform'
-
 
 export type AccordionItemConfig<M> = Readonly<{
   id: string
@@ -70,10 +68,17 @@ export const accordionItem = <M>(config: AccordionItemConfig<M>, h: HtmlBuilder<
       ariaLabelledBy: config.ariaLabelledBy,
       toView: ({ button, panel, animatePanel }) =>
         h.div(
-          [h.Class(cn(accordionWrapperClass, config.wrapperClass)), h.DataAttribute('slot', 'accordion-item')],
+          [
+            h.Class(cn(accordionWrapperClass, config.wrapperClass)),
+            h.DataAttribute('slot', 'accordion-item'),
+          ],
           [
             h.button(
-              [...button, h.Class(cn(accordionTriggerClass, config.triggerClass)), h.DataAttribute('slot', 'accordion-trigger')],
+              [
+                ...button,
+                h.Class(cn(accordionTriggerClass, config.triggerClass)),
+                h.DataAttribute('slot', 'accordion-trigger'),
+              ],
               [
                 h.span([], [config.title]),
                 h.span([h.Class(accordionChevronClass)], [icon(h, ChevronDown)]),

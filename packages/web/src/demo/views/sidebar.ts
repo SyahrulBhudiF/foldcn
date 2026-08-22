@@ -24,7 +24,11 @@ export const sideBarView = (model: Model, h: HtmlBuilder<Message>): Html =>
                   Sidebar.menu(
                     {},
                     [
-                      Sidebar.menuItem({}, [Sidebar.menuButton({ isActive: true }, ['Dashboard'], h)], h),
+                      Sidebar.menuItem(
+                        {},
+                        [Sidebar.menuButton({ isActive: true }, ['Dashboard'], h)],
+                        h,
+                      ),
                       Sidebar.menuItem({}, [Sidebar.menuButton({}, ['Projects'], h)], h),
                       Sidebar.menuItem({}, [Sidebar.menuButton({}, ['Team'], h)], h),
                     ],

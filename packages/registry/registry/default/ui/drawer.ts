@@ -18,7 +18,8 @@ export type Message = typeof Message.Type
 export const OutMessage = FoldkitDialog.OutMessage
 export type OutMessage = typeof OutMessage.Type
 
-export const init = (config: InitConfig): Model => FoldkitDialog.init({ isAnimated: true, ...config })
+export const init = (config: InitConfig): Model =>
+  FoldkitDialog.init({ isAnimated: true, ...config })
 export const update = FoldkitDialog.update
 export const open = FoldkitDialog.open
 export const close = FoldkitDialog.close
@@ -72,8 +73,7 @@ export const drawerDescriptionClass = 'cn-drawer-description text-balance'
 export const drawerFooterClass = 'cn-drawer-footer-base mt-auto flex shrink-0 flex-col'
 
 /** Upstream renders close via `<Button variant="ghost" size="icon-sm">`. */
-export const drawerCloseButtonClass =
-  'cn-button cn-button-variant-ghost cn-button-size-icon-sm'
+export const drawerCloseButtonClass = 'cn-button cn-button-variant-ghost cn-button-size-icon-sm'
 
 // --- Composable sub-components ---
 
@@ -82,7 +82,11 @@ type StyleConfig = Readonly<{ className?: string }>
 /** Grab handle (upstream DrawerSwipeHandle; aria-hidden). */
 export const handle = <M>(config: StyleConfig, h: HtmlBuilder<M>): Html =>
   h.div(
-    [h.AriaHidden(true), h.DataAttribute('slot', 'drawer-swipe-handle'), h.Class(cn(drawerHandleClass, config.className))],
+    [
+      h.AriaHidden(true),
+      h.DataAttribute('slot', 'drawer-swipe-handle'),
+      h.Class(cn(drawerHandleClass, config.className)),
+    ],
     [],
   )
 
@@ -101,8 +105,13 @@ export const title = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
-): Html => h.h2(
-    [...attributes, h.DataAttribute('slot', 'drawer-title'), h.Class(cn(drawerTitleClass, config.className))],
+): Html =>
+  h.h2(
+    [
+      ...attributes,
+      h.DataAttribute('slot', 'drawer-title'),
+      h.Class(cn(drawerTitleClass, config.className)),
+    ],
     children,
   )
 
@@ -111,7 +120,8 @@ export const description = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
-): Html => h.p(
+): Html =>
+  h.p(
     [
       ...attributes,
       h.DataAttribute('slot', 'drawer-description'),
@@ -137,7 +147,11 @@ export const closeButton = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.button(
-    [...attributes, h.DataAttribute('slot', 'drawer-close'), h.Class(cn(drawerCloseButtonClass, config.className))],
+    [
+      ...attributes,
+      h.DataAttribute('slot', 'drawer-close'),
+      h.Class(cn(drawerCloseButtonClass, config.className)),
+    ],
     children,
   )
 
@@ -165,7 +179,11 @@ export const styledViewInputs = <M>(
 ): FoldkitDialog.ViewInputs => ({
   toView: ({ dialog, backdrop, panel, closeButton, title, description, isVisible }) =>
     h.dialog(
-      [...dialog, h.DataAttribute('slot', 'drawer'), h.Class(cn(drawerClass, viewInputs.className))],
+      [
+        ...dialog,
+        h.DataAttribute('slot', 'drawer'),
+        h.Class(cn(drawerClass, viewInputs.className)),
+      ],
       isVisible
         ? [
             h.div([

@@ -35,14 +35,12 @@ export const inputGroupButtonSizeKeys = ['xs', 'sm', 'icon-xs', 'icon-sm'] as co
 export type InputGroupButtonSize = (typeof inputGroupButtonSizeKeys)[number]
 
 /** Upstream InputGroupButton base string (sizes are tokens). */
-export const inputGroupButtonClass =
-  'cn-input-group-button flex items-center shadow-none'
+export const inputGroupButtonClass = 'cn-input-group-button flex items-center shadow-none'
 
 export const inputGroupTextClass =
   'cn-input-group-text flex items-center [&_svg]:pointer-events-none'
 
-export const inputGroupInputClass =
-  'cn-input-group-input flex-1'
+export const inputGroupInputClass = 'cn-input-group-input flex-1'
 
 export type InputGroupInputConfig<M> = Readonly<{
   id: string
@@ -64,22 +62,20 @@ export const inputGroupInput = <M>(
   h: HtmlBuilder<M>,
   extraAttributes: ReadonlyArray<Attribute<M>> = [],
 ): Html =>
-  h.input(
-    [
-      h.Id(config.id),
-      ...(config.onInput === undefined ? [] : [h.OnInput(config.onInput)]),
-      ...(config.value === undefined ? [] : [h.Value(config.value)]),
-      ...(config.isDisabled === true ? [h.Disabled(true), h.DataAttribute('disabled', '')] : []),
-      ...(config.isReadOnly === true ? [h.Attribute('readonly', 'true')] : []),
-      ...(config.isInvalid === true ? [h.AriaInvalid(true), h.DataAttribute('invalid', '')] : []),
-      ...(config.name === undefined ? [] : [h.Name(config.name)]),
-      ...(config.type === undefined ? [] : [h.Type(config.type)]),
-      ...(config.placeholder === undefined ? [] : [h.Placeholder(config.placeholder)]),
-      h.DataAttribute('slot', 'input-group-control'),
-      h.Class(cn(inputClass, inputGroupInputClass, config.className)),
-      ...extraAttributes,
-    ],
-  )
+  h.input([
+    h.Id(config.id),
+    ...(config.onInput === undefined ? [] : [h.OnInput(config.onInput)]),
+    ...(config.value === undefined ? [] : [h.Value(config.value)]),
+    ...(config.isDisabled === true ? [h.Disabled(true), h.DataAttribute('disabled', '')] : []),
+    ...(config.isReadOnly === true ? [h.Attribute('readonly', 'true')] : []),
+    ...(config.isInvalid === true ? [h.AriaInvalid(true), h.DataAttribute('invalid', '')] : []),
+    ...(config.name === undefined ? [] : [h.Name(config.name)]),
+    ...(config.type === undefined ? [] : [h.Type(config.type)]),
+    ...(config.placeholder === undefined ? [] : [h.Placeholder(config.placeholder)]),
+    h.DataAttribute('slot', 'input-group-control'),
+    h.Class(cn(inputClass, inputGroupInputClass, config.className)),
+    ...extraAttributes,
+  ])
 
 type StyleConfig = Readonly<{ className?: string }>
 
@@ -108,7 +104,13 @@ export const inputGroupText = <M>(
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.div([h.Class(cn(inputGroupTextClass, config.className)), h.DataAttribute('slot', 'input-group-text')], children)
+  h.div(
+    [
+      h.Class(cn(inputGroupTextClass, config.className)),
+      h.DataAttribute('slot', 'input-group-text'),
+    ],
+    children,
+  )
 
 /** Segmented container — pass addons / controls as children. */
 export const inputGroup = <M>(
@@ -116,4 +118,7 @@ export const inputGroup = <M>(
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.div([h.Class(cn(inputGroupClass, config.className)), h.DataAttribute('slot', 'input-group')], children)
+  h.div(
+    [h.Class(cn(inputGroupClass, config.className)), h.DataAttribute('slot', 'input-group')],
+    children,
+  )

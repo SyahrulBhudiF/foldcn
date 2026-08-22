@@ -13,11 +13,7 @@ export const alertView = (model: Model, h: HtmlBuilder<Message>): Html =>
         {},
         [
           Alert.title<Message>({}, ['Heads up!'], h),
-          Alert.description<Message>(
-            {},
-            ['You can add components to your app using the cli.'],
-            h,
-          ),
+          Alert.description<Message>({}, ['You can add components to your app using the cli.'], h),
         ],
         h,
       ),
@@ -25,11 +21,7 @@ export const alertView = (model: Model, h: HtmlBuilder<Message>): Html =>
         { variant: 'destructive' },
         [
           Alert.title<Message>({}, ['Error'], h),
-          Alert.description<Message>(
-            {},
-            ['Your session has expired. Please log in again.'],
-            h,
-          ),
+          Alert.description<Message>({}, ['Your session has expired. Please log in again.'], h),
         ],
         h,
       ),

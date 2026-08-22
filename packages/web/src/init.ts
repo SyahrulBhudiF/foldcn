@@ -36,6 +36,9 @@ export const init = (url: Url.Url): InitReturn => {
       selectedPackageManager: 'pnpm',
       expandedCodeBlocks: new Set<string>(),
     },
-    [LoadBrowserEnvironment(), ...Command.mapMessages(demoCommands, (message) => GotDemoMessage({ message }))],
+    [
+      LoadBrowserEnvironment(),
+      ...Command.mapMessages(demoCommands, (message) => GotDemoMessage({ message })),
+    ],
   ]
 }

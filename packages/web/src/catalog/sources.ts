@@ -38,9 +38,7 @@ const GROUPS: ReadonlyArray<{ group: RegistryGroupJson; dir: string }> = [
 
 const resolveSource = (dir: string, filePath: string): SourceEntry | undefined => {
   const code = rawByTreePath[`${dir}/${filePath}`]
-  return code === undefined
-    ? undefined
-    : { path: `registry/default/${dir}/${filePath}`, code }
+  return code === undefined ? undefined : { path: `registry/default/${dir}/${filePath}`, code }
 }
 
 export const sourceByItem: Readonly<Record<string, SourceEntry>> = Object.fromEntries(

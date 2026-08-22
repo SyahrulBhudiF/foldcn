@@ -65,8 +65,8 @@ const foldVirtualList = Update.foldChild({
 })
 
 const fields = {
-    virtualList: virtualList.Model,
-  }
+  virtualList: virtualList.Model,
+}
 
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type
@@ -103,4 +103,3 @@ export const slice = defineSlice({
   // parent-side samples to feed update().
   subscriptions,
 })
-

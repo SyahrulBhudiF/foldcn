@@ -1,13 +1,6 @@
-// Build-time helpers for the LLM-friendly output: turning each prerendered
-// page's HTML into Markdown, and assembling the `llms.txt` / `llms-full.txt`
-// index files. Everything here is derived from the rendered page and the
-// registry manifest, so there is nothing to maintain by hand.
-
-import { readFileSync } from 'node:fs'
+import { Effect, FileSystem } from 'effect'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-
-import { htmlToMarkdown } from '../src/markdown'
 
 export { htmlToMarkdown, extractMain } from '../src/markdown'
 
@@ -31,36 +24,40 @@ const TYPE_TO_CATEGORY: Readonly<Record<string, string>> = {
 
 const GROUP_FILES = ['style', 'lib', 'ui', 'blocks'] as const
 
-/** Enumerate every registry item (name, title, description, category) straight
- *  from the manifest JSON — no `?raw` imports, so this runs under plain Node. */
-export const loadRegistryItems = (): ReadonlyArray<LlmItem> => {
-  const items: LlmItem[] = []
-  for (const group of GROUP_FILES) {
-    const file = resolve(REGISTRY_DIR, group, 'registry.json')
-    const json = JSON.parse(readFileSync(file, 'utf8')) satisfies {
-      items?: ReadonlyArray<{
-        name?: string
-        title?: string
-        description?: string
-        type?: string
-      }>
-    }
-    for (const it of json.items ?? []) {
-      const name = it.name
-      if (name === undefined || name === '') continue
-      items.push({
-        name,
-        title: it.title ?? name,
-        description: it.description ?? '',
-        category: TYPE_TO_CATEGORY[it.type ?? ''] ?? 'Components',
-      })
-    }
-  }
-  return items
-}
+export const loadRegistryItems = Effect.fn(function* () {
+  const fs = yield* FileSystem.FileSystem
+  const items = yield* Effect.all(
+    GROUP_FILES.map((group) =>
+      Effect.gen(function* () {
+        const file = yield* fs.readFileString(resolve(REGISTRY_DIR, group, 'registry.json'))
+        // oxlint-disable-next-line
+        const json = JSON.parse(file) as {
+          items?: ReadonlyArray<{
+            name?: string
+            title?: string
+            description?: string
+            type?: string
+          }>
+        }
 
-/** Build the root `llms.txt` — the deterministic, agent-readable site map. */
-export const buildLlmsTxt = (items: ReadonlyArray<LlmItem>, origin: string): string => {
+        return (
+          json.items
+            ?.filter((it) => it.name !== undefined && it.name !== '')
+            .map((it) => ({
+              name: it.name ?? '',
+              title: it.title ?? it.name ?? '',
+              description: it.description ?? '',
+              category: TYPE_TO_CATEGORY[it.type ?? ''] ?? 'Components',
+            })) ?? []
+        )
+      }),
+    ),
+    { concurrency: 'unbounded' },
+  )
+  return items.flat()
+})
+
+export const buildLlmsTxt = (items: ReadonlyArray<LlmItem>, origin: string) => {
   const lines: string[] = []
   lines.push('# foldcn')
   lines.push('')
@@ -69,7 +66,9 @@ export const buildLlmsTxt = (items: ReadonlyArray<LlmItem>, origin: string): str
   )
   lines.push('')
   lines.push('## Docs')
-  lines.push(`- [Home](${origin}/index.md): shadcn components for Foldkit — the registry landing page.`)
+  lines.push(
+    `- [Home](${origin}/index.md): shadcn components for Foldkit — the registry landing page.`,
+  )
   lines.push(
     `- [Components](${origin}/docs.md): Browse the full catalog of ${items.length} components, blocks and utilities.`,
   )
@@ -93,7 +92,6 @@ export const buildLlmsTxt = (items: ReadonlyArray<LlmItem>, origin: string): str
   return lines.join('\n')
 }
 
-/** Build `llms-full.txt` — every page concatenated, each marked by source path. */
 export const buildLlmsFull = (
   sections: ReadonlyArray<{ path: string; markdown: string }>,
   origin: string,

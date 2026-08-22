@@ -1,26 +1,9 @@
-// Shared Markdown helpers — used both at build time (prerender) and at
-// request time (dev SSR via entry.server). Keep this free of Node file-system
-// dependencies so it can be imported from the Vite SSR entry.
-
-import { NodeHtmlMarkdown } from 'node-html-markdown'
-
-// Elements that carry no prose value for an LLM: chrome, navigation, controls.
-// (The sidebar `<aside>` and breadcrumb `<nav>` live inside `<main>` on item
-// pages, so we drop them here rather than in the extraction step.)
-const MD = new NodeHtmlMarkdown({
-  codeFence: '```',
-  codeBlockStyle: 'fenced',
-  bulletMarker: '-',
-  emDelimiter: '_',
-  strongDelimiter: '**',
-  useInlineLinks: true,
-  ignore: ['button', 'script', 'style', 'aside', 'nav', 'svg', 'img'],
-  maxConsecutiveNewlines: 2,
-})
+import { Defuddle } from 'defuddle/node'
+import { Effect } from 'effect'
 
 /** Pull the `<main>…</main>` region out of a rendered page (falls back to the
  *  whole document if, for some reason, no `<main>` was emitted). */
-export const extractMain = (html: string): string => {
+export const extractMain = (html: string) => {
   const start = html.search(/<main[\s>]/i)
   if (start === -1) return html
   const end = html.indexOf('</main>', start)
@@ -31,8 +14,10 @@ export const extractMain = (html: string): string => {
 // node-html-markdown reads fence languages from a `language-*` class on the
 // `<code>` element, but the registry code blocks carry the language on the
 // wrapping `<pre data-language="ts">` with a bare `<code>` inside. Copy it
-// across before translating.
-const annotateCodeLanguages = (html: string): string =>
+// across before translating. Defuddle's markdown handler already checks
+// `data-language` on <pre> and <code>, but we keep this for fidelity and to
+// handle any edge cases.
+const annotateCodeLanguages = (html: string) =>
   html.replace(
     /(<pre[^>]*\bdata-language="([\w-]+)"[^>]*>\s*<code)>/g,
     (_match, open: string, language: string) => `${open} class="language-${language}">`,
@@ -52,7 +37,7 @@ const JAMMED_SIBLINGS = new RegExp(
   'g',
 )
 
-const separateInlineSiblings = (html: string): string =>
+const separateInlineSiblings = (html: string) =>
   html
     .split(/(<pre[\s\S]*?<\/pre>)/g)
     .map((part, index) => (index % 2 === 1 ? part : part.replace(JAMMED_SIBLINGS, '$1 $2')))
@@ -62,15 +47,44 @@ const separateInlineSiblings = (html: string): string =>
  *  working when the file is read outside the context of the page it came from
  *  (an agent fetching `/docs/button.md` has no base URL to resolve against).
  *  Applied to the translated Markdown rather than the source HTML so literal
- *  `href="…"` text inside code listings is never touched. */
-const absolutizeLinks = (markdown: string, origin: string): string =>
+ *  `href="…"` text inside code listings is never touched. Defuddle already
+ *  absolutizes URLs when a `url` is provided, but we keep this as a safety
+ *  net for any relative links that slip through. */
+const absolutizeLinks = (markdown: string, origin: string) =>
   markdown.replace(/\]\((\/[^)\s]*)\)/g, (_match, path: string) => `](${origin}${path})`)
 
-/** Convert a rendered page's HTML to clean Markdown. */
-export const htmlToMarkdown = (html: string, origin: string): string => {
-  const main = extractMain(html)
-  const markdown = MD.translate(separateInlineSiblings(annotateCodeLanguages(main)))
-    .replace(/\n{3,}/g, '\n\n')
-    .trim()
+/** Convert a rendered page's HTML to clean Markdown using Defuddle.
+ *
+ * Defuddle extracts the main article content (via Readability-style heuristics
+ * and content scoring), strips clutter (nav, aside, ads, etc.), and converts
+ * the result to Markdown with turndown. We pre-process the HTML to preserve
+ * code-block languages and inline spacing, and post-process to ensure links
+ * are absolute.
+ *
+ * The `contentSelector` targets the article column (`.max-w-3xl` / `.max-w-2xl`)
+ * which holds the actual docs content, excluding the sidebar. If the selector
+ * is not found, Defuddle falls back to its auto-detection (which still finds
+ * `<main>`).
+ */
+export const htmlToMarkdown = Effect.fn(function* (html: string, origin: string) {
+  // Pre-process before Defuddle: preserve `data-language` on code blocks and
+  // fix jammed inline siblings that CSS `gap` would otherwise collapse.
+  const preprocessed = separateInlineSiblings(annotateCodeLanguages(html))
+
+  const result = yield* Effect.tryPromise({
+    try: () =>
+      Defuddle(preprocessed, `${origin}/`, {
+        markdown: true,
+        contentSelector: '.max-w-3xl, .max-w-2xl',
+      }),
+    catch: (cause) => new Error(`Failed to convert HTML to Markdown: ${String(cause)}`, { cause }),
+  })
+
+  let markdown = result.content.replace(/\n{3,}/g, '\n\n').trim()
+  // Defuddle's standardize converts h1 -> h2 for cleaner outlines. Restore
+  // the first h2 back to h1 so the page title matches the original site
+  // (e.g., "# Button" instead of "## Button") and the llms.txt hierarchy
+  // stays consistent.
+  markdown = markdown.replace(/^## /m, '# ')
   return `${absolutizeLinks(markdown, origin)}\n`
-}
+})

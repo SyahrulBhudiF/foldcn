@@ -22,9 +22,10 @@ const gapsCallout = (name: string, h: HtmlBuilder<Message>): Html => {
   return h.div(
     [h.Class('mt-4 rounded-lg border border-border bg-muted/40 p-4')],
     [
-      h.p([h.Class('text-xs font-semibold uppercase tracking-wide text-muted-foreground')], [
-        'Differences vs shadcn/ui',
-      ]),
+      h.p(
+        [h.Class('text-xs font-semibold uppercase tracking-wide text-muted-foreground')],
+        ['Differences vs shadcn/ui'],
+      ),
       h.ul([h.Class('mt-2 list-disc space-y-1 pl-4 text-sm text-muted-foreground')], gaps),
     ],
   )
@@ -55,7 +56,7 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
     [h.Class('mx-auto flex w-full max-w-6xl flex-1')],
     [
       sidebarView(model, h),
-      h.div(
+      h.main(
         [h.Class('flex-1 min-w-0')],
         [
           h.div(
@@ -65,7 +66,10 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
               h.nav(
                 [h.Class('mb-6 flex items-center gap-2 text-sm text-muted-foreground')],
                 [
-                  h.a([h.Href('/'), h.Class('transition-colors hover:text-foreground')], ['Registry']),
+                  h.a(
+                    [h.Href('/'), h.Class('transition-colors hover:text-foreground')],
+                    ['Registry'],
+                  ),
                   h.span([], ['/']),
                   h.span([h.Class('text-foreground')], [categoryLabel(item.category)]),
                   h.span([], ['/']),
@@ -88,7 +92,10 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                   ),
                 ],
               ),
-              h.p([h.Class('mt-4 text-pretty text-muted-foreground font-mono')], [item.description]),
+              h.p(
+                [h.Class('mt-4 text-pretty text-muted-foreground font-mono')],
+                [item.description],
+              ),
               gapsCallout(item.name, h),
 
               // dependencies
@@ -113,7 +120,11 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                     const demoExample = demoExampleByName[demoName]!
                     return [
                       h.div(
-                        [h.Class('mt-10 overflow-hidden rounded-xl border border-border bg-background font-sans')],
+                        [
+                          h.Class(
+                            'mt-10 overflow-hidden rounded-xl border border-border bg-background font-sans',
+                          ),
+                        ],
                         [
                           h.div(
                             [
@@ -122,9 +133,16 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                               ),
                             ],
                             [
-                              h.span([h.Class('text-xs font-medium text-muted-foreground')], ['Preview']),
                               h.span(
-                                [h.Class('flex items-center gap-1.5 text-xs text-muted-foreground')],
+                                [h.Class('text-xs font-medium text-muted-foreground')],
+                                ['Preview'],
+                              ),
+                              h.span(
+                                [
+                                  h.Class(
+                                    'flex items-center gap-1.5 text-xs text-muted-foreground',
+                                  ),
+                                ],
                                 ['Interactive demo'],
                               ),
                             ],

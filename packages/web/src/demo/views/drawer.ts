@@ -47,7 +47,10 @@ export const drawerView = (model: Model, h: HtmlBuilder<Message>): Html =>
                 [
                   Drawer.closeButton(closeButton, {}, ['Cancel'], h),
                   h.button(
-                    [...closeButton, h.Class('rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground')],
+                    [
+                      ...closeButton,
+                      h.Class('rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground'),
+                    ],
                     ['Move'],
                   ),
                 ],
@@ -62,10 +65,10 @@ export const drawerView = (model: Model, h: HtmlBuilder<Message>): Html =>
     ],
   )
 
-const foldNoOp =
-  (): ((out: Drawer.OutMessage) => Update.Step<State, unknown>) =>
-  () =>
-  (model) => [model, []]
+const foldNoOp = (): ((out: Drawer.OutMessage) => Update.Step<State, unknown>) => () => (model) => [
+  model,
+  [],
+]
 
 const foldDrawerOutMessage = M.type<Drawer.OutMessage>().pipe(
   M.withReturnType<Update.Step<State, unknown>>(),

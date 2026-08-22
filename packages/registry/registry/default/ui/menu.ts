@@ -35,8 +35,7 @@ export type GroupHeading = FoldkitMenu.GroupHeading
 
 /** Upstream renders DropdownMenuTrigger unstyled (consumers pass a Button);
  *  foldcn's trigger builder keeps a ghost-button composition. */
-export const menuTriggerClass =
-  'cn-button cn-button-variant-ghost cn-button-size-default'
+export const menuTriggerClass = 'cn-button cn-button-variant-ghost cn-button-size-default'
 
 export const menuItemsClass =
   'cn-dropdown-menu-content z-50 min-w-32 overflow-hidden outline-hidden'
@@ -48,9 +47,11 @@ export const menuItemClass =
 
 export const menuSeparatorClass = 'cn-dropdown-menu-separator -mx-1 my-1 h-px'
 
-export const menuHeadingClass = 'cn-dropdown-menu-label px-2 py-1.5 text-xs font-medium text-muted-foreground'
+export const menuHeadingClass =
+  'cn-dropdown-menu-label px-2 py-1.5 text-xs font-medium text-muted-foreground'
 
-export const menuShortcutClass = 'cn-dropdown-menu-shortcut ml-auto text-xs tracking-widest text-muted-foreground'
+export const menuShortcutClass =
+  'cn-dropdown-menu-shortcut ml-auto text-xs tracking-widest text-muted-foreground'
 
 export const menuLabelClass = menuHeadingClass
 

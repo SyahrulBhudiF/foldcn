@@ -40,7 +40,9 @@ const readFlag = (name) => {
 }
 const checkOnly = args.includes('--check')
 const shadcnDir = resolve(
-  readFlag('--shadcn-dir') ?? process.env.SHADCN_UI_DIR ?? '/Users/elianiva/Development/repos/shadcn-ui/ui',
+  readFlag('--shadcn-dir') ??
+    process.env.SHADCN_UI_DIR ??
+    '/Users/elianiva/Development/repos/shadcn-ui/ui',
 )
 const upstreamStylesDir = join(shadcnDir, 'apps', 'v4', 'registry', 'styles')
 
@@ -86,7 +88,9 @@ if (checkOnly) {
     console.error(`vendored styles differ from ${upstreamCommit}:\n  ${drifted.join('\n  ')}`)
     process.exit(1)
   }
-  console.log(`sync-styles: --check clean (${styleFiles.length} files match upstream ${upstreamCommit})`)
+  console.log(
+    `sync-styles: --check clean (${styleFiles.length} files match upstream ${upstreamCommit})`,
+  )
   process.exit(0)
 }
 
@@ -136,5 +140,7 @@ and in \`scripts/resolve-styles.mjs\`.
 `,
 )
 
-console.log(`sync-styles: vendored ${styleFiles.length} files from upstream ${upstreamCommit} (${today})`)
+console.log(
+  `sync-styles: vendored ${styleFiles.length} files from upstream ${upstreamCommit} (${today})`,
+)
 console.log(`  ${styleFiles.join('\n  ')}`)

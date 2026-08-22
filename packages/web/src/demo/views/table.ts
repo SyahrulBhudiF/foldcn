@@ -31,17 +31,29 @@ export const tableView = (model: Model, h: HtmlBuilder<Message>): Html =>
         [
           Table.row(
             {},
-            [Table.cell({}, ['INV001'], h), Table.cell({}, ['Paid'], h), Table.cell({}, ['$250.00'], h)],
+            [
+              Table.cell({}, ['INV001'], h),
+              Table.cell({}, ['Paid'], h),
+              Table.cell({}, ['$250.00'], h),
+            ],
             h,
           ),
           Table.row(
             {},
-            [Table.cell({}, ['INV002'], h), Table.cell({}, ['Pending'], h), Table.cell({}, ['$150.00'], h)],
+            [
+              Table.cell({}, ['INV002'], h),
+              Table.cell({}, ['Pending'], h),
+              Table.cell({}, ['$150.00'], h),
+            ],
             h,
           ),
           Table.row(
             {},
-            [Table.cell({}, ['INV003'], h), Table.cell({}, ['Unpaid'], h), Table.cell({}, ['$350.00'], h)],
+            [
+              Table.cell({}, ['INV003'], h),
+              Table.cell({}, ['Unpaid'], h),
+              Table.cell({}, ['$350.00'], h),
+            ],
             h,
           ),
         ],

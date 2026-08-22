@@ -56,7 +56,9 @@ for (const file of itemFiles) {
   }
   if (changed) writeFileSync(itemPath, `${JSON.stringify(item, null, 2)}\n`)
 }
-console.log(`resolved sources swapped into ${swapped} file(s) across ${itemFiles.length} item JSONs`)
+console.log(
+  `resolved sources swapped into ${swapped} file(s) across ${itemFiles.length} item JSONs`,
+)
 
 // 2b. Assert the shipped sources keep the resolver's guarantee: no `cn-*`
 //     tokens inside string literals (comments may still reference upstream
@@ -81,7 +83,9 @@ for (const file of itemFiles) {
   }
 }
 if (literalOffenders.length > 0) {
-  console.error(`unresolved cn-* literals in shipped sources:\n  ${[...new Set(literalOffenders)].join('\n  ')}`)
+  console.error(
+    `unresolved cn-* literals in shipped sources:\n  ${[...new Set(literalOffenders)].join('\n  ')}`,
+  )
   process.exit(1)
 }
 
