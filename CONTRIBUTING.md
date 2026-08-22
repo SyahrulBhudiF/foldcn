@@ -40,18 +40,25 @@ pnpm test         # run tests
 
 ## Adding a component
 
-1. **Create the source file** in `packages/registry/registry/default/ui/<name>.ts`. It must be a self-contained module — types, logic, and styled view all in one file.
+Contributing a component is a **3-touchpoint flow** — the showcase site derives its catalog, source display and demo registration automatically from the registry manifests and demo files. No site code needs to change.
 
-2. **Register it** in `packages/registry/registry/default/ui/registry.json`.
-
-3. **Follow the patterns**:
+1. **Create the source file** at `packages/registry/registry/default/ui/<name>.ts`. It must be a self-contained module — types, logic, and styled view all in one file. Follow one of the three established patterns:
    - **Stateless helpers** (Button, Input, etc.): export a view function that takes a config object + builder callback.
-   - **Stateful submodels** (Dialog, Menu, etc.): re-export `init`, `update`, `view` from `@foldkit/ui` plus a `styledViewInputs` factory.
+   - **Stateful submodels** (Dialog, Popover, etc.): re-export `init`, `update`, `view` from `@foldkit/ui` plus a `styledViewInputs` factory.
    - **List-style submodels** (Menu, Listbox, etc.): use the `create<Value>()` bundle pattern.
 
-4. **Validate**: `pnpm validate`
+2. **Register it** in `packages/registry/registry/default/ui/registry.json` with `name`, `type` (`registry:ui`), `title`, `description` and `registryDependencies`. Declare `dependencies` only for packages beyond what the base style already installs (see ADR-006 in CONTEXT.md).
 
-5. **Build the registry**: `npx shadcn@latest build`
+3. **Add a demo view** at `packages/web/src/demo/views/<name>.ts` exporting `<camel>NameView(model, h)` (e.g. `buttonView`). The showcase picks it up automatically for its catalog, source display and demo registration.
+
+Then validate and build:
+
+```bash
+pnpm --filter @foldcn/registry validate   # schema gate for the manifests
+pnpm --filter @foldcn/registry build      # resolve styles + build + ship
+```
+
+> **Never run bare `npx shadcn build`** — it would ship unresolved `cn-*` token classes. Always go through `scripts/build.mjs`, which runs `resolve-styles.mjs` first, then the shadcn build, then swaps in the resolved sources.
 
 ## Code conventions
 

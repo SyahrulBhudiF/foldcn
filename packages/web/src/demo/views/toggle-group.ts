@@ -1,11 +1,16 @@
+import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { toggleGroup } from '@foldcn/registry/styles/default/ui/toggle-group'
 import { icon } from '@foldcn/registry/styles/default/lib/icons'
 import { Bold, Italic, Underline } from 'lucide'
 
-import { SelectedToggleGroup, type Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const SelectedToggleGroup = m('SelectedToggleGroup', { value: S.Array(S.String) })
 
 export const toggleGroupView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -34,3 +39,21 @@ export const toggleGroupView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+const fields = { toggleGroupValue: S.Array(S.String) }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: { toggleGroupValue: ['bold'] },
+  messages: [SelectedToggleGroup],
+  handlers: (model: State) => ({
+    SelectedToggleGroup: ({ value }: typeof SelectedToggleGroup.Type): UpdateReturn => [
+      evo(model, { toggleGroupValue: () => value }),
+      [],
+    ],
+  }),
+  samples: [SelectedToggleGroup({ value: ['bold', 'italic'] })],
+})

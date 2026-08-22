@@ -2,8 +2,8 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Kbd } from '@foldcn/registry/styles/default/ui/kbd'
 
-import type { Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice } from '../slice'
+import type { Model, Message } from '../assemble'
 
 export const kbdView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -18,3 +18,10 @@ export const kbdView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+export const slice = defineSlice({
+  fields: {},
+  init: {},
+  messages: [],
+  handlers: () => ({}),
+})

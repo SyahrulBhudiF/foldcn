@@ -1,9 +1,14 @@
+import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { button, buttonSizeKeys, buttonVariantKeys } from '@foldcn/registry/styles/default/ui/button'
 
-import { ClickedButtonDemo, type Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const ClickedButtonDemo = m('ClickedButtonDemo')
 
 export const buttonView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -29,3 +34,18 @@ export const buttonView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+const fields = { buttonClickCount: S.Number }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: { buttonClickCount: 0 },
+  messages: [ClickedButtonDemo],
+  handlers: (model: State) => ({
+    ClickedButtonDemo: (): UpdateReturn => [evo(model, { buttonClickCount: (n) => n + 1 }), []],
+  }),
+  samples: [ClickedButtonDemo()],
+})

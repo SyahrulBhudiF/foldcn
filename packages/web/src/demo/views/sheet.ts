@@ -1,10 +1,20 @@
+import { Match as M, Option } from 'effect'
+import { Schema as S } from 'effect'
+import { Command, Update } from 'foldkit'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { button } from '@foldcn/registry/styles/default/ui/button'
 import * as Sheet from '@foldcn/registry/styles/default/ui/sheet'
 
-import { ClickedOpenDialog, GotDialogMessage, type Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+type State = { dialog: typeof Sheet.Model.Type }
+
+const GotDialogMessage = m('GotDialogMessage', { message: Sheet.Message })
+const ClickedOpenDialog = m('ClickedOpenDialog')
 
 export const sheetView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -51,3 +61,44 @@ export const sheetView = (model: Model, h: HtmlBuilder<Message>): Html =>
       }),
     ],
   )
+
+const foldNoOp =
+  (): ((out: Sheet.OutMessage) => Update.Step<State, unknown>) =>
+  () =>
+  (model) => [model, []]
+
+const foldSheetOutMessage = M.type<Sheet.OutMessage>().pipe(
+  M.withReturnType<Update.Step<State, unknown>>(),
+  M.tagsExhaustive({
+    Opened: foldNoOp(),
+    Closed: foldNoOp(),
+  }),
+)
+
+// The sheet demo shares the dialog slice's `dialog` submodel field and its
+// message tags — all dialog-engine demos drive the same submodel.
+const foldSheet = Update.foldChild({
+  update: Sheet.update,
+  read: (model: State) => Option.some(model.dialog),
+  write: (model, next) => evo(model, { dialog: () => next }),
+  toParentMessage: (message) => GotDialogMessage({ message }),
+  foldOutMessage: foldSheetOutMessage,
+})
+
+export const slice = defineSlice({
+  fields: {},
+  init: {},
+  messages: [GotDialogMessage, ClickedOpenDialog],
+  handlers: (model: State) => ({
+    GotDialogMessage: (payload: typeof GotDialogMessage.Type): UpdateReturn =>
+      foldSheet(model, payload.message),
+    ClickedOpenDialog: (): UpdateReturn => {
+      const [next, commands] = Sheet.open(model.dialog)
+      return [
+        evo(model, { dialog: () => next }),
+        Command.mapMessages(commands, (message) => GotDialogMessage({ message })),
+      ]
+    },
+  }),
+  samples: [ClickedOpenDialog()],
+})

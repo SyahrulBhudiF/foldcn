@@ -2,8 +2,8 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { progress } from '@foldcn/registry/styles/default/ui/progress'
 
-import type { Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice } from '../slice'
+import type { Model, Message } from '../assemble'
 
 export const progressView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -14,3 +14,10 @@ export const progressView = (model: Model, h: HtmlBuilder<Message>): Html =>
       progress<Message>({}, h),
     ],
   )
+
+export const slice = defineSlice({
+  fields: {},
+  init: {},
+  messages: [],
+  handlers: () => ({}),
+})

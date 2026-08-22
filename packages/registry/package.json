@@ -17,7 +17,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "resolve": "node scripts/resolve-styles.mjs",
-    "validate": "pnpm dlx shadcn@latest registry validate foldcn/foldcn",
+    "validate": "pnpm dlx shadcn@latest registry validate registry.json --cwd .",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

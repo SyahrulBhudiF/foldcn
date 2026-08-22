@@ -1,9 +1,14 @@
+import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Command, commandGroupHeadingClass } from '@foldcn/registry/styles/default/ui/command'
 
-import { UpdatedCommandSearch, type Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const UpdatedCommandSearch = m('UpdatedCommandSearch', { value: S.String })
 
 const ALL_COMMANDS = [
   { group: 'Suggestions', items: ['Calendar', 'Search Emoji', 'Launch'] },
@@ -39,3 +44,21 @@ export const commandView = (model: Model, h: HtmlBuilder<Message>): Html => {
     h,
   )
 }
+
+const fields = { commandSearch: S.String }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: { commandSearch: '' },
+  messages: [UpdatedCommandSearch],
+  handlers: (model: State) => ({
+    UpdatedCommandSearch: ({ value }: typeof UpdatedCommandSearch.Type): UpdateReturn => [
+      evo(model, { commandSearch: () => value }),
+      [],
+    ],
+  }),
+  samples: [UpdatedCommandSearch({ value: 'cal' })],
+})

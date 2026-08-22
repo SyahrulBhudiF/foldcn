@@ -3,7 +3,7 @@ import { m } from 'foldkit/message'
 import { Url } from 'foldkit'
 import { UrlRequest } from 'foldkit/navigation'
 
-import { Message as DemoMessage } from './demo/message'
+import { Message as DemoMessage } from './demo'
 import { Message as InstallTabsMessage } from '@foldkit/ui/tabs'
 import { PackageManager, ResolvedTheme, ThemePreference } from './model'
 

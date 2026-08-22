@@ -5,13 +5,17 @@
 
 A **shadcn-style component registry for [Foldkit](https://foldkit.dev)**. Copy-paste styled components built on [`@foldkit/ui`](https://foldkit.dev/ui/overview), themed with Tailwind CSS variables — the same distribution model as shadcn/ui, for the Elm-architecture world of Foldkit.
 
-- **30 registry items** — every `@foldkit/ui` component, styled, plus a base style, utilities, icons and composed blocks.
+- **67 registry items** — 60 styled components, 3 composed blocks (`login-form`, `settings-page`, `data-table`), 3 lib utilities (`utils`, `icons`, `code-block`), plus 1 base style.
 - **Self-contained modules** — each item is a single `.ts` file with types, state and styled view. Copy it in, wire it up, done.
 - **Pure Foldkit** — Model/Message/update/View throughout. No React.
 
 ## Install
 
-Requirements: a Foldkit project with Tailwind CSS v4. Start with the base style, which installs the core dependencies (`foldkit`, `effect`, `@foldkit/ui`, `clsx`, `tailwind-merge`, `lucide`, `tw-animate-css`) and writes the theme variables into your CSS:
+Requirements: a Foldkit project with Tailwind CSS v4.
+
+> **Prerequisite:** your Tailwind CSS entry file (e.g. `src/index.css`) must contain `@import "tailwindcss";` **before** installing the base style. Without it, the CLI crashes with a cryptic `proxyOf` error.
+
+Start with the base style, which installs the core dependencies (`foldkit`, `effect`, `@foldkit/ui`, `clsx`, `tailwind-merge`, `lucide`, `tw-animate-css`) and writes the theme variables into your CSS:
 
 ```bash
 npx shadcn@latest registry add @foldcn=https://foldcn.elianiva.com/r/{name}.json
@@ -37,6 +41,8 @@ Or add the namespace manually to your `components.json`:
 
 ## Components
 
+The table below is a highlight selection — browse the full catalog of all 67 items at [foldcn.elianiva.com](https://foldcn.elianiva.com).
+
 ```bash
 npx shadcn@latest add @foldcn/button @foldcn/input @foldcn/dialog
 ```
@@ -48,6 +54,8 @@ npx shadcn@latest add @foldcn/button @foldcn/input @foldcn/dialog
 | **Helpers**   | `button`, `input`, `textarea`, `select`, `checkbox`, `switch`, `fieldset`, `disclosure`, `nav`, `card`                                                                                        |
 | **Submodels** | `dialog`, `popover`, `tooltip`, `menu`, `listbox`, `combobox`, `tabs`, `radio-group`, `slider`, `calendar`, `date-picker`, `toast`, `animation`, `file-drop`, `virtual-list`, `drag-and-drop` |
 | **Blocks**    | `login-form`, `settings-page`, `data-table`                                                                                                                                                   |
+
+…and more — 60 components in total, all listed in the full catalog at <https://foldcn.elianiva.com>.
 
 ## Usage
 

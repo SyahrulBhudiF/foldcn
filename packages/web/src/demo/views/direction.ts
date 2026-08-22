@@ -2,8 +2,8 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { direction } from '@foldcn/registry/styles/default/ui/direction'
 
-import type { Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice } from '../slice'
+import type { Model, Message } from '../assemble'
 
 export const directionView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -21,3 +21,10 @@ export const directionView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+export const slice = defineSlice({
+  fields: {},
+  init: {},
+  messages: [],
+  handlers: () => ({}),
+})

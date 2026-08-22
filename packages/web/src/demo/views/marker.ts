@@ -4,8 +4,8 @@ import { Marker } from '@foldcn/registry/styles/default/ui/marker'
 import { icon } from '@foldcn/registry/styles/default/lib/icons'
 import { Check } from 'lucide'
 
-import type { Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice } from '../slice'
+import type { Model, Message } from '../assemble'
 
 export const markerView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -31,3 +31,10 @@ export const markerView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+export const slice = defineSlice({
+  fields: {},
+  init: {},
+  messages: [],
+  handlers: () => ({}),
+})

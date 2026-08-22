@@ -1,9 +1,20 @@
+import { Subscription, Update } from 'foldkit'
+import { Command } from 'foldkit'
+import { Option } from 'effect'
+import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
+
+import { VirtualList as FoldkitVirtualList } from '@foldkit/ui'
 
 import * as virtualList from '@foldcn/registry/styles/default/ui/virtual-list'
 
-import { ClickedScrollToMiddle, GotVirtualListMessage, type Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const GotVirtualListMessage = m('GotVirtualListMessage', { message: virtualList.Message })
+const ClickedScrollToMiddle = m('ClickedScrollToMiddle')
 
 export const VIRTUAL_LIST_ROW_COUNT = 100_000
 
@@ -45,3 +56,51 @@ export const virtualListView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+const foldVirtualList = Update.foldChild({
+  update: virtualList.update,
+  read: (model: State) => Option.some(model.virtualList),
+  write: (model, next) => evo(model, { virtualList: () => next }),
+  toParentMessage: (message) => GotVirtualListMessage({ message }),
+})
+
+const fields = {
+    virtualList: virtualList.Model,
+  }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const subscriptions = Subscription.lift({
+  virtualListContainerEvents: FoldkitVirtualList.subscriptions.containerEvents,
+})<State, typeof GotVirtualListMessage.Type>({
+  toChildModel: (model) => model.virtualList,
+  toParentMessage: (message) => GotVirtualListMessage({ message }),
+})
+
+export const slice = defineSlice({
+  fields,
+  init: {
+    virtualList: virtualList.init({ id: 'virtual-list-demo', rowHeightPx: 56 }),
+  },
+  messages: [GotVirtualListMessage, ClickedScrollToMiddle],
+  handlers: (model: State) => ({
+    GotVirtualListMessage: (payload: typeof GotVirtualListMessage.Type): UpdateReturn =>
+      foldVirtualList(model, payload.message),
+    ClickedScrollToMiddle: (): UpdateReturn => {
+      const [next, commands] = FoldkitVirtualList.scrollToIndex(
+        model.virtualList,
+        Math.floor(VIRTUAL_LIST_ROW_COUNT / 2),
+      )
+      return [
+        evo(model, { virtualList: () => next }),
+        Command.mapMessages(commands, (message) => GotVirtualListMessage({ message })),
+      ]
+    },
+  }),
+  samples: [],
+  // Virtual-list events arrive through the child's own update; there are no
+  // parent-side samples to feed update().
+  subscriptions,
+})
+

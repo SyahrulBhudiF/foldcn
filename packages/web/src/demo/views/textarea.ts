@@ -1,9 +1,14 @@
+import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { textarea } from '@foldcn/registry/styles/default/ui/textarea'
 
-import { UpdatedTextareaValue, type Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const UpdatedTextareaValue = m('UpdatedTextareaValue', { value: S.String })
 
 export const textareaView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -23,3 +28,21 @@ export const textareaView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+const fields = { textareaValue: S.String }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: { textareaValue: '' },
+  messages: [UpdatedTextareaValue],
+  handlers: (model: State) => ({
+    UpdatedTextareaValue: ({ value }: typeof UpdatedTextareaValue.Type): UpdateReturn => [
+      evo(model, { textareaValue: () => value }),
+      [],
+    ],
+  }),
+  samples: [UpdatedTextareaValue({ value: 'Hello, world!' })],
+})

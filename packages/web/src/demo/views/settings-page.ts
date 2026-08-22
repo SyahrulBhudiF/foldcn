@@ -1,18 +1,20 @@
+import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { settingsPage } from '@foldcn/registry/styles/default/blocks/settings-page/settings-page'
 
-import {
-  ClickedSaveSettings,
-  ToggledSettingsEmailNotifs,
-  ToggledSettingsTfa,
-  UpdatedSettingsBio,
-  UpdatedSettingsEmail,
-  UpdatedSettingsLanguage,
-  UpdatedSettingsName,
-  type Message,
-} from '../message'
-import type { Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const UpdatedSettingsName = m('UpdatedSettingsName', { value: S.String })
+const UpdatedSettingsEmail = m('UpdatedSettingsEmail', { value: S.String })
+const UpdatedSettingsBio = m('UpdatedSettingsBio', { value: S.String })
+const UpdatedSettingsLanguage = m('UpdatedSettingsLanguage', { value: S.String })
+const ToggledSettingsEmailNotifs = m('ToggledSettingsEmailNotifs', { isChecked: S.Boolean })
+const ToggledSettingsTfa = m('ToggledSettingsTfa', { isChecked: S.Boolean })
+const ClickedSaveSettings = m('ClickedSaveSettings')
 
 export const settingsPageView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -50,3 +52,69 @@ export const settingsPageView = (model: Model, h: HtmlBuilder<Message>): Html =>
         : []),
     ],
   )
+
+const fields = {
+    settingsName: S.String,
+    settingsEmail: S.String,
+    settingsBio: S.String,
+    settingsLanguage: S.String,
+    settingsEmailNotifs: S.Boolean,
+    settingsTfa: S.Boolean,
+    settingsSaved: S.Boolean,
+  }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: {
+    settingsName: '',
+    settingsEmail: '',
+    settingsBio: '',
+    settingsLanguage: 'en',
+    settingsEmailNotifs: true,
+    settingsTfa: false,
+    settingsSaved: false,
+  },
+  messages: [
+    UpdatedSettingsName,
+    UpdatedSettingsEmail,
+    UpdatedSettingsBio,
+    UpdatedSettingsLanguage,
+    ToggledSettingsEmailNotifs,
+    ToggledSettingsTfa,
+    ClickedSaveSettings,
+  ],
+  handlers: (model: State) => ({
+    UpdatedSettingsName: ({ value }: typeof UpdatedSettingsName.Type): UpdateReturn => [
+      evo(model, { settingsName: () => value }),
+      [],
+    ],
+    UpdatedSettingsEmail: ({ value }: typeof UpdatedSettingsEmail.Type): UpdateReturn => [
+      evo(model, { settingsEmail: () => value }),
+      [],
+    ],
+    UpdatedSettingsBio: ({ value }: typeof UpdatedSettingsBio.Type): UpdateReturn => [
+      evo(model, { settingsBio: () => value }),
+      [],
+    ],
+    UpdatedSettingsLanguage: ({ value }: typeof UpdatedSettingsLanguage.Type): UpdateReturn => [
+      evo(model, { settingsLanguage: () => value }),
+      [],
+    ],
+    ToggledSettingsEmailNotifs: (
+      { isChecked }: typeof ToggledSettingsEmailNotifs.Type,
+    ): UpdateReturn => [evo(model, { settingsEmailNotifs: () => isChecked }), []],
+    ToggledSettingsTfa: ({ isChecked }: typeof ToggledSettingsTfa.Type): UpdateReturn => [
+      evo(model, { settingsTfa: () => isChecked }),
+      [],
+    ],
+    ClickedSaveSettings: (): UpdateReturn => [evo(model, { settingsSaved: () => true }), []],
+  }),
+  samples: [
+    UpdatedSettingsName({ value: 'Ada' }),
+    ToggledSettingsTfa({ isChecked: true }),
+    ClickedSaveSettings(),
+  ],
+})

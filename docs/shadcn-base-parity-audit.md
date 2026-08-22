@@ -8,6 +8,13 @@
 > only; class-material diffs (radius/surface/ring columns) are resolved as of this
 > branch. Primitive-level gaps (menus without submenu/checkbox kinds, static sidebar,
 > presentational command, click-vs-hover popover family) still stand.
+>
+> **Functional-gap update (2026-08-22):** gaps #1–#4 below are FIXED:
+> #1 button disabled → `aria-disabled:`/`data-disabled:` twins added in `packages/registry/registry/default/style/cn-compat.css` (button block);
+> #2 progress indeterminate → `undefined` now renders an empty track (`packages/registry/registry/default/ui/progress.ts`; animated indeterminate still awaits primitive support);
+> #3 switch hidden input → Foldkit's `attributes.hiddenInput` is now rendered (`packages/registry/registry/default/ui/switch.ts`);
+> #4 input-otp `onComplete` → documented intentional update-channel fallback with an in-code comment (`packages/registry/registry/default/ui/input-otp.ts`).
+> Gaps #5–#12 are unchanged.
 
 Reference: `/Users/elianiva/Development/repos/shadcn-ui/ui/apps/v4/registry/bases/base/ui` (Base UI–backed registry), with `cn-*` tokens resolved via `registry/styles/style-nova.css`. Lineage checked against `registry/new-york-v4/ui` (legacy inline-class registry).
 
@@ -126,8 +133,11 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 
 > 2026-08 update: the foundation for this is in place — see `docs/deriving-from-base.md`
 > and ADR-014. Components now derive from `bases/base/ui` via the generated `cn-*`
-> token layer (`button` is migrated as the reference). Remaining work: migrate the
-> other components following the recipe, and fix the functional gaps below.
+> token layer (`button` is migrated as the reference). Functional gaps #1–#4
+> (button disabled, progress indeterminate, switch hidden input, input-otp
+> onComplete) were fixed as of 2026-08-22 — see the Status blockquote above for
+> evidence. Remaining work: migrate the other components following the recipe,
+> and address the remaining functional gaps below.
 
 1. Fix the functional bugs first (button/switch/progress/input-otp disabled-form-indeterminate paths) — they're independent of styling.
 2. Decide the target: re-derive visuals from `bases/base/ui/*.tsx` + resolve `cn-*` tokens (either inline the resolved utilities, as today, or ship a foldcn `cn-*` layer — currently none exists, so any literal `cn-*` class foldcn emits is dead).

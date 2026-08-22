@@ -1,9 +1,14 @@
+import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { disclosure } from '@foldcn/registry/styles/default/ui/collapsible'
 
-import { ToggledCollapsible, type Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const ToggledCollapsible = m('ToggledCollapsible', { isOpen: S.Boolean })
 
 export const collapsibleView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -22,3 +27,21 @@ export const collapsibleView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+const fields = { isCollapsibleOpen: S.Boolean }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: { isCollapsibleOpen: false },
+  messages: [ToggledCollapsible],
+  handlers: (model: State) => ({
+    ToggledCollapsible: (payload: typeof ToggledCollapsible.Type): UpdateReturn => [
+      evo(model, { isCollapsibleOpen: () => payload.isOpen }),
+      [],
+    ],
+  }),
+  samples: [ToggledCollapsible({ isOpen: true })],
+})

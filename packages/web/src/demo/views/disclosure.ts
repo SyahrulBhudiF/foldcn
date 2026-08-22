@@ -1,9 +1,15 @@
+import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { disclosure } from '@foldcn/registry/styles/default/ui/disclosure'
 
-import { ToggledDisclosureAnimated, ToggledDisclosureBasic, type Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const ToggledDisclosureBasic = m('ToggledDisclosureBasic', { isOpen: S.Boolean })
+const ToggledDisclosureAnimated = m('ToggledDisclosureAnimated', { isOpen: S.Boolean })
 
 export const disclosureView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -34,3 +40,24 @@ export const disclosureView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+const fields = { isDisclosureBasicOpen: S.Boolean, isDisclosureAnimatedOpen: S.Boolean }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: { isDisclosureBasicOpen: false, isDisclosureAnimatedOpen: false },
+  messages: [ToggledDisclosureBasic, ToggledDisclosureAnimated],
+  handlers: (model: State) => ({
+    ToggledDisclosureBasic: ({ isOpen }: typeof ToggledDisclosureBasic.Type): UpdateReturn => [
+      evo(model, { isDisclosureBasicOpen: () => isOpen }),
+      [],
+    ],
+    ToggledDisclosureAnimated: (
+      { isOpen }: typeof ToggledDisclosureAnimated.Type,
+    ): UpdateReturn => [evo(model, { isDisclosureAnimatedOpen: () => isOpen }), []],
+  }),
+  samples: [ToggledDisclosureBasic({ isOpen: true }), ToggledDisclosureAnimated({ isOpen: true })],
+})

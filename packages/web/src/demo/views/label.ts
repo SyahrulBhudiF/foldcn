@@ -1,9 +1,10 @@
+import { Schema as S } from 'effect'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { label } from '@foldcn/registry/styles/default/ui/label'
 
-import type { Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice } from '../slice'
+import type { Model, Message } from '../assemble'
 
 export const labelView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -18,3 +19,17 @@ export const labelView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ]),
     ],
   )
+
+const fields = {} as const
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: {},
+  messages: [],
+  handlers: (model: State) => {
+    void model
+    return {}
+  },
+})

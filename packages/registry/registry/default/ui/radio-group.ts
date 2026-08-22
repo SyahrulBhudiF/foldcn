@@ -55,8 +55,12 @@ export const radioIndicatorClass = 'cn-radio-group-indicator'
 
 export const radioDotClass = 'cn-radio-group-indicator-icon'
 
+/** Label for the upstream-anatomy option row. The circle control (radioItemClass)
+ *  carries `peer` and precedes the label, and foldkit emits aria-disabled/
+ *  data-disabled on it when disabled — so the peer twins below are live
+ *  (upstream's native peer-disabled variant can never match). */
 export const radioItemLabelClass =
-  'cn-label flex items-center select-none group-data-[disabled=true]:pointer-events-none peer-disabled:cursor-not-allowed'
+  'cn-label flex items-center select-none peer-aria-disabled:pointer-events-none peer-aria-disabled:cursor-not-allowed peer-data-[disabled]:pointer-events-none peer-data-[disabled]:cursor-not-allowed'
 
 export const radioItemDescriptionClass = 'text-sm text-muted-foreground'
 
@@ -64,8 +68,12 @@ export const radioItemDescriptionClass = 'text-sm text-muted-foreground'
 export const radioOptionClass =
   'group/radio-group-item peer relative flex cursor-pointer select-none items-center justify-between rounded-md border border-border bg-card p-4 text-card-foreground shadow-sm transition-colors after:absolute after:-inset-x-3 after:-inset-y-2 hover:bg-accent hover:text-accent-foreground data-[checked]:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50'
 
+/** Legacy path label: nested inside the option row (which itself is the
+ *  `group/radio-group-item` carrying foldkit's data-disabled), so disabled
+ *  state flows via the group variant — a `peer-*` form can never match a
+ *  descendant of the peer element. */
 export const radioOptionLabelClass =
-  'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
+  'text-sm font-medium leading-none group-data-[disabled]/radio-group-item:cursor-not-allowed group-data-[disabled]/radio-group-item:opacity-70'
 
 export const radioOptionDescriptionClass = 'text-sm text-muted-foreground'
 

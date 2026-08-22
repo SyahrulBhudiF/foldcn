@@ -2,8 +2,8 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { spinner } from '@foldcn/registry/styles/default/ui/spinner'
 
-import type { Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice } from '../slice'
+import type { Model, Message } from '../assemble'
 
 export const spinnerView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -17,3 +17,10 @@ export const spinnerView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+export const slice = defineSlice({
+  fields: {},
+  init: {},
+  messages: [],
+  handlers: () => ({}),
+})

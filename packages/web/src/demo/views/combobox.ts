@@ -1,11 +1,19 @@
-import { Option } from 'effect'
+import { Update } from 'foldkit'
+import { Match as M, Option } from 'effect'
+import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import * as combobox from '@foldcn/registry/styles/default/ui/combobox'
-import { CityCombobox } from '../bundles'
+import { Combobox as FoldkitCombobox } from '@foldkit/ui'
 
-import { GotComboboxMessage, type Message } from '../message'
-import type { City, Model } from '../model'
+import * as combobox from '@foldcn/registry/styles/default/ui/combobox'
+
+import { CityCombobox, City } from '../bundles'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const GotComboboxMessage = m('GotComboboxMessage', { message: combobox.Message })
 
 const CITIES: ReadonlyArray<City> = [
   'Johannesburg',
@@ -44,3 +52,43 @@ export const comboboxView = (model: Model, h: HtmlBuilder<Message>): Html =>
       }),
     ],
   )
+
+const foldComboboxOutMessage = M.type<FoldkitCombobox.OutMessage<City>>().pipe(
+  M.withReturnType<Update.Step<State, unknown>>(),
+  M.tagsExhaustive({
+    Selected:
+      ({ value }) =>
+      (model) => [evo(model, { maybeComboboxValue: () => Option.some(value) }), []],
+    ClearedSelection: () => (model) => [model, []],
+  }),
+)
+
+const foldCombobox = Update.foldChild({
+  update: CityCombobox.update,
+  read: (model: State) => Option.some(model.combobox),
+  write: (model, next) => evo(model, { combobox: () => next }),
+  toParentMessage: (message) => GotComboboxMessage({ message }),
+  foldOutMessage: foldComboboxOutMessage,
+})
+
+const fields = { combobox: combobox.Model, maybeComboboxValue: S.Option(City) }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: {
+    combobox: combobox.init({ id: 'combobox-demo' }),
+    maybeComboboxValue: Option.none(),
+  },
+  messages: [GotComboboxMessage],
+  handlers: (model: State) => ({
+    GotComboboxMessage: (payload: typeof GotComboboxMessage.Type): UpdateReturn =>
+      foldCombobox(model, payload.message),
+  }),
+  samples: [],
+  // Selection flows through the submodel's out-messages; the public
+  // @foldkit/ui namespace exports no child-message constructors, so there
+  // are no top-level samples to feed update().
+})

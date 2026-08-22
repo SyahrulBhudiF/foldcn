@@ -1,9 +1,14 @@
+import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { resizable } from '@foldcn/registry/styles/default/ui/resizable'
 
-import { ResizedSplit, type Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const ResizedSplit = m('ResizedSplit', { percent: S.Number })
 
 export const resizableView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -32,3 +37,21 @@ export const resizableView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+const fields = { resizablePercent: S.Number }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: { resizablePercent: 50 },
+  messages: [ResizedSplit],
+  handlers: (model: State) => ({
+    ResizedSplit: ({ percent }: typeof ResizedSplit.Type): UpdateReturn => [
+      evo(model, { resizablePercent: () => percent }),
+      [],
+    ],
+  }),
+  samples: [ResizedSplit({ percent: 70 })],
+})

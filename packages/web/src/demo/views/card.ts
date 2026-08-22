@@ -1,10 +1,11 @@
+import { Schema as S } from 'effect'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { button } from '@foldcn/registry/styles/default/ui/button'
 import { Card } from '@foldcn/registry/styles/default/ui/card'
 
-import type { Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice } from '../slice'
+import type { Model, Message } from '../assemble'
 
 export const cardView = (model: Model, h: HtmlBuilder<Message>): Html =>
   Card<Message>(
@@ -28,3 +29,17 @@ export const cardView = (model: Model, h: HtmlBuilder<Message>): Html =>
     ],
     h,
   )
+
+const fields = {} as const
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: {},
+  messages: [],
+  handlers: (model: State) => {
+    void model
+    return {}
+  },
+})

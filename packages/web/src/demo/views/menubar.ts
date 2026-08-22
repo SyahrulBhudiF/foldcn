@@ -3,8 +3,10 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 import * as Menubar from '@foldcn/registry/styles/default/ui/menubar'
 import { DemoMenu } from '../bundles'
 
-import { GotMenuMessage, type Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice } from '../slice'
+import type { Model, Message } from '../assemble'
+
+import { GotMenuMessage } from './menu'
 
 export const menubarView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -35,3 +37,13 @@ export const menubarView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+// The menubar demo has no state of its own — it renders the shared DemoMenu
+// bundle bound to the menu slice's `menu` field, whose slice owns all of the
+// menu wiring.
+export const slice = defineSlice({
+  fields: {},
+  init: {},
+  messages: [],
+  handlers: () => ({}),
+})

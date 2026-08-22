@@ -3,8 +3,8 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 import { buttonGroup, buttonGroupItem } from '@foldcn/registry/styles/default/ui/button-group'
 import { button } from '@foldcn/registry/styles/default/ui/button'
 
-import type { Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice } from '../slice'
+import type { Model, Message } from '../assemble'
 
 export const buttonGroupView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -39,3 +39,10 @@ export const buttonGroupView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+export const slice = defineSlice({
+  fields: {},
+  init: {},
+  messages: [],
+  handlers: () => ({}),
+})

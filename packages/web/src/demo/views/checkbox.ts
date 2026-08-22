@@ -1,9 +1,14 @@
+import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { checkbox } from '@foldcn/registry/styles/default/ui/checkbox'
 
-import { ToggledCheckbox, type Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const ToggledCheckbox = m('ToggledCheckbox', { isChecked: S.Boolean })
 
 export const checkboxView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -31,3 +36,21 @@ export const checkboxView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+const fields = { isCheckboxChecked: S.Boolean }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: { isCheckboxChecked: true },
+  messages: [ToggledCheckbox],
+  handlers: (model: State) => ({
+    ToggledCheckbox: ({ isChecked }: typeof ToggledCheckbox.Type): UpdateReturn => [
+      evo(model, { isCheckboxChecked: () => isChecked }),
+      [],
+    ],
+  }),
+  samples: [ToggledCheckbox({ isChecked: false })],
+})

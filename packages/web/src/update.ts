@@ -166,7 +166,10 @@ export const LoadBrowserEnvironment = Command.define('LoadBrowserEnvironment', {
 })
 
 const foldDemo = (model: Model, message: Demo.DemoMessage): UpdateReturn => {
-  const [nextDemo, demoCommands] = Demo.update(model.demo, message)
+  const [nextDemo, demoCommands] = Demo.update(model.demo, message) as unknown as [
+    Demo.DemoModel,
+    ReadonlyArray<Command.Command<Demo.DemoMessage>>,
+  ]
   return [
     evo(model, { demo: () => nextDemo }),
     Command.mapMessages(demoCommands, (m) => GotDemoMessage({ message: m })),

@@ -6,8 +6,13 @@ import { cn } from '@/lib/utils'
 
 /** Derived from the shadcn v4 BASE registry:
  *  apps/v4/registry/bases/base/ui/label.tsx. */
+/** Upstream keys label disabling on a native peer-disabled sibling variant
+ *  and `group-data-[disabled=true]`, neither of which matches under foldkit
+ *  (no `.peer` sibling; `data-disabled` is emitted empty). Re-keyed onto a
+ *  live `group` ancestor carrying data-disabled — e.g. the fieldset compound
+ *  or switch wrapper. */
 export const labelClass =
-  'cn-label flex items-center select-none group-data-[disabled=true]:pointer-events-none peer-disabled:cursor-not-allowed'
+  'cn-label flex items-center select-none group-data-[disabled]/field-set:pointer-events-none group-data-[disabled]/field-set:cursor-not-allowed group-data-[disabled]/field-set:opacity-50'
 
 type LabelConfig = Readonly<{ forId?: string; className?: string }>
 

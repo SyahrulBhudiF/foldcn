@@ -1,13 +1,19 @@
+import { Array } from 'effect'
+import { Update } from 'foldkit'
+import { Match as M, Option } from 'effect'
+import { Schema as S } from 'effect'
+import { File } from 'foldkit'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import * as fileDrop from '@foldcn/registry/styles/default/ui/file-drop'
 
-import {
-  ClickedRemoveFile,
-  GotFileDropMessage,
-  type Message,
-} from '../message'
-import type { Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const GotFileDropMessage = m('GotFileDropMessage', { message: fileDrop.Message })
+const ClickedRemoveFile = m('ClickedRemoveFile', { fileIndex: S.Number })
 
 export const fileDropView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -54,3 +60,53 @@ export const fileDropView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+const foldNoOp =
+  (): ((out: fileDrop.OutMessage) => Update.Step<State, unknown>) =>
+  () =>
+  (model) => [model, []]
+
+const foldFileDropOutMessage = M.type<fileDrop.OutMessage>().pipe(
+  M.withReturnType<Update.Step<State, unknown>>(),
+  M.tagsExhaustive({
+    ReceivedFiles:
+      ({ files }) =>
+      (model) => [evo(model, { fileDropFiles: () => [...model.fileDropFiles, ...files] }), []],
+    RejectedNonFiles: foldNoOp(),
+  }),
+)
+
+const foldFileDrop = Update.foldChild({
+  update: fileDrop.update,
+  read: (model: State) => Option.some(model.fileDrop),
+  write: (model, next) => evo(model, { fileDrop: () => next }),
+  toParentMessage: (message) => GotFileDropMessage({ message }),
+  foldOutMessage: foldFileDropOutMessage,
+})
+
+const fields = {
+    fileDrop: fileDrop.Model,
+    fileDropFiles: S.Array(File.File),
+  }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: {
+    fileDrop: fileDrop.init({ id: 'file-drop-demo' }),
+    fileDropFiles: [],
+  },
+  messages: [GotFileDropMessage, ClickedRemoveFile],
+  handlers: (model: State) => ({
+    GotFileDropMessage: (payload: typeof GotFileDropMessage.Type): UpdateReturn =>
+      foldFileDrop(model, payload.message),
+    ClickedRemoveFile: ({ fileIndex }: typeof ClickedRemoveFile.Type): UpdateReturn => [
+      evo(model, {
+        fileDropFiles: () => Array.remove(model.fileDropFiles, fileIndex),
+      }),
+      [],
+    ],
+  }),
+})

@@ -1,9 +1,14 @@
+import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { accordionItem } from '@foldcn/registry/styles/default/ui/accordion'
 
-import { ToggledAccordion, type Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const ToggledAccordion = m('ToggledAccordion', { index: S.Number, isOpen: S.Boolean })
 
 const ITEMS = [
   {
@@ -41,3 +46,23 @@ export const accordionView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ),
   )
+
+const fields = { accordionOpen: S.Array(S.Boolean) }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: { accordionOpen: [false, false, false] },
+  messages: [ToggledAccordion],
+  handlers: (model: State) => ({
+    ToggledAccordion: (payload: typeof ToggledAccordion.Type): UpdateReturn => [
+      evo(model, {
+        accordionOpen: (arr) => arr.map((value, i) => (i === payload.index ? payload.isOpen : value)),
+      }),
+      [],
+    ],
+  }),
+  samples: [ToggledAccordion({ index: 0, isOpen: true })],
+})

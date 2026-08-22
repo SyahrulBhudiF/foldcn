@@ -19,7 +19,10 @@ export type InitReturn = readonly [Model, ReadonlyArray<Command.Command<Message>
  * boot Command, which the runtime runs once hydration has completed.
  */
 export const init = (url: Url.Url): InitReturn => {
-  const [demo, demoCommands] = Demo.init()
+  const [demo, demoCommands] = Demo.init() as unknown as [
+    Demo.DemoModel,
+    ReadonlyArray<Command.Command<Demo.DemoMessage>>,
+  ]
   const installTabs = Tabs.init({ id: 'install-tabs' })
 
   return [

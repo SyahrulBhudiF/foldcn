@@ -1,9 +1,19 @@
+import { Command, Update } from 'foldkit'
+import { Match as M, Option } from 'effect'
+import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
+
+import { Animation as FoldkitAnimation } from '@foldkit/ui'
 
 import * as animation from '@foldcn/registry/styles/default/ui/animation'
 
-import { GotAnimationMessage, ToggledAnimation, type Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const GotAnimationMessage = m('GotAnimationMessage', { message: animation.Message })
+const ToggledAnimation = m('ToggledAnimation')
 
 export const animationView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -39,3 +49,55 @@ export const animationView = (model: Model, h: HtmlBuilder<Message>): Html =>
       }),
     ],
   )
+
+const foldAnimationOutMessage: (
+  outMessage: animation.OutMessage,
+  context: Update.FoldContext<animation.Message, unknown>,
+) => Update.Step<State, unknown> = (outMessage, { liftCommand }) =>
+  M.value(outMessage).pipe(
+    M.withReturnType<Update.Step<State, unknown>>(),
+    M.tagsExhaustive({
+      StartedLeaveAnimating: () => (model) => [
+        model,
+        [liftCommand(FoldkitAnimation.defaultLeaveCommand(model.animation))],
+      ],
+      TransitionedOut: () => (model) => [model, []],
+    }),
+  )
+
+const foldAnimation = Update.foldChild({
+  update: animation.update,
+  read: (model: State) => Option.some(model.animation),
+  write: (model, next) => evo(model, { animation: () => next }),
+  toParentMessage: (message) => GotAnimationMessage({ message }),
+  foldOutMessage: foldAnimationOutMessage,
+})
+
+const fields = {
+    animation: animation.Model,
+    isAnimationShowing: S.Boolean,
+  }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: {
+    animation: animation.init({ id: 'animation-demo' }),
+    isAnimationShowing: false,
+  },
+  messages: [GotAnimationMessage, ToggledAnimation],
+  handlers: (model: State) => ({
+    GotAnimationMessage: (payload: typeof GotAnimationMessage.Type): UpdateReturn =>
+      foldAnimation(model, payload.message),
+    ToggledAnimation: (): UpdateReturn => {
+      const nextShowing = !model.isAnimationShowing
+      return foldAnimation(
+        evo(model, { isAnimationShowing: () => nextShowing }),
+        nextShowing ? FoldkitAnimation.Showed() : FoldkitAnimation.Hid(),
+      )
+    },
+  }),
+  samples: [ToggledAnimation()],
+})

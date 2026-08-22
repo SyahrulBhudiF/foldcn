@@ -4,8 +4,8 @@ import { Item } from '@foldcn/registry/styles/default/ui/item'
 import { icon } from '@foldcn/registry/styles/default/lib/icons'
 import { User } from 'lucide'
 
-import type { Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice } from '../slice'
+import type { Model, Message } from '../assemble'
 
 export const itemView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -55,3 +55,10 @@ export const itemView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+export const slice = defineSlice({
+  fields: {},
+  init: {},
+  messages: [],
+  handlers: () => ({}),
+})

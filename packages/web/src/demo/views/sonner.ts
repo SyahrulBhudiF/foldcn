@@ -5,17 +5,11 @@ import { icon } from '@foldcn/registry/styles/default/lib/icons'
 import { X } from 'lucide'
 import * as Sonner from '@foldcn/registry/styles/default/ui/sonner'
 
-import {
-  ClickedDismissAllToasts,
-  ClickedShowErrorToast,
-  ClickedShowInfoToast,
-  ClickedShowSuccessToast,
-  ClickedShowWarningToast,
-  GotToastMessage,
-  type Message,
-} from '../message'
-import type { Model } from '../model'
+import type { Model, Message } from '../assemble'
 import { Toast } from '../toast'
+// The sonner demo renders the shared toast stack owned by the toast slice;
+// its message wrappers and click handlers live there.
+import { ClickedDismissAllToasts, ClickedShowErrorToast, ClickedShowInfoToast, ClickedShowSuccessToast, ClickedShowWarningToast, GotToastMessage } from './toast'
 
 export const sonnerView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(

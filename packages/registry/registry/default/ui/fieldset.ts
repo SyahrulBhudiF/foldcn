@@ -19,7 +19,7 @@ import { cn } from '@/lib/utils'
 // --- FieldSet ---
 
 export const fieldsetClass =
-  'cn-field-set flex flex-col has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3'
+  'cn-field-set group/field-set flex flex-col has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3'
 
 // --- FieldLegend ---
 
@@ -52,8 +52,12 @@ export const fieldContentClass =
 
 // --- Label (base, from label.tsx) + FieldLabel ---
 
+/** Upstream keys label disabling on a native peer-disabled sibling variant
+ *  (no foldkit `.peer` sibling exists) and `group-data-[disabled=true]`
+ *  (foldkit emits `data-disabled=""`, never "true"). Re-keyed onto the
+ *  fieldset wrapper's live group + data-disabled signal. */
 export const labelClass =
-  'cn-label flex items-center select-none group-data-[disabled=true]:pointer-events-none peer-disabled:cursor-not-allowed'
+  'cn-label flex items-center select-none group-data-[disabled]/field-set:pointer-events-none group-data-[disabled]/field-set:cursor-not-allowed group-data-[disabled]/field-set:opacity-50'
 
 export const fieldLabelClass =
   'cn-field-label group/field-label peer/field-label flex w-fit has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col'

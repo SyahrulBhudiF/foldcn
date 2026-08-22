@@ -1,9 +1,14 @@
+import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { inputOtp } from '@foldcn/registry/styles/default/ui/input-otp'
 
-import { UpdatedOtp, type Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const UpdatedOtp = m('UpdatedOtp', { value: S.String })
 
 export const inputOtpView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -19,3 +24,21 @@ export const inputOtpView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+const fields = { otp: S.String }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: { otp: '' },
+  messages: [UpdatedOtp],
+  handlers: (model: State) => ({
+    UpdatedOtp: ({ value }: typeof UpdatedOtp.Type): UpdateReturn => [
+      evo(model, { otp: () => value }),
+      [],
+    ],
+  }),
+  samples: [UpdatedOtp({ value: '1234' })],
+})

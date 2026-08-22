@@ -3,8 +3,8 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 import { icon } from '@foldcn/registry/styles/default/lib/icons'
 import { Check, ChevronDown, ChevronLeft, ChevronRight, Minus, X } from 'lucide'
 
-import type { Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice } from '../slice'
+import type { Model, Message } from '../assemble'
 
 const ICON_ROWS: ReadonlyArray<ReadonlyArray<[string, (h: HtmlBuilder<Message>) => Html]>> = [
   [
@@ -44,3 +44,10 @@ export const iconsView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+export const slice = defineSlice({
+  fields: {},
+  init: {},
+  messages: [],
+  handlers: () => ({}),
+})

@@ -12,12 +12,16 @@ export const inputClass =
   'cn-input w-full min-w-0 outline-none file:inline-flex file:border-0 file:bg-transparent file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
 
 /** Same string as the `label` item's component classes (upstream label.tsx). */
+/** Upstream string re-keyed for foldkit: the label precedes the control, so
+ *  upstream's native peer-disabled sibling variant can never match; disabled
+ *  state flows from the wrapper (group/field + data-disabled, mirroring
+ *  switch.ts). */
 export const inputLabelClass =
-  'cn-label flex items-center select-none group-data-[disabled=true]:pointer-events-none peer-disabled:cursor-not-allowed'
+  'cn-label flex items-center select-none group-data-[disabled]/field:pointer-events-none group-data-[disabled]/field:cursor-not-allowed group-data-[disabled]/field:opacity-50'
 
 export const inputDescriptionClass = 'text-sm text-muted-foreground'
 
-export const inputWrapperClass = 'flex flex-col gap-1.5 w-full'
+export const inputWrapperClass = 'group/field flex flex-col gap-1.5 w-full'
 
 export type InputConfig<M> = Readonly<{
   id: string
@@ -55,7 +59,10 @@ export const input = <M>(config: InputConfig<M>, h: HtmlBuilder<M>): Html =>
       placeholder: config.placeholder,
       toView: (attributes) =>
         h.div(
-          [h.Class(cn(inputWrapperClass, config.wrapperClass))],
+          [
+            h.Class(cn(inputWrapperClass, config.wrapperClass)),
+            ...(config.isDisabled ? [h.DataAttribute('disabled', '')] : []),
+          ],
           [
             h.label(
               [

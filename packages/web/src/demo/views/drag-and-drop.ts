@@ -1,12 +1,61 @@
 import { clsx } from 'clsx'
-import { Array, Option, pipe } from 'effect'
+import { Array, Match as M, Option, pipe } from 'effect'
+import { Subscription, Update } from 'foldkit'
+import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { cn } from '@foldcn/registry/styles/default/lib/utils'
 import * as DragAndDrop from '@foldcn/registry/styles/default/ui/drag-and-drop'
 
-import { GotDragAndDropMessage, type Message } from '../message'
-import type { DemoCard, DemoColumn, Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const GotDragAndDropMessage = m('GotDragAndDropMessage', { message: DragAndDrop.Message })
+
+export const DemoCard = S.Struct({ id: S.String, label: S.String })
+export type DemoCard = typeof DemoCard.Type
+
+export const DemoColumn = S.Struct({
+  id: S.String,
+  label: S.String,
+  cards: S.Array(DemoCard),
+})
+export type DemoColumn = typeof DemoColumn.Type
+
+const reorderColumns = (
+  columns: ReadonlyArray<DemoColumn>,
+  itemId: string,
+  fromContainerId: string,
+  toContainerId: string,
+  toIndex: number,
+): ReadonlyArray<DemoColumn> => {
+  const maybeCard = pipe(
+    columns,
+    Array.findFirst(({ id }) => id === fromContainerId),
+    Option.flatMap((column) => Array.findFirst(column.cards, ({ id }) => id === itemId)),
+  )
+  return Option.match(maybeCard, {
+    onNone: () => columns,
+    onSome: (card) =>
+      Array.map(columns, (column) => {
+        const withRemoved =
+          column.id === fromContainerId
+            ? Array.filter(column.cards, ({ id }) => id !== itemId)
+            : column.cards
+        if (column.id !== toContainerId) {
+          return evo(column, { cards: () => withRemoved })
+        }
+        const inserted = [
+          ...Array.take(withRemoved, toIndex),
+          card,
+          ...Array.drop(withRemoved, toIndex),
+        ]
+        return evo(column, { cards: () => inserted })
+      }),
+  })
+}
 
 const findDraggedCard = (
   columns: ReadonlyArray<DemoColumn>,
@@ -176,3 +225,83 @@ export const dragAndDropView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+const foldDragAndDropOutMessage = M.type<DragAndDrop.OutMessage>().pipe(
+  M.withReturnType<Update.Step<State, unknown>>(),
+  M.tagsExhaustive({
+    Reordered:
+      ({ itemId, fromContainerId, toContainerId, toIndex }) =>
+      (model) => [
+        evo(model, {
+          dragColumns: () =>
+            reorderColumns(model.dragColumns, itemId, fromContainerId, toContainerId, toIndex),
+        }),
+        [],
+      ],
+    Cancelled: () => (model) => [model, []],
+  }),
+)
+
+const foldDragAndDrop = Update.foldChild({
+  update: DragAndDrop.update,
+  read: (model: State) => Option.some(model.dragAndDrop),
+  write: (model, next) => evo(model, { dragAndDrop: () => next }),
+  toParentMessage: (message) => GotDragAndDropMessage({ message }),
+  foldOutMessage: foldDragAndDropOutMessage,
+})
+
+const DRAG_COLUMNS: ReadonlyArray<DemoColumn> = [
+  {
+    id: 'backlog',
+    label: 'Backlog',
+    cards: [
+      { id: 'card-1', label: 'Design API' },
+      { id: 'card-2', label: 'Write tests' },
+      { id: 'card-3', label: 'Build docs' },
+    ],
+  },
+  {
+    id: 'done',
+    label: 'Done',
+    cards: [
+      { id: 'card-4', label: 'Set up repo' },
+      { id: 'card-5', label: 'Add CI' },
+    ],
+  },
+]
+
+const fields = {
+    dragAndDrop: DragAndDrop.Model,
+    dragColumns: S.Array(DemoColumn),
+  }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const subscriptions = Subscription.lift({
+  dragPointer: DragAndDrop.subscriptions.documentPointer,
+  dragEscape: DragAndDrop.subscriptions.documentEscape,
+  dragKeyboard: DragAndDrop.subscriptions.documentKeyboard,
+  autoScroll: DragAndDrop.subscriptions.autoScroll,
+})<State, typeof GotDragAndDropMessage.Type>({
+  toChildModel: (model) => model.dragAndDrop,
+  toParentMessage: (message) => GotDragAndDropMessage({ message }),
+})
+
+export const slice = defineSlice({
+  fields,
+  init: {
+    dragAndDrop: DragAndDrop.init({ id: 'drag-and-drop-demo' }),
+    dragColumns: DRAG_COLUMNS,
+  },
+  messages: [GotDragAndDropMessage],
+  handlers: (model: State) => ({
+    GotDragAndDropMessage: (payload: typeof GotDragAndDropMessage.Type): UpdateReturn =>
+      foldDragAndDrop(model, payload.message),
+  }),
+  samples: [],
+  // Card drops are resolved through the child's out-messages; there are no
+  // parent-side samples to feed update().
+  subscriptions,
+})
+

@@ -2,6 +2,7 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import * as Demo from '../demo'
 import { type DemoItemName, hasDemo } from '../demo/view'
+import { gapsByItem } from '../catalog/gaps'
 import { itemByName } from '../catalog'
 import type { Item } from '../catalog/types'
 import { GotDemoMessage, type Message } from '../message'
@@ -13,6 +14,21 @@ import { notFoundView } from './home'
 
 const categoryLabel = (category: Item['category']): string =>
   ({ Base: 'Base', Lib: 'Lib', Components: 'Components', Blocks: 'Blocks' })[category]
+
+/** Known behavioral differences vs the shadcn/ui counterpart — see catalog/gaps.ts. */
+const gapsCallout = (name: string, h: HtmlBuilder<Message>): Html => {
+  const gaps = gapsByItem[name]
+  if (gaps === undefined) return h.div([], [])
+  return h.div(
+    [h.Class('mt-4 rounded-lg border border-border bg-muted/40 p-4')],
+    [
+      h.p([h.Class('text-xs font-semibold uppercase tracking-wide text-muted-foreground')], [
+        'Differences vs shadcn/ui',
+      ]),
+      h.ul([h.Class('mt-2 list-disc space-y-1 pl-4 text-sm text-muted-foreground')], gaps),
+    ],
+  )
+}
 
 const dependencyChips = (
   h: HtmlBuilder<Message>,
@@ -73,6 +89,7 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                 ],
               ),
               h.p([h.Class('mt-4 text-pretty text-muted-foreground font-mono')], [item.description]),
+              gapsCallout(item.name, h),
 
               // dependencies
               ...(item.maybeDependencies && item.maybeDependencies.length > 0
@@ -93,7 +110,7 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
               // preview + demo code (stacked vertically, per design: [preview/demo code] then [source])
               ...(demoName !== undefined
                 ? (() => {
-                    const demoExample = demoExampleByName[demoName]
+                    const demoExample = demoExampleByName[demoName]!
                     return [
                       h.div(
                         [h.Class('mt-10 overflow-hidden rounded-xl border border-border bg-background font-sans')],

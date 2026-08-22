@@ -88,18 +88,35 @@ const ENTER_UTILITIES =
 const EXIT_UTILITIES =
   /^(animate-out|fade-out-[\w.]+|zoom-out-[\w.]+|spin-out-[\w.]+|slide-out-to-[\w.-]+|animate-accordion-up)$/
 
-/** Applied to style-map values so vendored style CSS stays byte-identical upstream. */
+/** Applied to style-map values so vendored style CSS stays byte-identical upstream.
+ *
+ * Three mechanical rewrites:
+ *  1. Animation re-keying: Base UI `data-open:` enter utilities → foldkit's
+ *     `data-enter:` window; `data-closed:` exit utilities → `data-leave:`.
+ *  2. Native `peer-disabled:*` utilities are dropped outright: they key on a
+ *     preceding `.peer` sibling carrying a native `:disabled` state. foldcn
+ *     components wrap control and label in one module, and foldkit emits
+ *     aria-/data-disabled instead of native disabled — so no such selector can
+ *     ever match. Components that genuinely pair a `.peer` control with a
+ *     label author their own `peer-aria-disabled:` twins inline.
+ *  3. `[disabled=true]` attribute selectors are re-keyed to `[disabled]`:
+ *     foldkit emits `data-disabled` as an EMPTY attribute, so the explicit
+ *     `=true` form never matches (e.g. vendored cn-label/cn-field tokens).
+ */
 const foldkitCompat = (classes) =>
   classes
     .split(/\s+/)
     .map((utility) => {
+      if (/^peer-disabled:/.test(utility)) return ''
       const m = utility.match(/^(data-open|data-closed):([\w./-]+)$/)
+      if (!m) return utility.replace(/data-\[disabled=true\]/g, 'data-[disabled]')
       if (!m) return utility
       const [, state, value] = m
       if (state === 'data-open' && ENTER_UTILITIES.test(value)) return `data-enter:${value}`
       if (state === 'data-closed' && EXIT_UTILITIES.test(value)) return `data-leave:${value}`
       return utility
     })
+    .filter(Boolean)
     .join(' ')
 
 export function resolveStyles() {

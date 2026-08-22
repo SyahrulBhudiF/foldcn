@@ -1,10 +1,18 @@
+import { Command, Update } from 'foldkit'
+import { Match as M, Option } from 'effect'
+import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { button } from '@foldcn/registry/styles/default/ui/button'
 import * as Dialog from '@foldcn/registry/styles/default/ui/dialog'
 
-import { ClickedOpenDialog, GotDialogMessage, type Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const GotDialogMessage = m('GotDialogMessage', { message: Dialog.Message })
+const ClickedOpenDialog = m('ClickedOpenDialog')
 
 export const dialogView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -51,3 +59,47 @@ export const dialogView = (model: Model, h: HtmlBuilder<Message>): Html =>
       }),
     ],
   )
+
+const foldNoOp =
+  (): ((out: Dialog.OutMessage) => Update.Step<State, unknown>) =>
+  () =>
+  (model) => [model, []]
+
+const foldDialogOutMessage = M.type<Dialog.OutMessage>().pipe(
+  M.withReturnType<Update.Step<State, unknown>>(),
+  M.tagsExhaustive({
+    Opened: foldNoOp(),
+    Closed: foldNoOp(),
+  }),
+)
+
+const foldDialog = Update.foldChild({
+  update: Dialog.update,
+  read: (model: State) => Option.some(model.dialog),
+  write: (model, next) => evo(model, { dialog: () => next }),
+  toParentMessage: (message) => GotDialogMessage({ message }),
+  foldOutMessage: foldDialogOutMessage,
+})
+
+const fields = { dialog: Dialog.Model }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: { dialog: Dialog.init({ id: 'dialog-demo' }) },
+  messages: [GotDialogMessage, ClickedOpenDialog],
+  handlers: (model: State) => ({
+    GotDialogMessage: (payload: typeof GotDialogMessage.Type): UpdateReturn =>
+      foldDialog(model, payload.message),
+    ClickedOpenDialog: (): UpdateReturn => {
+      const [next, commands] = Dialog.open(model.dialog)
+      return [
+        evo(model, { dialog: () => next }),
+        Command.mapMessages(commands, (message) => GotDialogMessage({ message })),
+      ]
+    },
+  }),
+  samples: [ClickedOpenDialog()],
+})

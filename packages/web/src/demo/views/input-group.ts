@@ -4,8 +4,8 @@ import { inputGroup, inputGroupText, inputGroupInput } from '@foldcn/registry/st
 import { icon } from '@foldcn/registry/styles/default/lib/icons'
 import { Mail, Lock } from 'lucide'
 
-import type { Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice } from '../slice'
+import type { Model, Message } from '../assemble'
 
 export const inputGroupView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -38,3 +38,10 @@ export const inputGroupView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
     ],
   )
+
+export const slice = defineSlice({
+  fields: {},
+  init: {},
+  messages: [],
+  handlers: () => ({}),
+})

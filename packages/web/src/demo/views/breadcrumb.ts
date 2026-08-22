@@ -2,8 +2,8 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Breadcrumb } from '@foldcn/registry/styles/default/ui/breadcrumb'
 
-import type { Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice } from '../slice'
+import type { Model, Message } from '../assemble'
 
 export const breadcrumbView = (model: Model, h: HtmlBuilder<Message>): Html =>
   Breadcrumb(
@@ -23,3 +23,10 @@ export const breadcrumbView = (model: Model, h: HtmlBuilder<Message>): Html =>
     ],
     h,
   )
+
+export const slice = defineSlice({
+  fields: {},
+  init: {},
+  messages: [],
+  handlers: () => ({}),
+})

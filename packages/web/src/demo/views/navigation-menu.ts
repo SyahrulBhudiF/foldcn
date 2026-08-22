@@ -1,9 +1,10 @@
+import { Schema as S } from 'effect'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { NavigationMenu } from '@foldcn/registry/styles/default/ui/navigation-menu'
 
-import type { Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice } from '../slice'
+import type { Model, Message } from '../assemble'
 
 export const navigationMenuView = (model: Model, h: HtmlBuilder<Message>): Html =>
   NavigationMenu(
@@ -41,3 +42,14 @@ export const navigationMenuView = (model: Model, h: HtmlBuilder<Message>): Html 
     ],
     h,
   )
+
+const fields = {} as const
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: {},
+  messages: [],
+  handlers: (_model: State) => ({}),
+})

@@ -1,7 +1,7 @@
 import { Schema as S } from 'effect'
 import { Model as InstallTabsModel } from '@foldkit/ui/tabs'
 
-import { Model as DemoModelSchema } from './demo/model'
+import { Model as DemoModelSchema } from './demo'
 import { AppRoute } from './route'
 
 export const ThemePreference = S.Literals(['Dark', 'Light', 'System'])

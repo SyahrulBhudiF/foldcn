@@ -2,8 +2,8 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { skeleton } from '@foldcn/registry/styles/default/ui/skeleton'
 
-import type { Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice } from '../slice'
+import type { Model, Message } from '../assemble'
 
 export const skeletonView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -15,3 +15,10 @@ export const skeletonView = (model: Model, h: HtmlBuilder<Message>): Html =>
       skeleton<Message>({ className: 'h-32 w-full rounded-xl' }, [], h),
     ],
   )
+
+export const slice = defineSlice({
+  fields: {},
+  init: {},
+  messages: [],
+  handlers: () => ({}),
+})

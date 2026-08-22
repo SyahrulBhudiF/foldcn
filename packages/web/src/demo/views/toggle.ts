@@ -1,11 +1,16 @@
+import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { toggle } from '@foldcn/registry/styles/default/ui/toggle'
 import { icon } from '@foldcn/registry/styles/default/lib/icons'
 import { Bold } from 'lucide'
 
-import { ToggledToggle, type Message } from '../message'
-import type { Model } from '../model'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message } from '../assemble'
+
+const ToggledToggle = m('ToggledToggle', { isPressed: S.Boolean })
 
 export const toggleView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -24,3 +29,21 @@ export const toggleView = (model: Model, h: HtmlBuilder<Message>): Html =>
       toggle<Message>({ variant: 'outline', isPressed: true, ariaLabel: 'Toggle underline' }, 'On', h),
     ],
   )
+
+const fields = { isToggleOn: S.Boolean }
+
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
+export const slice = defineSlice({
+  fields,
+  init: { isToggleOn: false },
+  messages: [ToggledToggle],
+  handlers: (model: State) => ({
+    ToggledToggle: ({ isPressed }: typeof ToggledToggle.Type): UpdateReturn => [
+      evo(model, { isToggleOn: () => isPressed }),
+      [],
+    ],
+  }),
+  samples: [ToggledToggle({ isPressed: true })],
+})

@@ -31,7 +31,7 @@ Target audience: Foldkit projects using `foldkit` + `effect` + `@foldkit/ui`. No
 
 ### ADR-003: Hosted registry with `@foldcn` namespace
 
-Users configure `components.json` with `"@foldcn": "https://foldkit.dev/r/{name}.json"` and install via `shadcn add @foldcn/button`. Hosted on static hosting (Cloudflare Pages / Vercel / GitHub Pages) — built with `shadcn build`, zero server logic.
+Users configure `components.json` with `"@foldcn": "https://foldcn.elianiva.com/r/{name}.json"` and install via `shadcn add @foldcn/button`. Hosted on static hosting (Cloudflare Pages / Vercel / GitHub Pages) — built with `shadcn build`, zero server logic.
 
 ### ADR-004: Self-contained component modules
 
@@ -71,7 +71,7 @@ Stateful submodels (Dialog, Popover, Tooltip, Tabs, RadioGroup, Slider, Calendar
 
 ### ADR-013: Registry items are `.ts`, source is the build input
 
-The registry repo's source files live under `registry/default/` and are the input to `shadcn build`, which emits the flattened catalog + per-item JSON into `public/r/`. Imports use `@/` aliases (`@/lib/utils`, `@/components/ui/*`) so the CLI rewrites them per the user's `components.json` on install.
+The registry repo's source files live under `registry/default/` and are the input to the build pipeline (`scripts/build.mjs`: resolve-styles → shadcn build → token swap), which emits the flattened catalog + per-item JSON into `packages/registry/dist/r/` — the deploy copies it into the web assets. Imports use `@/` aliases (`@/lib/utils`, `@/components/ui/*`) so the CLI rewrites them per the user's `components.json` on install.
 
 ### ADR-014: Derive from the shadcn v4 BASE registry via a `cn-*` token layer
 
@@ -85,70 +85,118 @@ The shadcn token layers (`apps/v4/registry/styles/style-*.css`, one file per sty
 
 ## Component Inventory
 
-All ~20 @foldkit/ui components, organized by type:
+All 60 `registry:ui` items from `packages/registry/registry/default/ui/registry.json`, organized by pattern — plus the lib utilities, base style and blocks.
 
 ### Stateless helpers (registry:ui)
 
-| Component  | Description                             |
-| ---------- | --------------------------------------- |
-| Button     | Accessible button with variants + sizes |
-| Input      | Text input with label + description     |
-| Textarea   | Multi-line text input                   |
-| Checkbox   | Toggle with indeterminate state         |
-| Switch     | On/off toggle                           |
-| Select     | Native select with chevron              |
-| Fieldset   | Groups related form controls            |
-| Disclosure | Show/hide toggle (accordion/FAQ)        |
-| Nav        | URL-driven navigation landmark          |
-| Card       | Pure layout container                   |
+| Component | Description                                                                             |
+| --------- | --------------------------------------------------------------------------------------- |
+| button    | Styled button with variants and sizes, built on the @foldkit/ui Button helper.           |
+| input     | Styled text input with label and description, built on the @foldkit/ui Input helper.     |
+| textarea  | Styled multi-line textarea with label and description, built on the @foldkit/ui Textarea helper. |
+| select    | Styled native select with label, chevron and description, built on the @foldkit/ui Select helper. |
+| card      | Composable card primitives (Card…CardFooter). A pure layout primitive.                  |
+| checkbox  | Styled checkbox with label, indeterminate state and description, built on the @foldkit/ui Checkbox helper. |
+| switch    | Styled switch toggle with label and description, built on the @foldkit/ui Switch helper. |
+| fieldset  | Styled fieldset with legend and description, built on the @foldkit/ui Fieldset helper.   |
+| disclosure | Styled collapsible section with animated panel support, built on the @foldkit/ui Disclosure helper. |
+| nav       | Styled navigation landmark with current-page marking, built on the @foldkit/ui Nav helper. |
 
 ### Stateful submodels (registry:ui)
 
-| Component     | Description                                                         |
-| ------------- | ------------------------------------------------------------------- |
-| Dialog        | Modal dialog with focus trapping + backdrop                         |
-| Menu          | Dropdown menu with keyboard nav + typeahead                         |
-| Listbox       | Custom select with selection + keyboard nav                         |
-| Combobox      | Autocomplete input with filtering                                   |
-| Popover       | Floating panel with arbitrary content                               |
-| Tabs          | Tabbed interface with keyboard nav                                  |
-| Radio Group   | Radio options with roving tabindex                                  |
-| Slider        | Numeric range input with pointer drag                               |
-| Calendar      | Inline calendar grid with locale support                            |
-| Date Picker   | Input + popover Calendar combo                                      |
-| Drag and Drop | Sortable lists + cross-container movement (view-less: helpers only) |
-| File Drop     | File input with drag-and-drop                                       |
-| Animation     | CSS enter/leave animation coordinator                               |
-| Toast         | Transient notification stack (payload-schema factory)               |
-| Virtual List  | Virtualized list for large datasets                                 |
+| Component     | Description                                                                                     |
+| ------------- | ----------------------------------------------------------------------------------------------- |
+| dialog        | Composable modal dialog (header/title/description/footer/closeButton), built on the @foldkit/ui Dialog submodel. |
+| popover       | Composable floating panel (header/title/description), built on the @foldkit/ui Popover submodel. |
+| tooltip       | Styled tooltip with trigger and hover/focus reveal, built on the @foldkit/ui Tooltip submodel.   |
+| menu          | Styled dropdown menu with keyboard navigation and typeahead, built on the @foldkit/ui Menu submodel. |
+| listbox       | Styled custom select with single and multi selection, built on the @foldkit/ui Listbox submodel. |
+| combobox      | Styled autocomplete input with filtering, built on the @foldkit/ui Combobox submodel.            |
+| tabs          | Composable tabbed interface (list/trigger/content), built on the @foldkit/ui Tabs submodel.      |
+| radio-group   | Styled radio options with roving tabindex, built on the @foldkit/ui RadioGroup submodel.         |
+| slider        | Styled numeric range slider, built on the @foldkit/ui Slider submodel.                           |
+| calendar      | Styled inline calendar grid with locale support, built on the @foldkit/ui Calendar submodel.     |
+| date-picker   | Styled date picker combining trigger, popover and calendar, built on the @foldkit/ui DatePicker submodel. |
+| toast         | Styled transient notification stack with auto-dismiss, built on the @foldkit/ui Toast component. |
+| animation     | Styled enter/leave animation coordinator, built on the @foldkit/ui Animation submodel.           |
+| drag-and-drop | Styled sortable lists and cross-container movement, built on the @foldkit/ui DragAndDrop submodel. |
+| file-drop     | Styled file input with drag-and-drop support, built on the @foldkit/ui FileDrop submodel.        |
+| virtual-list  | Styled virtualized list for large datasets, built on the @foldkit/ui VirtualList submodel.       |
+
+### Presentational ports (registry:ui)
+
+Pure-layout ports of shadcn's presentational components — no submodel backing (no Model/Message/init/update).
+
+| Component       | Description                                                                                     |
+| --------------- | ----------------------------------------------------------------------------------------------- |
+| badge           | Styled inline badge with variant support, built as a themed span.                               |
+| skeleton        | Styled pulsing placeholder block.                                                               |
+| separator       | Styled divider with horizontal/vertical orientation.                                            |
+| kbd             | Styled keyboard key(s) with grouping support.                                                   |
+| avatar          | Styled avatar with image, fallback, badge and grouping.                                         |
+| aspect-ratio    | Styled aspect-ratio box wrapper.                                                                |
+| alert           | Styled alert with title and description sub-builders.                                           |
+| empty           | Styled empty state with header, media, title, description and content.                          |
+| spinner         | Styled loading spinner (Loader2 icon in a status wrapper).                                      |
+| marker          | Styled marker with icon and content sub-builders and variant support.                           |
+| item            | Styled flexible list row with media, title, description, actions, header and footer.            |
+| direction       | Text-direction wrapper (ltr/rtl) carrying a data-slot surface.                                  |
+| label           | Styled form label with optional for association.                                                |
+| progress        | Styled progress bar with value-driven indicator.                                                |
+| alert-dialog    | Destructive-confirm modal dialog, built on the @foldkit/ui Dialog submodel.                     |
+| sheet           | Edge-anchored modal panel (top/bottom/left/right), built on the @foldkit/ui Dialog submodel.    |
+| drawer          | Bottom-docked modal with grab handle, built on the @foldkit/ui Dialog submodel.                 |
+| hover-card      | Card-styled floating panel, built on the @foldkit/ui Popover submodel.                          |
+| accordion       | Vertical stack of collapsible sections with rotating chevron, built on the @foldkit/ui Disclosure helper. |
+| collapsible     | Single-section collapsible; in foldcn this is the Disclosure primitive — see `disclosure`.      |
+| context-menu    | Right-click style menu, built on the @foldkit/ui Menu submodel.                                 |
+| menubar         | Horizontal bar of menus, built on the @foldkit/ui Menu submodel.                                |
+| sonner          | Stacked auto-dismissing notifications, built on the @foldkit/ui Toast submodel.                 |
+| button-group    | Connected run of buttons forming a single segmented control, built on the @foldkit/ui Button helper. |
+| input-group     | Shared bordered box with text/icon add-ons around a connected input, built on the @foldkit/ui Input helper. |
+| toggle          | Two-state toggle button marked with aria-pressed and data-state.                                |
+| toggle-group    | Connected group of toggles with shared single or multiple selection.                            |
+| input-otp       | Row of single-character slots backed by one combined value.                                     |
+| breadcrumb      | Presentational breadcrumb landmark with list, link, page and separator builders.                |
+| navigation-menu | Presentational top-level navigation bar with trigger and content builders.                      |
+| sidebar         | Presentational sidebar layout — provider, rail, menu, group and inset builders.                 |
+| table           | Presentational table with header, body, footer, row, head, cell and caption builders.           |
+| command         | Presentational command-palette surface with input, list, group and item builders.               |
+| resizable       | Two-pane split with a draggable, keyboard-accessible handle.                                    |
 
 ### Utilities (registry:lib)
 
-| Item | Description                            |
-| ---- | -------------------------------------- |
-| cn   | `clsx` + `tailwind-merge` class merger |
+| Item       | Description                                                                                            |
+| ---------- | ------------------------------------------------------------------------------------------------------ |
+| utils      | Class name merger built on clsx and tailwind-merge (`cn`). Used by every foldcn component.             |
+| icons      | Lucide icons rendered as Foldkit virtual DOM via the h builder, plus commonly used icons.              |
+| code-block | Syntax-highlighted code block with file header and copy button, powered by @tanstack/highlight.        |
 
 ### Base (registry:style)
 
-| Item   | Description                                     |
-| ------ | ----------------------------------------------- |
-| foldcn | Base style: CSS vars, core deps, base CSS rules |
+| Item   | Description                                                                                    |
+| ------ | ---------------------------------------------------------------------------------------------- |
+| foldcn | Base style: CSS variables, Tailwind v4 theme mapping, base CSS and core dependencies. Install this first. |
 
 ### Blocks (registry:block)
 
-| Item          | Description                                |
-| ------------- | ------------------------------------------ |
-| login-form    | Login page composing Button + Input + Card |
-| settings-page | Settings form with multiple components     |
-| data-table    | Data table with sorting/filtering          |
+| Item          | Description                                                                       |
+| ------------- | ---------------------------------------------------------------------------------- |
+| login-form    | Login page with email/password fields, error state and submit button. Composed from foldcn primitives. |
+| settings-page | Settings page with profile and preferences sections. Composed from foldcn primitives. |
+| data-table    | Searchable table with styled rows and cells. Composed from foldcn primitives.      |
 
 ## File Structure
 
 ```
-foldcn/
-├── registry.json                          ← root registry manifest
-├── CONTEXT.md                             ← this file
-├── components.json                        ← recommended config template
+packages/registry/
+├── registry.json                          ← root catalog manifest (includes default/{style,lib,ui,blocks})
+├── components.json                        ← recommended components.json template
+├── scripts/
+│   ├── build.mjs                          ← pipeline: resolve-styles → shadcn build → token swap (→ dist/r/)
+│   ├── resolve-styles.mjs                 ← substitutes cn-* tokens into the resolved trees
+│   ├── sync-styles.mjs                    ← periodic vendored style sync from shadcn-ui/ui
+│   └── lib/                               ← shared script helpers
 ├── registry/
 │   ├── styles/                           ← VENDORED shadcn style-*.css, byte-identical (ADR-015)
 │   │   ├── README.md                     ← credit + sync provenance (regenerated)
@@ -158,31 +206,34 @@ foldcn/
 │       │   ├── registry.json             ← registry:style base item (cssVars + base css)
 │       │   └── cn-compat.css             ← hand-written foldkit deltas
 │       ├── ui/
-│       │   ├── button.ts                  ← registry:ui
-│       │   ├── input.ts
-│       │   ├── dialog.ts
-│       │   ├── ... (all ~20 components)
-│       │   └── tabs.ts
+│       │   ├── registry.json             ← ui manifest (60 entries)
+│       │   ├── button.ts                 ← registry:ui — one self-contained .ts per item
+│       │   ├── input.ts                     (button … resizable: helpers, submodels,
+│       │   └── resizable.ts                  presentational ports)
 │       ├── lib/
-│       │   └── cn.ts                      ← registry:lib
-│       ├── blocks/
-│       │   ├── login-form/
-│       │   │   ├── login-form.json        ← registry:block manifest
-│       │   │   ├── page.tsx               ← route page
-│       │   │   └── login-form.tsx         ← component
-│       │   ├── settings-page/
-│       │   └── data-table/
-│       └── icons/
-│           └── lucide-helpers.ts          ← h.-wrapped lucide SVGs
-└── docs/
-    └── getting-started.md
+│       │   ├── registry.json             ← lib manifest (3 entries)
+│       │   ├── utils.ts                  ← cn() class merger (registry:lib)
+│       │   ├── icons.ts                  ← h.-wrapped lucide SVGs (registry:lib)
+│       │   └── code-block.ts             ← syntax-highlighted code block (registry:lib)
+│       └── blocks/
+│           ├── registry.json             ← blocks manifest (3 entries)
+│           ├── login-form/
+│           │   ├── login-form.json       ← registry:block manifest
+│           │   └── login-form.ts         ← component source
+│           ├── settings-page/
+│           └── data-table/
+├── styles/default/                       ← RESOLVED trees (gitignored), output of resolve-styles.mjs
+│   ├── ui/                                  consumed by the web demo + swapped into shipped JSONs
+│   ├── lib/
+│   └── blocks/
+└── dist/r/                               ← build output: flattened catalog + per-item JSONs (served by the deploy)
 ```
 
 ## User Installation Flow
 
 1. User adds namespace to `components.json`:
    ```json
-   { "registries": { "@foldcn": "https://foldkit.dev/r/{name}.json" } }
+   { "registries": { "@foldcn": "https://foldcn.elianiva.com/r/{name}.json" } }
    ```
 2. User installs base style:
    ```bash
