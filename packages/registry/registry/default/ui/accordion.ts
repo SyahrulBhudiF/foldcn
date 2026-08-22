@@ -12,20 +12,30 @@ import { cn } from '@/lib/utils'
 // keeps one open index). The primitive is stateless and controlled — the
 // parent owns each item's open state and dispatches `onToggle`.
 
+/** Derived from the shadcn v4 BASE registry:
+ *  apps/v4/registry/bases/base/ui/accordion.tsx.
+ *
+ * foldcn gaps vs upstream: no single/multiple root semantics (parent-owned
+ * state), and the chevron rotates instead of swapping icons. */
+
 export const buttonId = FoldkitDisclosure.buttonId
 
-export const accordionItemClass = 'border-b last:border-b-0'
+export const accordionWrapperClass = 'cn-accordion flex w-full flex-col'
+
+export const accordionItemClass = 'cn-accordion-item'
 
 export const accordionTriggerClass =
-  'group/accordion-trigger flex w-full items-center justify-between gap-2 py-4 text-left text-sm font-medium transition-all hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 [&[aria-expanded=true]>svg]:rotate-180'
+  'cn-accordion-trigger group/accordion-trigger relative flex flex-1 items-start justify-between border border-transparent transition-all outline-none aria-disabled:pointer-events-none aria-disabled:opacity-50'
 
-export const accordionContentClass = 'overflow-hidden pb-4 text-sm text-muted-foreground'
+export const accordionContentClass = 'cn-accordion-content overflow-hidden text-sm'
 
 export const accordionAnimatedContentClass = 'overflow-hidden pb-4 text-sm text-muted-foreground'
 
-export const accordionChevronClass = 'size-4 shrink-0 text-muted-foreground transition-transform'
+export const accordionContentInnerClass =
+  'cn-accordion-content-inner h-(--accordion-panel-height) data-ending-style:h-0 data-starting-style:h-0 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4'
 
-export const accordionWrapperClass = 'w-full self-start'
+export const accordionChevronClass =
+  'cn-accordion-trigger-icon pointer-events-none size-4 shrink-0 transition-transform'
 
 export type AccordionType = 'single' | 'multiple'
 
@@ -83,9 +93,7 @@ export const accordion = <M>(config: AccordionConfig<M>, h: HtmlBuilder<M>): Htm
   )
 }
 
-/** Styled accordion item built on the @foldkit/ui Disclosure helper. Mirrors
- *  the shadcn `accordion` trigger/content pair: a full-width trigger with a
- *  chevron that rotates when expanded, and a collapsible content region. */
+/** Styled accordion item built on the @foldkit/ui Disclosure helper. */
 export const accordionItem = <M>(config: AccordionItemConfig<M>, h: HtmlBuilder<M>): Html =>
   FoldkitDisclosure.view<M>(
     {
@@ -98,7 +106,7 @@ export const accordionItem = <M>(config: AccordionItemConfig<M>, h: HtmlBuilder<
       toView: ({ button, panel, animatePanel }) =>
         h.div(
           [
-            h.Class(cn(accordionItemClass, accordionWrapperClass, config.wrapperClass)),
+            h.Class(cn(accordionItemClass, config.wrapperClass)),
             h.DataAttribute('slot', 'accordion-item'),
           ],
           [
@@ -121,7 +129,7 @@ export const accordionItem = <M>(config: AccordionItemConfig<M>, h: HtmlBuilder<
                       h.Class(cn(accordionAnimatedContentClass, config.contentClass)),
                       h.DataAttribute('slot', 'accordion-content'),
                     ],
-                    [config.content],
+                    [h.div([h.Class(accordionContentInnerClass)], [config.content])],
                   ),
                 )
               : config.isOpen
@@ -131,7 +139,7 @@ export const accordionItem = <M>(config: AccordionItemConfig<M>, h: HtmlBuilder<
                       h.Class(cn(accordionContentClass, config.contentClass)),
                       h.DataAttribute('slot', 'accordion-content'),
                     ],
-                    [config.content],
+                    [h.div([h.Class(accordionContentInnerClass)], [config.content])],
                   )
                 : h.empty,
           ],
