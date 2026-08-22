@@ -117,7 +117,7 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 
 ### Composite inputs
 
-- **input-group — MAJOR.** Only Group/Text/Input; no Addon/Button/Textarea parts, no `role=group`, no frame-level invalid/disabled states, addon-click-focus missing.
+- **input-group — MINOR.** Full part set (Group/Addon/Button/Text/Input/Textarea) with `role=group`, align variants, and frame-level invalid/focus states keyed off `data-slot=input-group-control`; addon-click-focus missing (foldkit has no scoped click-to-focus attribute).
 - **input-otp — MAJOR.** Standalone cells vs joined pill; no Group/Slot/Separator parts; onComplete quirk (bug #4).
 - **button-group — MAJOR.** Outer-frame model vs child corner-cutting; no orientation/Text/Separator, no `role=group`.
 - **item — MINOR.** Full part parity minus `xs` size; padding/radius/hover drift; media boxed vs bare.
