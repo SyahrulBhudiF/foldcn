@@ -36,7 +36,10 @@ export type Week = FoldkitCalendar.Week
 // dropdown captions, single-date selection only (no ranges/week numbers),
 // and state hooks ride on the cell's group data attrs (data-today/
 // data-selected/data-focused/data-outside-month/data-disabled) rather than
-// react-day-picker modifiers.
+// react-day-picker modifiers. foldkit emits those attrs empty (`data-x=""`),
+// so the hooks match on attribute presence — never `[data-x=true]` like
+// upstream's focused rules — and the cell mounts a plain `group` alongside
+// upstream's named `group/day` for the unscooped variants to key off.
 
 /** Upstream root + months strings combined (foldcn renders one container). */
 export const calendarContainerClass =
@@ -68,14 +71,18 @@ export const calendarWeekdaysClass = 'flex'
 export const calendarColumnHeaderClass =
   'flex-1 rounded-(--cell-radius) py-1 text-center text-[0.8rem] font-normal text-muted-foreground select-none'
 
-/** Upstream day-cell string. */
+/** Upstream day-cell string, plus a plain `group` mount: foldkit puts the
+ *  state data attrs on this cell, and the day/month/year buttons read them
+ *  via group-data-* variants. */
 export const calendarCellClass =
-  'group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none'
+  'group group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none'
 
 /** Upstream DayButton string (ghost icon button base) plus foldcn's
- *  group-scoped state hooks. */
+ *  group-scoped state hooks. Presence-based because foldkit emits empty
+ *  attr values; transition-all replaces what upstream inherits from the
+ *  Button cva base, which foldcn's token layer does not carry. */
 export const calendarDayButtonClass =
-  'cn-button cn-button-variant-ghost cn-button-size-icon cn-calendar-day-button relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 group-data-[selected]:rounded-(--cell-radius) group-data-[selected]:bg-primary group-data-[selected]:text-primary-foreground group-data-[today]:bg-muted group-data-[today]:text-foreground group-data-[outside-month]:text-muted-foreground group-data-[disabled]:pointer-events-none group-data-[disabled]:opacity-50 dark:hover:text-foreground [&>span]:text-xs [&>span]:opacity-70'
+  'cn-button cn-button-variant-ghost cn-button-size-icon cn-calendar-day-button relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal transition-all group-data-[focused]/day:relative group-data-[focused]/day:z-10 group-data-[focused]/day:border-ring group-data-[focused]/day:ring-[3px] group-data-[focused]/day:ring-ring/50 group-data-[selected]:rounded-(--cell-radius) group-data-[selected]:bg-primary group-data-[selected]:text-primary-foreground group-data-[today]:bg-muted group-data-[today]:text-foreground group-data-[outside-month]:text-muted-foreground group-data-[disabled]:pointer-events-none group-data-[disabled]:text-muted-foreground group-data-[disabled]:opacity-50 dark:hover:text-foreground [&>span]:text-xs [&>span]:opacity-70'
 
 export const calendarMonthYearGridClass = 'grid flex-1 grid-cols-3 grid-rows-4 gap-1 outline-none'
 
@@ -98,11 +105,7 @@ const headingButton = <M>(
     [heading.text, icon(h, ChevronDown, 'size-3')],
   )
 
-const weekRow = <M>(
-  week: Week,
-  showOutsideDays: boolean,
-  h: HtmlBuilder<M>,
-): Html =>
+const weekRow = <M>(week: Week, showOutsideDays: boolean, h: HtmlBuilder<M>): Html =>
   h.div(
     [...week.attributes, h.Class(calendarRowClass)],
     week.cells.map((cell) =>
@@ -173,7 +176,7 @@ const monthsView = <M>(
     ],
     [
       h.div(
-        [h.Class(`${calendarHeaderClass} justify-center`)],
+        [h.Class(cn(calendarHeaderClass, 'justify-center'))],
         [headingButton(months.heading, months.headingButton, h)],
       ),
       h.div(
