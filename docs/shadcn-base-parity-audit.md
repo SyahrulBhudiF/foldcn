@@ -2,8 +2,8 @@
 
 > **Status (post-migration):** every file in `packages/registry/registry/default/ui/*.ts`
 > now derives from `bases/base/ui` per `docs/deriving-from-base.md` — class strings are
-> the upstream `cn-*` token compositions, resolved at build time from the generated
-> `style/cn-tokens.css` plus hand-written deltas in `style/cn-compat.css` (see ADR-014). The verdicts below were written
+> the upstream `cn-*` token compositions, resolved at build time from the vendored
+> `registry/styles/style-nova.css` plus hand-written deltas in `style/cn-compat.css` (see ADR-014/ADR-015). The verdicts below were written
 > against the **pre-migration legacy port** and are kept for the functional-gap analysis
 > only; class-material diffs (radius/surface/ring columns) are resolved as of this
 > branch. Primitive-level gaps (menus without submenu/checkbox kinds, static sidebar,

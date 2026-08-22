@@ -3,8 +3,9 @@
  *
  * Vendored (MIT) from shadcn-ui/ui packages/shadcn/src/styles/create-style-map.ts
  * and ported to plain ESM JavaScript for foldcn's registry build. Upstream
- * parses one `style-<name>.css`; foldcn concatenates its generated token layer
- * (`cn-tokens.css`) with the hand-written foldkit deltas (`cn-compat.css`)
+ * parses one `style-<name>.css`; foldcn concatenates its hand-written foldkit
+ * deltas (`registry/default/style/cn-compat.css`) with the vendored style CSS
+ * (`registry/styles/style-nova.css`, byte-identical to upstream — see ADR-015)
  * before calling this, so both contribute to the same map. Deltas are
  * concatenated FIRST: createStyleMap prepends later duplicate selectors, so
  * processing compat first leaves it last in the merged string — and under

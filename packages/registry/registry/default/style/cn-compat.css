@@ -1,5 +1,6 @@
-/* Hand-maintained foldkit compatibility deltas — concatenated AHEAD of
- * cn-tokens.css by scripts/resolve-styles.mjs when building the style map
+/* Hand-maintained foldkit compatibility deltas — concatenated AHEAD of the
+ * vendored shadcn style CSS (registry/styles/style-nova.css, byte-identical
+ * to upstream) by scripts/resolve-styles.mjs when building the style map
  * (so delta utilities win tailwind-merge conflicts), then inlined into every
  * resolved component. Do not regenerate this file.
  *

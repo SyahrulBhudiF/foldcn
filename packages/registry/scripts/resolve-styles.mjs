@@ -4,10 +4,20 @@
  *
  * This mirrors the shadcn v4 registry pipeline (apps/v4/scripts/build-registry.mts):
  * authored components reference semantic `cn-*` token classes; a style map built
- * from the style CSS (`cn-tokens.css` + `cn-compat.css`) substitutes every token
- * occurrence inside string literals with its resolved utilities. Demos render the
- * resolved tree and the registry build ships it, so neither needs the token CSS
- * loaded at runtime — exactly how ui.shadcn.com demos work.
+ * from a style CSS substitutes every token occurrence inside string literals with
+ * its resolved utilities. Demos render the resolved tree and the registry build
+ * ships it, so neither needs the token CSS loaded at runtime — exactly how
+ * ui.shadcn.com demos work.
+ *
+ * Style CSS sources (see ADR-014/ADR-015):
+ *   registry/styles/style-*.css           vendored verbatim from shadcn-ui/ui,
+ *                                         refreshed by scripts/sync-styles.mjs
+ *   registry/default/style/cn-compat.css  hand-written foldkit deltas, merged
+ *                                         FIRST so they win tailwind-merge conflicts
+ *
+ * The foldkit animation-state rewrite (data-open:<enter anim> → data-enter:,
+ * data-closed:<exit anim> → data-leave:) is applied HERE, to the style-map
+ * values — never to the vendored files, which stay byte-identical to upstream.
  *
  * Outputs (gitignored, regenerate via this script or `pnpm --filter @foldcn/registry build`):
  *   styles/<style>/ui/*.ts       transformed component sources
@@ -37,16 +47,16 @@ const DEFAULT_DIR = join(REGISTRY_DIR, 'registry', 'default')
 const STYLES_OUT_ROOT = join(REGISTRY_DIR, 'styles')
 
 /**
- * Style combinations to emit. foldcn currently derives a single style from the
- * shadcn `nova` tokens (see scripts/sync-cn-tokens.mjs); add entries here when
- * additional styles are derived. Compat CSS concatenates FIRST so its deltas
- * win tailwind-merge conflicts against the generated token layer.
+ * Style combinations to emit. foldcn derives from the vendored shadcn `nova`
+ * style tokens (registry/styles/style-nova.css — see ADR-015); add entries
+ * here when additional vendored styles are adopted. Compat CSS concatenates
+ * FIRST so its deltas win tailwind-merge conflicts against the vendored layer.
  */
 const STYLES = [
   {
     name: 'default',
     title: 'Default',
-    cssFiles: ['cn-compat.css', 'cn-tokens.css'],
+    cssFiles: ['registry/default/style/cn-compat.css', 'registry/styles/style-nova.css'],
   },
 ]
 
@@ -56,19 +66,62 @@ const VERBATIM_DIRS = ['lib', 'blocks']
 const TOKEN_DIR = 'ui'
 const TOKEN_SOURCE_EXT = '.ts'
 
+// --- foldkit animation-state rewrite ---------------------------------------
+
+/**
+ * tw-animate-css utilities + project keyframe animations whose Base UI
+ * `data-open:` / `data-closed:` hooks must be re-keyed for foldkit.
+ *
+ * foldkit overlay/panel state machine (verified in @foldkit/ui dist):
+ *   EnterStart     → data-closed data-enter  data-transition
+ *   EnterAnimating →           data-enter  data-transition
+ *   LeaveStart     →           data-leave  data-transition
+ *   LeaveAnimating → data-closed data-leave data-transition
+ *   idle open      → data-open
+ *
+ * Re-keying animations onto data-enter/data-leave means each animation plays
+ * exactly once during its transition window; persistent open styling keyed on
+ * `data-open:` keeps working because foldkit emits that attribute verbatim.
+ */
+const ENTER_UTILITIES =
+  /^(animate-in|fade-in-[\w.]+|zoom-in-[\w.]+|spin-in-[\w.]+|slide-in-from-[\w.-]+|animate-accordion-down)$/
+const EXIT_UTILITIES =
+  /^(animate-out|fade-out-[\w.]+|zoom-out-[\w.]+|spin-out-[\w.]+|slide-out-to-[\w.-]+|animate-accordion-up)$/
+
+/** Applied to style-map values so vendored style CSS stays byte-identical upstream. */
+const foldkitCompat = (classes) =>
+  classes
+    .split(/\s+/)
+    .map((utility) => {
+      const m = utility.match(/^(data-open|data-closed):([\w./-]+)$/)
+      if (!m) return utility
+      const [, state, value] = m
+      if (state === 'data-open' && ENTER_UTILITIES.test(value)) return `data-enter:${value}`
+      if (state === 'data-closed' && EXIT_UTILITIES.test(value)) return `data-leave:${value}`
+      return utility
+    })
+    .join(' ')
+
 export function resolveStyles() {
   const created = []
 
   for (const style of STYLES) {
     const cssText = style.cssFiles
       .map((file) => {
-        const path = join(DEFAULT_DIR, 'style', file)
+        const path = join(REGISTRY_DIR, file)
         if (!existsSync(path)) throw new Error(`missing style css: ${path}`)
         return readFileSync(path, 'utf8')
       })
       .join('\n')
 
-    const styleMap = createStyleMap(cssText)
+    // Compat deltas concatenated first land LAST in merged duplicate values
+    // (createStyleMap prepends later duplicates), so under tailwind-merge's
+    // last-wins rule the delta wins. Vendored classes get the foldkit
+    // animation-state rewrite applied uniformly over the merged map.
+    const rawStyleMap = createStyleMap(cssText)
+    const styleMap = Object.fromEntries(
+      Object.entries(rawStyleMap).map(([token, classes]) => [token, foldkitCompat(classes)]),
+    )
     if (Object.keys(styleMap).length === 0) {
       throw new Error(`style "${style.name}" produced an empty cn-* map`)
     }
@@ -112,7 +165,7 @@ function transformTokenDir(style, styleMap, outDir) {
   if (unmappedTokens.size > 0) {
     console.warn(
       `resolve-styles [${style.name}]: tokens referenced by components but absent from the style map ` +
-        `(stripped from output — check cn-tokens.css/cn-compat.css for drift):\n  ${[...unmappedTokens].join('\n  ')}`,
+        `(stripped from output — check cn-compat.css and registry/styles/style-nova.css for drift):\n  ${[...unmappedTokens].join('\n  ')}`,
     )
   }
 
