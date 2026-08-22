@@ -25,7 +25,7 @@ export const accordionWrapperClass = 'cn-accordion flex w-full flex-col'
 export const accordionItemClass = 'cn-accordion-item'
 
 export const accordionTriggerClass =
-  'cn-accordion-trigger group/accordion-trigger relative flex flex-1 items-start justify-between border border-transparent transition-all outline-none aria-disabled:pointer-events-none aria-disabled:opacity-50'
+  'cn-accordion-trigger group/accordion-trigger relative flex w-full flex-1 items-start justify-between border border-transparent transition-all outline-none aria-disabled:pointer-events-none aria-disabled:opacity-50'
 
 export const accordionContentClass = 'cn-accordion-content overflow-hidden text-sm'
 
