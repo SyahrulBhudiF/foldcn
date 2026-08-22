@@ -24,7 +24,7 @@ import { Toast } from './toast'
 
 // A fixed "today" so the SSG-prerendered calendar matches the hydrated page.
 // Using the wall clock here would let the server and client disagree.
-const DEMO_TODAY = FoldkitCalendar.make(2025, 1, 15)
+const DEMO_TODAY = FoldkitCalendar.make(2026, 1, 15)
 
 export const INITIAL_ROWS: ReadonlyArray<{
   id: string
