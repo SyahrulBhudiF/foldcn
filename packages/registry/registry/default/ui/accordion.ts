@@ -20,26 +20,35 @@ import { cn } from '@/lib/utils'
 
 export const buttonId = FoldkitDisclosure.buttonId
 
-/** Upstream Accordion root string (each foldcn item renders its own wrapper;
- *  consumers stack them inside a w-full flex-col container). */
 export const accordionWrapperClass = 'cn-accordion flex w-full flex-col'
 
 export const accordionItemClass = 'cn-accordion-item'
 
 export const accordionTriggerClass =
-  'cn-accordion-trigger group/accordion-trigger relative flex flex-1 items-start justify-between border border-transparent transition-all outline-none aria-disabled:pointer-events-none aria-disabled:opacity-50'
+  'cn-accordion-trigger group/accordion-trigger relative flex w-full flex-1 items-start justify-between border border-transparent transition-all outline-none aria-disabled:pointer-events-none aria-disabled:opacity-50'
 
 export const accordionContentClass = 'cn-accordion-content overflow-hidden text-sm'
 
-export const accordionAnimatedContentClass =
-  'overflow-hidden pb-4 text-sm text-muted-foreground'
+export const accordionAnimatedContentClass = 'overflow-hidden pb-4 text-sm text-muted-foreground'
 
 export const accordionContentInnerClass =
   'cn-accordion-content-inner h-(--accordion-panel-height) data-ending-style:h-0 data-starting-style:h-0 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4'
 
 export const accordionChevronClass =
-  'cn-accordion-trigger-icon pointer-events-none size-4 shrink-0 transition-transform'
+  'cn-accordion-trigger-icon pointer-events-none size-4 shrink-0 transition-transform group-aria-expanded/accordion-trigger:rotate-180'
 
+export type AccordionType = 'single' | 'multiple'
+
+/** Computes the next open-state array for an accordion group. */
+export const nextAccordionOpen = (
+  current: ReadonlyArray<boolean>,
+  index: number,
+  isOpen: boolean,
+  type: AccordionType = 'multiple',
+): ReadonlyArray<boolean> =>
+  type === 'single' && isOpen
+    ? current.map((_, itemIndex) => itemIndex === index)
+    : current.map((value, itemIndex) => (itemIndex === index ? isOpen : value))
 
 export type AccordionItemConfig<M> = Readonly<{
   id: string
@@ -56,9 +65,35 @@ export type AccordionItemConfig<M> = Readonly<{
   wrapperClass?: string
 }>
 
-/** Styled accordion item built on the @foldkit/ui Disclosure helper. Mirrors
- *  the shadcn `accordion` trigger/content pair: a full-width trigger with a
- *  chevron that rotates when expanded, and a collapsible content region. */
+export type AccordionConfig<M> = Readonly<{
+  type?: AccordionType
+  value: ReadonlyArray<boolean>
+  items: ReadonlyArray<Omit<AccordionItemConfig<M>, 'isOpen' | 'onToggle'>>
+  onValueChange: (value: ReadonlyArray<boolean>) => M
+  className?: string
+}>
+
+/** Renders a controlled accordion group with single or multiple open items. */
+export const accordion = <M>(config: AccordionConfig<M>, h: HtmlBuilder<M>): Html => {
+  const type = config.type ?? 'multiple'
+
+  return h.div(
+    [h.Class(cn(accordionWrapperClass, config.className)), h.DataAttribute('slot', 'accordion')],
+    config.items.map((item, index) =>
+      accordionItem<M>(
+        {
+          ...item,
+          isOpen: config.value[index] ?? false,
+          onToggle: (isOpen) =>
+            config.onValueChange(nextAccordionOpen(config.value, index, isOpen, type)),
+        },
+        h,
+      ),
+    ),
+  )
+}
+
+/** Styled accordion item built on the @foldkit/ui Disclosure helper. */
 export const accordionItem = <M>(config: AccordionItemConfig<M>, h: HtmlBuilder<M>): Html =>
   FoldkitDisclosure.view<M>(
     {
@@ -70,10 +105,17 @@ export const accordionItem = <M>(config: AccordionItemConfig<M>, h: HtmlBuilder<
       ariaLabelledBy: config.ariaLabelledBy,
       toView: ({ button, panel, animatePanel }) =>
         h.div(
-          [h.Class(cn(accordionWrapperClass, config.wrapperClass)), h.DataAttribute('slot', 'accordion-item')],
+          [
+            h.Class(cn(accordionItemClass, config.wrapperClass)),
+            h.DataAttribute('slot', 'accordion-item'),
+          ],
           [
             h.button(
-              [...button, h.Class(cn(accordionTriggerClass, config.triggerClass)), h.DataAttribute('slot', 'accordion-trigger')],
+              [
+                ...button,
+                h.Class(cn(accordionTriggerClass, config.triggerClass)),
+                h.DataAttribute('slot', 'accordion-trigger'),
+              ],
               [
                 h.span([], [config.title]),
                 h.span([h.Class(accordionChevronClass)], [icon(h, ChevronDown)]),
