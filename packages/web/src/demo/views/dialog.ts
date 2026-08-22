@@ -43,10 +43,7 @@ export const dialogView = (model: Model, h: HtmlBuilder<Message>): Html =>
                     ['Cancel'],
                   ),
                   h.button(
-                    [
-                      ...closeButton,
-                      h.Class('rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground'),
-                    ],
+                    [h.Class('rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground')],
                     ['Save'],
                   ),
                 ],

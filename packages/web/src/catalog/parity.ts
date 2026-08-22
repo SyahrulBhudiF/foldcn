@@ -25,7 +25,6 @@ import { gapsByItem } from './gaps'
 export const foldcnOnly = new Set<string>([
   'animation',
   'date-picker',
-  'disclosure',
   'drag-and-drop',
   'file-drop',
   'listbox',

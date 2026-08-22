@@ -41,19 +41,45 @@ export type RenderInfo = FoldkitDialog.RenderInfo
 // opacity). foldkit has no drag primitive, so this keeps the static
 // show/hide dialog mechanics and applies the popup/content/handle tokens;
 // motion is the dialog enter/leave fade+zoom. The panel emits
-// data-swipe-direction="down" statically so the token's bottom-edge radius/
-// border variants resolve.
+// data-swipe-direction="down" / data-swipe-axis="y" statically so the
+// token's bottom-edge radius/border variants AND the upstream
+// positioning/bleed utilities resolve. Upstream lines that key purely on
+// drag/nested state (--translate-y movement, stack vars beyond --bleed,
+// data-swiping/data-nested-*/data-snap-points) stay dropped.
+//
+// foldkit delta for the enter/exit motion: upstream keys the slide on
+// data-starting-style:transform-(--closed-transform) /
+// data-ending-style:transform-(--closed-transform); per the overlay note
+// above, [data-enter][data-closed] / [data-leave][data-closed] are the
+// faithful one-frame equivalents, so the panel slides up from (and back down
+// to) --closed-transform via its own transform transition — no keyframes, no
+// scale.
 
 export const drawerClass = 'bg-transparent p-0 open:block'
 
-/** Upstream overlay minus swipe-progress opacity (needs drag state). */
+/** Upstream overlay minus swipe-progress opacity (needs drag state).
+ *
+ *  foldkit delta: upstream keys the fade on data-starting-style:opacity-0 /
+ *  data-ending-style:opacity-0, which exist for one frame around the
+ *  transition. foldkit instead holds `data-enter`/`data-leave` on the backdrop
+ *  for the WHOLE transition window (until the panel's own animation settles),
+ *  so keying the hidden state on the bare attribute delays the overlay fade
+ *  until after the popup has entered. The engine emits `data-closed` only on
+ *  the first frame of each window (EnterStart / LeaveAnimating — see
+ *  @foldkit/ui dist/dialog + dist/animation), making
+ *  [data-enter][data-closed] / [data-leave][data-closed] faithful
+ *  starting-style/ending-style equivalents: the opacity transition kicks off
+ *  on the second frame, concurrent with the popup motion, exactly like
+ *  upstream. */
 export const drawerBackdropClass =
-  'cn-drawer-overlay fixed inset-0 z-50 transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] select-none data-enter:opacity-0 data-leave:opacity-0'
+  'cn-drawer-overlay fixed inset-0 z-50 transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] select-none data-enter:data-closed:opacity-0 data-leave:data-closed:opacity-0'
 
-/** Upstream DrawerPrimitive.Popup base string (nested/bleed/sizing lines
- *  dropped — they key on drag state foldkit cannot emit). */
+/** Upstream DrawerPrimitive.Popup string minus drag/nested-state lines
+ *  (see the foldcn gaps note above). Positioning, bleed and sizing resolve
+ *  via the statically-emitted swipe attributes. Enter/exit is upstream's
+ *  closed-transform slide re-keyed onto the one-frame data-closed windows. */
 export const drawerPanelClass =
-  'cn-drawer-popup group/drawer-popup pointer-events-auto fixed z-50 m-(--drawer-inset,0px) flex h-(--drawer-content-height) max-h-(--drawer-content-max-height,none) min-h-0 w-(--drawer-content-width,auto) transform-[translate3d(var(--translate-x,0px),var(--translate-y,0px),0)_scale(var(--stack-scale))] flex-col transition-[transform,height,opacity,filter] duration-450 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform outline-none select-none [interpolate-size:allow-keywords] [--drawer-content-max-height:calc(100dvh-6rem)] [--drawer-content-height:auto] duration-200 data-enter:animate-in data-enter:fade-in-0 data-enter:zoom-in-95 data-leave:animate-out data-leave:fade-out-0 data-leave:zoom-out-95'
+  'cn-drawer-popup group/drawer-popup pointer-events-auto fixed z-50 m-(--drawer-inset,0px) flex h-(--drawer-content-height) max-h-(--drawer-content-max-height,none) min-h-0 w-(--drawer-content-width,auto) transform-[translate3d(var(--translate-x,0px),var(--translate-y,0px),0)_scale(var(--stack-scale))] flex-col transition-[transform,height,opacity,filter] duration-450 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform outline-none select-none [interpolate-size:allow-keywords] after:pointer-events-none after:absolute after:bg-(--drawer-bleed-background,var(--color-popover)) data-[swipe-axis=y]:after:inset-x-0 data-[swipe-axis=y]:after:h-(--bleed) data-[swipe-direction=down]:after:top-full [--drawer-content-height:var(--drawer-height,auto)] [--drawer-content-max-height:calc(100dvh-6rem)] [--bleed:3rem] data-[swipe-axis=y]:inset-x-0 data-[swipe-direction=down]:bottom-0 data-[swipe-direction=down]:origin-bottom data-[swipe-direction=down]:[--closed-transform:translate3d(0,calc(100%+var(--drawer-inset,0px)+2px),0)] data-enter:data-closed:transform-(--closed-transform) data-leave:data-closed:transform-(--closed-transform)'
 
 /** Upstream DrawerContent string. */
 export const drawerContentClass =
@@ -72,8 +98,9 @@ export const drawerDescriptionClass = 'cn-drawer-description text-balance'
 
 export const drawerFooterClass = 'cn-drawer-footer-base mt-auto flex shrink-0 flex-col'
 
-/** Upstream renders close via `<Button variant="ghost" size="icon-sm">`. */
-export const drawerCloseButtonClass = 'cn-button cn-button-variant-ghost cn-button-size-icon-sm'
+/** Upstream DrawerClose is an unstyled passthrough; every base example
+ *  styles it as `<Button variant="outline">`. */
+export const drawerCloseButtonClass = 'cn-button cn-button-variant-outline cn-button-size-default'
 
 // --- Composable sub-components ---
 

@@ -89,18 +89,18 @@ All 60 `registry:ui` items from `packages/registry/registry/default/ui/registry.
 
 ### Stateless helpers (registry:ui)
 
-| Component  | Description                                                                                                |
-| ---------- | ---------------------------------------------------------------------------------------------------------- |
-| button     | Styled button with variants and sizes, built on the @foldkit/ui Button helper.                             |
-| input      | Styled text input with label and description, built on the @foldkit/ui Input helper.                       |
-| textarea   | Styled multi-line textarea with label and description, built on the @foldkit/ui Textarea helper.           |
-| select     | Styled native select with label, chevron and description, built on the @foldkit/ui Select helper.          |
-| card       | Composable card primitives (Card…CardFooter). A pure layout primitive.                                     |
-| checkbox   | Styled checkbox with label, indeterminate state and description, built on the @foldkit/ui Checkbox helper. |
-| switch     | Styled switch toggle with label and description, built on the @foldkit/ui Switch helper.                   |
-| fieldset   | Styled fieldset with legend and description, built on the @foldkit/ui Fieldset helper.                     |
-| disclosure | Styled collapsible section with animated panel support, built on the @foldkit/ui Disclosure helper.        |
-| nav        | Styled navigation landmark with current-page marking, built on the @foldkit/ui Nav helper.                 |
+| Component   | Description                                                                                                |
+| ----------- | ---------------------------------------------------------------------------------------------------------- |
+| button      | Styled button with variants and sizes, built on the @foldkit/ui Button helper.                             |
+| input       | Styled text input with label and description, built on the @foldkit/ui Input helper.                       |
+| textarea    | Styled multi-line textarea with label and description, built on the @foldkit/ui Textarea helper.           |
+| select      | Styled native select with label, chevron and description, built on the @foldkit/ui Select helper.          |
+| card        | Composable card primitives (Card…CardFooter). A pure layout primitive.                                     |
+| checkbox    | Styled checkbox with label, indeterminate state and description, built on the @foldkit/ui Checkbox helper. |
+| switch      | Styled switch toggle with label and description, built on the @foldkit/ui Switch helper.                   |
+| fieldset    | Styled fieldset with legend and description, built on the @foldkit/ui Fieldset helper.                     |
+| collapsible | Single-section collapsible panel with animated support, built on the @foldkit/ui Disclosure helper.        |
+| nav         | Styled navigation landmark with current-page marking, built on the @foldkit/ui Nav helper.                 |
 
 ### Stateful submodels (registry:ui)
 
@@ -148,7 +148,7 @@ Pure-layout ports of shadcn's presentational components — no submodel backing 
 | drawer          | Bottom-docked modal with grab handle, built on the @foldkit/ui Dialog submodel.                             |
 | hover-card      | Card-styled floating panel, built on the @foldkit/ui Popover submodel.                                      |
 | accordion       | Vertical stack of collapsible sections with rotating chevron, built on the @foldkit/ui Disclosure helper.   |
-| collapsible     | Single-section collapsible; in foldcn this is the Disclosure primitive — see `disclosure`.                  |
+| collapsible     | Single-section collapsible panel, built on the @foldkit/ui Disclosure helper — see `collapsible`.           |
 | context-menu    | Right-click style menu, built on the @foldkit/ui Menu submodel.                                             |
 | menubar         | Horizontal bar of menus, built on the @foldkit/ui Menu submodel.                                            |
 | sonner          | Stacked auto-dismissing notifications, built on the @foldkit/ui Toast submodel.                             |

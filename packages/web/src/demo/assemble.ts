@@ -20,15 +20,14 @@ import { slice as buttonSlice } from './views/button'
 import { slice as calendarSlice } from './views/calendar'
 import { slice as cardSlice } from './views/card'
 import { slice as checkboxSlice } from './views/checkbox'
-import { slice as collapsibleSlice } from './views/collapsible'
 import { slice as comboboxSlice } from './views/combobox'
+import { slice as collapsibleSlice } from './views/collapsible'
 import { slice as commandSlice } from './views/command'
 import { slice as contextMenuSlice } from './views/context-menu'
 import { slice as dataTableSlice } from './views/data-table'
 import { slice as datePickerSlice } from './views/date-picker'
 import { slice as dialogSlice } from './views/dialog'
 import { slice as directionSlice } from './views/direction'
-import { slice as disclosureSlice } from './views/disclosure'
 import { slice as dragAndDropSlice } from './views/drag-and-drop'
 import { slice as drawerSlice } from './views/drawer'
 import { slice as emptySlice } from './views/empty'
@@ -89,15 +88,14 @@ const ModelSchema = S.Struct({
   ...calendarSlice.fields,
   ...cardSlice.fields,
   ...checkboxSlice.fields,
-  ...collapsibleSlice.fields,
   ...comboboxSlice.fields,
+  ...collapsibleSlice.fields,
   ...commandSlice.fields,
   ...contextMenuSlice.fields,
   ...dataTableSlice.fields,
   ...datePickerSlice.fields,
   ...dialogSlice.fields,
   ...directionSlice.fields,
-  ...disclosureSlice.fields,
   ...dragAndDropSlice.fields,
   ...drawerSlice.fields,
   ...emptySlice.fields,
@@ -159,15 +157,14 @@ const MessageSchema = S.Union([
   ...calendarSlice.messages,
   ...cardSlice.messages,
   ...checkboxSlice.messages,
-  ...collapsibleSlice.messages,
   ...comboboxSlice.messages,
+  ...collapsibleSlice.messages,
   ...commandSlice.messages,
   ...contextMenuSlice.messages,
   ...dataTableSlice.messages,
   ...datePickerSlice.messages,
   ...dialogSlice.messages,
   ...directionSlice.messages,
-  ...disclosureSlice.messages,
   ...dragAndDropSlice.messages,
   ...drawerSlice.messages,
   ...emptySlice.messages,
@@ -230,15 +227,14 @@ export const init = (): [Model, []] => [
     ...calendarSlice.init,
     ...cardSlice.init,
     ...checkboxSlice.init,
-    ...collapsibleSlice.init,
     ...comboboxSlice.init,
+    ...collapsibleSlice.init,
     ...commandSlice.init,
     ...contextMenuSlice.init,
     ...dataTableSlice.init,
     ...datePickerSlice.init,
     ...dialogSlice.init,
     ...directionSlice.init,
-    ...disclosureSlice.init,
     ...dragAndDropSlice.init,
     ...drawerSlice.init,
     ...emptySlice.init,
@@ -297,13 +293,12 @@ export const update = (model: Model, message: Message): UpdateReturn =>
       ...calendarSlice.handlers(model),
       ...cardSlice.handlers(model),
       ...checkboxSlice.handlers(model),
-      ...collapsibleSlice.handlers(model),
       ...comboboxSlice.handlers(model),
+      ...collapsibleSlice.handlers(model),
       ...commandSlice.handlers(model),
       ...dataTableSlice.handlers(model),
       ...datePickerSlice.handlers(model),
       ...dialogSlice.handlers(model),
-      ...disclosureSlice.handlers(model),
       ...dragAndDropSlice.handlers(model),
       ...drawerSlice.handlers(model),
       ...fieldsetSlice.handlers(model),

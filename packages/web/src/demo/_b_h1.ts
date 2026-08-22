@@ -12,15 +12,14 @@ import { slice as buttonSlice } from './views/button'
 import { slice as calendarSlice } from './views/calendar'
 import { slice as cardSlice } from './views/card'
 import { slice as checkboxSlice } from './views/checkbox'
-import { slice as collapsibleSlice } from './views/collapsible'
 import { slice as comboboxSlice } from './views/combobox'
+import { slice as collapsibleSlice } from './views/collapsible'
 import { slice as commandSlice } from './views/command'
 import { slice as contextMenuSlice } from './views/context-menu'
 import { slice as dataTableSlice } from './views/data-table'
 import { slice as datePickerSlice } from './views/date-picker'
 import { slice as dialogSlice } from './views/dialog'
 import { slice as directionSlice } from './views/direction'
-import { slice as disclosureSlice } from './views/disclosure'
 import { slice as dragAndDropSlice } from './views/drag-and-drop'
 import { slice as drawerSlice } from './views/drawer'
 import { slice as emptySlice } from './views/empty'
@@ -46,15 +45,14 @@ const ModelSchema = S.Struct({
   ...calendarSlice.fields,
   ...cardSlice.fields,
   ...checkboxSlice.fields,
-  ...collapsibleSlice.fields,
   ...comboboxSlice.fields,
+  ...collapsibleSlice.fields,
   ...commandSlice.fields,
   ...contextMenuSlice.fields,
   ...dataTableSlice.fields,
   ...datePickerSlice.fields,
   ...dialogSlice.fields,
   ...directionSlice.fields,
-  ...disclosureSlice.fields,
   ...dragAndDropSlice.fields,
   ...drawerSlice.fields,
   ...emptySlice.fields,

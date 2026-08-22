@@ -45,14 +45,8 @@ export const drawerView = (model: Model, h: HtmlBuilder<Message>): Html =>
               Drawer.footer(
                 {},
                 [
+                  button<Message>({}, 'Move', h),
                   Drawer.closeButton(closeButton, {}, ['Cancel'], h),
-                  h.button(
-                    [
-                      ...closeButton,
-                      h.Class('rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground'),
-                    ],
-                    ['Move'],
-                  ),
                 ],
                 h,
               ),

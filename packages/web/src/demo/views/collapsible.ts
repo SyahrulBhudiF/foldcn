@@ -3,7 +3,7 @@ import { evo } from 'foldkit/struct'
 import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { disclosure } from '@foldcn/registry/styles/default/ui/collapsible'
+import { collapsible } from '@foldcn/registry/styles/default/ui/collapsible'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message } from '../assemble'
@@ -14,14 +14,14 @@ export const collapsibleView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
     [h.Class('flex w-full flex-col gap-4')],
     [
-      disclosure<Message>(
+      collapsible<Message>(
         {
           id: 'collapsible-demo',
           isOpen: model.isCollapsibleOpen,
           onToggle: (isOpen) => ToggledCollapsible({ isOpen }),
           title: 'Can I collapse this?',
           content:
-            'A single collapsible section — in foldcn this is exactly the Disclosure primitive, shared with the `disclosure` component.',
+            'A single collapsible section — a trigger that toggles one panel open or closed.',
         },
         h,
       ),

@@ -9,8 +9,11 @@ import { cn } from '@/lib/utils'
  *
  * foldkit deltas (inlined at style resolution): foldkit emits aria-disabled/
  * data-disabled instead of native disabled, and only data-checked (never
- * data-unchecked) — this view hand-emits data-unchecked when off so the
- * upstream thumb/track variants resolve.
+ * data-unchecked) on the ROOT button — this view hand-emits data-unchecked
+ * there when off. Upstream Base UI also puts data-checked/data-unchecked on
+ * the THUMB itself (the travel/track variants like
+ * group-data-[size=default]/switch:data-checked:* key on the thumb's own
+ * attribute), so the thumb span mirrors the state attribute too.
  */
 
 export const switchSizeKeys = ['default', 'sm'] as const
@@ -83,6 +86,7 @@ export const switch_ = <M>(config: SwitchConfig<M>, h: HtmlBuilder<M>): Html =>
               [
                 h.span([
                   h.DataAttribute('slot', 'switch-thumb'),
+                  h.DataAttribute(config.isChecked ? 'checked' : 'unchecked', ''),
                   h.Class(cn(switchThumbClass, config.thumbClass)),
                 ]),
               ],

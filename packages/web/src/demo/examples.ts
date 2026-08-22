@@ -14,7 +14,6 @@ import dataTableViewSource from './views/data-table.ts?raw'
 import datePickerViewSource from './views/date-picker.ts?raw'
 import dialogViewSource from './views/dialog.ts?raw'
 import directionViewSource from './views/direction.ts?raw'
-import disclosureViewSource from './views/disclosure.ts?raw'
 import dragAndDropViewSource from './views/drag-and-drop.ts?raw'
 import emptyViewSource from './views/empty.ts?raw'
 import fieldsetViewSource from './views/fieldset.ts?raw'
@@ -97,7 +96,6 @@ export const demoExampleByName: Readonly<Record<DemoItemName, DemoExample>> = {
   },
   dialog: { path: 'src/demo/views/dialog.ts', code: dialogViewSource },
   direction: { path: 'src/demo/views/direction.ts', code: directionViewSource },
-  disclosure: { path: 'src/demo/views/disclosure.ts', code: disclosureViewSource },
   'drag-and-drop': {
     path: 'src/demo/views/drag-and-drop.ts',
     code: dragAndDropViewSource,

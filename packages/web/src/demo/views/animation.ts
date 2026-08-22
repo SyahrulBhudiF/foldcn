@@ -17,7 +17,7 @@ const ToggledAnimation = m('ToggledAnimation')
 
 export const animationView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
-    [h.Class('flex flex-col items-start gap-4')],
+    [h.Class('flex flex-col items-center gap-4')],
     [
       h.button(
         [

@@ -66,14 +66,6 @@
       "files": [{ "path": "fieldset.ts", "type": "registry:ui" }]
     },
     {
-      "name": "disclosure",
-      "type": "registry:ui",
-      "title": "Disclosure",
-      "description": "Styled collapsible section with animated panel support, built on the @foldkit/ui Disclosure helper.",
-      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
-      "files": [{ "path": "disclosure.ts", "type": "registry:ui" }]
-    },
-    {
       "name": "nav",
       "type": "registry:ui",
       "title": "Nav",
@@ -365,7 +357,7 @@
       "name": "collapsible",
       "type": "registry:ui",
       "title": "Collapsible",
-      "description": "Single-section collapsible. In foldcn this is the Disclosure primitive — see `disclosure`.",
+      "description": "Single-section collapsible panel with animated support, built on the @foldkit/ui Disclosure helper.",
       "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [{ "path": "collapsible.ts", "type": "registry:ui" }]
     },

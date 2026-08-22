@@ -51,7 +51,7 @@ npx shadcn@latest add @foldcn/button @foldcn/input @foldcn/dialog
 | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Base**      | `@foldcn/foldcn` (style)                                                                                                                                                                      |
 | **Lib**       | `@foldcn/utils` (cn), `@foldcn/icons` (lucide → h.svg)                                                                                                                                        |
-| **Helpers**   | `button`, `input`, `textarea`, `select`, `checkbox`, `switch`, `fieldset`, `disclosure`, `nav`, `card`                                                                                        |
+| **Helpers**   | `button`, `input`, `textarea`, `select`, `checkbox`, `switch`, `fieldset`, `collapsible`, `nav`, `card`                                                                                       |
 | **Submodels** | `dialog`, `popover`, `tooltip`, `menu`, `listbox`, `combobox`, `tabs`, `radio-group`, `slider`, `calendar`, `date-picker`, `toast`, `animation`, `file-drop`, `virtual-list`, `drag-and-drop` |
 | **Blocks**    | `login-form`, `settings-page`, `data-table`                                                                                                                                                   |
 

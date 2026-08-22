@@ -38,9 +38,9 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 
 ### Not covered (no counterpart)
 
-- **foldcn-only (8):** animation, date-picker, disclosure (≈ base collapsible/accordion), drag-and-drop, file-drop, listbox, nav, virtual-list
+- **foldcn-only (7):** animation, date-picker, drag-and-drop, file-drop, listbox, nav, virtual-list
 - **base-only, missing from foldcn (10):** attachment, bubble, carousel, chart, message, message-scroller, native-select (partially covered inside foldcn `select.ts`), pagination, questionnaire, scroll-area
-- Renames: foldcn `menu` ↔ base `dropdown-menu`; foldcn `fieldset` ↔ base `field`. foldcn `collapsible` delegates to `disclosure`.
+- Renames: foldcn `menu` ↔ base `dropdown-menu`; foldcn `fieldset` ↔ base `field`.
 - Manifest `ui/registry.json`: 60 entries ↔ 60 files, no mismatches.
 
 ## Functional gaps (behavior, not just classes)
@@ -95,7 +95,7 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 ### Disclosure & navigation
 
 - **accordion — MAJOR.** Array-of-controlled-items; no single/multiple root semantics (no multi-open); grid-rows animation vs `animate-accordion-down/up`; single rotating chevron vs icon swap; legacy py-4/ring-2 metrics.
-- **collapsible — MAJOR.** Re-exports Disclosure with an opinionated card skin and `disclosure*` slot names; base ships unstyled parts.
+- **collapsible — MAJOR.** Opinionated card skin (bordered trigger + panel) vs base's unstyled parts; single `title`/`content` config instead of free-form children.
 - **tabs — MINOR.** Full keyboard/activation parity (roving tabindex, orientation, automatic/manual). Diffs: `data-selected` vs `data-active`; h-9 vs h-8 list; line underline offset.
 - **navigation-menu — MAJOR.** Presentational bar; no viewport/indicator/popup management, no `aria-expanded`, no chevron; content is per-item absolute dropdown.
 - **breadcrumb — MINOR.** Visuals match; missing `.ellipsis` part and `aria-label="breadcrumb"`, page `role/aria-current`, separator `role=presentation`; no rtl-flip.

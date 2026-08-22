@@ -145,7 +145,7 @@ export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html => {
       h.div(
         [
           h.Class(
-            'sticky top-10 h-[calc(100vh-2.5rem)] overflow-y-auto border-r border-border py-6 pr-4',
+            'sticky top-10 h-[calc(100vh-2.5rem)] overflow-y-auto overflow-x-visible border-r border-border py-6 pr-4',
           ),
         ],
         [

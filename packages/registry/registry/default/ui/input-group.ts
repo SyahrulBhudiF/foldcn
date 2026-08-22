@@ -126,10 +126,11 @@ export const inputGroupInput = <M>(
     ...extraAttributes,
   ])
 
-export type InputGroupButtonConfig<M> = Omit<ButtonConfig<M>, 'size'> & Readonly<{
-  /** Group-local size — keys `cn-input-group-button-size-*` tokens. */
-  size?: InputGroupButtonSize
-}>
+export type InputGroupButtonConfig<M> = Omit<ButtonConfig<M>, 'size'> &
+  Readonly<{
+    /** Group-local size — keys `cn-input-group-button-size-*` tokens. */
+    size?: InputGroupButtonSize
+  }>
 
 /** A `button` styled to sit inside an `inputGroup` — ghost by default,
  *  sized by the group tokens (upstream keeps the underlying Button on its own
@@ -145,11 +146,7 @@ export const inputGroupButton = <M>(
     {
       ...buttonConfig,
       variant: config.variant ?? 'ghost',
-      className: cn(
-        inputGroupButtonClass,
-        inputGroupButtonSizeClasses[size],
-        config.className,
-      ),
+      className: cn(inputGroupButtonClass, inputGroupButtonSizeClasses[size], config.className),
     },
     label,
     h,
@@ -201,6 +198,10 @@ export const inputGroup = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.Role('group'), h.Class(cn(inputGroupClass, config.className)), h.DataAttribute('slot', 'input-group')],
+    [
+      h.Role('group'),
+      h.Class(cn(inputGroupClass, config.className)),
+      h.DataAttribute('slot', 'input-group'),
+    ],
     children,
   )

@@ -45,14 +45,8 @@ export const sheetView = (model: Model, h: HtmlBuilder<Message>): Html =>
               Sheet.footer(
                 {},
                 [
+                  button<Message>({}, 'Save changes', h),
                   Sheet.closeButton(closeButton, {}, ['Cancel'], h),
-                  h.button(
-                    [
-                      ...closeButton,
-                      h.Class('rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground'),
-                    ],
-                    ['Save changes'],
-                  ),
                 ],
                 h,
               ),
