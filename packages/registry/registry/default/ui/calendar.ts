@@ -43,20 +43,20 @@ export type Week = FoldkitCalendar.Week
 
 /** Upstream root + months strings combined (foldcn renders one container). */
 export const calendarContainerClass =
-  'cn-calendar group/calendar relative flex w-fit flex-col gap-4 bg-background select-none in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent'
+  'cn-calendar group/calendar relative flex w-[280px] min-w-[280px] flex-col gap-4 bg-background select-none in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent'
 
 /** Upstream nav + month_caption anatomy (foldcn keeps the header in flow). */
 export const calendarHeaderClass =
   'flex h-(--cell-size) w-full items-center justify-between gap-1 px-(--cell-size)'
 
 export const calendarHeadingButtonClass =
-  'cn-calendar-caption-label flex items-center gap-1 rounded-(--cell-radius) text-sm font-medium select-none [&>svg]:size-3.5 [&>svg]:text-muted-foreground'
+  'cn-calendar-caption-label flex min-w-0 flex-1 items-center justify-center gap-1 rounded-(--cell-radius) text-sm font-medium select-none [&>svg]:size-3.5 [&>svg]:text-muted-foreground'
 
 export const calendarHeadingTextClass = 'cn-calendar-caption text-sm font-medium select-none'
 
 /** Upstream nav button: Button ghost icon at cell size. */
 export const calendarNavButtonClass =
-  'cn-button cn-button-variant-ghost cn-button-size-icon size-(--cell-size) p-0 select-none aria-disabled:opacity-50'
+  'cn-button cn-button-variant-ghost cn-button-size-icon size-(--cell-size) shrink-0 p-0 select-none aria-disabled:opacity-50'
 
 export const calendarGridClass = 'flex w-full flex-col outline-none'
 
@@ -82,7 +82,7 @@ export const calendarCellClass =
  *  attr values; transition-all replaces what upstream inherits from the
  *  Button cva base, which foldcn's token layer does not carry. */
 export const calendarDayButtonClass =
-  'cn-button cn-button-variant-ghost cn-button-size-icon cn-calendar-day-button relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal transition-all group-data-[focused]/day:relative group-data-[focused]/day:z-10 group-data-[focused]/day:border-ring group-data-[focused]/day:ring-[3px] group-data-[focused]/day:ring-ring/50 group-data-[selected]:rounded-(--cell-radius) group-data-[selected]:bg-primary group-data-[selected]:text-primary-foreground group-data-[selected]:hover:text-primary-foreground group-data-[today]:bg-muted group-data-[today]:text-foreground group-data-[outside-month]:text-muted-foreground group-data-[disabled]:pointer-events-none group-data-[disabled]:text-muted-foreground group-data-[disabled]:opacity-50 dark:hover:text-foreground [&>span]:text-xs [&>span]:opacity-70'
+  'cn-button cn-button-variant-ghost cn-button-size-icon cn-calendar-day-button relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) items-center justify-center border-0 leading-none font-normal transition-all group-data-[focused]/day:relative group-data-[focused]/day:z-10 group-data-[focused]/day:border-ring group-data-[focused]/day:ring-[3px] group-data-[focused]/day:ring-ring/50 group-data-[selected]:rounded-(--cell-radius) group-data-[selected]:bg-primary group-data-[selected]:text-primary-foreground group-data-[selected]:hover:bg-primary group-data-[selected]:hover:text-primary-foreground group-data-[today]:bg-muted group-data-[today]:text-foreground group-data-[outside-month]:text-muted-foreground group-data-[disabled]:pointer-events-none group-data-[disabled]:text-muted-foreground group-data-[disabled]:opacity-50 dark:hover:text-foreground [&>span]:text-xs [&>span]:opacity-70'
 
 export const calendarMonthYearGridClass = 'grid flex-1 grid-cols-3 grid-rows-4 gap-2 outline-none'
 
