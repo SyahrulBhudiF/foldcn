@@ -2,13 +2,13 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import * as HoverCard from '@foldcn/registry/styles/default/ui/hover-card'
 
-import { GotPopoverMessage, type Message } from '../message'
+import { GotHoverCardMessage, type Message } from '../message'
 import type { Model } from '../model'
 
 export const hoverCardView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.submodel({
-    slotId: model.popover.id,
-    model: model.popover,
+    slotId: model.hoverCard.popover.id,
+    model: model.hoverCard,
     view: HoverCard.view,
     viewInputs: HoverCard.styledViewInputs(
       {
@@ -23,11 +23,11 @@ export const hoverCardView = (model: Model, h: HtmlBuilder<Message>): Html =>
             h,
           ),
           h.p([h.Class('text-sm text-muted-foreground')], [
-            'Components are copy-paste HTML-builder factories, themed with Tailwind CSS variables.',
+            'Opens on hover after a short delay, stays open while you move into the card, and closes after a grace period once you leave.',
           ]),
         ],
       },
       h,
     ),
-    toParentMessage: (message) => GotPopoverMessage({ message }),
+    toParentMessage: (message) => GotHoverCardMessage({ message }),
   })

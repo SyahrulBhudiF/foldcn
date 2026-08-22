@@ -8,6 +8,7 @@ import * as DatePicker from '@foldcn/registry/styles/default/ui/date-picker'
 import * as Dialog from '@foldcn/registry/styles/default/ui/dialog'
 import * as DragAndDrop from '@foldcn/registry/styles/default/ui/drag-and-drop'
 import * as FileDrop from '@foldcn/registry/styles/default/ui/file-drop'
+import * as HoverCard from '@foldcn/registry/styles/default/ui/hover-card'
 import * as Listbox from '@foldcn/registry/styles/default/ui/listbox'
 import * as Menu from '@foldcn/registry/styles/default/ui/menu'
 import * as Popover from '@foldcn/registry/styles/default/ui/popover'
@@ -92,6 +93,7 @@ export const Model = S.Struct({
   // stateful submodels
   dialog: Dialog.Model,
   popover: Popover.Model,
+  hoverCard: HoverCard.Model,
   tooltip: Tooltip.Model,
   menu: Menu.Model,
   listbox: Listbox.Model,
