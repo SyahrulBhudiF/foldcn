@@ -1,6 +1,7 @@
-/* Hand-maintained foldkit compatibility deltas — merged into the style item's
- * "@layer components" by scripts/sync-cn-tokens.mjs --inject, and imported
- * after cn-tokens.css everywhere else. Do not regenerate this file.
+/* Hand-maintained foldkit compatibility deltas — concatenated AHEAD of
+ * cn-tokens.css by scripts/resolve-styles.mjs when building the style map
+ * (so delta utilities win tailwind-merge conflicts), then inlined into every
+ * resolved component. Do not regenerate this file.
  *
  * Convention: keep component class strings identical to the upstream base
  * registry files; where foldkit cannot reproduce a Base UI attribute that

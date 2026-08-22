@@ -58,6 +58,33 @@ for (const file of itemFiles) {
 }
 console.log(`resolved sources swapped into ${swapped} file(s) across ${itemFiles.length} item JSONs`)
 
+// 2b. Assert the shipped sources keep the resolver's guarantee: no `cn-*`
+//     tokens inside string literals (comments may still reference upstream
+//     token names as behavioral documentation).
+const { Node, Project } = await import('ts-morph')
+const literalOffenders = []
+for (const file of itemFiles) {
+  const item = JSON.parse(readFileSync(resolve(OUT_DIR, file), 'utf8'))
+  for (const entry of item.files ?? []) {
+    if (!entry.path?.endsWith('.ts') || !entry.content) continue
+    const sf = new Project({ useInMemoryFileSystem: true }).createSourceFile(
+      entry.path,
+      entry.content,
+      { overwrite: true },
+    )
+    sf.forEachDescendant((node) => {
+      const isLiteral = Node.isStringLiteral(node) || Node.isNoSubstitutionTemplateLiteral(node)
+      if (isLiteral && /\bcn-[\w-]+\b/.test(node.getLiteralText())) {
+        literalOffenders.push(`${file} :: ${entry.path}`)
+      }
+    })
+  }
+}
+if (literalOffenders.length > 0) {
+  console.error(`unresolved cn-* literals in shipped sources:\n  ${[...new Set(literalOffenders)].join('\n  ')}`)
+  process.exit(1)
+}
+
 // 3. Generate a worker index over the built item JSONs so the deploy worker
 //    can serve /r/{name}.json without knowing the item list ahead of time.
 const identifierFor = (file) => `_${file.slice(0, -'.json'.length).replace(/[^a-zA-Z0-9]/g, '_')}`
