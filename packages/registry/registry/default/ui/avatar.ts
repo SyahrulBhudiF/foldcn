@@ -6,8 +6,7 @@ import { cn } from '@/lib/utils'
 
 /**
  * Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/avatar.tsx.
- * Keep the class strings identical to upstream — visual tokens live in the
- * style item's `cn-*` layer. See docs/deriving-from-base.md.
+ * Keep the class strings identical to upstream — visual styling lives in the central foldcn style definition. See docs/deriving-from-base.md.
  *
  * Known foldkit gap: upstream swaps image→fallback automatically via the
  * Base UI Avatar primitive; foldcn's image helper always renders <img>, so

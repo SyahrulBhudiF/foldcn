@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 //
 // Derived from the shadcn v4 BASE registry:
 // apps/v4/registry/bases/base/ui/toggle.tsx. Class strings are identical to
-// upstream; visual tokens live in the style item's `cn-*` layer.
+// upstream; visual styling lives in the central foldcn style definition.
 
 export const toggleVariantKeys = ['default', 'outline'] as const
 export type ToggleVariant = (typeof toggleVariantKeys)[number]

@@ -10,8 +10,7 @@ import { cn } from '@/lib/utils'
 // Card.content, Card.footer.
 //
 // Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/card.tsx.
-// Class strings are identical to upstream; visual tokens live in the style
-// item's `cn-*` layer. Every part carries a `data-slot` attribute and the
+// Class strings are identical to upstream; visual styling lives in the central foldcn style definition. Every part carries a `data-slot` attribute and the
 // container exposes `data-size` ("default" | "sm"). The container defines
 // --card-spacing, which header/content/footer consume via px-(--card-spacing),
 // so a single data-[size=sm] override resizes the whole card.

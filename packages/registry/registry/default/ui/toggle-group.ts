@@ -12,7 +12,7 @@ type Child = Html | string
 //
 // Derived from the shadcn v4 BASE registry:
 // apps/v4/registry/bases/base/ui/toggle-group.tsx. Class strings are
-// identical to upstream; visual tokens live in the style item's `cn-*` layer.
+// identical to upstream; visual styling lives in the central foldcn style definition.
 //
 // Upstream renders a loose flex row joined only when spacing is 0; foldcn
 // keeps the same model via the `spacing` config (default 2, matching

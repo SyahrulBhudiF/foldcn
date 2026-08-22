@@ -12,8 +12,7 @@ import { cn } from '@/lib/utils'
 //
 // Derived from the shadcn v4 BASE registry:
 // apps/v4/registry/bases/base/ui/input-otp.tsx (joined-pill slots). Class
-// strings are identical to upstream; visual tokens live in the style item's
-// `cn-*` layer (cn-input-otp-input / cn-input-otp-caret are intentional no-op
+// strings are identical to upstream; visual styling lives in the central foldcn style definition. (cn-input-otp-input / cn-input-otp-caret are intentional no-op
 // hooks upstream — the real input/caret styling is foldcn-specific below).
 
 export const inputOtpClass = 'cn-input-otp relative flex items-center has-disabled:opacity-50'

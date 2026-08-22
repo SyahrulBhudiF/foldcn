@@ -44,7 +44,7 @@ export const hoverCardTriggerClass =
 /**
  * Derived from the shadcn v4 BASE registry:
  * apps/v4/registry/bases/base/ui/hover-card.tsx. Class strings are identical
- * to upstream; visual tokens live in the style item's `cn-*` layer.
+ * to upstream; visual styling lives in the central foldcn style definition.
  *
  * foldcn gap vs upstream: Base UI backs hover-card with PreviewCard (true
  * hover-intent open/close); foldkit has no hover primitive, so this stays a

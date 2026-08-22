@@ -13,7 +13,7 @@ type Child = Html | string
 //
 // Derived from the shadcn v4 BASE registry:
 // apps/v4/registry/bases/base/ui/breadcrumb.tsx. Class strings are identical
-// to upstream; visual tokens live in the style item's `cn-*` layer
+// to upstream; visual styling lives in the central foldcn style definition
 // (cn-breadcrumb itself is an intentional no-op hook upstream).
 
 export const breadcrumbClass = 'cn-breadcrumb'

@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 /**
  * Derived from the shadcn v4 BASE registry:
  * apps/v4/registry/bases/base/ui/radio-group.tsx. Class strings are identical
- * to upstream; visual tokens live in the style item's `cn-*` layer.
+ * to upstream; visual styling lives in the central foldcn style definition.
  *
  * Two rendering paths in `styledViewInputs`:
  *  - `optionLabel` (+ optional `optionDescription`) → upstream anatomy: a
@@ -47,7 +47,7 @@ export const radioGroupHorizontalClass =
   'cn-radio-group grid gap-2 w-full sm:flex-row sm:items-center'
 
 /** Upstream item component string. The disabled: variants are inert under
- *  foldkit (aria-/data- twins live in cn-compat.css). */
+ *  foldkit (aria-/data- twins are inlined at style resolution). */
 export const radioItemClass =
   'cn-radio-group-item group/radio-group-item peer relative aspect-square shrink-0 border outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50'
 

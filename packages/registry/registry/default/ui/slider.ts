@@ -5,8 +5,7 @@ import { cn } from '@/lib/utils'
 
 /**
  * Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/slider.tsx.
- * Class strings are identical to upstream; visual tokens live in the style
- * item's `cn-*` layer. See docs/deriving-from-base.md.
+ * Class strings are identical to upstream; visual styling lives in the central foldcn style definition. See docs/deriving-from-base.md.
  *
  * foldcn gap vs upstream: single value / single thumb only (upstream is
  * multi-thumb); vertical layout is configured but the styled view renders
@@ -47,7 +46,7 @@ export const sliderFilledTrackClass =
   'cn-slider-range select-none data-horizontal:h-full data-vertical:w-full'
 
 /** Upstream SliderPrimitive.Thumb string. The disabled: variants are inert
- *  under foldkit (aria-/data- twins live in cn-compat.css). */
+ *  under foldkit (aria-/data- twins are inlined at style resolution). */
 export const sliderThumbClass =
   'cn-slider-thumb block shrink-0 select-none disabled:pointer-events-none disabled:opacity-50'
 

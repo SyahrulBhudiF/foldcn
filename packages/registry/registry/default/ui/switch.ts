@@ -5,10 +5,9 @@ import { cn } from '@/lib/utils'
 
 /**
  * Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/switch.tsx.
- * Class strings are identical to upstream; visual tokens live in the style
- * item's `cn-*` layer. See docs/deriving-from-base.md.
+ * Class strings are identical to upstream; visual styling lives in the central foldcn style definition. See docs/deriving-from-base.md.
  *
- * foldkit deltas (handled in cn-compat.css): foldkit emits aria-disabled/
+ * foldkit deltas (inlined at style resolution): foldkit emits aria-disabled/
  * data-disabled instead of native disabled, and only data-checked (never
  * data-unchecked) — this view hand-emits data-unchecked when off so the
  * upstream thumb/track variants resolve.

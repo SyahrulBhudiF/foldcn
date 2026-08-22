@@ -10,7 +10,7 @@ type Child = Html | string
 //
 // Derived from the shadcn v4 BASE registry:
 // apps/v4/registry/bases/base/ui/table.tsx. Class strings are identical to
-// upstream; visual tokens live in the style item's `cn-*` layer.
+// upstream; visual styling lives in the central foldcn style definition.
 
 export const tableContainerClass = 'cn-table-container'
 

@@ -6,8 +6,7 @@ import { cn } from '@/lib/utils'
 
 /**
  * Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/marker.tsx.
- * Keep the class strings identical to upstream — visual tokens live in the
- * style item's `cn-*` layer (cn-marker-variant-default is an intentional
+ * Keep the class strings identical to upstream — visual styling lives in the central foldcn style definition (cn-marker-variant-default is an intentional
  * no-op hook upstream too). See docs/deriving-from-base.md.
  */
 

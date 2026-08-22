@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 //
 // Derived from the shadcn v4 BASE registry:
 // apps/v4/registry/bases/base/ui/item.tsx. Class strings are identical to
-// upstream; visual tokens live in the style item's `cn-*` layer.
+// upstream; visual styling lives in the central foldcn style definition.
 
 export const itemGroupClass = 'cn-item-group group/item-group flex w-full flex-col'
 

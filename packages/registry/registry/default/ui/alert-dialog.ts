@@ -10,8 +10,7 @@ import { cn } from '@/lib/utils'
 //
 // Derived from the shadcn v4 BASE registry:
 // apps/v4/registry/bases/base/ui/alert-dialog.tsx. Class strings are
-// identical to upstream; visual tokens live in the style item's `cn-*`
-// layer. See docs/deriving-from-base.md.
+// identical to upstream; visual styling lives in the central foldcn style definition. See docs/deriving-from-base.md.
 //
 // foldcn gaps vs upstream: no Media part slot wiring in styledViewInputs
 // (use AlertDialog.media inside content), and Action/Cancel compose Button

@@ -1,6 +1,6 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import * as radioGroup from '@foldcn/registry/src/ui/radio-group'
+import * as radioGroup from '@foldcn/registry/styles/default/ui/radio-group'
 import { PlanRadioGroup } from '../bundles'
 
 import { GotRadioGroupMessage, type Message } from '../message'

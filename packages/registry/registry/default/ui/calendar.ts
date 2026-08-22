@@ -29,7 +29,7 @@ export type Week = FoldkitCalendar.Week
 
 // Derived from the shadcn v4 BASE registry:
 // apps/v4/registry/bases/base/ui/calendar.tsx. Class strings are identical
-// to upstream; visual tokens live in the style item's `cn-*` layer
+// to upstream; visual styling lives in the central foldcn style definition
 // (--cell-size / --cell-radius come from the cn-calendar token).
 //
 // foldcn gaps vs upstream: Days/Months/Years drill navigation instead of
@@ -47,18 +47,22 @@ export const calendarHeaderClass =
   'flex h-(--cell-size) w-full items-center justify-between gap-1 px-(--cell-size)'
 
 export const calendarHeadingButtonClass =
-  'cn-calendar-caption-label flex cursor-pointer items-center gap-1 rounded-(--cell-radius) text-sm font-medium select-none [&>svg]:size-3.5 [&>svg]:text-muted-foreground'
+  'cn-calendar-caption-label flex items-center gap-1 rounded-(--cell-radius) text-sm font-medium select-none [&>svg]:size-3.5 [&>svg]:text-muted-foreground'
 
 export const calendarHeadingTextClass = 'cn-calendar-caption text-sm font-medium select-none'
 
 /** Upstream nav button: Button ghost icon at cell size. */
 export const calendarNavButtonClass =
-  'cn-button cn-button-variant-ghost cn-button-size-icon size-(--cell-size) cursor-pointer p-0 select-none aria-disabled:opacity-50 [&>svg]:rtl:rotate-180'
+  'cn-button cn-button-variant-ghost cn-button-size-icon size-(--cell-size) p-0 select-none aria-disabled:opacity-50'
 
 export const calendarGridClass = 'flex w-full flex-col outline-none'
 
 /** Upstream week string. */
 export const calendarRowClass = 'mt-2 flex w-full'
+
+/** Upstream weekdays string (the weekday *header* row; weeks get mt-2,
+ *  weekdays don't). */
+export const calendarWeekdaysClass = 'flex'
 
 /** Upstream weekday string. */
 export const calendarColumnHeaderClass =
@@ -136,16 +140,16 @@ const daysView = <M>(
       h.div(
         [h.Class(calendarHeaderClass)],
         [
-          navButton(days.previousMonthButton, icon(h, ChevronLeft, 'size-5'), h),
+          navButton(days.previousMonthButton, icon(h, ChevronLeft, 'cn-rtl-flip size-4'), h),
           headingButton(days.heading, days.headingButton, h),
-          navButton(days.nextMonthButton, icon(h, ChevronRight, 'size-5'), h),
+          navButton(days.nextMonthButton, icon(h, ChevronRight, 'cn-rtl-flip size-4'), h),
         ],
       ),
       h.div(
         [...days.grid, h.Class(calendarGridClass)],
         [
           h.div(
-            [...days.headerRow, h.Class(calendarRowClass)],
+            [...days.headerRow, h.Class(calendarWeekdaysClass)],
             days.columnHeaders.map((header) =>
               h.div([...header.attributes, h.Class(calendarColumnHeaderClass)], [header.name]),
             ),
@@ -204,9 +208,9 @@ const yearsView = <M>(
       h.div(
         [h.Class(calendarHeaderClass)],
         [
-          navButton(years.previousPageButton, icon(h, ChevronLeft, 'size-5'), h),
+          navButton(years.previousPageButton, icon(h, ChevronLeft, 'cn-rtl-flip size-4'), h),
           h.h2([h.Id(years.heading.id), h.Class(calendarHeadingTextClass)], [years.heading.text]),
-          navButton(years.nextPageButton, icon(h, ChevronRight, 'size-5'), h),
+          navButton(years.nextPageButton, icon(h, ChevronRight, 'cn-rtl-flip size-4'), h),
         ],
       ),
       h.div(

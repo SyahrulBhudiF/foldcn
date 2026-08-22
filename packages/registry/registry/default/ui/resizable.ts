@@ -10,7 +10,7 @@ type Child = Html | string
 //
 // Derived from the shadcn v4 BASE registry:
 // apps/v4/registry/bases/base/ui/resizable.tsx. Class strings are identical
-// to upstream; visual tokens live in the style item's `cn-*` layer
+// to upstream; visual styling lives in the central foldcn style definition
 // (cn-resizable-panel-group / cn-resizable-handle are intentional no-op
 // hooks upstream — the effective classes are the literal strings).
 //

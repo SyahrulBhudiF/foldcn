@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 //
 // Derived from the shadcn v4 BASE registry:
 // apps/v4/registry/bases/base/ui/popover.tsx. Class strings are identical to
-// upstream; visual tokens live in the style item's `cn-*` layer (enter/leave
+// upstream; visual styling lives in the central foldcn style definition (enter/leave
 // animations are pre-transformed there). The panel emits data-side derived
 // from the anchor placement alongside foldkit's data-placement.
 

@@ -2,6 +2,7 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { cn } from '@/lib/utils'
 import { button, type ButtonConfig, type ButtonSize, type ButtonVariant } from './button'
+import { separatorClass } from './separator'
 
 type Child = Html | string
 
@@ -11,7 +12,7 @@ type Child = Html | string
 //
 // Derived from the shadcn v4 BASE registry:
 // apps/v4/registry/bases/base/ui/button-group.tsx. Class strings are
-// identical to upstream; visual tokens live in the style item's `cn-*` layer.
+// identical to upstream; visual styling lives in the central foldcn style definition.
 
 export const buttonGroupClass =
   'cn-button-group flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 [&>[data-slot=select-trigger]:not([class*=\'w-\'])]:w-fit [&>input]:flex-1'
@@ -27,7 +28,7 @@ export type ButtonGroupOrientation = keyof typeof buttonGroupOrientationClasses
 
 /** Upstream ButtonGroupText string. */
 export const buttonGroupTextClass =
-  'cn-button-group-text flex items-center bg-muted px-2 text-sm font-medium [&_svg:not([class*=\'size-\'])]:size-4 [&_svg:not([class*=\'text-\'])]:text-muted-foreground'
+  'cn-button-group-text flex items-center [&_svg]:pointer-events-none'
 
 /** Upstream ButtonGroupSeparator string. */
 export const buttonGroupSeparatorClass =
@@ -44,6 +45,7 @@ export const buttonGroup = <M>(
   const orientation = config.orientation ?? 'horizontal'
   return h.div(
     [
+      h.Role('group'),
       h.Class(
         cn(buttonGroupClass, buttonGroupOrientationClasses[orientation], config.className),
       ),
@@ -66,16 +68,21 @@ export const buttonGroupText = <M>(
     children,
   )
 
-/** Divider between grouped controls. */
+// Upstream renders the shared <Separator> part; foldcn composes the same
+// attribute set and class merge (separator base wins conflicts first) by hand.
+
+/** Divider between grouped controls — a vertical `Separator` by default,
+ *  matching upstream `ButtonGroupSeparator`. */
 export const buttonGroupSeparator = <M>(config: StyleConfig, h: HtmlBuilder<M>): Html => {
-  const orientation = config.orientation ?? 'horizontal'
+  const orientation = config.orientation ?? 'vertical'
   return h.div(
     [
       h.Role('separator'),
       h.AriaOrientation(orientation),
       h.DataAttribute('slot', 'button-group-separator'),
+      h.DataAttribute('orientation', orientation),
       h.DataAttribute(orientation, ''),
-      h.Class(cn(buttonGroupSeparatorClass, config.className)),
+      h.Class(cn(separatorClass, buttonGroupSeparatorClass, config.className)),
     ],
     [],
   )

@@ -5,9 +5,7 @@ import { cn } from '@/lib/utils'
 
 /**
  * Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/input.tsx.
- * Keep the class strings identical to upstream — visual tokens live in the
- * style item's `cn-*` layer (registry/default/style/cn-tokens.css), and
- * foldkit-specific deltas live in cn-compat.css. See docs/deriving-from-base.md.
+ * Keep the class strings identical to upstream — visual styling lives in the central foldcn style definition . See docs/deriving-from-base.md.
  */
 
 export const inputClass =

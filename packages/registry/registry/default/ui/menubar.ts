@@ -20,7 +20,7 @@ export type OutMessage = typeof OutMessage.Type
 
 // Derived from the shadcn v4 BASE registry:
 // apps/v4/registry/bases/base/ui/menubar.tsx. Class strings are identical to
-// upstream; visual tokens live in the style item's `cn-*` layer.
+// upstream; visual styling lives in the central foldcn style definition.
 //
 // foldcn gaps vs upstream: each trigger is an independent Menu bundle — no
 // cross-menu arrow traversal or open-on-hover-of-next-trigger (needs a

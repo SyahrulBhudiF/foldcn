@@ -31,11 +31,11 @@ export type RenderInfo = FoldkitDialog.RenderInfo
 
 // Derived from the shadcn v4 BASE registry:
 // apps/v4/registry/bases/base/ui/sheet.tsx. Class strings are identical to
-// upstream; visual tokens live in the style item's `cn-*` layer.
+// upstream; visual styling lives in the central foldcn style definition.
 //
 // foldkit delta: upstream keys enter/exit motion on
 // data-starting-style/data-ending-style, which foldkit cannot emit — the
-// equivalent declarations live in cn-compat.css under data-enter/data-leave,
+// equivalent declarations are inlined under data-enter/data-leave,
 // and the panel emits data-side (derived from the anchor placement).
 
 // --- Sides ---
@@ -59,7 +59,7 @@ export const sheetPanelClass: Readonly<Record<SheetSide, string>> = {
 }
 
 /** Upstream motion classes (data-starting-style/data-ending-style variants);
- *  foldkit equivalents are added to the same tokens in cn-compat.css. */
+ *  foldkit equivalents are added to the same tokens at style resolution. */
 export const sheetMotionClass =
   'data-ending-style:opacity-0 data-starting-style:opacity-0 data-[side=bottom]:data-ending-style:translate-y-[2.5rem] data-[side=bottom]:data-starting-style:translate-y-[2.5rem] data-[side=left]:data-ending-style:translate-x-[-2.5rem] data-[side=left]:data-starting-style:translate-x-[-2.5rem] data-[side=right]:data-ending-style:translate-x-[2.5rem] data-[side=right]:data-starting-style:translate-x-[2.5rem] data-[side=top]:data-ending-style:translate-y-[-2.5rem] data-[side=top]:data-starting-style:translate-y-[-2.5rem]'
 

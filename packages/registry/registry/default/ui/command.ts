@@ -15,7 +15,7 @@ type Child = Html | string
 
 // Derived from the shadcn v4 BASE registry:
 // apps/v4/registry/bases/base/ui/command.tsx. Class strings are identical to
-// upstream; visual tokens live in the style item's `cn-*` layer.
+// upstream; visual styling lives in the central foldcn style definition.
 //
 // foldcn gaps vs upstream: no cmdk behavior layer (filtering, arrow-key
 // selection and Enter-to-select are consumer-owned) and no Dialog wrapper;

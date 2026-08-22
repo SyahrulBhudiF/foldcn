@@ -31,9 +31,7 @@ export type RenderInfo = FoldkitDialog.RenderInfo
 // --- Class constants ---
 //
 // Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/dialog.tsx.
-// Keep the class strings identical to upstream — visual tokens live in the
-// style item's `cn-*` layer (registry/default/style/cn-tokens.css), and
-// foldkit-specific deltas live in cn-compat.css. See docs/deriving-from-base.md.
+// Keep the class strings identical to upstream — visual styling lives in the central foldcn style definition . See docs/deriving-from-base.md.
 
 /** foldkit delta: the host <dialog> element's own chrome (upstream Root renders
  *  nothing). Backdrop/panel are fixed-position; this only neutralizes the
@@ -43,8 +41,8 @@ export const dialogClass = 'bg-transparent p-0 open:flex items-center justify-ce
 // The @foldkit/ui Dialog defers Animation submodel attributes onto the
 // backdrop/panel elements: `data-enter` while entering, `data-leave` while
 // leaving (never `data-state`). The sync script rewrites upstream's
-// `data-open:`/`data-closed:` animation utilities to these windows inside
-// cn-tokens.css; persistent `data-open:` styling passes through untouched.
+// `data-open:`/`data-closed:` animation utilities to these windows during token
+// sync; persistent `data-open:` styling passes through untouched.
 export const dialogBackdropClass = 'cn-dialog-overlay fixed inset-0 isolate z-50'
 
 export const dialogPanelClass =

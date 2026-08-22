@@ -7,16 +7,15 @@ import { cn } from '@/lib/utils'
 
 /**
  * Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/checkbox.tsx.
- * Class strings are identical to upstream; visual tokens live in the style
- * item's `cn-*` layer. See docs/deriving-from-base.md.
+ * Class strings are identical to upstream; visual styling lives in the central foldcn style definition. See docs/deriving-from-base.md.
  *
- * foldkit delta (handled in cn-compat.css): foldkit emits
+ * foldkit delta (inlined at style resolution): foldkit emits
  * aria-disabled/data-disabled instead of native disabled, and data-checked /
  * data-indeterminate for state.
  */
 
 /** Upstream checkbox component string. The disabled: variants are inert under
- *  foldkit (never native disabled) — compat twins live in cn-compat.css. */
+ *  foldkit (never native disabled) — compat twins are inlined at style resolution. */
 export const checkboxClass =
   'cn-checkbox peer relative shrink-0 outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50'
 
