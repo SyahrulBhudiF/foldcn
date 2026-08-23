@@ -1,6 +1,6 @@
 // User-facing caveats for registry items whose behavior differs from their
 // shadcn/ui counterpart. Most of these stem from foldkit primitive ceilings
-// (no submenu kinds, no pointer-position anchoring, no hover-intent) that are
+// (no submenu kinds, no pointer-position anchoring) that are
 // documented in depth in docs/shadcn-base-parity-audit.md; this map surfaces
 // the short version on the item pages themselves so adopters learn the limits
 // before installing.
@@ -20,7 +20,7 @@ export const gapsByItem: Readonly<Record<string, ReadonlyArray<string>>> = {
     'Opens on activation at a fixed anchor — foldkit has no right-click/pointer-position anchoring primitive yet.',
   ],
   'hover-card': [
-    'Toggles like a popover (click/activation), not on hover — foldkit has no hover-intent primitive yet.',
+    'Hover-intent is hand-rolled in this component, not a shared foldkit/ui primitive — copy it along if you need the same behavior elsewhere.',
   ],
   sidebar: [
     'No cookie persistence — foldkit owns initial render through its own hydration rather than document.cookie (an SSR flash-prevention mechanism).',
@@ -40,7 +40,7 @@ export const gapsByItem: Readonly<Record<string, ReadonlyArray<string>>> = {
     'Two-pane percentage splitter — no min/max constraints, collapsible panes, or N-pane layouts.',
   ],
   'navigation-menu': [
-    'Presentational navigation bar — no viewport, indicator, or popup management.',
+    'Each dropdown is its own independently-anchored Popover panel — no shared/morphing Viewport panel or slide-direction indicator like upstream.',
   ],
   calendar: ['Single-date selection — no ranges or week numbers.'],
   slider: ['Single thumb, horizontal orientation only.'],
