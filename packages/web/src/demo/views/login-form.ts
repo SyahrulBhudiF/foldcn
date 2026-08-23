@@ -1,28 +1,30 @@
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { loginForm } from '@foldcn/registry/styles/default/blocks/login-form/login-form'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const UpdatedLoginEmail = m('UpdatedLoginEmail', { value: S.String })
-const UpdatedLoginPassword = m('UpdatedLoginPassword', { value: S.String })
-const SubmittedLogin = m('SubmittedLogin')
+const Message = defineMessageUnion({
+  UpdatedLoginEmail: { value: S.String },
+  UpdatedLoginPassword: { value: S.String },
+  SubmittedLogin: {},
+})
 
-export const loginFormView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const loginFormView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('w-full overflow-hidden rounded-xl border border-border')],
     [
-      loginForm<Message>(
+      loginForm<AppMessage>(
         {
           email: model.loginEmail,
-          onEmailInput: (value) => UpdatedLoginEmail({ value }),
+          onEmailInput: (value) => Message.UpdatedLoginEmail({ value }),
           password: model.loginPassword,
-          onPasswordInput: (value) => UpdatedLoginPassword({ value }),
-          onSubmit: SubmittedLogin(),
+          onPasswordInput: (value) => Message.UpdatedLoginPassword({ value }),
+          onSubmit: Message.SubmittedLogin(),
         },
         h,
       ),
@@ -53,17 +55,17 @@ export const slice = defineSlice({
     loginPassword: '',
     loginSubmitted: false,
   },
-  messages: [UpdatedLoginEmail, UpdatedLoginPassword, SubmittedLogin],
+  messages: [Message.UpdatedLoginEmail, Message.UpdatedLoginPassword, Message.SubmittedLogin],
   handlers: (model: State) => ({
-    UpdatedLoginEmail: ({ value }: typeof UpdatedLoginEmail.Type): UpdateReturn => [
+    UpdatedLoginEmail: ({ value }: typeof Message.UpdatedLoginEmail.Type): UpdateReturn => [
       evo(model, { loginEmail: () => value }),
       [],
     ],
-    UpdatedLoginPassword: ({ value }: typeof UpdatedLoginPassword.Type): UpdateReturn => [
+    UpdatedLoginPassword: ({ value }: typeof Message.UpdatedLoginPassword.Type): UpdateReturn => [
       evo(model, { loginPassword: () => value }),
       [],
     ],
     SubmittedLogin: (): UpdateReturn => [evo(model, { loginSubmitted: () => true }), []],
   }),
-  samples: [UpdatedLoginEmail({ value: 'ada@example.com' }), SubmittedLogin()],
+  samples: [Message.UpdatedLoginEmail({ value: 'ada@example.com' }), Message.SubmittedLogin()],
 })

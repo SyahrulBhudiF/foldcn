@@ -3,19 +3,21 @@ import { Calendar as FoldkitCalendar } from 'foldkit'
 import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import * as calendar from '@foldcn/registry/styles/default/ui/calendar'
 
 import { DEMO_TODAY } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const GotCalendarMessage = m('GotCalendarMessage', { message: calendar.Message })
+const Message = defineMessageUnion({
+  GotCalendarMessage: { message: calendar.Message },
+})
 
 // Single-date calendar mirroring apps/v4/examples/base/calendar-demo.tsx
-export const calendarView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const calendarView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.submodel({
     slotId: model.calendar.id,
     model: model.calendar,
@@ -24,7 +26,7 @@ export const calendarView = (model: Model, h: HtmlBuilder<Message>): Html =>
       { maybeSelectedDate: model.maybeSelectedDate, containerClass: 'rounded-lg border' },
       h,
     ),
-    toParentMessage: (message) => GotCalendarMessage({ message }),
+    toParentMessage: (message) => Message.GotCalendarMessage({ message }),
   })
 
 const foldCalendarOutMessage = M.type<calendar.OutMessage>().pipe(
@@ -41,7 +43,7 @@ const foldCalendar = Update.foldChild({
   update: calendar.update,
   read: (model: State) => Option.some(model.calendar),
   write: (model, next) => evo(model, { calendar: () => next }),
-  toParentMessage: (message) => GotCalendarMessage({ message }),
+  toParentMessage: (message) => Message.GotCalendarMessage({ message }),
   foldOutMessage: foldCalendarOutMessage,
 })
 
@@ -64,9 +66,9 @@ export const slice = defineSlice({
     }),
     maybeSelectedDate: Option.some(DEMO_TODAY),
   },
-  messages: [GotCalendarMessage],
+  messages: [Message.GotCalendarMessage],
   handlers: (model: State) => ({
-    GotCalendarMessage: (payload: typeof GotCalendarMessage.Type): UpdateReturn =>
+    GotCalendarMessage: (payload: typeof Message.GotCalendarMessage.Type): UpdateReturn =>
       foldCalendar(model, payload.message),
   }),
   samples: [],

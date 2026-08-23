@@ -4,7 +4,7 @@ import type { AnchorConfig } from '@foldkit/ui/anchor'
 import { Popover as FoldkitPopover } from '@foldkit/ui'
 import { childAttributes, type ChildAttribute } from 'foldkit/html'
 import type { Html, HtmlBuilder } from 'foldkit/html'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import { evo } from 'foldkit/struct'
 import { defineView } from 'foldkit/submodel'
 import * as Update from 'foldkit/update'
@@ -35,40 +35,22 @@ export type Model = typeof Model.Type
 const DEFAULT_OPEN_DELAY_MS = 200
 const DEFAULT_CLOSE_DELAY_MS = 300
 
-/** Sent when the pointer enters the trigger or the panel. */
-export const EnteredHoverZone = m('EnteredHoverZone')
-/** Sent when the pointer leaves the trigger or the panel. */
-export const LeftHoverZone = m('LeftHoverZone')
-/** Sent when focus lands on the trigger. Opens immediately, without delay. */
-export const FocusedTrigger = m('FocusedTrigger')
-/** Sent when focus leaves the trigger. */
-export const BlurredTrigger = m('BlurredTrigger')
-/** Sent when Escape is pressed on the trigger while the card is open. */
-export const PressedEscape = m('PressedEscape')
-/** Sent when the show-delay timer fires. Stale versions are ignored. */
-export const CompletedWaitBeforeShow = m('CompletedWaitBeforeShow', { version: S.Number })
-/** Sent when the close-delay timer fires. Stale versions are ignored. */
-export const CompletedWaitBeforeHide = m('CompletedWaitBeforeHide', { version: S.Number })
-/** Wraps a Popover submodel message for delegation. */
-export const GotPopoverMessage = m('GotPopoverMessage', { message: FoldkitPopover.Message })
-
-export const Message = S.Union([
-  EnteredHoverZone,
-  LeftHoverZone,
-  FocusedTrigger,
-  BlurredTrigger,
-  PressedEscape,
-  CompletedWaitBeforeShow,
-  CompletedWaitBeforeHide,
-  GotPopoverMessage,
-])
+export const Message = defineMessageUnion({
+  EnteredHoverZone: {},
+  LeftHoverZone: {},
+  FocusedTrigger: {},
+  BlurredTrigger: {},
+  PressedEscape: {},
+  CompletedWaitBeforeShow: { version: S.Number },
+  CompletedWaitBeforeHide: { version: S.Number },
+  GotPopoverMessage: { message: FoldkitPopover.Message },
+})
 export type Message = typeof Message.Type
 
-/** Emitted when the hover card opens (open-delay elapsed or trigger focused). */
-export const Opened = m('Opened')
-/** Emitted after the close delay elapses and the card closes. */
-export const Closed = m('Closed')
-export const OutMessage = S.Union([Opened, Closed])
+export const OutMessage = defineMessageUnion({
+  Opened: {},
+  Closed: {},
+})
 export type OutMessage = typeof OutMessage.Type
 
 export type InitConfig = Readonly<{
@@ -157,9 +139,9 @@ type UpdateReturn = readonly [
  *  Stale invocations are filtered by version in update. */
 const WaitBeforeShow = Command.define('WaitBeforeShow', {
   args: { delay: S.DurationFromMillis, version: S.Number },
-  messages: [CompletedWaitBeforeShow],
+  messages: [Message.CompletedWaitBeforeShow],
   execute: ({ delay, version }) =>
-    Effect.sleep(delay).pipe(Effect.as(CompletedWaitBeforeShow({ version }))),
+    Effect.sleep(delay).pipe(Effect.as(Message.CompletedWaitBeforeShow({ version }))),
 })
 
 /** Waits for the close delay before emitting `CompletedWaitBeforeHide`.
@@ -167,15 +149,15 @@ const WaitBeforeShow = Command.define('WaitBeforeShow', {
  *  gap without closing the card. */
 const WaitBeforeHide = Command.define('WaitBeforeHide', {
   args: { delay: S.DurationFromMillis, version: S.Number },
-  messages: [CompletedWaitBeforeHide],
+  messages: [Message.CompletedWaitBeforeHide],
   execute: ({ delay, version }) =>
-    Effect.sleep(delay).pipe(Effect.as(CompletedWaitBeforeHide({ version }))),
+    Effect.sleep(delay).pipe(Effect.as(Message.CompletedWaitBeforeHide({ version }))),
 })
 
 const isOpen = (model: Model): boolean => model.popover.isOpen
 
 const toGotPopoverMessage = (message: FoldkitPopover.Message): Message =>
-  GotPopoverMessage({ message })
+  Message.GotPopoverMessage({ message })
 
 const foldPopover = Update.foldChild({
   update: FoldkitPopover.update,
@@ -183,7 +165,7 @@ const foldPopover = Update.foldChild({
   write: (model, nextPopover) => evo(model, { popover: () => nextPopover }),
   toParentMessage: toGotPopoverMessage,
   toParentOutMessage: (outMessage: FoldkitPopover.OutMessage): Option.Option<OutMessage> =>
-    outMessage._tag === 'Opened' ? Option.some(Opened()) : Option.some(Closed()),
+    outMessage._tag === 'Opened' ? Option.some(OutMessage.Opened()) : Option.some(OutMessage.Closed()),
 })
 
 const scheduleShow = (model: Model): UpdateReturn => {
@@ -209,7 +191,7 @@ const openNow = (model: Model): UpdateReturn => {
   return [
     evo(model, { popover: () => nextPopover }),
     Command.mapMessages(popoverCommands, toGotPopoverMessage),
-    Option.some(Opened()),
+    Option.some(OutMessage.Opened()),
   ]
 }
 
@@ -220,7 +202,7 @@ const closeNow = (model: Model): UpdateReturn => {
   // and immediately re-open the card.
   const [nextPopover, popoverCommands] = FoldkitPopover.update(
     model.popover,
-    FoldkitPopover.RequestedClose(),
+    FoldkitPopover.Message.RequestedClose(),
   )
   return [
     evo(model, { popover: () => nextPopover }),
@@ -228,7 +210,7 @@ const closeNow = (model: Model): UpdateReturn => {
       popoverCommands.filter((command) => command.name !== 'FocusButton'),
       toGotPopoverMessage,
     ),
-    Option.some(Closed()),
+    Option.some(OutMessage.Closed()),
   ]
 }
 
@@ -367,14 +349,14 @@ export const view = defineView<Model, Message, ViewInputs>((model, viewInputs, h
 
   const hoverZoneHandlers = isDisabled
     ? []
-    : [h.OnMouseEnter(EnteredHoverZone()), h.OnMouseLeave(LeftHoverZone())]
+    : [h.OnMouseEnter(Message.EnteredHoverZone()), h.OnMouseLeave(Message.LeftHoverZone())]
   const triggerFocusHandlers = isDisabled
     ? []
     : [
-        h.OnFocus(FocusedTrigger()),
-        h.OnBlur(BlurredTrigger()),
+        h.OnFocus(Message.FocusedTrigger()),
+        h.OnBlur(Message.BlurredTrigger()),
         h.OnKeyDownPreventDefault((key) =>
-          key === 'Escape' && model.popover.isOpen ? Option.some(PressedEscape()) : Option.none(),
+          key === 'Escape' && model.popover.isOpen ? Option.some(Message.PressedEscape()) : Option.none(),
         ),
       ]
 

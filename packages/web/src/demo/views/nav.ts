@@ -1,20 +1,23 @@
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { nav } from '@foldcn/registry/styles/default/ui/nav'
 
 import { DemoNav } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const SelectedNav = m('SelectedNav', { value: DemoNav })
+const Message = defineMessageUnion({
+  SelectedNav: { value: DemoNav },
+})
+const SelectedNav = Message.SelectedNav
 
 const NAV_ITEMS = ['Overview', 'Components', 'Settings', 'Docs'] as const
 
-export const navView = (model: Model, h: HtmlBuilder<Message>): Html =>
-  nav<Message, (typeof NAV_ITEMS)[number]>(
+export const navView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
+  nav<AppMessage, (typeof NAV_ITEMS)[number]>(
     {
       items: NAV_ITEMS,
       ariaLabel: 'Primary',

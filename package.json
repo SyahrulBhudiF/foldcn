@@ -16,9 +16,9 @@
     "infra:deploy": "alchemy deploy --stage prod --yes"
   },
   "devDependencies": {
-    "@effect/platform-node": "4.0.0-rc.109",
-    "alchemy": "2.0.0-beta.72",
-    "effect": "4.0.0-rc.109",
+    "@effect/platform-node": "4.0.0-rc.111",
+    "alchemy": "2.0.0-beta.74",
+    "effect": "4.0.0-rc.111",
     "turbo": "^2.10.11",
     "typescript": "^7.0.2",
     "vite-plus": "^0.2.9"

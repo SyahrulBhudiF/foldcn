@@ -2,7 +2,7 @@ import { Command, Update } from 'foldkit'
 import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Animation as FoldkitAnimation } from '@foldkit/ui'
@@ -10,12 +10,16 @@ import { Animation as FoldkitAnimation } from '@foldkit/ui'
 import * as animation from '@foldcn/registry/styles/default/ui/animation'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const GotAnimationMessage = m('GotAnimationMessage', { message: animation.Message })
-const ToggledAnimation = m('ToggledAnimation')
+const Message = defineMessageUnion({
+  GotAnimationMessage: { message: animation.Message },
+  ToggledAnimation: {},
+})
+const GotAnimationMessage = Message.GotAnimationMessage
+const ToggledAnimation = Message.ToggledAnimation
 
-export const animationView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const animationView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('flex flex-col items-center gap-4')],
     [
@@ -95,7 +99,7 @@ export const slice = defineSlice({
       const nextShowing = !model.isAnimationShowing
       return foldAnimation(
         evo(model, { isAnimationShowing: () => nextShowing }),
-        nextShowing ? FoldkitAnimation.Showed() : FoldkitAnimation.Hid(),
+        nextShowing ? FoldkitAnimation.Message.Showed() : FoldkitAnimation.Message.Hid(),
       )
     },
   }),

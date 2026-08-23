@@ -2,17 +2,19 @@ import { Update } from 'foldkit'
 import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import * as HoverCard from '@foldcn/registry/styles/default/ui/hover-card'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const GotHoverCardMessage = m('GotHoverCardMessage', { message: HoverCard.Message })
+const Message = defineMessageUnion({
+  GotHoverCardMessage: { message: HoverCard.Message },
+})
 
-export const hoverCardView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const hoverCardView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.submodel({
     slotId: model.hoverCard.popover.id,
     model: model.hoverCard,
@@ -34,7 +36,7 @@ export const hoverCardView = (model: Model, h: HtmlBuilder<Message>): Html =>
       },
       h,
     ),
-    toParentMessage: (message) => GotHoverCardMessage({ message }),
+    toParentMessage: (message) => Message.GotHoverCardMessage({ message }),
   })
 
 const foldNoOp =
@@ -54,7 +56,7 @@ const foldHoverCard = Update.foldChild({
   update: HoverCard.update,
   read: (model: State) => Option.some(model.hoverCard),
   write: (model, next) => evo(model, { hoverCard: () => next }),
-  toParentMessage: (message) => GotHoverCardMessage({ message }),
+  toParentMessage: (message) => Message.GotHoverCardMessage({ message }),
   foldOutMessage: foldHoverCardOutMessage,
 })
 
@@ -66,9 +68,9 @@ type State = typeof stateSchema.Type
 export const slice = defineSlice({
   fields,
   init: { hoverCard: HoverCard.init({ id: 'hover-card-demo' }) },
-  messages: [GotHoverCardMessage],
+  messages: [Message.GotHoverCardMessage],
   handlers: (model: State) => ({
-    GotHoverCardMessage: (payload: typeof GotHoverCardMessage.Type): UpdateReturn =>
+    GotHoverCardMessage: (payload: typeof Message.GotHoverCardMessage.Type): UpdateReturn =>
       foldHoverCard(model, payload.message),
   }),
   samples: [],

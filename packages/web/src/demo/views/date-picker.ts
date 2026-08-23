@@ -3,24 +3,26 @@ import { Calendar as FoldkitCalendar } from 'foldkit'
 import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import * as datePicker from '@foldcn/registry/styles/default/ui/date-picker'
 
 import { DEMO_TODAY } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const GotDatePickerMessage = m('GotDatePickerMessage', { message: datePicker.Message })
+const Message = defineMessageUnion({
+  GotDatePickerMessage: { message: datePicker.Message },
+})
 
-export const datePickerView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const datePickerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.submodel({
     slotId: model.datePicker.id,
     model: model.datePicker,
     view: datePicker.view,
     viewInputs: datePicker.styledViewInputs({ maybeSelectedDate: model.maybePickedDate }, h),
-    toParentMessage: (message) => GotDatePickerMessage({ message }),
+    toParentMessage: (message) => Message.GotDatePickerMessage({ message }),
   })
 
 const foldDatePickerOutMessage = M.type<datePicker.OutMessage>().pipe(
@@ -38,7 +40,7 @@ const foldDatePicker = Update.foldChild({
   update: datePicker.update,
   read: (model: State) => Option.some(model.datePicker),
   write: (model, next) => evo(model, { datePicker: () => next }),
-  toParentMessage: (message) => GotDatePickerMessage({ message }),
+  toParentMessage: (message) => Message.GotDatePickerMessage({ message }),
   foldOutMessage: foldDatePickerOutMessage,
 })
 
@@ -61,9 +63,9 @@ export const slice = defineSlice({
     }),
     maybePickedDate: Option.none(),
   },
-  messages: [GotDatePickerMessage],
+  messages: [Message.GotDatePickerMessage],
   handlers: (model: State) => ({
-    GotDatePickerMessage: (payload: typeof GotDatePickerMessage.Type): UpdateReturn =>
+    GotDatePickerMessage: (payload: typeof Message.GotDatePickerMessage.Type): UpdateReturn =>
       foldDatePicker(model, payload.message),
   }),
   samples: [],

@@ -2,7 +2,7 @@ import { Update } from 'foldkit'
 import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Listbox as FoldkitListbox } from '@foldkit/ui'
@@ -11,9 +11,11 @@ import * as listbox from '@foldcn/registry/styles/default/ui/listbox'
 
 import { ItemListbox, ListboxItem } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const GotListboxMessage = m('GotListboxMessage', { message: listbox.Message })
+const Message = defineMessageUnion({
+  GotListboxMessage: { message: listbox.Message },
+})
 
 const LISTBOX_ITEMS: ReadonlyArray<ListboxItem> = [
   'Michael Bluth',
@@ -23,7 +25,7 @@ const LISTBOX_ITEMS: ReadonlyArray<ListboxItem> = [
   'Tobias Funke',
 ]
 
-export const listboxView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const listboxView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('flex flex-col gap-1.5')],
     [
@@ -47,7 +49,7 @@ export const listboxView = (model: Model, h: HtmlBuilder<Message>): Html =>
             ),
           }),
         }),
-        toParentMessage: (message) => GotListboxMessage({ message }),
+        toParentMessage: (message) => Message.GotListboxMessage({ message }),
       }),
     ],
   )
@@ -65,7 +67,7 @@ const foldListbox = Update.foldChild({
   update: ItemListbox.update,
   read: (model: State) => Option.some(model.listbox),
   write: (model, next) => evo(model, { listbox: () => next }),
-  toParentMessage: (message) => GotListboxMessage({ message }),
+  toParentMessage: (message) => Message.GotListboxMessage({ message }),
   foldOutMessage: foldListboxOutMessage,
 })
 
@@ -80,9 +82,9 @@ export const slice = defineSlice({
     listbox: listbox.init({ id: 'listbox-demo' }),
     maybeListboxValue: Option.none(),
   },
-  messages: [GotListboxMessage],
+  messages: [Message.GotListboxMessage],
   handlers: (model: State) => ({
-    GotListboxMessage: (payload: typeof GotListboxMessage.Type): UpdateReturn =>
+    GotListboxMessage: (payload: typeof Message.GotListboxMessage.Type): UpdateReturn =>
       foldListbox(model, payload.message),
   }),
   samples: [],

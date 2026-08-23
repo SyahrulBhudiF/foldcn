@@ -3,16 +3,18 @@ import { Schema as S } from 'effect'
 import { Listbox as FoldkitListbox } from '@foldkit/ui'
 import { Update } from 'foldkit'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import * as select from '@foldcn/registry/styles/default/ui/select'
 import { LanguageSelect } from '../bundles'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const GotSelectMessage = m('GotSelectMessage', { message: select.Message })
+const Message = defineMessageUnion({
+  GotSelectMessage: { message: select.Message },
+})
 
 type FruitItem = { value: string; label: string }
 
@@ -24,7 +26,7 @@ const FRUITS: ReadonlyArray<FruitItem> = [
   { value: 'pineapple', label: 'Pineapple' },
 ]
 
-export const selectView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const selectView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('w-full max-w-48')],
     [
@@ -32,7 +34,7 @@ export const selectView = (model: Model, h: HtmlBuilder<Message>): Html =>
         slotId: model.select.id,
         model: model.select,
         view: LanguageSelect.view,
-        viewInputs: select.styledViewInputs<Message, FruitItem, string>(
+        viewInputs: select.styledViewInputs<AppMessage, FruitItem, string>(
           {
             options: FRUITS,
             maybeSelectedValue: model.maybeSelectValue,
@@ -44,7 +46,7 @@ export const selectView = (model: Model, h: HtmlBuilder<Message>): Html =>
           },
           h,
         ),
-        toParentMessage: (message) => GotSelectMessage({ message }),
+        toParentMessage: (message) => Message.GotSelectMessage({ message }),
       }),
     ],
   )
@@ -62,7 +64,7 @@ const foldSelect = Update.foldChild({
   update: LanguageSelect.update,
   read: (model: State) => Option.some(model.select),
   write: (model, next) => evo(model, { select: () => next }),
-  toParentMessage: (message) => GotSelectMessage({ message }),
+  toParentMessage: (message) => Message.GotSelectMessage({ message }),
   foldOutMessage: foldSelectOutMessage,
 })
 
@@ -80,12 +82,12 @@ export const slice = defineSlice({
     select: select.init({ id: 'select-demo' }),
     maybeSelectValue: Option.none(),
   },
-  messages: [GotSelectMessage],
+  messages: [Message.GotSelectMessage],
   handlers: (model: State) => ({
-    GotSelectMessage: (payload: typeof GotSelectMessage.Type): UpdateReturn =>
+    GotSelectMessage: (payload: typeof Message.GotSelectMessage.Type): UpdateReturn =>
       foldSelect(model, payload.message),
   }),
   samples: [
-    GotSelectMessage({ message: FoldkitListbox.Opened({ maybeActiveItemIndex: Option.none() }) }),
+    Message.GotSelectMessage({ message: FoldkitListbox.Message.Opened({ maybeActiveItemIndex: Option.none() }) }),
   ],
 })

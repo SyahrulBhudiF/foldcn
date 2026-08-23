@@ -2,25 +2,29 @@ import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { Command, Update } from 'foldkit'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { button } from '@foldcn/registry/styles/default/ui/button'
 import * as Drawer from '@foldcn/registry/styles/default/ui/drawer'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
 type State = { dialog: typeof Drawer.Model.Type }
 
-const GotDialogMessage = m('GotDialogMessage', { message: Drawer.Message })
-const ClickedOpenDialog = m('ClickedOpenDialog')
+const Message = defineMessageUnion({
+  GotDialogMessage: { message: Drawer.Message },
+  ClickedOpenDialog: {},
+})
+const GotDialogMessage = Message.GotDialogMessage
+const ClickedOpenDialog = Message.ClickedOpenDialog
 
-export const drawerView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('flex flex-col items-start gap-4')],
     [
-      button<Message>({ variant: 'outline', onClick: ClickedOpenDialog() }, 'Open Drawer', h),
+      button<AppMessage>({ variant: 'outline', onClick: ClickedOpenDialog() }, 'Open Drawer', h),
       h.submodel({
         slotId: model.dialog.id,
         model: model.dialog,

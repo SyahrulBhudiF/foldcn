@@ -2,17 +2,19 @@ import { Update } from 'foldkit'
 import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import * as popover from '@foldcn/registry/styles/default/ui/popover'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const GotPopoverMessage = m('GotPopoverMessage', { message: popover.Message })
+const Message = defineMessageUnion({
+  GotPopoverMessage: { message: popover.Message },
+})
 
-export const popoverView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const popoverView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.submodel({
     slotId: model.popover.id,
     model: model.popover,
@@ -108,7 +110,7 @@ export const popoverView = (model: Model, h: HtmlBuilder<Message>): Html =>
       },
       h,
     ),
-    toParentMessage: (message) => GotPopoverMessage({ message }),
+    toParentMessage: (message) => Message.GotPopoverMessage({ message }),
   })
 
 const foldNoOp =
@@ -128,7 +130,7 @@ const foldPopover = Update.foldChild({
   update: popover.update,
   read: (model: State) => Option.some(model.popover),
   write: (model, next) => evo(model, { popover: () => next }),
-  toParentMessage: (message) => GotPopoverMessage({ message }),
+  toParentMessage: (message) => Message.GotPopoverMessage({ message }),
   foldOutMessage: foldPopoverOutMessage,
 })
 
@@ -140,9 +142,9 @@ type State = typeof stateSchema.Type
 export const slice = defineSlice({
   fields,
   init: { popover: popover.init({ id: 'popover-demo' }) },
-  messages: [GotPopoverMessage],
+  messages: [Message.GotPopoverMessage],
   handlers: (model: State) => ({
-    GotPopoverMessage: (payload: typeof GotPopoverMessage.Type): UpdateReturn =>
+    GotPopoverMessage: (payload: typeof Message.GotPopoverMessage.Type): UpdateReturn =>
       foldPopover(model, payload.message),
   }),
   samples: [],

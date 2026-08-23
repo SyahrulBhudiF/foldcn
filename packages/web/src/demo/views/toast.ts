@@ -2,24 +2,32 @@ import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { Command, Update } from 'foldkit'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import * as ToastModule from '@foldcn/registry/styles/default/ui/toast'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 import { Toast } from '../toast'
 
 // Exported for the sonner demo, which renders the same shared toast stack.
-export const GotToastMessage = m('GotToastMessage', { message: Toast.Message })
-export const ClickedShowInfoToast = m('ClickedShowInfoToast')
-export const ClickedShowSuccessToast = m('ClickedShowSuccessToast')
-export const ClickedShowWarningToast = m('ClickedShowWarningToast')
-export const ClickedShowErrorToast = m('ClickedShowErrorToast')
-export const ClickedDismissAllToasts = m('ClickedDismissAllToasts')
+const Message = defineMessageUnion({
+  GotToastMessage: { message: Toast.Message },
+  ClickedShowInfoToast: {},
+  ClickedShowSuccessToast: {},
+  ClickedShowWarningToast: {},
+  ClickedShowErrorToast: {},
+  ClickedDismissAllToasts: {},
+})
+export const GotToastMessage = Message.GotToastMessage
+export const ClickedShowInfoToast = Message.ClickedShowInfoToast
+export const ClickedShowSuccessToast = Message.ClickedShowSuccessToast
+export const ClickedShowWarningToast = Message.ClickedShowWarningToast
+export const ClickedShowErrorToast = Message.ClickedShowErrorToast
+export const ClickedDismissAllToasts = Message.ClickedDismissAllToasts
 
-export const toastView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const toastView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('flex flex-col items-start gap-6')],
     [
@@ -72,7 +80,7 @@ export const toastView = (model: Model, h: HtmlBuilder<Message>): Html =>
     ],
   )
 
-const hButton = (h: HtmlBuilder<Message>, label: string, message: Message): Html =>
+const hButton = (h: HtmlBuilder<AppMessage>, label: string, message: AppMessage): Html =>
   h.button(
     [
       h.Class('rounded-md border border-input bg-background px-4 py-2 text-sm font-medium'),

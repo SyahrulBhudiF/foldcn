@@ -2,25 +2,27 @@ import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { Command, Update } from 'foldkit'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { button } from '@foldcn/registry/styles/default/ui/button'
 import * as AlertDialog from '@foldcn/registry/styles/default/ui/alert-dialog'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
 type State = { dialog: typeof AlertDialog.Model.Type }
 
-const GotDialogMessage = m('GotDialogMessage', { message: AlertDialog.Message })
-const ClickedOpenDialog = m('ClickedOpenDialog')
+const Message = defineMessageUnion({
+  GotDialogMessage: { message: AlertDialog.Message },
+  ClickedOpenDialog: {},
+})
 
-export const alertDialogView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const alertDialogView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('flex flex-col items-start gap-4')],
     [
-      button<Message>({ variant: 'outline', onClick: ClickedOpenDialog() }, 'Show Dialog', h),
+      button<AppMessage>({ variant: 'outline', onClick: Message.ClickedOpenDialog() }, 'Show Dialog', h),
       h.submodel({
         slotId: model.dialog.id,
         model: model.dialog,
@@ -55,7 +57,7 @@ export const alertDialogView = (model: Model, h: HtmlBuilder<Message>): Html =>
           },
           h,
         ),
-        toParentMessage: (message) => GotDialogMessage({ message }),
+        toParentMessage: (message) => Message.GotDialogMessage({ message }),
       }),
     ],
   )
@@ -77,24 +79,24 @@ const foldAlertDialog = Update.foldChild({
   update: AlertDialog.update,
   read: (model: State) => Option.some(model.dialog),
   write: (model, next) => evo(model, { dialog: () => next }),
-  toParentMessage: (message) => GotDialogMessage({ message }),
+  toParentMessage: (message) => Message.GotDialogMessage({ message }),
   foldOutMessage: foldAlertDialogOutMessage,
 })
 
 export const slice = defineSlice({
   fields: {},
   init: {},
-  messages: [GotDialogMessage, ClickedOpenDialog],
+  messages: [Message.GotDialogMessage, Message.ClickedOpenDialog],
   handlers: (model: State) => ({
-    GotDialogMessage: (payload: typeof GotDialogMessage.Type): UpdateReturn =>
+    GotDialogMessage: (payload: typeof Message.GotDialogMessage.Type): UpdateReturn =>
       foldAlertDialog(model, payload.message),
     ClickedOpenDialog: (): UpdateReturn => {
       const [next, commands] = AlertDialog.open(model.dialog)
       return [
         evo(model, { dialog: () => next }),
-        Command.mapMessages(commands, (message) => GotDialogMessage({ message })),
+        Command.mapMessages(commands, (message) => Message.GotDialogMessage({ message })),
       ]
     },
   }),
-  samples: [ClickedOpenDialog()],
+  samples: [Message.ClickedOpenDialog()],
 })

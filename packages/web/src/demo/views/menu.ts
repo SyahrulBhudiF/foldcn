@@ -2,7 +2,7 @@ import { Update } from 'foldkit'
 import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Menu as FoldkitMenu } from '@foldkit/ui'
@@ -11,13 +11,16 @@ import * as menu from '@foldcn/registry/styles/default/ui/menu'
 
 import { DemoMenu } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-export const GotMenuMessage = m('GotMenuMessage', { message: menu.Message })
+const Message = defineMessageUnion({
+  GotMenuMessage: { message: menu.Message },
+})
+export const GotMenuMessage = Message.GotMenuMessage
 
 // Items mirror apps/v4/examples/base/dropdown-menu-demo.tsx (flat list;
 // foldcn's Menu has no checkbox/radio/submenu/destructive kinds — presentational gap noted in registry).
-export const menuView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const menuView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.submodel({
     slotId: model.menu.id,
     model: model.menu,
@@ -30,7 +33,7 @@ export const menuView = (model: Model, h: HtmlBuilder<Message>): Html =>
         content: h.span([], [item]),
       }),
     }),
-    toParentMessage: (message) => GotMenuMessage({ message }),
+    toParentMessage: (message) => Message.GotMenuMessage({ message }),
   })
 
 const foldNoOp =
@@ -49,7 +52,7 @@ const foldMenu = Update.foldChild({
   update: DemoMenu.update,
   read: (model: State) => Option.some(model.menu),
   write: (model, next) => evo(model, { menu: () => next }),
-  toParentMessage: (message) => GotMenuMessage({ message }),
+  toParentMessage: (message) => Message.GotMenuMessage({ message }),
   foldOutMessage: foldMenuOutMessage,
 })
 
@@ -61,9 +64,9 @@ type State = typeof stateSchema.Type
 export const slice = defineSlice({
   fields,
   init: { menu: menu.init({ id: 'menu-demo' }) },
-  messages: [GotMenuMessage],
+  messages: [Message.GotMenuMessage],
   handlers: (model: State) => ({
-    GotMenuMessage: (payload: typeof GotMenuMessage.Type): UpdateReturn =>
+    GotMenuMessage: (payload: typeof Message.GotMenuMessage.Type): UpdateReturn =>
       foldMenu(model, payload.message),
   }),
   samples: [],

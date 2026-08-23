@@ -2,7 +2,7 @@ import { Option } from 'effect'
 import { Schema as S } from 'effect'
 import { Subscription, Update } from 'foldkit'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import {
@@ -24,9 +24,12 @@ import { icon } from '@foldcn/registry/styles/default/lib/icons'
 import * as Sidebar from '@foldcn/registry/styles/default/ui/sidebar'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const GotSidebarMessage = m('GotSidebarMessage', { message: Sidebar.Message })
+const Message = defineMessageUnion({
+  GotSidebarMessage: { message: Sidebar.Message },
+})
+const GotSidebarMessage = Message.GotSidebarMessage
 
 // Mimics apps/v4/examples/base/sidebar-demo.tsx (the flagship Team
 // Switcher + collapsible Platform + Projects w/ actions + User footer
@@ -37,7 +40,7 @@ const GotSidebarMessage = m('GotSidebarMessage', { message: Sidebar.Message })
 // See also sidebar-group.tsx / sidebar-menu*.tsx for the smaller
 // sub-part variants this demo composites.
 
-export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const sidebarView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('flex w-full flex-col gap-0 bg-background')],
     [
@@ -127,7 +130,7 @@ export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html =>
     ],
   )
 
-const teamSwitcher = (h: HtmlBuilder<Message>): Html =>
+const teamSwitcher = (h: HtmlBuilder<AppMessage>): Html =>
   Sidebar.menu(
     {},
     [
@@ -156,7 +159,7 @@ const teamSwitcher = (h: HtmlBuilder<Message>): Html =>
     h,
   )
 
-const navMain = (h: HtmlBuilder<Message>): Html =>
+const navMain = (h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [],
     [
@@ -206,7 +209,7 @@ const collapsibleMenuRow = (config: {
   icon: Parameters<typeof icon>[1]
   isActive?: boolean
   subItems: ReadonlyArray<string>
-  h: HtmlBuilder<Message>
+  h: HtmlBuilder<AppMessage>
 }): Html =>
   // Static open mimic: no Collapsible helper wired — the submenu is
   // always rendered, matching the defaultOpen={isActive} of the
@@ -249,7 +252,7 @@ const collapsibleMenuRow = (config: {
     config.h,
   )
 
-const navProjects = (h: HtmlBuilder<Message>): Html =>
+const navProjects = (h: HtmlBuilder<AppMessage>): Html =>
   Sidebar.group(
     { className: 'group-data-[collapsible=icon]:hidden' },
     [
@@ -281,7 +284,7 @@ const navProjects = (h: HtmlBuilder<Message>): Html =>
 const projectRow = (
   iconNode: Parameters<typeof icon>[1],
   label: string,
-  h: HtmlBuilder<Message>,
+  h: HtmlBuilder<AppMessage>,
 ): Html =>
   Sidebar.menuItem(
     {},
@@ -297,7 +300,7 @@ const projectRow = (
     h,
   )
 
-const secondarySupportGroup = (h: HtmlBuilder<Message>): Html =>
+const secondarySupportGroup = (h: HtmlBuilder<AppMessage>): Html =>
   Sidebar.group(
     { className: 'group-data-[collapsible=icon]:hidden' },
     [
@@ -324,7 +327,7 @@ const secondarySupportGroup = (h: HtmlBuilder<Message>): Html =>
     h,
   )
 
-const navUser = (h: HtmlBuilder<Message>): Html =>
+const navUser = (h: HtmlBuilder<AppMessage>): Html =>
   Sidebar.menu(
     {},
     [

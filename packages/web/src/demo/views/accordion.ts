@@ -1,14 +1,16 @@
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { accordion } from '@foldcn/registry/styles/default/ui/accordion'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const ToggledAccordion = m('ToggledAccordion', { value: S.Array(S.Boolean) })
+const Message = defineMessageUnion({
+  ToggledAccordion: { value: S.Array(S.Boolean) },
+})
 
 // Mirrors apps/v4/examples/base/accordion-demo.tsx
 const ITEMS = [
@@ -32,12 +34,12 @@ const ITEMS = [
   },
 ] as const
 
-export const accordionView = (model: Model, h: HtmlBuilder<Message>): Html =>
-  accordion<Message>(
+export const accordionView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
+  accordion<AppMessage>(
     {
       type: 'multiple',
       value: model.accordionOpen,
-      onValueChange: (value) => ToggledAccordion({ value }),
+      onValueChange: (value) => Message.ToggledAccordion({ value }),
       className: 'max-w-lg',
       items: ITEMS.map((item) => ({
         id: item.id,
@@ -56,12 +58,12 @@ type State = typeof stateSchema.Type
 export const slice = defineSlice({
   fields,
   init: { accordionOpen: [true, false, false] },
-  messages: [ToggledAccordion],
+  messages: [Message.ToggledAccordion],
   handlers: (model: State) => ({
-    ToggledAccordion: (payload: typeof ToggledAccordion.Type): UpdateReturn => [
+    ToggledAccordion: (payload: typeof Message.ToggledAccordion.Type): UpdateReturn => [
       evo(model, { accordionOpen: () => payload.value }),
       [],
     ],
   }),
-  samples: [ToggledAccordion({ value: [true, false, false] })],
+  samples: [Message.ToggledAccordion({ value: [true, false, false] })],
 })

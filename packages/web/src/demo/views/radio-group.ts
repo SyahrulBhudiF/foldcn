@@ -2,7 +2,7 @@ import { Update } from 'foldkit'
 import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { RadioGroup as FoldkitRadioGroup } from '@foldkit/ui'
@@ -10,16 +10,18 @@ import { RadioGroup as FoldkitRadioGroup } from '@foldkit/ui'
 import * as radioGroup from '@foldcn/registry/styles/default/ui/radio-group'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const GotRadioGroupMessage = m('GotRadioGroupMessage', { message: radioGroup.Message })
+const Message = defineMessageUnion({
+  GotRadioGroupMessage: { message: radioGroup.Message },
+})
 
 const RadioValue = S.Literals(['default', 'comfortable', 'compact'])
 type RadioValue = typeof RadioValue.Type
 
 const RadioDemoGroup = radioGroup.create<RadioValue>()
 
-export const radioGroupView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const radioGroupView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('w-full')],
     [
@@ -27,7 +29,7 @@ export const radioGroupView = (model: Model, h: HtmlBuilder<Message>): Html =>
         slotId: model.radioGroup.id,
         model: model.radioGroup,
         view: RadioDemoGroup.view,
-        viewInputs: radioGroup.styledViewInputs<Message, RadioValue>(
+        viewInputs: radioGroup.styledViewInputs<AppMessage, RadioValue>(
           {
             options: ['default', 'comfortable', 'compact'],
             selectedValue: model.maybeRadioValue,
@@ -37,7 +39,7 @@ export const radioGroupView = (model: Model, h: HtmlBuilder<Message>): Html =>
           },
           h,
         ),
-        toParentMessage: (message) => GotRadioGroupMessage({ message }),
+        toParentMessage: (message) => Message.GotRadioGroupMessage({ message }),
       }),
     ],
   )
@@ -55,7 +57,7 @@ const foldRadioGroup = Update.foldChild({
   update: RadioDemoGroup.update,
   read: (model: State) => Option.some(model.radioGroup),
   write: (model, next) => evo(model, { radioGroup: () => next }),
-  toParentMessage: (message) => GotRadioGroupMessage({ message }),
+  toParentMessage: (message) => Message.GotRadioGroupMessage({ message }),
   foldOutMessage: foldRadioGroupOutMessage,
 })
 
@@ -70,9 +72,9 @@ export const slice = defineSlice({
     radioGroup: radioGroup.init({ id: 'radio-group-demo' }),
     maybeRadioValue: Option.some('comfortable' as RadioValue),
   },
-  messages: [GotRadioGroupMessage],
+  messages: [Message.GotRadioGroupMessage],
   handlers: (model: State) => ({
-    GotRadioGroupMessage: (payload: typeof GotRadioGroupMessage.Type): UpdateReturn =>
+    GotRadioGroupMessage: (payload: typeof Message.GotRadioGroupMessage.Type): UpdateReturn =>
       foldRadioGroup(model, payload.message),
   }),
   samples: [],

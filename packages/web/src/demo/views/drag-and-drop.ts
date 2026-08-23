@@ -3,16 +3,19 @@ import { Array, Match as M, Option, pipe } from 'effect'
 import { Subscription, Update } from 'foldkit'
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { cn } from '@foldcn/registry/styles/default/lib/utils'
 import * as DragAndDrop from '@foldcn/registry/styles/default/ui/drag-and-drop'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const GotDragAndDropMessage = m('GotDragAndDropMessage', { message: DragAndDrop.Message })
+const Message = defineMessageUnion({
+  GotDragAndDropMessage: { message: DragAndDrop.Message },
+})
+const GotDragAndDropMessage = Message.GotDragAndDropMessage
 
 export const DemoCard = S.Struct({ id: S.String, label: S.String })
 export type DemoCard = typeof DemoCard.Type
@@ -77,7 +80,7 @@ const cardView = (
   index: number,
   containerId: string,
   model: Model,
-  h: HtmlBuilder<Message>,
+  h: HtmlBuilder<AppMessage>,
 ): Html => {
   const maybeItemId = DragAndDrop.maybeDraggedItemId(model.dragAndDrop)
   const isBeingDragged = Option.exists(maybeItemId, (id) => id === card.id)
@@ -110,14 +113,14 @@ const cardView = (
   )
 }
 
-const dropPlaceholder = (h: HtmlBuilder<Message>): Html =>
+const dropPlaceholder = (h: HtmlBuilder<AppMessage>): Html =>
   h.keyed('div')('drop-placeholder', [h.Class(DragAndDrop.dragDropPlaceholderClass)])
 
 const renderColumn = (
   column: DemoColumn,
   model: Model,
   children: ReadonlyArray<Html>,
-  h: HtmlBuilder<Message>,
+  h: HtmlBuilder<AppMessage>,
 ): Html => {
   const maybeTarget = DragAndDrop.maybeDropTarget(model.dragAndDrop)
   const isDropTarget =
@@ -151,7 +154,7 @@ const columnView = (
   columns: ReadonlyArray<DemoColumn>,
   column: DemoColumn,
   model: Model,
-  h: HtmlBuilder<Message>,
+  h: HtmlBuilder<AppMessage>,
 ): Html => {
   const maybeItemId = DragAndDrop.maybeDraggedItemId(model.dragAndDrop)
   const maybeTarget = DragAndDrop.maybeDropTarget(model.dragAndDrop)
@@ -194,7 +197,7 @@ const columnView = (
 const ghostView = (
   columns: ReadonlyArray<DemoColumn>,
   model: Model,
-  h: HtmlBuilder<Message>,
+  h: HtmlBuilder<AppMessage>,
 ): Html => {
   const maybeItemId = DragAndDrop.maybeDraggedItemId(model.dragAndDrop)
   return pipe(
@@ -210,7 +213,7 @@ const ghostView = (
   )
 }
 
-export const dragAndDropView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const dragAndDropView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('w-full')],
     [

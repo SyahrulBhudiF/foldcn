@@ -2,7 +2,7 @@ import { Update } from 'foldkit'
 import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Combobox as FoldkitCombobox } from '@foldkit/ui'
@@ -11,15 +11,17 @@ import * as combobox from '@foldcn/registry/styles/default/ui/combobox'
 
 import { City, CityCombobox } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const GotComboboxMessage = m('GotComboboxMessage', { message: combobox.Message })
+const Message = defineMessageUnion({
+  GotComboboxMessage: { message: combobox.Message },
+})
 
 // Frameworks mirror apps/v4/examples/base/combobox-demo.tsx (single-select).
 // Cast through City to reuse the shared CityCombobox bundle without adding a second bundle.
 const FRAMEWORKS = ['Next.js', 'SvelteKit', 'Nuxt.js', 'Remix', 'Astro'] as const
 
-export const comboboxView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const comboboxView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('w-full max-w-xs')],
     [
@@ -42,7 +44,7 @@ export const comboboxView = (model: Model, h: HtmlBuilder<Message>): Html =>
             ),
           }),
         }),
-        toParentMessage: (message) => GotComboboxMessage({ message }),
+        toParentMessage: (message) => Message.GotComboboxMessage({ message }),
       }),
     ],
   )
@@ -61,7 +63,7 @@ const foldCombobox = Update.foldChild({
   update: CityCombobox.update,
   read: (model: State) => Option.some(model.combobox),
   write: (model, next) => evo(model, { combobox: () => next }),
-  toParentMessage: (message) => GotComboboxMessage({ message }),
+  toParentMessage: (message) => Message.GotComboboxMessage({ message }),
   foldOutMessage: foldComboboxOutMessage,
 })
 
@@ -76,9 +78,9 @@ export const slice = defineSlice({
     combobox: combobox.init({ id: 'combobox-demo' }),
     maybeComboboxValue: Option.none(),
   },
-  messages: [GotComboboxMessage],
+  messages: [Message.GotComboboxMessage],
   handlers: (model: State) => ({
-    GotComboboxMessage: (payload: typeof GotComboboxMessage.Type): UpdateReturn =>
+    GotComboboxMessage: (payload: typeof Message.GotComboboxMessage.Type): UpdateReturn =>
       foldCombobox(model, payload.message),
   }),
   samples: [],

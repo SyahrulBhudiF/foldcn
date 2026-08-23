@@ -2,7 +2,7 @@ import { Update } from 'foldkit'
 import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Tabs as FoldkitTabs } from '@foldkit/ui'
@@ -12,9 +12,11 @@ import { Card } from '@foldcn/registry/styles/default/ui/card'
 
 import { DemoTabs, DemoTab } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const GotTabsMessage = m('GotTabsMessage', { message: tabs.Message })
+const Message = defineMessageUnion({
+  GotTabsMessage: { message: tabs.Message },
+})
 
 const TAB_DETAILS: Record<DemoTab, { title: string; description: string; content: string }> = {
   Overview: {
@@ -43,7 +45,7 @@ const TAB_DETAILS: Record<DemoTab, { title: string; description: string; content
   },
 }
 
-export const tabsView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const tabsView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('w-full max-w-[400px]')],
     [
@@ -51,25 +53,25 @@ export const tabsView = (model: Model, h: HtmlBuilder<Message>): Html =>
         slotId: model.tabs.id,
         model: model.tabs,
         view: DemoTabs.view,
-        viewInputs: tabs.styledViewInputs<Message, DemoTab>(
+        viewInputs: tabs.styledViewInputs<AppMessage, DemoTab>(
           {
             tabs: ['Overview', 'Analytics', 'Reports', 'Settings'],
             selectedValue: model.activeTab,
             ariaLabel: 'Demo tabs',
             panel: (tab, _render, h) => {
               const details = TAB_DETAILS[tab]
-              return Card<Message>(
+              return Card<AppMessage>(
                 {},
                 [
-                  Card.header<Message>(
+                  Card.header<AppMessage>(
                     {},
                     [
-                      Card.title<Message>({}, [details.title], h),
-                      Card.description<Message>({}, [details.description], h),
+                      Card.title<AppMessage>({}, [details.title], h),
+                      Card.description<AppMessage>({}, [details.description], h),
                     ],
                     h,
                   ),
-                  Card.content<Message>(
+                  Card.content<AppMessage>(
                     {},
                     [h.p([h.Class('text-sm text-muted-foreground')], [details.content])],
                     h,
@@ -81,7 +83,7 @@ export const tabsView = (model: Model, h: HtmlBuilder<Message>): Html =>
           },
           h,
         ),
-        toParentMessage: (message) => GotTabsMessage({ message }),
+        toParentMessage: (message) => Message.GotTabsMessage({ message }),
       }),
     ],
   )
@@ -99,7 +101,7 @@ const foldTabs = Update.foldChild({
   update: DemoTabs.update,
   read: (model: State) => Option.some(model.tabs),
   write: (model, next) => evo(model, { tabs: () => next }),
-  toParentMessage: (message) => GotTabsMessage({ message }),
+  toParentMessage: (message) => Message.GotTabsMessage({ message }),
   foldOutMessage: foldTabsOutMessage,
 })
 
@@ -111,9 +113,9 @@ type State = typeof stateSchema.Type
 export const slice = defineSlice({
   fields,
   init: { tabs: tabs.init({ id: 'tabs-demo' }), activeTab: 'Overview' },
-  messages: [GotTabsMessage],
+  messages: [Message.GotTabsMessage],
   handlers: (model: State) => ({
-    GotTabsMessage: (payload: typeof GotTabsMessage.Type): UpdateReturn =>
+    GotTabsMessage: (payload: typeof Message.GotTabsMessage.Type): UpdateReturn =>
       foldTabs(model, payload.message),
   }),
   samples: [],

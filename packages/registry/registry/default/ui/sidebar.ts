@@ -1,6 +1,6 @@
 import { Effect, Match, Option, Queue, Schema as S, Stream } from 'effect'
 import { childAttributes, type Attribute, type ChildAttribute, type Html, type HtmlBuilder } from 'foldkit/html'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import { evo } from 'foldkit/struct'
 import { defineView } from 'foldkit/submodel'
 import type { View as SubmodelView } from 'foldkit/submodel'
@@ -50,15 +50,18 @@ export const SIDEBAR_KEYBOARD_SHORTCUT = 'b'
  *  `useIsMobile`). */
 export const MOBILE_MEDIA_QUERY = '(max-width: 767px)'
 
-const Toggled = m('Toggled')
-const SetIsOpen = m('SetIsOpen', { isOpen: S.Boolean })
-const SetIsMobile = m('SetIsMobile', { isMobile: S.Boolean })
-const GotSheetMessage = m('GotSheetMessage', { message: Sheet.Message })
-
-export { Toggled, SetIsOpen, SetIsMobile }
-
-export const Message = S.Union([Toggled, SetIsOpen, SetIsMobile, GotSheetMessage])
+export const Message = defineMessageUnion({
+  Toggled: {},
+  SetIsOpen: { isOpen: S.Boolean },
+  SetIsMobile: { isMobile: S.Boolean },
+  GotSheetMessage: { message: Sheet.Message },
+})
 export type Message = typeof Message.Type
+
+export const Toggled = Message.Toggled
+export const SetIsOpen = Message.SetIsOpen
+export const SetIsMobile = Message.SetIsMobile
+export const GotSheetMessage = Message.GotSheetMessage
 
 /** Sidebar state: desktop expansion, mobile viewport flag, and the mobile
  *  off-canvas Sheet submodel that owns the open-on-mobile presentation. */
@@ -94,7 +97,7 @@ const mapSheet = (
   [next, commands]: Update.ReturnWithOutMessage<Sheet.Model, Sheet.Message, Sheet.OutMessage>,
 ): Update.Return<Model, Message> => [
   evo(model, { sheet: () => next }),
-  Command.mapMessages(commands, (message) => GotSheetMessage({ message })),
+  Command.mapMessages(commands, (message) => Message.GotSheetMessage({ message })),
 ]
 
 /** Open the off-canvas mobile sidebar. */
@@ -128,7 +131,7 @@ const foldSheet = Update.foldChild({
   update: Sheet.update,
   read: (model: Model) => Option.some(model.sheet),
   write: (model, next) => evo(model, { sheet: () => next }),
-  toParentMessage: (message) => GotSheetMessage({ message }),
+  toParentMessage: (message) => Message.GotSheetMessage({ message }),
   foldOutMessage: foldSheetOutMessage,
 })
 
@@ -163,7 +166,7 @@ export const subscriptions = Subscription.make<Model, Message>()((entry) => ({
                 (event.metaKey || event.ctrlKey)
               ) {
                 event.preventDefault()
-                return Option.some(Toggled())
+                return Option.some(Message.Toggled())
               }
               return Option.none()
             },
@@ -183,12 +186,12 @@ export const subscriptions = Subscription.make<Model, Message>()((entry) => ({
               Effect.sync(() => {
                 const mediaQuery = window.matchMedia(MOBILE_MEDIA_QUERY)
                 const handler = (event: MediaQueryListEvent) => {
-                  Queue.offerUnsafe(queue, SetIsMobile({ isMobile: event.matches }))
+                  Queue.offerUnsafe(queue, Message.SetIsMobile({ isMobile: event.matches }))
                 }
                 mediaQuery.addEventListener('change', handler)
                 // Emit once on subscribe so a mobile viewport corrects the
                 // desktop default right after mount.
-                Queue.offerUnsafe(queue, SetIsMobile({ isMobile: mediaQuery.matches }))
+                Queue.offerUnsafe(queue, Message.SetIsMobile({ isMobile: mediaQuery.matches }))
                 return { mediaQuery, handler }
               }),
               ({ mediaQuery, handler }) =>
@@ -364,8 +367,8 @@ export const view = defineView<Model, Message, ProviderViewInputs>((model, viewI
     isOpen: model.isOpen,
     state: state(model),
     isMobile: model.isMobile,
-    trigger: childAttributes([h.OnClick(Toggled())]),
-    rail: childAttributes([h.OnClick(Toggled())]),
+    trigger: childAttributes([h.OnClick(Message.Toggled())]),
+    rail: childAttributes([h.OnClick(Message.Toggled())]),
   }
 
   const padding = variant === 'floating' || variant === 'inset' ? 'padded' : 'docked'
@@ -435,7 +438,7 @@ export const view = defineView<Model, Message, ProviderViewInputs>((model, viewI
           model: model.sheet,
           view: mobileSheetView,
           viewInputs: mobileSheetInputs,
-          toParentMessage: (message) => GotSheetMessage({ message }),
+          toParentMessage: (message) => Message.GotSheetMessage({ message }),
         }),
         ...viewInputs.children(slots),
       ],

@@ -3,7 +3,7 @@ import { Schema as S } from 'effect'
 import { Listbox as FoldkitListbox } from '@foldkit/ui'
 import { Update } from 'foldkit'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { fieldset } from '@foldcn/registry/styles/default/ui/fieldset'
@@ -12,10 +12,14 @@ import * as select from '@foldcn/registry/styles/default/ui/select'
 import { LanguageSelect } from '../bundles'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const UpdatedInputValue = m('UpdatedInputValue', { value: S.String })
-const GotSelectMessage = m('GotSelectMessage', { message: select.Message })
+const Message = defineMessageUnion({
+  UpdatedInputValue: { value: S.String },
+  GotSelectMessage: { message: select.Message },
+})
+const UpdatedInputValue = Message.UpdatedInputValue
+const GotSelectMessage = Message.GotSelectMessage
 
 const LANGUAGE_OPTIONS = [
   ['en', 'English'],
@@ -23,14 +27,14 @@ const LANGUAGE_OPTIONS = [
   ['ja', '日本語'],
 ] as const
 
-export const fieldsetView = (model: Model, h: HtmlBuilder<Message>): Html =>
-  fieldset<Message>(
+export const fieldsetView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
+  fieldset<AppMessage>(
     {
       id: 'fieldset-contact',
       legend: 'Contact details',
       maybeDescription: 'Used for shipping and billing.',
       children: [
-        input<Message>(
+        input<AppMessage>(
           {
             id: 'fieldset-name',
             label: 'Name',
@@ -49,7 +53,7 @@ export const fieldsetView = (model: Model, h: HtmlBuilder<Message>): Html =>
               model: model.select,
               view: LanguageSelect.view,
               viewInputs: select.styledViewInputs<
-                Message,
+                AppMessage,
                 { value: string; label: string },
                 string
               >(

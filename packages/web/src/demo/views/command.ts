@@ -1,6 +1,6 @@
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Command, commandGroupHeadingClass } from '@foldcn/registry/styles/default/ui/command'
@@ -8,9 +8,11 @@ import { icon } from '@foldcn/registry/styles/default/lib/icons'
 import { Calculator, Calendar, CreditCard, Settings, Smile, User } from 'lucide'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const UpdatedCommandSearch = m('UpdatedCommandSearch', { value: S.String })
+const Message = defineMessageUnion({
+  UpdatedCommandSearch: { value: S.String },
+})
 
 // Presentational palette mirroring apps/v4/examples/base/command-demo.tsx.
 // Filtering is parent-owned; the upstream cmdk behaviors (arrow nav, Enter
@@ -37,7 +39,7 @@ const GROUPS: ReadonlyArray<{
   },
 ]
 
-export const commandView = (model: Model, h: HtmlBuilder<Message>): Html => {
+export const commandView = (model: Model, h: HtmlBuilder<AppMessage>): Html => {
   const query = model.commandSearch.toLowerCase()
   const groups = GROUPS.map((group) => {
     const items = group.items.filter((item) => item.label.toLowerCase().includes(query))
@@ -71,7 +73,7 @@ export const commandView = (model: Model, h: HtmlBuilder<Message>): Html => {
       Command.input(
         {
           value: model.commandSearch,
-          onInput: (value) => UpdatedCommandSearch({ value }),
+          onInput: (value) => Message.UpdatedCommandSearch({ value }),
           placeholder: 'Type a command or search...',
         },
         h,
@@ -90,12 +92,12 @@ type State = typeof stateSchema.Type
 export const slice = defineSlice({
   fields,
   init: { commandSearch: '' },
-  messages: [UpdatedCommandSearch],
+  messages: [Message.UpdatedCommandSearch],
   handlers: (model: State) => ({
-    UpdatedCommandSearch: ({ value }: typeof UpdatedCommandSearch.Type): UpdateReturn => [
+    UpdatedCommandSearch: ({ value }: typeof Message.UpdatedCommandSearch.Type): UpdateReturn => [
       evo(model, { commandSearch: () => value }),
       [],
     ],
   }),
-  samples: [UpdatedCommandSearch({ value: 'cal' })],
+  samples: [Message.UpdatedCommandSearch({ value: 'cal' })],
 })

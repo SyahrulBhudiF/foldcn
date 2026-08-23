@@ -1,14 +1,17 @@
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { dataTable } from '@foldcn/registry/styles/default/blocks/data-table/data-table'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const UpdatedTableSearch = m('UpdatedTableSearch', { value: S.String })
+const Message = defineMessageUnion({
+  UpdatedTableSearch: { value: S.String },
+})
+const UpdatedTableSearch = Message.UpdatedTableSearch
 
 const INITIAL_ROWS: ReadonlyArray<{
   id: string
@@ -41,11 +44,11 @@ const TABLE_COLUMNS = [
   { key: 'status', title: 'Status', align: 'right' as const },
 ]
 
-export const dataTableView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const dataTableView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('w-full rounded-xl border border-border')],
     [
-      dataTable<Message>(
+      dataTable<AppMessage>(
         {
           columns: TABLE_COLUMNS,
           rows: filteredRows(model.tableSearch).map((row) => ({

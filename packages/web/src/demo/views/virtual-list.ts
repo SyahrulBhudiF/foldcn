@@ -3,7 +3,7 @@ import { Command } from 'foldkit'
 import { Option } from 'effect'
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { VirtualList as FoldkitVirtualList } from '@foldkit/ui'
@@ -11,14 +11,18 @@ import { VirtualList as FoldkitVirtualList } from '@foldkit/ui'
 import * as virtualList from '@foldcn/registry/styles/default/ui/virtual-list'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const GotVirtualListMessage = m('GotVirtualListMessage', { message: virtualList.Message })
-const ClickedScrollToMiddle = m('ClickedScrollToMiddle')
+const Message = defineMessageUnion({
+  GotVirtualListMessage: { message: virtualList.Message },
+  ClickedScrollToMiddle: {},
+})
+const GotVirtualListMessage = Message.GotVirtualListMessage
+const ClickedScrollToMiddle = Message.ClickedScrollToMiddle
 
 export const VIRTUAL_LIST_ROW_COUNT = 100_000
 
-export const virtualListView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const virtualListView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('flex w-full flex-col items-start gap-3')],
     [

@@ -1,5 +1,5 @@
 import { Schema as S } from 'effect'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import { Url } from 'foldkit'
 import { UrlRequest } from 'foldkit/navigation'
 
@@ -7,64 +7,43 @@ import { Message as DemoMessage } from './demo'
 import { Message as InstallTabsMessage } from '@foldkit/ui/tabs'
 import { PackageManager, ResolvedTheme, ThemePreference } from './model'
 
-// routing
-export const ClickedLink = m('ClickedLink', { request: UrlRequest })
-export const ChangedUrl = m('ChangedUrl', { url: Url.Url })
-
-// demo harness
-export const GotDemoMessage = m('GotDemoMessage', { message: DemoMessage })
-
-// theme
-export const SelectedThemePreference = m('SelectedThemePreference', {
-  preference: ThemePreference,
+export const Message = defineMessageUnion({
+  ClickedLink: { request: UrlRequest },
+  ChangedUrl: { url: Url.Url },
+  GotDemoMessage: { message: DemoMessage },
+  SelectedThemePreference: { preference: ThemePreference },
+  ChangedSystemTheme: { theme: ResolvedTheme },
+  CompletedApplyTheme: {},
+  CompletedSaveThemePreference: {},
+  LoadedBrowserEnvironment: {
+    maybePreference: S.Option(ThemePreference),
+    systemTheme: ResolvedTheme,
+    packageManager: PackageManager,
+  },
+  ClickedCopy: { value: S.String },
+  CompletedCopy: { value: S.String },
+  ToggledCodeBlock: { id: S.String },
+  GotInstallTabsMessage: { message: InstallTabsMessage },
+  CompletedSavePackageManager: {},
+  CompletedNavigateInternal: {},
+  CompletedLoadExternal: {},
+  CompletedScrollToTop: {},
 })
-export const ChangedSystemTheme = m('ChangedSystemTheme', {
-  theme: ResolvedTheme,
-})
-export const CompletedApplyTheme = m('CompletedApplyTheme')
-export const CompletedSaveThemePreference = m('CompletedSaveThemePreference')
-
-// browser environment boot load
-export const LoadedBrowserEnvironment = m('LoadedBrowserEnvironment', {
-  maybePreference: S.Option(ThemePreference),
-  systemTheme: ResolvedTheme,
-  packageManager: PackageManager,
-})
-
-// clipboard
-export const ClickedCopy = m('ClickedCopy', { value: S.String })
-export const CompletedCopy = m('CompletedCopy', { value: S.String })
-
-// collapsible code blocks
-export const ToggledCodeBlock = m('ToggledCodeBlock', { id: S.String })
-
-// install tabs
-export const GotInstallTabsMessage = m('GotInstallTabsMessage', {
-  message: InstallTabsMessage,
-})
-export const CompletedSavePackageManager = m('CompletedSavePackageManager')
-
-// navigation completions
-export const CompletedNavigateInternal = m('CompletedNavigateInternal')
-export const CompletedLoadExternal = m('CompletedLoadExternal')
-export const CompletedScrollToTop = m('CompletedScrollToTop')
-
-export const Message = S.Union([
-  ClickedLink,
-  ChangedUrl,
-  GotDemoMessage,
-  SelectedThemePreference,
-  ChangedSystemTheme,
-  LoadedBrowserEnvironment,
-  CompletedApplyTheme,
-  CompletedSaveThemePreference,
-  ClickedCopy,
-  CompletedCopy,
-  ToggledCodeBlock,
-  GotInstallTabsMessage,
-  CompletedSavePackageManager,
-  CompletedNavigateInternal,
-  CompletedLoadExternal,
-  CompletedScrollToTop,
-])
 export type Message = typeof Message.Type
+
+export const ClickedLink = Message.ClickedLink
+export const ChangedUrl = Message.ChangedUrl
+export const GotDemoMessage = Message.GotDemoMessage
+export const SelectedThemePreference = Message.SelectedThemePreference
+export const ChangedSystemTheme = Message.ChangedSystemTheme
+export const CompletedApplyTheme = Message.CompletedApplyTheme
+export const CompletedSaveThemePreference = Message.CompletedSaveThemePreference
+export const LoadedBrowserEnvironment = Message.LoadedBrowserEnvironment
+export const ClickedCopy = Message.ClickedCopy
+export const CompletedCopy = Message.CompletedCopy
+export const ToggledCodeBlock = Message.ToggledCodeBlock
+export const GotInstallTabsMessage = Message.GotInstallTabsMessage
+export const CompletedSavePackageManager = Message.CompletedSavePackageManager
+export const CompletedNavigateInternal = Message.CompletedNavigateInternal
+export const CompletedLoadExternal = Message.CompletedLoadExternal
+export const CompletedScrollToTop = Message.CompletedScrollToTop

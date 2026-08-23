@@ -2,17 +2,19 @@ import { Update } from 'foldkit'
 import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import * as tooltip from '@foldcn/registry/styles/default/ui/tooltip'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const GotTooltipMessage = m('GotTooltipMessage', { message: tooltip.Message })
+const Message = defineMessageUnion({
+  GotTooltipMessage: { message: tooltip.Message },
+})
 
-export const tooltipView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const tooltipView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.submodel({
     slotId: model.tooltip.id,
     model: model.tooltip,
@@ -25,7 +27,7 @@ export const tooltipView = (model: Model, h: HtmlBuilder<Message>): Html =>
       },
       h,
     ),
-    toParentMessage: (message) => GotTooltipMessage({ message }),
+    toParentMessage: (message) => Message.GotTooltipMessage({ message }),
   })
 
 const foldNoOp =
@@ -45,7 +47,7 @@ const foldTooltip = Update.foldChild({
   update: tooltip.update,
   read: (model: State) => Option.some(model.tooltip),
   write: (model, next) => evo(model, { tooltip: () => next }),
-  toParentMessage: (message) => GotTooltipMessage({ message }),
+  toParentMessage: (message) => Message.GotTooltipMessage({ message }),
   foldOutMessage: foldTooltipOutMessage,
 })
 
@@ -57,9 +59,9 @@ type State = typeof stateSchema.Type
 export const slice = defineSlice({
   fields,
   init: { tooltip: tooltip.init({ id: 'tooltip-demo' }) },
-  messages: [GotTooltipMessage],
+  messages: [Message.GotTooltipMessage],
   handlers: (model: State) => ({
-    GotTooltipMessage: (payload: typeof GotTooltipMessage.Type): UpdateReturn =>
+    GotTooltipMessage: (payload: typeof Message.GotTooltipMessage.Type): UpdateReturn =>
       foldTooltip(model, payload.message),
   }),
   samples: [],

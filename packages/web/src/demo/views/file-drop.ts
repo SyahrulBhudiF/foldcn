@@ -4,18 +4,22 @@ import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { File } from 'foldkit'
 import { evo } from 'foldkit/struct'
-import { m } from 'foldkit/message'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import * as fileDrop from '@foldcn/registry/styles/default/ui/file-drop'
 
 import { defineSlice, type UpdateReturn } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Model, Message as AppMessage } from '../assemble'
 
-const GotFileDropMessage = m('GotFileDropMessage', { message: fileDrop.Message })
-const ClickedRemoveFile = m('ClickedRemoveFile', { fileIndex: S.Number })
+const Message = defineMessageUnion({
+  GotFileDropMessage: { message: fileDrop.Message },
+  ClickedRemoveFile: { fileIndex: S.Number },
+})
+const GotFileDropMessage = Message.GotFileDropMessage
+const ClickedRemoveFile = Message.ClickedRemoveFile
 
-export const fileDropView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const fileDropView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('w-full max-w-md')],
     [

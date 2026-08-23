@@ -17,18 +17,8 @@ export type OutMessage = typeof OutMessage.Type
 
 export const TransitionState = FoldkitAnimation.TransitionState
 export type TransitionState = typeof TransitionState.Type
-export const Showed = FoldkitAnimation.Showed
-export type Showed = typeof Showed.Type
-export const Hid = FoldkitAnimation.Hid
-export type Hid = typeof Hid.Type
-export const StartedLeaveAnimating = FoldkitAnimation.StartedLeaveAnimating
-export type StartedLeaveAnimating = typeof StartedLeaveAnimating.Type
-export const TransitionedOut = FoldkitAnimation.TransitionedOut
-export type TransitionedOut = typeof TransitionedOut.Type
-export const CompletedWaitForPaint = FoldkitAnimation.CompletedWaitForPaint
-export type CompletedWaitForPaint = typeof CompletedWaitForPaint.Type
-export const EndedAnimation = FoldkitAnimation.EndedAnimation
-export type EndedAnimation = typeof EndedAnimation.Type
+export type Showed = FoldkitAnimation.Showed
+export type Hid = FoldkitAnimation.Hid
 
 export const WaitForPaint = FoldkitAnimation.WaitForPaint
 export const WaitForAnimationSettled = FoldkitAnimation.WaitForAnimationSettled
