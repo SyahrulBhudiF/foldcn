@@ -6,7 +6,7 @@ import { DemoMenu } from '../bundles'
 import { defineSlice } from '../slice'
 import type { Model, Message } from '../assemble'
 
-import { GotMenuMessage } from './menu'
+import { Message as MenuMessage } from './menu'
 
 // Presentational menubar mirroring apps/v4/examples/base/menubar-demo.tsx.
 // Each trigger is an independent Menu bundle — no cross-menu arrow traversal
@@ -30,7 +30,7 @@ export const menubarView = (model: Model, h: HtmlBuilder<Message>): Html =>
                 content: h.span([], [item]),
               }),
             }),
-            toParentMessage: (message) => GotMenuMessage({ message }),
+            toParentMessage: (message) => MenuMessage.GotMenuMessage({ message }),
           }),
           h.button([h.Class(Menubar.menubarTriggerClass)], ['Edit']),
           h.button([h.Class(Menubar.menubarTriggerClass)], ['View']),

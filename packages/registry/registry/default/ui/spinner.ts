@@ -16,6 +16,7 @@ const nodeToAttributes = <M>(
 
 const renderIconNode = <M>(node: IconNode, h: HtmlBuilder<M>): ReadonlyArray<Html> =>
   node.map(([tag, attrs]) => {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const attributes = nodeToAttributes(attrs as Record<string, string>, h)
     return tag === 'path' ? h.path(attributes) : h.circle(attributes)
   })

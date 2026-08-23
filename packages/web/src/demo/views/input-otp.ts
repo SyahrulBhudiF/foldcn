@@ -11,12 +11,11 @@ import type { Model, Message as AppMessage } from '../assemble'
 const Message = defineMessageUnion({
   UpdatedOtp: { value: S.String },
 })
-const UpdatedOtp = Message.UpdatedOtp
 
 // 6-digit OTP mirroring apps/v4/examples/base/input-otp-demo.tsx
 export const inputOtpView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   inputOtp<AppMessage>(
-    { length: 6, value: model.otp, onInput: (value) => UpdatedOtp({ value }) },
+    { length: 6, value: model.otp, onInput: (value) => Message.UpdatedOtp({ value }) },
     h,
   )
 
@@ -28,12 +27,12 @@ type State = typeof stateSchema.Type
 export const slice = defineSlice({
   fields,
   init: { otp: '123456' },
-  messages: [UpdatedOtp],
+  messages: [Message.UpdatedOtp],
   handlers: (model: State) => ({
-    UpdatedOtp: ({ value }: typeof UpdatedOtp.Type): UpdateReturn => [
+    UpdatedOtp: ({ value }: typeof Message.UpdatedOtp.Type): UpdateReturn => [
       evo(model, { otp: () => value }),
       [],
     ],
   }),
-  samples: [UpdatedOtp({ value: '1234' })],
+  samples: [Message.UpdatedOtp({ value: '1234' })],
 })

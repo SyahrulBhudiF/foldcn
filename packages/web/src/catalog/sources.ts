@@ -8,11 +8,11 @@ import type { RegistryGroupJson } from './types'
 
 export type SourceEntry = Readonly<{ path: string; code: string }>
 
-const rawSources = import.meta.glob('../../../registry/styles/default/**/*.ts', {
+const rawSources: Readonly<Record<string, string>> = import.meta.glob('../../../registry/styles/default/**/*.ts', {
   query: '?raw',
   import: 'default',
   eager: true,
-}) as Readonly<Record<string, string>>
+})
 
 // Glob keys are module paths whose shape depends on how the pattern resolves;
 // normalize them to paths relative to the resolved tree root.

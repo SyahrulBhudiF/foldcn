@@ -9,14 +9,7 @@ import type { Model, Message } from '../assemble'
 import { Toast } from '../toast'
 // The sonner demo renders the shared toast stack owned by the toast slice;
 // its message wrappers and click handlers live there.
-import {
-  ClickedDismissAllToasts,
-  ClickedShowErrorToast,
-  ClickedShowInfoToast,
-  ClickedShowSuccessToast,
-  ClickedShowWarningToast,
-  GotToastMessage,
-} from './toast'
+import { Message as ToastMessage } from './toast'
 
 export const sonnerView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -25,10 +18,10 @@ export const sonnerView = (model: Model, h: HtmlBuilder<Message>): Html =>
       h.div(
         [h.Class('flex flex-wrap gap-2')],
         [
-          hButton(h, 'Info', ClickedShowInfoToast()),
-          hButton(h, 'Success', ClickedShowSuccessToast()),
-          hButton(h, 'Warning', ClickedShowWarningToast()),
-          hButton(h, 'Error', ClickedShowErrorToast()),
+          hButton(h, 'Info', ToastMessage.ClickedShowInfoToast()),
+          hButton(h, 'Success', ToastMessage.ClickedShowSuccessToast()),
+          hButton(h, 'Warning', ToastMessage.ClickedShowWarningToast()),
+          hButton(h, 'Error', ToastMessage.ClickedShowErrorToast()),
         ],
       ),
       h.div(
@@ -37,7 +30,7 @@ export const sonnerView = (model: Model, h: HtmlBuilder<Message>): Html =>
           h.button(
             [
               h.Class('rounded-md border border-input bg-background px-4 py-2 text-sm font-medium'),
-              h.OnClick(ClickedDismissAllToasts()),
+              h.OnClick(ToastMessage.ClickedDismissAllToasts()),
             ],
             ['Dismiss all'],
           ),
@@ -83,7 +76,7 @@ export const sonnerView = (model: Model, h: HtmlBuilder<Message>): Html =>
               ],
             ),
         },
-        toParentMessage: (message) => GotToastMessage({ message }),
+        toParentMessage: (message) => ToastMessage.GotToastMessage({ message }),
       }),
     ],
   )

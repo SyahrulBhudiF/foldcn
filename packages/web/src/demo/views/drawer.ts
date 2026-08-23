@@ -1,5 +1,4 @@
 import { Match as M, Option } from 'effect'
-import { Schema as S } from 'effect'
 import { Command, Update } from 'foldkit'
 import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
@@ -17,14 +16,12 @@ const Message = defineMessageUnion({
   GotDialogMessage: { message: Drawer.Message },
   ClickedOpenDialog: {},
 })
-const GotDialogMessage = Message.GotDialogMessage
-const ClickedOpenDialog = Message.ClickedOpenDialog
 
 export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('flex flex-col items-start gap-4')],
     [
-      button<AppMessage>({ variant: 'outline', onClick: ClickedOpenDialog() }, 'Open Drawer', h),
+      button<AppMessage>({ variant: 'outline', onClick: Message.ClickedOpenDialog() }, 'Open Drawer', h),
       h.submodel({
         slotId: model.dialog.id,
         model: model.dialog,
@@ -138,7 +135,7 @@ export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           },
           h,
         ),
-        toParentMessage: (message) => GotDialogMessage({ message }),
+        toParentMessage: (message) => Message.GotDialogMessage({ message }),
       }),
     ],
   )
@@ -162,24 +159,24 @@ const foldDrawer = Update.foldChild({
   update: Drawer.update,
   read: (model: State) => Option.some(model.dialog),
   write: (model, next) => evo(model, { dialog: () => next }),
-  toParentMessage: (message) => GotDialogMessage({ message }),
+  toParentMessage: (message) => Message.GotDialogMessage({ message }),
   foldOutMessage: foldDrawerOutMessage,
 })
 
 export const slice = defineSlice({
   fields: {},
   init: {},
-  messages: [GotDialogMessage, ClickedOpenDialog],
+  messages: [Message.GotDialogMessage, Message.ClickedOpenDialog],
   handlers: (model: State) => ({
-    GotDialogMessage: (payload: typeof GotDialogMessage.Type): UpdateReturn =>
+    GotDialogMessage: (payload: typeof Message.GotDialogMessage.Type): UpdateReturn =>
       foldDrawer(model, payload.message),
     ClickedOpenDialog: (): UpdateReturn => {
       const [next, commands] = Drawer.open(model.dialog)
       return [
         evo(model, { dialog: () => next }),
-        Command.mapMessages(commands, (message) => GotDialogMessage({ message })),
+        Command.mapMessages(commands, (message) => Message.GotDialogMessage({ message })),
       ]
     },
   }),
-  samples: [ClickedOpenDialog()],
+  samples: [Message.ClickedOpenDialog()],
 })

@@ -18,8 +18,6 @@ const Message = defineMessageUnion({
   UpdatedInputValue: { value: S.String },
   GotSelectMessage: { message: select.Message },
 })
-const UpdatedInputValue = Message.UpdatedInputValue
-const GotSelectMessage = Message.GotSelectMessage
 
 const LANGUAGE_OPTIONS = [
   ['en', 'English'],
@@ -39,7 +37,7 @@ export const fieldsetView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
             id: 'fieldset-name',
             label: 'Name',
             value: model.inputValue,
-            onInput: (value) => UpdatedInputValue({ value }),
+            onInput: (value) => Message.UpdatedInputValue({ value }),
             placeholder: 'Ada Lovelace',
           },
           h,
@@ -66,7 +64,7 @@ export const fieldsetView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 },
                 h,
               ),
-              toParentMessage: (message) => GotSelectMessage({ message }),
+              toParentMessage: (message) => Message.GotSelectMessage({ message }),
             }),
           ],
         ),
@@ -88,7 +86,7 @@ const foldSelect = Update.foldChild({
   update: LanguageSelect.update,
   read: (model: State) => Option.some(model.select),
   write: (model, next) => evo(model, { select: () => next }),
-  toParentMessage: (message) => GotSelectMessage({ message }),
+  toParentMessage: (message) => Message.GotSelectMessage({ message }),
   foldOutMessage: foldSelectOutMessage,
 })
 
@@ -108,14 +106,14 @@ export const slice = defineSlice({
     select: select.init({ id: 'select-language' }),
     maybeSelectValue: Option.some('en'),
   },
-  messages: [GotSelectMessage, UpdatedInputValue],
+  messages: [Message.GotSelectMessage, Message.UpdatedInputValue],
   handlers: (model: State) => ({
-    UpdatedInputValue: ({ value }: typeof UpdatedInputValue.Type): UpdateReturn => [
+    UpdatedInputValue: ({ value }: typeof Message.UpdatedInputValue.Type): UpdateReturn => [
       evo(model, { inputValue: () => value }),
       [],
     ],
-    GotSelectMessage: (payload: typeof GotSelectMessage.Type): UpdateReturn =>
+    GotSelectMessage: (payload: typeof Message.GotSelectMessage.Type): UpdateReturn =>
       foldSelect(model, payload.message),
   }),
-  samples: [UpdatedInputValue({ value: 'Ada Lovelace' })],
+  samples: [Message.UpdatedInputValue({ value: 'Ada Lovelace' })],
 })

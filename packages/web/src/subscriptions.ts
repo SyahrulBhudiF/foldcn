@@ -2,10 +2,11 @@ import { Effect, Option, Queue, Schema as S, Stream } from 'effect'
 import { Subscription } from 'foldkit'
 
 import { subscriptions as demoSubscriptions } from './demo/subscriptions'
-import { ChangedSystemTheme, GotDemoMessage, type Message } from './message'
+import { Message } from './message'
+import type { Message as AppMessage } from './message'
 import type { Model } from './model'
 
-const systemThemeSubscriptions = Subscription.make<Model, Message>()((entry) => ({
+const systemThemeSubscriptions = Subscription.make<Model, AppMessage>()((entry) => ({
   systemTheme: entry(
     { isSystemPreference: S.Boolean },
     {
@@ -17,14 +18,14 @@ const systemThemeSubscriptions = Subscription.make<Model, Message>()((entry) => 
       }),
       dependenciesToStream: ({ isSystemPreference }) =>
         Stream.when(
-          Stream.callback<typeof ChangedSystemTheme.Type>((queue) =>
+          Stream.callback<typeof Message.ChangedSystemTheme.Type>((queue) =>
             Effect.acquireRelease(
               Effect.sync(() => {
                 const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
                 const handler = (event: MediaQueryListEvent) => {
                   Queue.offerUnsafe(
                     queue,
-                    ChangedSystemTheme({
+                    Message.ChangedSystemTheme({
                       theme: event.matches ? 'Dark' : 'Light',
                     }),
                   )
@@ -42,12 +43,12 @@ const systemThemeSubscriptions = Subscription.make<Model, Message>()((entry) => 
   ),
 }))
 
-const demoLiftedSubscriptions = Subscription.lift(demoSubscriptions)<Model, Message>({
+const demoLiftedSubscriptions = Subscription.lift(demoSubscriptions)<Model, AppMessage>({
   toChildModel: (model) => model.demo,
-  toParentMessage: (message) => GotDemoMessage({ message }),
+  toParentMessage: (message) => Message.GotDemoMessage({ message }),
 })
 
-export const subscriptions = Subscription.aggregate<Model, Message>()(
+export const subscriptions = Subscription.aggregate<Model, AppMessage>()(
   systemThemeSubscriptions,
   demoLiftedSubscriptions,
 )
