@@ -29,7 +29,6 @@ import type { Model, Message as AppMessage } from '../assemble'
 const Message = defineMessageUnion({
   GotSidebarMessage: { message: Sidebar.Message },
 })
-const GotSidebarMessage = Message.GotSidebarMessage
 
 // Mimics apps/v4/examples/base/sidebar-demo.tsx (the flagship Team
 // Switcher + collapsible Platform + Projects w/ actions + User footer
@@ -123,7 +122,7 @@ export const sidebarView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 ),
               ],
             },
-            toParentMessage: (message) => GotSidebarMessage({ message }),
+            toParentMessage: (message) => Message.GotSidebarMessage({ message }),
           }),
         ],
       ),
@@ -368,20 +367,20 @@ const foldSidebar = Update.foldChild({
   update: Sidebar.update,
   read: (model: State) => Option.some(model.sidebar),
   write: (model, next) => evo(model, { sidebar: () => next }),
-  toParentMessage: (message) => GotSidebarMessage({ message }),
+  toParentMessage: (message) => Message.GotSidebarMessage({ message }),
 })
 
 export const slice = defineSlice({
   fields,
   init: { sidebar: Sidebar.init({ id: 'sidebar-demo', defaultOpen: true }) },
-  messages: [GotSidebarMessage],
+  messages: [Message.GotSidebarMessage],
   handlers: (model: State) => ({
-    GotSidebarMessage: (payload: typeof GotSidebarMessage.Type): UpdateReturn =>
+    GotSidebarMessage: (payload: typeof Message.GotSidebarMessage.Type): UpdateReturn =>
       foldSidebar(model, payload.message),
   }),
-  samples: [GotSidebarMessage({ message: Sidebar.Toggled() })],
-  subscriptions: Subscription.lift(Sidebar.subscriptions)<State, typeof GotSidebarMessage.Type>({
+  samples: [Message.GotSidebarMessage({ message: Sidebar.Message.Toggled() })],
+  subscriptions: Subscription.lift(Sidebar.subscriptions)<State, typeof Message.GotSidebarMessage.Type>({
     toChildModel: (model) => model.sidebar,
-    toParentMessage: (message) => GotSidebarMessage({ message }),
+    toParentMessage: (message) => Message.GotSidebarMessage({ message }),
   }),
 })

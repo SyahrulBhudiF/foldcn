@@ -12,13 +12,8 @@ import { styledViewInputs as tabsStyledViewInputs } from '@foldcn/registry/style
 import { toggleGroup } from '@foldcn/registry/styles/default/ui/toggle-group'
 import { ArrowRight, Computer, Moon, Sun } from 'lucide'
 
-import {
-  ClickedCopy,
-  GotInstallTabsMessage,
-  SelectedThemePreference,
-  ToggledCodeBlock,
-  type Message,
-} from '../message'
+import { Message } from '../message'
+import type { Message as AppMessage } from '../message'
 import type { Model, PackageManager, ThemePreference } from '../model'
 
 import { categoryGroups, componentCount } from '../catalog'
@@ -33,9 +28,9 @@ import {
   type ParityStatus,
 } from '../catalog/parity'
 
-export const themeSelector = (model: Model, h: HtmlBuilder<Message>): Html => {
+export const themeSelector = (model: Model, h: HtmlBuilder<AppMessage>): Html => {
   const selected = Option.getOrUndefined(model.maybeThemePreference)
-  return toggleGroup<Message>(
+  return toggleGroup<AppMessage>(
     {
       type: 'single',
       value: selected === undefined ? [] : [selected],
@@ -44,10 +39,16 @@ export const themeSelector = (model: Model, h: HtmlBuilder<Message>): Html => {
       spacing: 0,
       ariaLabel: 'Theme preference',
       onValueChange: (next) => {
-        const value = next[0] as ThemePreference | undefined
+        const raw = next[0]
+        let value: ThemePreference | undefined
+        if (raw === 'Light' || raw === 'Dark' || raw === 'System') {
+          value = raw
+        } else {
+          value = undefined
+        }
         // Ignore deselect (single toggle clears on re-click) — keep current preference.
-        if (value === undefined) return SelectedThemePreference({ preference: selected ?? 'System' })
-        return SelectedThemePreference({ preference: value })
+        if (value === undefined) return Message.SelectedThemePreference({ preference: selected ?? 'System' })
+        return Message.SelectedThemePreference({ preference: value })
       },
     },
     [
@@ -59,7 +60,7 @@ export const themeSelector = (model: Model, h: HtmlBuilder<Message>): Html => {
   )
 }
 
-export const headerView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const headerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.header(
     [h.Class('py-4 font-mono')],
     [
@@ -116,21 +117,21 @@ export const headerView = (model: Model, h: HtmlBuilder<Message>): Html =>
     ],
   )
 
-const parityBadge = (status: ParityStatus, h: HtmlBuilder<Message>): Html =>
-  badge<Message>(
+const parityBadge = (status: ParityStatus, h: HtmlBuilder<AppMessage>): Html =>
+  badge<AppMessage>(
     { variant: parityVariant[status], className: 'h-5 shrink-0 gap-1 px-1.5' },
     [icon(h, parityIcon[status], 'size-3'), h.span([h.Class('sr-only')], [parityLabel[status]])],
     h,
   )
 
-const parityLegendBadge = (status: ParityStatus, h: HtmlBuilder<Message>): Html =>
-  badge<Message>(
+const parityLegendBadge = (status: ParityStatus, h: HtmlBuilder<AppMessage>): Html =>
+  badge<AppMessage>(
     { variant: parityVariant[status], className: 'h-5 gap-1 px-2 text-xs' },
     [icon(h, parityIcon[status], 'size-3'), parityLabel[status]],
     h,
   )
 
-export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html => {
+export const sidebarView = (model: Model, h: HtmlBuilder<AppMessage>): Html => {
   const componentsGroup = categoryGroups.find((g) => g.category === 'Components')
   const components = componentsGroup?.items ?? []
   const counts = {
@@ -259,11 +260,11 @@ export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html => {
   )
 }
 
-export const footerView = (h: HtmlBuilder<Message>): Html =>
+export const footerView = (h: HtmlBuilder<AppMessage>): Html =>
   h.footer(
     [h.Class('font-mono')],
     [
-      separator<Message>({}, h),
+      separator<AppMessage>({}, h),
       h.div(
         [
           h.Class(
@@ -303,20 +304,20 @@ export const footerView = (h: HtmlBuilder<Message>): Html =>
   )
 
 export const copyButton = (
-  h: HtmlBuilder<Message>,
+  h: HtmlBuilder<AppMessage>,
   value: string,
   maybeCopied: Option.Option<string>,
 ): Html =>
-  registryCopyButton<Message>(
+  registryCopyButton<AppMessage>(
     {
       value,
-      onCopy: ClickedCopy({ value }),
+      onCopy: Message.ClickedCopy({ value }),
       isCopied: Option.exists(maybeCopied, (v) => v === value),
     },
     h,
   )
 
-export const installLine = (h: HtmlBuilder<Message>, model: Model, command: string): Html =>
+export const installLine = (h: HtmlBuilder<AppMessage>, model: Model, command: string): Html =>
   h.div(
     [
       h.Class(
@@ -333,7 +334,7 @@ export const installLine = (h: HtmlBuilder<Message>, model: Model, command: stri
   )
 
 export const codeBlock = (
-  h: HtmlBuilder<Message>,
+  h: HtmlBuilder<AppMessage>,
   model: Model,
   path: string,
   code: string,
@@ -342,35 +343,35 @@ export const codeBlock = (
     {
       path,
       code,
-      onCopy: ClickedCopy({ value: code }),
+      onCopy: Message.ClickedCopy({ value: code }),
       isCopied: Option.exists(model.maybeCopiedValue, (v) => v === code),
     },
     h,
   )
 
 export const collapsibleCodeBlock = (
-  h: HtmlBuilder<Message>,
+  h: HtmlBuilder<AppMessage>,
   model: Model,
   id: string,
   path: string,
   code: string,
   className?: string,
 ): Html =>
-  registryCodeBlock<Message>(
+  registryCodeBlock<AppMessage>(
     {
       path,
       code,
-      onCopy: ClickedCopy({ value: code }),
+      onCopy: Message.ClickedCopy({ value: code }),
       isCopied: Option.exists(model.maybeCopiedValue, (v) => v === code),
       isCollapsible: true,
       isExpanded: model.expandedCodeBlocks.has(id),
-      onToggle: ToggledCodeBlock({ id }),
+      onToggle: Message.ToggledCodeBlock({ id }),
       className,
     },
     h,
   )
 
-export const sectionLink = (h: HtmlBuilder<Message>, href: string, label: string): Html =>
+export const sectionLink = (h: HtmlBuilder<AppMessage>, href: string, label: string): Html =>
   h.a(
     [
       h.Href(href),
@@ -392,7 +393,7 @@ const PACKAGE_MANAGER_COMMANDS: Record<PackageManager, string> = {
 const installCommand = (packageManager: PackageManager, componentName: string): string =>
   `${PACKAGE_MANAGER_COMMANDS[packageManager]} shadcn@latest add @foldcn/${componentName}`
 
-export const installTabs = (h: HtmlBuilder<Message>, model: Model, componentName: string): Html =>
+export const installTabs = (h: HtmlBuilder<AppMessage>, model: Model, componentName: string): Html =>
   h.submodel({
     slotId: 'install-tabs',
     model: model.installTabs,
@@ -423,5 +424,5 @@ export const installTabs = (h: HtmlBuilder<Message>, model: Model, componentName
       },
       h,
     ),
-    toParentMessage: (message) => GotInstallTabsMessage({ message }),
+    toParentMessage: (message) => Message.GotInstallTabsMessage({ message }),
   })

@@ -5,11 +5,12 @@ import * as Tabs from '@foldkit/ui/tabs'
 
 import * as Demo from './demo'
 import { parseRoute } from './route'
-import { GotDemoMessage, type Message } from './message'
+import { Message } from './message'
+import type { Message as MessageType } from './message'
 import { Model } from './model'
 import { LoadBrowserEnvironment } from './update'
 
-export type InitReturn = readonly [Model, ReadonlyArray<Command.Command<Message>>]
+export type InitReturn = readonly [Model, ReadonlyArray<Command.Command<MessageType>>]
 
 /**
  * Builds the same first Model on the server and in the browser: every field
@@ -19,6 +20,7 @@ export type InitReturn = readonly [Model, ReadonlyArray<Command.Command<Message>
  * boot Command, which the runtime runs once hydration has completed.
  */
 export const init = (url: Url.Url): InitReturn => {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const [demo, demoCommands] = Demo.init() as unknown as [
     Demo.DemoModel,
     ReadonlyArray<Command.Command<Demo.DemoMessage>>,
@@ -38,7 +40,7 @@ export const init = (url: Url.Url): InitReturn => {
     },
     [
       LoadBrowserEnvironment(),
-      ...Command.mapMessages(demoCommands, (message) => GotDemoMessage({ message })),
+      ...Command.mapMessages(demoCommands, (message) => Message.GotDemoMessage({ message })),
     ],
   ]
 }

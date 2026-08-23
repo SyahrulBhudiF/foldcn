@@ -1,5 +1,4 @@
 import { Match as M, Option } from 'effect'
-import { Schema as S } from 'effect'
 import { Command, Update } from 'foldkit'
 import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'

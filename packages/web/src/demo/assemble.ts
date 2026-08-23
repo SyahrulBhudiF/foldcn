@@ -206,8 +206,9 @@ const MessageSchema = S.Union([
 export type Message = typeof MessageSchema.Type
 export const Message = MessageSchema
 
-export const init = (): [Model, []] => [
-  {
+export const init = (): [Model, []] => {
+  // oxlint-disable-next-line typescript/consistent-type-assertions
+  const model = {
     ...accordionSlice.init,
     ...alertDialogSlice.init,
     ...alertSlice.init,
@@ -270,9 +271,9 @@ export const init = (): [Model, []] => [
     ...toggleSlice.init,
     ...tooltipSlice.init,
     ...virtualListSlice.init,
-  } as Model,
-  [],
-]
+  } as Model
+  return [model, []]
+}
 
 export const update = (model: Model, message: Message): UpdateReturn =>
   M.value(message).pipe(

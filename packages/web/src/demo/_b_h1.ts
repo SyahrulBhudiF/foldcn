@@ -65,4 +65,3 @@ const ModelSchema = S.Struct({
   ...inputSlice.fields,
 })
 export type Mdl = typeof ModelSchema.Type
-void (0 as unknown as Mdl)

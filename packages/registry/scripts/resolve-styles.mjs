@@ -72,7 +72,7 @@ const STYLES = [
 // references today; the assertion below keeps that guarantee honest.
 const VERBATIM_DIRS = ['lib', 'blocks']
 const TOKEN_DIR = 'ui'
-const TOKEN_SOURCE_EXT = '.ts'
+const _TOKEN_SOURCE_EXT = '.ts'
 
 /**
  * tw-animate-css utilities + project keyframe animations whose Base UI

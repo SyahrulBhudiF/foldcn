@@ -30,9 +30,10 @@ export const comboboxView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
         model: model.combobox,
         view: CityCombobox.view,
         viewInputs: combobox.viewInputs<City>({
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           items: FRAMEWORKS as unknown as ReadonlyArray<City>,
-          restingInputValue: Option.getOrElse(model.maybeComboboxValue as Option.Option<string>, () => ''),
-          maybeSelectedValue: model.maybeComboboxValue as Option.Option<City>,
+          restingInputValue: Option.getOrElse(model.maybeComboboxValue, () => ''),
+          maybeSelectedValue: model.maybeComboboxValue,
           itemToValue: (item) => item,
           itemToDisplayText: (item) => item,
           inputPlaceholder: 'Select framework...',

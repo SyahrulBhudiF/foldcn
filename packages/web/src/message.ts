@@ -30,20 +30,3 @@ export const Message = defineMessageUnion({
   CompletedScrollToTop: {},
 })
 export type Message = typeof Message.Type
-
-export const ClickedLink = Message.ClickedLink
-export const ChangedUrl = Message.ChangedUrl
-export const GotDemoMessage = Message.GotDemoMessage
-export const SelectedThemePreference = Message.SelectedThemePreference
-export const ChangedSystemTheme = Message.ChangedSystemTheme
-export const CompletedApplyTheme = Message.CompletedApplyTheme
-export const CompletedSaveThemePreference = Message.CompletedSaveThemePreference
-export const LoadedBrowserEnvironment = Message.LoadedBrowserEnvironment
-export const ClickedCopy = Message.ClickedCopy
-export const CompletedCopy = Message.CompletedCopy
-export const ToggledCodeBlock = Message.ToggledCodeBlock
-export const GotInstallTabsMessage = Message.GotInstallTabsMessage
-export const CompletedSavePackageManager = Message.CompletedSavePackageManager
-export const CompletedNavigateInternal = Message.CompletedNavigateInternal
-export const CompletedLoadExternal = Message.CompletedLoadExternal
-export const CompletedScrollToTop = Message.CompletedScrollToTop
