@@ -1,5 +1,16 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
+import { Alert } from '@foldcn/registry/styles/default/ui/alert'
+import { badge } from '@foldcn/registry/styles/default/ui/badge'
+import {
+  Breadcrumb,
+  breadcrumbLinkClass,
+} from '@foldcn/registry/styles/default/ui/breadcrumb'
+import { Card } from '@foldcn/registry/styles/default/ui/card'
+import { cn } from '@/lib/utils'
+import { icon } from '@foldcn/registry/styles/default/lib/icons'
+import { TriangleAlert } from 'lucide'
+
 import * as Demo from '../demo'
 import { type DemoItemName, hasDemo } from '../demo/view'
 import { gapsByItem } from '../catalog/gaps'
@@ -19,15 +30,18 @@ const categoryLabel = (category: Item['category']): string =>
 const gapsCallout = (name: string, h: HtmlBuilder<Message>): Html => {
   const gaps = gapsByItem[name]
   if (gaps === undefined) return h.div([], [])
-  return h.div(
-    [h.Class('mt-4 rounded-lg border border-border bg-muted/40 p-4')],
+  return Alert<Message>(
+    { className: 'mt-4' },
     [
-      h.p(
-        [h.Class('text-xs font-semibold uppercase tracking-wide text-muted-foreground')],
-        ['Differences vs shadcn/ui'],
+      icon(h, TriangleAlert),
+      Alert.title<Message>({}, ['Differences vs shadcn/ui'], h),
+      Alert.description<Message>(
+        {},
+        [h.ul([h.Class('list-disc space-y-1 pl-4')], gaps)],
+        h,
       ),
-      h.ul([h.Class('mt-2 list-disc space-y-1 pl-4 text-sm text-muted-foreground')], gaps),
     ],
+    h,
   )
 }
 
@@ -36,10 +50,7 @@ const dependencyChips = (
   dependencies: ReadonlyArray<string> | undefined,
 ): ReadonlyArray<Html> =>
   (dependencies ?? []).map((dependency) =>
-    h.code(
-      [h.Class('rounded bg-muted/60 px-1.5 py-0.5 font-mono text-xs text-muted-foreground')],
-      [dependency],
-    ),
+    badge<Message>({ variant: 'secondary', className: 'font-mono font-normal' }, [dependency], h),
   )
 
 export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): Html => {
@@ -62,19 +73,44 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
           h.div(
             [h.Class('mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 font-mono')],
             [
-              // breadcrumb
-              h.nav(
-                [h.Class('mb-6 flex items-center gap-2 text-sm text-muted-foreground')],
+              // breadcrumb — dogfoods registry/breadcrumb tokens
+              Breadcrumb<Message>(
+                { className: 'mb-6' },
                 [
-                  h.a(
-                    [h.Href('/'), h.Class('transition-colors hover:text-foreground')],
-                    ['Registry'],
+                  Breadcrumb.list<Message>(
+                    {},
+                    [
+                      Breadcrumb.item<Message>(
+                        {},
+                        [
+                          h.a(
+                            [
+                              h.Href('/'),
+                              h.Class(cn(breadcrumbLinkClass)),
+                              h.DataAttribute('slot', 'breadcrumb-link'),
+                            ],
+                            ['Registry'],
+                          ),
+                        ],
+                        h,
+                      ),
+                      Breadcrumb.separator<Message>({}, [], h),
+                      Breadcrumb.item<Message>(
+                        {},
+                        [Breadcrumb.page<Message>({}, [categoryLabel(item.category)], h)],
+                        h,
+                      ),
+                      Breadcrumb.separator<Message>({}, [], h),
+                      Breadcrumb.item<Message>(
+                        {},
+                        [Breadcrumb.page<Message>({ isCurrent: true }, [item.title], h)],
+                        h,
+                      ),
+                    ],
+                    h,
                   ),
-                  h.span([], ['/']),
-                  h.span([h.Class('text-foreground')], [categoryLabel(item.category)]),
-                  h.span([], ['/']),
-                  h.span([], [item.title]),
                 ],
+                h,
               ),
 
               // title
@@ -119,19 +155,11 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                 ? (() => {
                     const demoExample = demoExampleByName[demoName]!
                     return [
-                      h.div(
+                      Card<Message>(
+                        { className: 'mt-10 overflow-hidden font-sans py-0 gap-0' },
                         [
-                          h.Class(
-                            'mt-10 overflow-hidden rounded-xl border border-border bg-background font-sans',
-                          ),
-                        ],
-                        [
-                          h.div(
-                            [
-                              h.Class(
-                                'flex items-center justify-between border-b border-border px-4 py-2.5',
-                              ),
-                            ],
+                          Card.header<Message>(
+                            { className: 'flex-row items-center justify-between border-b py-2.5' },
                             [
                               h.span(
                                 [h.Class('text-xs font-medium text-muted-foreground')],
@@ -146,6 +174,7 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                                 ['Interactive demo'],
                               ),
                             ],
+                            h,
                           ),
                           // Sidebar wants a viewport-level shell (fixed inset-y-0,
                           // peer margins) — the centered justify-center/p-6 card
@@ -219,6 +248,7 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                             ],
                           ),
                         ],
+                        h,
                       ),
                     ]
                   })()

@@ -1,13 +1,15 @@
-import { clsx } from 'clsx'
 import { Option } from 'effect'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 import * as Tabs from '@foldkit/ui/tabs'
 
+import { cn } from '@/lib/utils'
 import { codeBlock as registryCodeBlock } from '@foldcn/registry/styles/default/lib/code-block'
 import { copyButton as registryCopyButton } from '@foldcn/registry/styles/default/lib/copy-button'
 import { icon } from '@foldcn/registry/styles/default/lib/icons'
 import { badge } from '@foldcn/registry/styles/default/ui/badge'
+import { separator } from '@foldcn/registry/styles/default/ui/separator'
 import { styledViewInputs as tabsStyledViewInputs } from '@foldcn/registry/styles/default/ui/tabs'
+import { toggleGroup } from '@foldcn/registry/styles/default/ui/toggle-group'
 import { ArrowRight, Computer, Moon, Sun } from 'lucide'
 
 import {
@@ -31,45 +33,31 @@ import {
   type ParityStatus,
 } from '../catalog/parity'
 
-const THEME_OPTIONS: ReadonlyArray<{
-  preference: ThemePreference
-  label: string
-  icon: (h: HtmlBuilder<Message>) => Html
-}> = [
-  { preference: 'Light', label: 'Light mode', icon: (h) => icon(h, Sun) },
-  { preference: 'System', label: 'System mode', icon: (h) => icon(h, Computer) },
-  { preference: 'Dark', label: 'Dark mode', icon: (h) => icon(h, Moon) },
-]
-
-export const themeSelector = (model: Model, h: HtmlBuilder<Message>): Html =>
-  h.div(
+export const themeSelector = (model: Model, h: HtmlBuilder<Message>): Html => {
+  const selected = Option.getOrUndefined(model.maybeThemePreference)
+  return toggleGroup<Message>(
+    {
+      type: 'single',
+      value: selected === undefined ? [] : [selected],
+      variant: 'outline',
+      size: 'sm',
+      spacing: 0,
+      ariaLabel: 'Theme preference',
+      onValueChange: (next) => {
+        const value = next[0] as ThemePreference | undefined
+        // Ignore deselect (single toggle clears on re-click) — keep current preference.
+        if (value === undefined) return SelectedThemePreference({ preference: selected ?? 'System' })
+        return SelectedThemePreference({ preference: value })
+      },
+    },
     [
-      h.Role('group'),
-      h.AriaLabel('Theme preference'),
-      h.Class(
-        'flex items-center gap-0.5 rounded-md border border-border bg-muted/40 p-0.5 font-sans',
-      ),
+      { value: 'Light', label: '', icon: Sun, ariaLabel: 'Light mode' },
+      { value: 'System', label: '', icon: Computer, ariaLabel: 'System mode' },
+      { value: 'Dark', label: '', icon: Moon, ariaLabel: 'Dark mode' },
     ],
-    THEME_OPTIONS.map(({ preference, label, icon }) => {
-      const isActive = Option.exists(model.maybeThemePreference, (p) => p === preference)
-      return h.button(
-        [
-          h.AriaPressed(String(isActive)),
-          h.Class(
-            clsx(
-              'rounded p-1.5 transition cursor-pointer',
-              isActive
-                ? 'bg-background text-foreground shadow-sm'
-                : 'text-muted-foreground hover:text-foreground',
-            ),
-          ),
-          h.AriaLabel(label),
-          h.OnClick(SelectedThemePreference({ preference })),
-        ],
-        [icon(h)],
-      )
-    }),
+    h,
   )
+}
 
 export const headerView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.header(
@@ -237,7 +225,7 @@ export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html => {
                             [
                               h.Href(`/docs/${item.name}`),
                               h.Class(
-                                clsx(
+                                cn(
                                   'flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm transition-colors',
                                   isActive
                                     ? 'bg-muted font-medium text-foreground'
@@ -273,8 +261,9 @@ export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html => {
 
 export const footerView = (h: HtmlBuilder<Message>): Html =>
   h.footer(
-    [h.Class('border-t border-border font-mono')],
+    [h.Class('font-mono')],
     [
+      separator<Message>({}, h),
       h.div(
         [
           h.Class(

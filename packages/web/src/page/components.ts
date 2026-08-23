@@ -1,5 +1,8 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
+import { badge } from '@foldcn/registry/styles/default/ui/badge'
+import { separator } from '@foldcn/registry/styles/default/ui/separator'
+
 import { items } from '../catalog'
 import type { Category, Item } from '../catalog/types'
 import type { Message } from '../message'
@@ -77,17 +80,28 @@ export const componentsIndexView = (model: Model, h: HtmlBuilder<Message>): Html
               'Every item in the foldcn registry — copy-paste source built on @foldkit/ui with Foldkit TEA and Tailwind CSS.',
             ],
           ),
-          ...GROUP_ORDER.flatMap((group) => {
+          ...GROUP_ORDER.flatMap((group, index) => {
             const groupItems = items.filter((item) => item.category === group.category)
             if (groupItems.length === 0) return []
             return [
-              h.h2(
+              ...(index > 0 ? [separator<Message>({ className: 'mt-10' }, h)] : []),
+              h.div(
+                [h.Class('mt-10 flex items-center gap-2')],
                 [
-                  h.Class(
-                    "mt-10 text-[1.375rem] font-semibold leading-[1.25] text-foreground before:content-['##_'] before:font-normal before:text-muted-foreground",
+                  h.h2(
+                    [
+                      h.Class(
+                        "text-[1.375rem] font-semibold leading-[1.25] text-foreground before:content-['##_'] before:font-normal before:text-muted-foreground",
+                      ),
+                    ],
+                    [group.label],
+                  ),
+                  badge<Message>(
+                    { variant: 'secondary', className: 'tabular-nums' },
+                    [String(groupItems.length)],
+                    h,
                   ),
                 ],
-                [group.label],
               ),
               h.p([h.Class('mt-5')], [group.description]),
               h.ul(

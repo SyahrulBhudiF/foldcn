@@ -1,7 +1,11 @@
+import { Option } from 'effect'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
+import { codeBlock as registryCodeBlock } from '@foldcn/registry/styles/default/lib/code-block'
+import { separator } from '@foldcn/registry/styles/default/ui/separator'
+
 import { componentCount } from '../catalog'
-import type { Message } from '../message'
+import { ClickedCopy, type Message } from '../message'
 import type { Model } from '../model'
 
 export const homeView = (model: Model, h: HtmlBuilder<Message>): Html =>
@@ -31,13 +35,19 @@ export const homeView = (model: Model, h: HtmlBuilder<Message>): Html =>
               ' copy-paste components built with @foldkit/ui, Foldkit TEA architecture, and Tailwind CSS.',
             ],
           ),
-          h.div(
-            [
-              h.Class(
-                'mt-5 overflow-x-auto whitespace-pre rounded-[6px] bg-muted px-4 py-[0.875rem] font-mono text-[0.85em] leading-[1.6] text-foreground',
+          registryCodeBlock<Message>(
+            {
+              path: 'Terminal',
+              code: 'npx shadcn@latest add @foldcn/foldcn',
+              lang: 'shell',
+              onCopy: ClickedCopy({ value: 'npx shadcn@latest add @foldcn/foldcn' }),
+              isCopied: Option.exists(
+                model.maybeCopiedValue,
+                (v) => v === 'npx shadcn@latest add @foldcn/foldcn',
               ),
-            ],
-            ['```sh\nnpx shadcn@latest add @foldcn/foldcn\n```'],
+              className: 'mt-5',
+            },
+            h,
           ),
           h.p(
             [h.Class('mt-5')],
@@ -79,15 +89,24 @@ export const homeView = (model: Model, h: HtmlBuilder<Message>): Html =>
                 [h.Class('mt-[0.375rem]')],
                 [
                   h.div([], ['Register the namespace']),
-                  h.div(
-                    [
-                      h.Class(
-                        'mt-2 overflow-x-auto whitespace-pre rounded-[6px] bg-muted px-4 py-[0.875rem] font-mono text-[0.85em] leading-[1.6] text-foreground',
+                  registryCodeBlock<Message>(
+                    {
+                      path: 'Terminal',
+                      code: 'npx shadcn@latest registry add @foldcn=https://foldcn.elianiva.com/r/{name}.json',
+                      lang: 'shell',
+                      onCopy: ClickedCopy({
+                        value:
+                          'npx shadcn@latest registry add @foldcn=https://foldcn.elianiva.com/r/{name}.json',
+                      }),
+                      isCopied: Option.exists(
+                        model.maybeCopiedValue,
+                        (v) =>
+                          v ===
+                          'npx shadcn@latest registry add @foldcn=https://foldcn.elianiva.com/r/{name}.json',
                       ),
-                    ],
-                    [
-                      '```sh\nnpx shadcn@latest registry add @foldcn=https://foldcn.elianiva.com/r/{name}.json\n```',
-                    ],
+                      className: 'mt-2',
+                    },
+                    h,
                   ),
                 ],
               ),
@@ -105,6 +124,7 @@ export const homeView = (model: Model, h: HtmlBuilder<Message>): Html =>
               ),
             ],
           ),
+          separator<Message>({ className: 'mt-8' }, h),
           h.p(
             [h.Class('mt-5')],
             [
