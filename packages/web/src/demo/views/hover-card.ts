@@ -27,7 +27,10 @@ export const hoverCardView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
             [h.Class('flex flex-col gap-0.5 w-64')],
             [
               h.div([h.Class('font-semibold')], ['@nextjs']),
-              h.div([h.Class('text-sm')], ['The React Framework – created and maintained by @vercel.']),
+              h.div(
+                [h.Class('text-sm')],
+                ['The React Framework – created and maintained by @vercel.'],
+              ),
               h.div([h.Class('mt-1 text-xs text-muted-foreground')], ['Joined December 2021']),
             ],
           ),

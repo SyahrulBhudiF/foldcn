@@ -26,7 +26,13 @@ export const toggleView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           onToggle: (isPressed) => Message.ToggledToggle({ isPressed }),
           ariaLabel: 'Toggle bookmark',
         },
-        h.span([], [icon(h, Bookmark, 'size-4 shrink-0 group-aria-pressed/toggle:fill-foreground'), ' Bookmark']),
+        h.span(
+          [],
+          [
+            icon(h, Bookmark, 'size-4 shrink-0 group-aria-pressed/toggle:fill-foreground'),
+            ' Bookmark',
+          ],
+        ),
         h,
       ),
     ],

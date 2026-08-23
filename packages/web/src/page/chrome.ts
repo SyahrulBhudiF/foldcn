@@ -47,7 +47,8 @@ export const themeSelector = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           value = undefined
         }
         // Ignore deselect (single toggle clears on re-click) — keep current preference.
-        if (value === undefined) return Message.SelectedThemePreference({ preference: selected ?? 'System' })
+        if (value === undefined)
+          return Message.SelectedThemePreference({ preference: selected ?? 'System' })
         return Message.SelectedThemePreference({ preference: value })
       },
     },
@@ -393,7 +394,11 @@ const PACKAGE_MANAGER_COMMANDS: Record<PackageManager, string> = {
 const installCommand = (packageManager: PackageManager, componentName: string): string =>
   `${PACKAGE_MANAGER_COMMANDS[packageManager]} shadcn@latest add @foldcn/${componentName}`
 
-export const installTabs = (h: HtmlBuilder<AppMessage>, model: Model, componentName: string): Html =>
+export const installTabs = (
+  h: HtmlBuilder<AppMessage>,
+  model: Model,
+  componentName: string,
+): Html =>
   h.submodel({
     slotId: 'install-tabs',
     model: model.installTabs,

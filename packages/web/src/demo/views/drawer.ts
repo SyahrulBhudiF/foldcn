@@ -21,7 +21,11 @@ export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('flex flex-col items-start gap-4')],
     [
-      button<AppMessage>({ variant: 'outline', onClick: Message.ClickedOpenDialog() }, 'Open Drawer', h),
+      button<AppMessage>(
+        { variant: 'outline', onClick: Message.ClickedOpenDialog() },
+        'Open Drawer',
+        h,
+      ),
       h.submodel({
         slotId: model.dialog.id,
         model: model.dialog,
@@ -60,20 +64,24 @@ export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                           h.div(
                             [h.Class('flex flex-1 flex-col gap-0.5')],
                             [
-                              h.span([h.Class('flex items-center gap-2 font-medium')], [
-                                'Standard delivery',
-                                h.span(
-                                  [
-                                    h.Class(
-                                      'inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground',
-                                    ),
-                                  ],
-                                  ['Fastest'],
-                                ),
-                              ]),
-                              h.span([h.Class('text-xs text-muted-foreground')], [
-                                '25–35 min · Driver assigned now',
-                              ]),
+                              h.span(
+                                [h.Class('flex items-center gap-2 font-medium')],
+                                [
+                                  'Standard delivery',
+                                  h.span(
+                                    [
+                                      h.Class(
+                                        'inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground',
+                                      ),
+                                    ],
+                                    ['Fastest'],
+                                  ),
+                                ],
+                              ),
+                              h.span(
+                                [h.Class('text-xs text-muted-foreground')],
+                                ['25–35 min · Driver assigned now'],
+                              ),
                             ],
                           ),
                           h.input([
@@ -98,9 +106,10 @@ export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                             [h.Class('flex flex-1 flex-col gap-0.5')],
                             [
                               h.span([h.Class('font-medium')], ['5:00 PM – 5:15 PM']),
-                              h.span([h.Class('text-xs text-muted-foreground')], [
-                                'Prep starts at 4:45 PM',
-                              ]),
+                              h.span(
+                                [h.Class('text-xs text-muted-foreground')],
+                                ['Prep starts at 4:45 PM'],
+                              ),
                             ],
                           ),
                           h.input([

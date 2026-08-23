@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
  * the THUMB itself (the travel/track variants like
  * group-data-[size=default]/switch:data-checked:* key on the thumb's own
  * attribute), so the thumb span mirrors the state attribute too.
- * 
+ *
  */
 
 export const switchSizeKeys = ['default', 'sm'] as const

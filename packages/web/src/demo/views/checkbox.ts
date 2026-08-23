@@ -76,7 +76,11 @@ export const slice = defineSlice({
     isCheckboxWithDescriptionChecked: true,
     isCheckboxNotificationsChecked: false,
   },
-  messages: [Message.ToggledCheckbox, Message.ToggledCheckboxWithDescription, Message.ToggledCheckboxNotifications],
+  messages: [
+    Message.ToggledCheckbox,
+    Message.ToggledCheckboxWithDescription,
+    Message.ToggledCheckboxNotifications,
+  ],
   handlers: (model: State) => ({
     ToggledCheckbox: ({ isChecked }: typeof Message.ToggledCheckbox.Type): UpdateReturn => [
       evo(model, { isCheckboxChecked: () => isChecked }),

@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
  * Known foldkit gap: upstream swaps image→fallback automatically via the
  * Base UI Avatar primitive; foldcn's image helper always renders <img>, so
  * consumers swap children themselves.
- * 
+ *
  */
 
 export const avatarSizeKeys = ['default', 'sm', 'lg'] as const

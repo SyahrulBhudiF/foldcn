@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
  * indicator directly; `undefined` renders an EMPTY track — animated
  * indeterminate needs primitive support. The label/value builders render
  * static content the consumer owns.
- * 
+ *
  */
 
 export const progressClass = 'cn-progress-root flex flex-wrap gap-3'

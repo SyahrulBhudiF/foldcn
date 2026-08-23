@@ -59,9 +59,24 @@ export const navigationMenuView = (model: Model, h: HtmlBuilder<Message>): Html 
                   h.ul(
                     [h.Class('grid w-96 gap-1')],
                     [
-                      navListItem(h, 'Introduction', '/docs', 'Re-usable components built with Tailwind CSS.'),
-                      navListItem(h, 'Installation', '/docs/installation', 'How to install dependencies and structure your app.'),
-                      navListItem(h, 'Typography', '/docs/primitives/typography', 'Styles for headings, paragraphs, lists...etc'),
+                      navListItem(
+                        h,
+                        'Introduction',
+                        '/docs',
+                        'Re-usable components built with Tailwind CSS.',
+                      ),
+                      navListItem(
+                        h,
+                        'Installation',
+                        '/docs/installation',
+                        'How to install dependencies and structure your app.',
+                      ),
+                      navListItem(
+                        h,
+                        'Typography',
+                        '/docs/primitives/typography',
+                        'Styles for headings, paragraphs, lists...etc',
+                      ),
                     ],
                   ),
                 ],
@@ -121,7 +136,12 @@ export const navigationMenuView = (model: Model, h: HtmlBuilder<Message>): Html 
     h,
   )
 
-const navListItem = (h: HtmlBuilder<Message>, title: string, href: string, description: string): Html =>
+const navListItem = (
+  h: HtmlBuilder<Message>,
+  title: string,
+  href: string,
+  description: string,
+): Html =>
   h.li(
     [],
     [

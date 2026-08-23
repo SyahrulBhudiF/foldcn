@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
  * foldkit delta (inlined at style resolution): foldkit emits
  * aria-disabled/data-disabled instead of native disabled, and data-checked /
  * data-indeterminate for state.
- * 
+ *
  */
 
 /** Upstream checkbox component string. The disabled: variants are inert under

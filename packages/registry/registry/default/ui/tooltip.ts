@@ -52,7 +52,7 @@ export const tooltipTriggerClass =
 /**
  * The foldkit anchor writes the resolved side to `data-placement`; this view
  * additionally emits `data-side` so upstream's data-[side=…] variants resolve.
- * 
+ *
  */
 export const tooltipContentClass =
   'cn-tooltip-content cn-tooltip-content-logical z-50 w-fit max-w-xs origin-(--transform-origin) bg-foreground text-background'

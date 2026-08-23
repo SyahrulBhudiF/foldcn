@@ -25,7 +25,18 @@ export const menuView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
     model: model.menu,
     view: DemoMenu.view,
     viewInputs: menu.viewInputs<string>({
-      items: ['Profile', 'Billing', 'Settings', 'Team', 'Invite users', 'New Team', 'GitHub', 'Support', 'API', 'Log out'],
+      items: [
+        'Profile',
+        'Billing',
+        'Settings',
+        'Team',
+        'Invite users',
+        'New Team',
+        'GitHub',
+        'Support',
+        'API',
+        'Log out',
+      ],
       buttonContent: h.span([], ['Open']),
       itemToConfig: (item, { isActive }) => ({
         className: isActive ? 'font-medium' : '',

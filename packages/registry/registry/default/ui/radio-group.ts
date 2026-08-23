@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
  *    mounted only while selected, and a wired label/description pair.
  *  - legacy `option` callback → consumer-owned row content inside a
  *    group-attributed wrapper (kept for backward compatibility).
- * 
+ *
  */
 
 // Re-export the @foldkit/ui RadioGroup surface. Create a bundle once per

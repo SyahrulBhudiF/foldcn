@@ -168,7 +168,9 @@ const foldDemo = (model: Model, message: Demo.DemoMessage): UpdateReturn => {
 
 const foldInstallTabs = (model: Model, message: Tabs.Message): UpdateReturn => {
   const [next, commands, maybeOutMessage] = PackageManagerTabs.update(model.installTabs, message)
-  const mappedCommands = Command.mapMessages(commands, (m) => Message.GotInstallTabsMessage({ message: m }))
+  const mappedCommands = Command.mapMessages(commands, (m) =>
+    Message.GotInstallTabsMessage({ message: m }),
+  )
 
   return Option.match(maybeOutMessage, {
     onNone: () => [evo(model, { installTabs: () => next }), mappedCommands],

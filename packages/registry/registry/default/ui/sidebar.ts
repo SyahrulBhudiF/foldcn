@@ -1,5 +1,11 @@
 import { Effect, Match, Option, Queue, Schema as S, Stream } from 'effect'
-import { childAttributes, type Attribute, type ChildAttribute, type Html, type HtmlBuilder } from 'foldkit/html'
+import {
+  childAttributes,
+  type Attribute,
+  type ChildAttribute,
+  type Html,
+  type HtmlBuilder,
+} from 'foldkit/html'
 import { defineMessageUnion } from 'foldkit/message'
 import { evo } from 'foldkit/struct'
 import { defineView } from 'foldkit/submodel'
@@ -156,10 +162,7 @@ export const subscriptions = Subscription.make<Model, Message>()((entry) => ({
             target: window,
             type: 'keydown',
             toMessage: (event) => {
-              if (
-                event.key === SIDEBAR_KEYBOARD_SHORTCUT &&
-                (event.metaKey || event.ctrlKey)
-              ) {
+              if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
                 event.preventDefault()
                 return Option.some(Message.Toggled())
               }
@@ -241,7 +244,7 @@ export const sidebarMobilePanelClass =
 
 /** Upstream SidebarRail string. */
 export const sidebarRailClass =
-  "cn-sidebar-rail absolute inset-y-0 z-20 hidden w-4 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:start-1/2 after:w-[2px] sm:flex ltr:-translate-x-1/2 rtl:-translate-x-1/2 in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize [[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full hover:group-data-[collapsible=offcanvas]:bg-sidebar [[data-side=left][data-collapsible=offcanvas]_&]:-right-2 [[data-side=right][data-collapsible=offcanvas]_&]:-left-2"
+  'cn-sidebar-rail absolute inset-y-0 z-20 hidden w-4 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:start-1/2 after:w-[2px] sm:flex ltr:-translate-x-1/2 rtl:-translate-x-1/2 in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize [[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full hover:group-data-[collapsible=offcanvas]:bg-sidebar [[data-side=left][data-collapsible=offcanvas]_&]:-right-2 [[data-side=right][data-collapsible=offcanvas]_&]:-left-2'
 
 /** Upstream SidebarHeader string. */
 export const sidebarHeaderClass = 'cn-sidebar-header flex flex-col gap-2 p-2'
@@ -396,11 +399,7 @@ export const view = defineView<Model, Message, ProviderViewInputs>((model, viewI
   // submodel's View parameter degrades inside this large view (the styled
   // inputs value then fails to check against a phantom `undefined` target).
   if (model.isMobile) {
-    const mobileSheetView: SubmodelView<
-      Sheet.Model,
-      Sheet.Message,
-      Sheet.ViewInputs
-    > = Sheet.view
+    const mobileSheetView: SubmodelView<Sheet.Model, Sheet.Message, Sheet.ViewInputs> = Sheet.view
     const mobileSheetInputs: Sheet.ViewInputs = Sheet.styledViewInputs(
       {
         side,
@@ -413,10 +412,7 @@ export const view = defineView<Model, Message, ProviderViewInputs>((model, viewI
               Sheet.description(description, {}, ['Displays the mobile sidebar.'], sheetH),
             ],
           ),
-          h.div(
-            [h.Class('flex h-full w-full flex-col')],
-            viewInputs.content(slots),
-          ),
+          h.div([h.Class('flex h-full w-full flex-col')], viewInputs.content(slots)),
         ],
       },
       h,
@@ -503,7 +499,11 @@ export const header = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.Class(sidebarHeaderClass), h.DataAttribute('slot', 'sidebar-header'), h.DataAttribute('sidebar', 'header')],
+    [
+      h.Class(sidebarHeaderClass),
+      h.DataAttribute('slot', 'sidebar-header'),
+      h.DataAttribute('sidebar', 'header'),
+    ],
     children,
   )
 
@@ -513,7 +513,11 @@ export const content = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.Class(sidebarContentClass), h.DataAttribute('slot', 'sidebar-content'), h.DataAttribute('sidebar', 'content')],
+    [
+      h.Class(sidebarContentClass),
+      h.DataAttribute('slot', 'sidebar-content'),
+      h.DataAttribute('sidebar', 'content'),
+    ],
     children,
   )
 
@@ -523,7 +527,11 @@ export const footer = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.Class(sidebarFooterClass), h.DataAttribute('slot', 'sidebar-footer'), h.DataAttribute('sidebar', 'footer')],
+    [
+      h.Class(sidebarFooterClass),
+      h.DataAttribute('slot', 'sidebar-footer'),
+      h.DataAttribute('sidebar', 'footer'),
+    ],
     children,
   )
 
@@ -533,7 +541,11 @@ export const group = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.Class(sidebarGroupClass), h.DataAttribute('slot', 'sidebar-group'), h.DataAttribute('sidebar', 'group')],
+    [
+      h.Class(sidebarGroupClass),
+      h.DataAttribute('slot', 'sidebar-group'),
+      h.DataAttribute('sidebar', 'group'),
+    ],
     children,
   )
 
@@ -589,7 +601,14 @@ export const menu = <M>(
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.ul([h.Class(sidebarMenuClass), h.DataAttribute('slot', 'sidebar-menu'), h.DataAttribute('sidebar', 'menu')], children)
+  h.ul(
+    [
+      h.Class(sidebarMenuClass),
+      h.DataAttribute('slot', 'sidebar-menu'),
+      h.DataAttribute('sidebar', 'menu'),
+    ],
+    children,
+  )
 
 export const menuItem = <M>(
   config: StyleConfig,
@@ -597,7 +616,11 @@ export const menuItem = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.li(
-    [h.Class(sidebarMenuItemClass), h.DataAttribute('slot', 'sidebar-menu-item'), h.DataAttribute('sidebar', 'menu-item')],
+    [
+      h.Class(sidebarMenuItemClass),
+      h.DataAttribute('slot', 'sidebar-menu-item'),
+      h.DataAttribute('sidebar', 'menu-item'),
+    ],
     children,
   )
 
@@ -715,7 +738,11 @@ export const menuSub = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.ul(
-    [h.Class(cn(sidebarMenuSubClass, config.className)), h.DataAttribute('slot', 'sidebar-menu-sub'), h.DataAttribute('sidebar', 'menu-sub')],
+    [
+      h.Class(cn(sidebarMenuSubClass, config.className)),
+      h.DataAttribute('slot', 'sidebar-menu-sub'),
+      h.DataAttribute('sidebar', 'menu-sub'),
+    ],
     children,
   )
 
@@ -763,11 +790,7 @@ export const menuSubButton = <M>(
 
 /** Bare text control styled for the rail (upstream wraps its Input primitive;
  *  foldcn's labeled field wrapper would add structure upstream doesn't have). */
-export const input = <M>(
-  attributes: Attributes<M>,
-  config: StyleConfig,
-  h: HtmlBuilder<M>,
-): Html =>
+export const input = <M>(attributes: Attributes<M>, config: StyleConfig, h: HtmlBuilder<M>): Html =>
   h.input([
     ...attributes,
     h.Class(cn(inputClass, 'cn-sidebar-input', config.className)),
@@ -789,11 +812,7 @@ export const separator = <M>(config: StyleConfig, h: HtmlBuilder<M>): Html =>
 
 /** Click-to-toggle hot-spot on the rail edge. Spread the provider's
  *  `slots.rail` attributes to wire it up. */
-export const rail = <M>(
-  attributes: Attributes<M>,
-  config: StyleConfig,
-  h: HtmlBuilder<M>,
-): Html =>
+export const rail = <M>(attributes: Attributes<M>, config: StyleConfig, h: HtmlBuilder<M>): Html =>
   h.button(
     [
       ...attributes,

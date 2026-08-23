@@ -8,6 +8,8 @@
     "predev": "node ../registry/scripts/resolve-styles.mjs",
     "dev": "portless run --name foldcn vite",
     "prebuild": "node ../registry/scripts/resolve-styles.mjs",
+    "pretypecheck": "node ../registry/scripts/resolve-styles.mjs",
+    "pretest": "node ../registry/scripts/resolve-styles.mjs",
     "build": "tsx scripts/build.ts",
     "preview": "vite preview --outDir dist/client",
     "typecheck": "tsc --noEmit",

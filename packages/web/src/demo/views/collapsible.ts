@@ -26,8 +26,7 @@ export const collapsibleView = (model: Model, h: HtmlBuilder<AppMessage>): Html 
           isOpen: model.isCollapsibleOpen,
           onToggle: (isOpen) => Message.ToggledCollapsible({ isOpen }),
           title: 'Order #4189 — Shipped',
-          content:
-            'Shipping address: 100 Market St, San Francisco · Items: 2× Studio Headphones',
+          content: 'Shipping address: 100 Market St, San Francisco · Items: 2× Studio Headphones',
         },
         h,
       ),

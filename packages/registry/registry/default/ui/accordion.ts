@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils'
 
 /**
  * foldcn gaps vs upstream: no single/multiple root semantics (parent-owned
- * state), and the chevron rotates instead of swapping icons. 
+ * state), and the chevron rotates instead of swapping icons.
  */
 
 export const buttonId = FoldkitDisclosure.buttonId

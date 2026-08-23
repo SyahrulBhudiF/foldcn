@@ -19,9 +19,7 @@ export const emptyView = (model: Model, h: HtmlBuilder<Message>): Html =>
           Empty.title<Message>({}, ['No Projects Yet'], h),
           Empty.description<Message>(
             {},
-            [
-              "You haven't created any projects yet. Get started by creating your first project.",
-            ],
+            ["You haven't created any projects yet. Get started by creating your first project."],
             h,
           ),
         ],
@@ -41,7 +39,10 @@ export const emptyView = (model: Model, h: HtmlBuilder<Message>): Html =>
           button<Message>(
             { variant: 'link', size: 'sm', className: 'text-muted-foreground' },
             // shadcn link button renders as <a> with ArrowUpRightIcon
-            h.span([h.Class('inline-flex items-center gap-1')], ['Learn More ', icon(h, ArrowUpRight)]),
+            h.span(
+              [h.Class('inline-flex items-center gap-1')],
+              ['Learn More ', icon(h, ArrowUpRight)],
+            ),
             h,
           ),
         ],

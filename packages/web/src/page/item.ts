@@ -2,10 +2,7 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Alert } from '@foldcn/registry/styles/default/ui/alert'
 import { badge } from '@foldcn/registry/styles/default/ui/badge'
-import {
-  Breadcrumb,
-  breadcrumbLinkClass,
-} from '@foldcn/registry/styles/default/ui/breadcrumb'
+import { Breadcrumb, breadcrumbLinkClass } from '@foldcn/registry/styles/default/ui/breadcrumb'
 import { Card } from '@foldcn/registry/styles/default/ui/card'
 import { cn } from '@/lib/utils'
 import { icon } from '@foldcn/registry/styles/default/lib/icons'
@@ -36,11 +33,7 @@ const gapsCallout = (name: string, h: HtmlBuilder<AppMessage>): Html => {
     [
       icon(h, TriangleAlert),
       Alert.title<AppMessage>({}, ['Differences vs shadcn/ui'], h),
-      Alert.description<AppMessage>(
-        {},
-        [h.ul([h.Class('list-disc space-y-1 pl-4')], gaps)],
-        h,
-      ),
+      Alert.description<AppMessage>({}, [h.ul([h.Class('list-disc space-y-1 pl-4')], gaps)], h),
     ],
     h,
   )
@@ -51,7 +44,11 @@ const dependencyChips = (
   dependencies: ReadonlyArray<string> | undefined,
 ): ReadonlyArray<Html> =>
   (dependencies ?? []).map((dependency) =>
-    badge<AppMessage>({ variant: 'secondary', className: 'font-mono font-normal' }, [dependency], h),
+    badge<AppMessage>(
+      { variant: 'secondary', className: 'font-mono font-normal' },
+      [dependency],
+      h,
+    ),
   )
 
 export const itemPage = (model: Model, name: string, h: HtmlBuilder<AppMessage>): Html => {
@@ -193,7 +190,8 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<AppMessage>)
                                       model: model.demo,
                                       view: Demo.view,
                                       viewInputs: { itemName: demoName! },
-                                      toParentMessage: (message) => Message.GotDemoMessage({ message }),
+                                      toParentMessage: (message) =>
+                                        Message.GotDemoMessage({ message }),
                                     }),
                                   ],
                                 ),
@@ -207,7 +205,8 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<AppMessage>)
                                       model: model.demo,
                                       view: Demo.view,
                                       viewInputs: { itemName: demoName! },
-                                      toParentMessage: (message) => Message.GotDemoMessage({ message }),
+                                      toParentMessage: (message) =>
+                                        Message.GotDemoMessage({ message }),
                                     }),
                                   ],
                                 ),
