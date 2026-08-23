@@ -1,125 +1,83 @@
 import { Subscription, Update } from 'foldkit'
-import { Match as M, Option } from 'effect'
-import { Schema as S } from 'effect'
+import { Match as M, Option, Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
 import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Slider as FoldkitSlider } from '@foldkit/ui'
 
-import * as slider from '@foldcn/registry/styles/default/ui/slider'
+import * as Slider from '@foldcn/registry/styles/default/ui/slider'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message } from '../assemble'
 
-const GotSliderRatingMessage = m('GotSliderRatingMessage', { message: slider.Message })
-const GotSliderVolumeMessage = m('GotSliderVolumeMessage', { message: slider.Message })
+const GotSliderMessage = m('GotSliderMessage', { message: Slider.Message })
 
+// Single thumb mirroring apps/v4/examples/base/slider-demo.tsx
 export const sliderView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
-    [h.Class('flex w-full max-w-sm flex-col gap-8')],
+    [h.Class('flex w-full max-w-xs flex-col gap-2')],
     [
       h.submodel({
-        slotId: model.sliderRating.id,
-        model: model.sliderRating,
-        view: slider.view,
-        viewInputs: slider.styledViewInputs(
+        slotId: model.sliderDemo.id,
+        model: model.sliderDemo,
+        view: Slider.view,
+        viewInputs: Slider.styledViewInputs(
           {
-            value: model.sliderRatingValue,
-            label: 'Rating',
-            formatValue: (value) => `${value} / 10`,
+            value: model.sliderValue,
+            ariaLabel: 'Value',
           },
           h,
         ),
-        toParentMessage: (message) => GotSliderRatingMessage({ message }),
-      }),
-      h.submodel({
-        slotId: model.sliderVolume.id,
-        model: model.sliderVolume,
-        view: slider.view,
-        viewInputs: slider.styledViewInputs(
-          {
-            value: model.sliderVolumeValue,
-            label: 'Volume',
-            formatValue: (value) => `${Math.round(value * 100)}%`,
-          },
-          h,
-        ),
-        toParentMessage: (message) => GotSliderVolumeMessage({ message }),
+        toParentMessage: (message) => GotSliderMessage({ message }),
       }),
     ],
   )
 
-const foldRatingOutMessage = M.type<slider.OutMessage>().pipe(
+const foldOutMessage = M.type<Slider.OutMessage>().pipe(
   M.withReturnType<Update.Step<State, unknown>>(),
   M.tagsExhaustive({
     ChangedValue:
       ({ value }) =>
-      (model) => [evo(model, { sliderRatingValue: () => value }), []],
+      (model) => [evo(model, { sliderValue: () => value }), []],
   }),
 )
 
-const foldVolumeOutMessage = M.type<slider.OutMessage>().pipe(
-  M.withReturnType<Update.Step<State, unknown>>(),
-  M.tagsExhaustive({
-    ChangedValue:
-      ({ value }) =>
-      (model) => [evo(model, { sliderVolumeValue: () => value }), []],
-  }),
-)
-
-const foldRating = Update.foldChild({
-  update: slider.update,
-  read: (model: State) => Option.some(model.sliderRating),
-  write: (model, next) => evo(model, { sliderRating: () => next }),
-  toParentMessage: (message) => GotSliderRatingMessage({ message }),
-  foldOutMessage: foldRatingOutMessage,
-})
-
-const foldVolume = Update.foldChild({
-  update: slider.update,
-  read: (model: State) => Option.some(model.sliderVolume),
-  write: (model, next) => evo(model, { sliderVolume: () => next }),
-  toParentMessage: (message) => GotSliderVolumeMessage({ message }),
-  foldOutMessage: foldVolumeOutMessage,
+const foldSlider = Update.foldChild({
+  update: Slider.update,
+  read: (model: State) => Option.some(model.sliderDemo),
+  write: (model, next) => evo(model, { sliderDemo: () => next }),
+  toParentMessage: (message) => GotSliderMessage({ message }),
+  foldOutMessage,
 })
 
 const fields = {
-  sliderRating: slider.Model,
-  sliderRatingValue: S.Number,
-  sliderVolume: slider.Model,
-  sliderVolumeValue: S.Number,
+  sliderDemo: Slider.Model,
+  sliderValue: S.Number,
 }
 
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type
 
 export const subscriptions = Subscription.lift({
-  sliderRatingPointer: FoldkitSlider.subscriptions.dragPointer,
-  sliderRatingEscape: FoldkitSlider.subscriptions.dragEscape,
-})<State, typeof GotSliderRatingMessage.Type | typeof GotSliderVolumeMessage.Type>({
-  toChildModel: (model) => model.sliderRating,
-  toParentMessage: (message) => GotSliderRatingMessage({ message }),
+  sliderPointer: FoldkitSlider.subscriptions.dragPointer,
+  sliderEscape: FoldkitSlider.subscriptions.dragEscape,
+})<State, typeof GotSliderMessage.Type>({
+  toChildModel: (model) => model.sliderDemo,
+  toParentMessage: (message) => GotSliderMessage({ message }),
 })
 
 export const slice = defineSlice({
   fields,
   init: {
-    sliderRating: slider.init({ id: 'slider-rating-demo', min: 0, max: 10, step: 1 }),
-    sliderRatingValue: 3,
-    sliderVolume: slider.init({ id: 'slider-volume-demo', min: 0, max: 1, step: 0.05 }),
-    sliderVolumeValue: 0.5,
+    sliderDemo: Slider.init({ id: 'slider-demo', min: 0, max: 100, step: 1 }),
+    sliderValue: 75,
   },
-  messages: [GotSliderRatingMessage, GotSliderVolumeMessage],
+  messages: [GotSliderMessage],
   handlers: (model: State) => ({
-    GotSliderRatingMessage: (payload: typeof GotSliderRatingMessage.Type): UpdateReturn =>
-      foldRating(model, payload.message),
-    GotSliderVolumeMessage: (payload: typeof GotSliderVolumeMessage.Type): UpdateReturn =>
-      foldVolume(model, payload.message),
+    GotSliderMessage: (payload: typeof GotSliderMessage.Type): UpdateReturn =>
+      foldSlider(model, payload.message),
   }),
   samples: [],
-  // Slider changes arrive purely through drag (child out-messages); the
-  // public @foldkit/ui namespace exports no child-message constructors, so
-  // there are no top-level samples to feed update().
   subscriptions,
 })

@@ -54,9 +54,11 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 7. **menubar — no menubar behavior.** Each trigger is an independent Menu bundle; no ArrowLeft/Right traversal, no open-on-hover-of-next-trigger.
 8. **command — pure markup.** No filtering, arrow-key nav, Enter-to-select, roving tabindex, or Dialog wrapper; `[cmdk-group-heading]` selectors in its classes match nothing.
 9. **toast/sonner — no swipe-to-dismiss, no stack expansion** (index-based scale/peek choreography absent); hover-pause restarts the _full_ duration on resume. foldcn emits literal `cn-toast` but defines no such rule in its CSS (inert class).
-10. **sidebar — static paint only (~13 of 24 parts).** No provider state, collapse modes (`offcanvas|icon|none`), side/variant props, mobile Sheet path, cookie persistence, ⌘/Ctrl+B shortcut, tooltips, rail, or RTL handling.
+10. **sidebar — interactive shell with two remaining gaps.** Collapse modes (`offcanvas|icon|none`), side/variant props, mobile Sheet path, ⌘/Ctrl+B shortcut, rail, and all 20+ parts (`groupAction/groupContent/menuAction/menuBadge/menuSkeleton/menuSub*`, `input`, RTL flip) are now ported. Remaining: no `document.cookie` persistence (foldkit hydration owns initial render) and collapsed-mode menu-button tooltips are not auto-composed (wrap menu buttons in Tooltip submodels yourself).
 11. **avatar — no image loading/error fallback chain** (stateless `<img>`; base swaps to Fallback automatically).
 12. **Inert/dead classes:** `peer-disabled:*` on input/textarea labels (no `.peer` sibling exists); command's cmdk selectors (above).
+
+> **2026-08-26 sidebar:** the static-paint bucket for sidebar is closed. The collapsible app shell, keyboard shortcut, mobile sheet, rail, and the `menu* / group* / input` sub-parts were added to `packages/registry/registry/default/ui/sidebar.ts`, and the demo at `packages/web/src/demo/views/sidebar.ts` now embeds the provider submodel, exercises `offcanvas|icon|none × left|right × sidebar|floating|inset`, and lifts the breakpoint/keyboard subscriptions.
 
 ## Recurring drift patterns
 
@@ -129,7 +131,7 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 
 - **table — MINOR.** Slots identical. foldcn adds `border-collapse *:border-border` (in neither registry); misses `has-aria-expanded:bg-muted/50`; head `text-muted-foreground` vs base `text-foreground`; keeps legacy checkbox translate-y.
 - **resizable — MAJOR.** Hand-rolled 2-pane percentage splitter (hidden range input) vs react-resizable-panels: no min/max/collapsible/N-panes, no hit-area/focus-ring on handle, slot named `resizable` not `resizable-panel-group`.
-- **sidebar — MAJOR.** See bug #10; also content double-padding, separator `-mx-2 my-2` vs `mx-2`, menu gap-1 vs gap-0.
+- **sidebar — MINOR (was MAJOR — fixed 2026-08-26).** Interactive shell (provider submodel, mobile sheet, keyboard shortcut, rail, all parts) now matches upstream. Remaining behavioral gaps are the two items noted in bug #10; class diffs reduced to separator and menu refinements that the style tokens already absorb.
 - **sonner — MAJOR.** Foldkit toast engine restyled; no theme sync, no `--normal-*`/`--radius` wiring, `bg-background rounded-lg` vs popover/`rounded-2xl`; inert `cn-toast` class.
 - **toast — MAJOR.** Single entry is a close visual copy (colors/focus/icon/close hit-area match); missing swipe, stack expansion, Action part, portal/viewport composition; exit fade 200ms vs 500ms cubic-bezier choreography.
 - **direction — MINOR.** Wrapper div with `dir` vs React context provider; extra `w-full` div; no data-slot.

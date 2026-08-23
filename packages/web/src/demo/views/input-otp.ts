@@ -10,19 +10,11 @@ import type { Model, Message } from '../assemble'
 
 const UpdatedOtp = m('UpdatedOtp', { value: S.String })
 
+// 6-digit OTP mirroring apps/v4/examples/base/input-otp-demo.tsx
 export const inputOtpView = (model: Model, h: HtmlBuilder<Message>): Html =>
-  h.div(
-    [h.Class('flex w-full max-w-sm flex-col gap-4')],
-    [
-      inputOtp<Message>(
-        { length: 6, value: model.otp, onInput: (value) => UpdatedOtp({ value }), autoFocus: true },
-        h,
-      ),
-      h.p(
-        [h.Class('text-sm text-muted-foreground')],
-        [model.otp === '' ? 'Enter the 6-digit code.' : `Entered: ${model.otp}`],
-      ),
-    ],
+  inputOtp<Message>(
+    { length: 6, value: model.otp, onInput: (value) => UpdatedOtp({ value }) },
+    h,
   )
 
 const fields = { otp: S.String }
@@ -32,7 +24,7 @@ type State = typeof stateSchema.Type
 
 export const slice = defineSlice({
   fields,
-  init: { otp: '' },
+  init: { otp: '123456' },
   messages: [UpdatedOtp],
   handlers: (model: State) => ({
     UpdatedOtp: ({ value }: typeof UpdatedOtp.Type): UpdateReturn => [

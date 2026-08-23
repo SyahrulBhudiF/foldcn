@@ -445,8 +445,8 @@
       "name": "sidebar",
       "type": "registry:ui",
       "title": "Sidebar",
-      "description": "Presentational sidebar layout — provider, rail, menu, group and inset builders.",
-      "registryDependencies": ["@foldcn/utils"],
+      "description": "Collapsible app shell — SidebarProvider.view submodel (offcanvas/icon/none × sidebar/floating/inset, mobile sheet, ⌘B shortcut, rail) with menu/badge/skeleton/sub-menu/input primitives.",
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [{ "path": "sidebar.ts", "type": "registry:ui" }]
     },
     {

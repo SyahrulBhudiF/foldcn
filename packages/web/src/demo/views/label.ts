@@ -1,35 +1,45 @@
 import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { label } from '@foldcn/registry/styles/default/ui/label'
+import { checkbox } from '@foldcn/registry/styles/default/ui/checkbox'
 
-import { defineSlice } from '../slice'
+import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message } from '../assemble'
+
+const ToggledLabelCheckbox = m('ToggledLabelCheckbox', { isChecked: S.Boolean })
 
 export const labelView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
-    [h.Class('flex w-full max-w-sm flex-col gap-2')],
+    [h.Class('flex gap-2')],
     [
-      label<Message>({ forId: 'label-demo' }, ['Email'], h),
-      h.input([
-        h.Id('label-demo'),
-        h.Class(
-          'h-9 w-full rounded-md border border-input bg-background px-3 text-sm shadow-xs outline-none',
-        ),
-      ]),
+      checkbox<Message>(
+        {
+          id: 'terms',
+          label: 'Accept terms and conditions',
+          isChecked: model.isLabelChecked,
+          onToggle: (isChecked) => ToggledLabelCheckbox({ isChecked }),
+        },
+        h,
+      ),
     ],
   )
 
-const fields = {} as const
+const fields = { isLabelChecked: S.Boolean }
+
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type
 
 export const slice = defineSlice({
   fields,
-  init: {},
-  messages: [],
-  handlers: (model: State) => {
-    void model
-    return {}
-  },
+  init: { isLabelChecked: false },
+  messages: [ToggledLabelCheckbox],
+  handlers: (model: State) => ({
+    ToggledLabelCheckbox: ({ isChecked }: typeof ToggledLabelCheckbox.Type): UpdateReturn => [
+      evo(model, { isLabelChecked: () => isChecked }),
+      [],
+    ],
+  }),
+  samples: [ToggledLabelCheckbox({ isChecked: true })],
 })

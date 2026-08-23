@@ -14,36 +14,38 @@ import type { Model, Message } from '../assemble'
 
 const GotSelectMessage = m('GotSelectMessage', { message: select.Message })
 
-const LANGUAGE_OPTIONS = [
-  ['en', 'English'],
-  ['id', 'Bahasa Indonesia'],
-  ['ja', '日本語'],
-] as const
+type FruitItem = { value: string; label: string }
+
+const FRUITS: ReadonlyArray<FruitItem> = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'blueberry', label: 'Blueberry' },
+  { value: 'grapes', label: 'Grapes' },
+  { value: 'pineapple', label: 'Pineapple' },
+]
 
 export const selectView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
-    [h.Class(select.selectWrapperClass)],
+    [h.Class('w-full max-w-48')],
     [
-      select.selectLabel('Language', h),
       h.submodel({
         slotId: model.select.id,
         model: model.select,
         view: LanguageSelect.view,
-        viewInputs: select.styledViewInputs<Message, { value: string; label: string }, string>(
+        viewInputs: select.styledViewInputs<Message, FruitItem, string>(
           {
-            options: LANGUAGE_OPTIONS.map(([value, label]) => ({ value, label })),
+            options: FRUITS,
             maybeSelectedValue: model.maybeSelectValue,
             itemToValue: (item) => item.value,
             itemToLabel: (item) => item.label,
-            label: 'Language',
-            description: 'Choose your interface language.',
-            isInvalid: false,
+            label: 'Fruits',
+            placeholder: 'Select a fruit',
+            triggerClass: 'w-full max-w-48',
           },
           h,
         ),
         toParentMessage: (message) => GotSelectMessage({ message }),
       }),
-      select.selectDescription('Choose your interface language.', h),
     ],
   )
 
@@ -75,8 +77,8 @@ type State = typeof stateSchema.Type
 export const slice = defineSlice({
   fields,
   init: {
-    select: select.init({ id: 'select-language' }),
-    maybeSelectValue: Option.some('en'),
+    select: select.init({ id: 'select-demo' }),
+    maybeSelectValue: Option.none(),
   },
   messages: [GotSelectMessage],
   handlers: (model: State) => ({

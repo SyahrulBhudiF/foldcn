@@ -1,54 +1,156 @@
+import { Option } from 'effect'
 import { Schema as S } from 'effect'
+import { Subscription, Update } from 'foldkit'
+import { evo } from 'foldkit/struct'
+import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { Sidebar, SidebarInset, SidebarProvider } from '@foldcn/registry/styles/default/ui/sidebar'
+import {
+  BookOpen,
+  Bot,
+  ChevronRight,
+  ChevronsUpDown,
+  Frame,
+  GalleryVerticalEnd,
+  Map,
+  MoreHorizontal,
+  PieChart,
+  Settings2,
+  Sparkles,
+  SquareTerminal,
+} from 'lucide'
 
-import { defineSlice } from '../slice'
+import { icon } from '@foldcn/registry/styles/default/lib/icons'
+import * as Sidebar from '@foldcn/registry/styles/default/ui/sidebar'
+
+import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message } from '../assemble'
 
-export const sideBarView = (model: Model, h: HtmlBuilder<Message>): Html =>
-  SidebarProvider(
+const GotSidebarMessage = m('GotSidebarMessage', { message: Sidebar.Message })
+
+// Mimics apps/v4/examples/base/sidebar-demo.tsx (the flagship Team
+// Switcher + collapsible Platform + Projects w/ actions + User footer
+// shell). Kept static (sub-menus always expanded; dropdowns shown as
+// affordances only) so the demo stays a single-slice shell demo — the
+// interactive behavior it exercises is collapse/expand, rail, keyboard
+// shortcut and mobile sheet.
+// See also sidebar-group.tsx / sidebar-menu*.tsx for the smaller
+// sub-part variants this demo composites.
+
+export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html =>
+  h.div(
+    [h.Class('flex w-full flex-col gap-0 bg-background')],
+    [
+      h.p(
+        [h.Class('px-4 pb-3 pt-1 text-xs text-muted-foreground')],
+        [
+          'Collapsible app shell — toggle with the header button, the rail hot-spot, or ',
+          h.kbd([h.Class('rounded border bg-muted px-1 font-mono text-[11px]')], ['⌘B']),
+          '. Resize below the md breakpoint for the mobile sheet.',
+        ],
+      ),
+      h.div(
+        [
+          h.Class('relative flex h-[520px] w-full overflow-hidden rounded-lg border bg-background'),
+          h.Style({ transform: 'translateZ(0)' }),
+        ],
+        [
+          h.submodel({
+            slotId: 'sidebar-demo',
+            model: model.sidebar,
+            view: Sidebar.SidebarProvider.view,
+            viewInputs: {
+              side: 'left',
+              variant: 'inset',
+              collapsible: 'icon',
+              // Inside the 420px preview card the upstream `min-h-svh`
+              // / `h-svh` (viewport units) overflow. Override to `h-full`
+              // so the shell is contained by the transformed preview box.
+              className: '!min-h-0 !h-full [&_[data-slot=sidebar]]:!h-full [&_[data-slot=sidebar-container]]:!h-full',
+              content: (slots) => [
+                Sidebar.header({}, [teamSwitcher(h)], h),
+                Sidebar.content(
+                  {},
+                  [navMain(h), navProjects(h), secondarySupportGroup(h)],
+                  h,
+                ),
+                Sidebar.footer({}, [navUser(h)], h),
+                Sidebar.rail(slots.rail, {}, h),
+              ],
+              children: (slots) => [
+                Sidebar.SidebarInset(
+                  {},
+                  [
+                    h.header(
+                      [
+                        h.Class(
+                          'flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12',
+                        ),
+                      ],
+                      [
+                        h.div([h.Class('flex items-center gap-2 px-4')], [
+                          Sidebar.trigger(slots.trigger, {}, h),
+                          Sidebar.separator({ className: '-ml-px mr-2 h-4' }, h),
+                          h.span(
+                            [h.Class('text-sm font-medium')],
+                            [
+                              slots.state === 'collapsed'
+                                ? 'Collapsed — hover the icons or press ⌘B'
+                                : 'Acme Inc — Playground / Starred',
+                            ],
+                          ),
+                        ]),
+                      ],
+                    ),
+                    h.div(
+                      [h.Class('flex flex-1 flex-col gap-4 p-4 pt-0')],
+                      [
+                        h.div(
+                          [h.Class('grid auto-rows-min gap-4 md:grid-cols-2')],
+                          [
+                            h.div([h.Class('rounded-xl bg-muted/50 p-6')], []),
+                            h.div([h.Class('rounded-xl bg-muted/50 p-6')], []),
+                          ],
+                        ),
+                        h.div([h.Class('min-h-[160px] flex-1 rounded-xl bg-muted/50')], []),
+                      ],
+                    ),
+                  ],
+                  h,
+                ),
+              ],
+            },
+            toParentMessage: (message) => GotSidebarMessage({ message }),
+          }),
+        ],
+      ),
+    ],
+  )
+
+// --- Demo fragments (mirroring sidebar-demo.tsx data) ---
+
+const teamSwitcher = (h: HtmlBuilder<Message>): Html =>
+  Sidebar.menu(
     {},
     [
-      Sidebar(
+      Sidebar.menuItem(
         {},
         [
-          Sidebar.header({}, [h.div([h.Class('font-semibold')], ['Acme Inc'])], h),
-          Sidebar.content(
-            {},
+          Sidebar.menuButton(
+            { size: 'lg', className: 'data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground' },
             [
-              Sidebar.group(
-                {},
-                [
-                  Sidebar.groupLabel({}, ['Platform'], h),
-                  Sidebar.menu(
-                    {},
-                    [
-                      Sidebar.menuItem(
-                        {},
-                        [Sidebar.menuButton({ isActive: true }, ['Dashboard'], h)],
-                        h,
-                      ),
-                      Sidebar.menuItem({}, [Sidebar.menuButton({}, ['Projects'], h)], h),
-                      Sidebar.menuItem({}, [Sidebar.menuButton({}, ['Team'], h)], h),
-                    ],
-                    h,
-                  ),
-                ],
-                h,
+              h.div(
+                [h.Class('flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground')],
+                [icon(h, GalleryVerticalEnd, 'size-4')],
               ),
+              h.div([h.Class('grid flex-1 text-left text-sm leading-tight')], [
+                h.span([h.Class('truncate font-medium')], ['Acme Inc']),
+                h.span([h.Class('truncate text-xs')], ['Enterprise']),
+              ]),
+              icon(h, ChevronsUpDown, 'ml-auto'),
             ],
             h,
           ),
-          Sidebar.footer({}, [Sidebar.menuButton({}, ['Settings'], h)], h),
-        ],
-        h,
-      ),
-      SidebarInset(
-        {},
-        [
-          h.header([h.Class('flex h-12 items-center border-b px-4')], ['Dashboard']),
-          h.main([h.Class('p-4')], ['Main content area']),
         ],
         h,
       ),
@@ -56,13 +158,229 @@ export const sideBarView = (model: Model, h: HtmlBuilder<Message>): Html =>
     h,
   )
 
-const fields = {} as const
+const navMain = (h: HtmlBuilder<Message>): Html =>
+  h.div(
+    [],
+    [
+      Sidebar.group(
+        {},
+        [
+          Sidebar.groupLabel({}, ['Platform'], h),
+          Sidebar.menu(
+            {},
+            [
+              collapsibleMenuRow({
+                title: 'Playground',
+                icon: SquareTerminal,
+                isActive: true,
+                subItems: ['History', 'Starred', 'Settings'],
+                h,
+              }),
+              collapsibleMenuRow({
+                title: 'Models',
+                icon: Bot,
+                subItems: ['Genesis', 'Explorer', 'Quantum'],
+                h,
+              }),
+              collapsibleMenuRow({
+                title: 'Documentation',
+                icon: BookOpen,
+                subItems: ['Introduction', 'Get Started', 'Tutorials', 'Changelog'],
+                h,
+              }),
+              collapsibleMenuRow({
+                title: 'Settings',
+                icon: Settings2,
+                subItems: ['General', 'Team', 'Billing', 'Limits'],
+                h,
+              }),
+            ],
+            h,
+          ),
+        ],
+        h,
+      ),
+    ],
+  )
+
+const collapsibleMenuRow = (config: {
+  title: string
+  icon: Parameters<typeof icon>[1]
+  isActive?: boolean
+  subItems: ReadonlyArray<string>
+  h: HtmlBuilder<Message>
+}): Html =>
+  // Static open mimic: no Collapsible helper wired — the submenu is
+  // always rendered, matching the defaultOpen={isActive} of the
+  // upstream example. Keeps the demo single-slice.
+  Sidebar.menuItem(
+    {},
+    [
+      Sidebar.menuButton(
+        { isActive: config.isActive },
+        [
+          icon(config.h, config.icon),
+          config.h.span([], [config.title]),
+          icon(
+            config.h,
+            ChevronRight,
+            'ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90',
+          ),
+        ],
+        config.h,
+      ),
+      Sidebar.menuSub(
+        {},
+        config.subItems.map((label) =>
+          Sidebar.menuSubItem(
+            {},
+            [
+              Sidebar.menuSubButton(
+                [],
+                { isActive: label === 'Starred' },
+                [config.h.span([], [label])],
+                config.h,
+              ),
+            ],
+            config.h,
+          ),
+        ),
+        config.h,
+      ),
+    ],
+    config.h,
+  )
+
+const navProjects = (h: HtmlBuilder<Message>): Html =>
+  Sidebar.group(
+    { className: 'group-data-[collapsible=icon]:hidden' },
+    [
+      Sidebar.groupLabel({}, ['Projects'], h),
+      Sidebar.menu(
+        {},
+        [
+          projectRow(Frame, 'Design Engineering', h),
+          projectRow(PieChart, 'Sales & Marketing', h),
+          projectRow(Map, 'Travel', h),
+          Sidebar.menuItem(
+            {},
+            [
+              Sidebar.menuButton(
+                { className: 'text-sidebar-foreground/70' },
+                [icon(h, MoreHorizontal, 'text-sidebar-foreground/70'), h.span([], ['More'])],
+                h,
+              ),
+            ],
+            h,
+          ),
+        ],
+        h,
+      ),
+    ],
+    h,
+  )
+
+const projectRow = (
+  iconNode: Parameters<typeof icon>[1],
+  label: string,
+  h: HtmlBuilder<Message>,
+): Html =>
+  Sidebar.menuItem(
+    {},
+    [
+      Sidebar.menuButton({}, [icon(h, iconNode), h.span([], [label])], h),
+      Sidebar.menuAction(
+        [],
+        { showOnHover: true },
+        [icon(h, MoreHorizontal), h.span([h.Class('sr-only')], ['More'])],
+        h,
+      ),
+    ],
+    h,
+  )
+
+const secondarySupportGroup = (h: HtmlBuilder<Message>): Html =>
+  Sidebar.group(
+    { className: 'group-data-[collapsible=icon]:hidden' },
+    [
+      Sidebar.groupLabel({}, ['Support'], h),
+      Sidebar.menu(
+        {},
+        [
+          Sidebar.menuItem(
+            {},
+            [
+              Sidebar.menuButton({}, [icon(h, Sparkles), h.span([], ['What\u2019s new'])], h),
+            ],
+            h,
+          ),
+          Sidebar.menuItem(
+            {},
+            [Sidebar.menuButton({}, [icon(h, Settings2), h.span([], ['Settings'])], h)],
+            h,
+          ),
+        ],
+        h,
+      ),
+    ],
+    h,
+  )
+
+const navUser = (h: HtmlBuilder<Message>): Html =>
+  Sidebar.menu(
+    {},
+    [
+      Sidebar.menuItem(
+        {},
+        [
+          Sidebar.menuButton(
+            { size: 'lg', className: 'data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground' },
+            [
+              h.span(
+                [
+                  h.Class(
+                    'flex size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground text-xs font-semibold',
+                  ),
+                ],
+                ['CN'],
+              ),
+              h.div([h.Class('grid flex-1 text-left text-sm leading-tight')], [
+                h.span([h.Class('truncate font-medium')], ['shadcn']),
+                h.span([h.Class('truncate text-xs')], ['m@example.com']),
+              ]),
+              icon(h, ChevronsUpDown, 'ml-auto size-4'),
+            ],
+            h,
+          ),
+        ],
+        h,
+      ),
+    ],
+    h,
+  )
+
+const fields = { sidebar: Sidebar.Model }
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type
 
+const foldSidebar = Update.foldChild({
+  update: Sidebar.update,
+  read: (model: State) => Option.some(model.sidebar),
+  write: (model, next) => evo(model, { sidebar: () => next }),
+  toParentMessage: (message) => GotSidebarMessage({ message }),
+})
+
 export const slice = defineSlice({
   fields,
-  init: {},
-  messages: [],
-  handlers: (_model: State) => ({}),
+  init: { sidebar: Sidebar.init({ id: 'sidebar-demo', defaultOpen: true }) },
+  messages: [GotSidebarMessage],
+  handlers: (model: State) => ({
+    GotSidebarMessage: (payload: typeof GotSidebarMessage.Type): UpdateReturn =>
+      foldSidebar(model, payload.message),
+  }),
+  samples: [GotSidebarMessage({ message: Sidebar.Toggled() })],
+  subscriptions: Subscription.lift(Sidebar.subscriptions)<State, typeof GotSidebarMessage.Type>({
+    toChildModel: (model) => model.sidebar,
+    toParentMessage: (message) => GotSidebarMessage({ message }),
+  }),
 })

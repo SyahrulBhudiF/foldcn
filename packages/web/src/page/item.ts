@@ -147,18 +147,44 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                               ),
                             ],
                           ),
-                          h.div(
-                            [h.Class('flex min-h-[260px] items-center justify-center p-6')],
-                            [
-                              h.submodel({
-                                slotId: 'demo-harness',
-                                model: model.demo,
-                                view: Demo.view,
-                                viewInputs: { itemName: demoName! },
-                                toParentMessage: (message) => GotDemoMessage({ message }),
-                              }),
-                            ],
-                          ),
+                          // Sidebar wants a viewport-level shell (fixed inset-y-0,
+                          // peer margins) — the centered justify-center/p-6 card
+                          // gives it a narrow flex child and lets the fixed
+                          // container escape to the document. Render it full-bleed
+                          // with a transform isolation so the fixed shell is
+                          // contained inside the preview.
+                          ...(demoName === 'sidebar'
+                            ? [
+                                h.div(
+                                  [
+                                    h.Class('p-0'),
+                                    h.Style({ transform: 'translateZ(0)' }),
+                                  ],
+                                  [
+                                    h.submodel({
+                                      slotId: 'demo-harness',
+                                      model: model.demo,
+                                      view: Demo.view,
+                                      viewInputs: { itemName: demoName! },
+                                      toParentMessage: (message) => GotDemoMessage({ message }),
+                                    }),
+                                  ],
+                                ),
+                              ]
+                            : [
+                                h.div(
+                                  [h.Class('flex min-h-[260px] items-center justify-center p-6')],
+                                  [
+                                    h.submodel({
+                                      slotId: 'demo-harness',
+                                      model: model.demo,
+                                      view: Demo.view,
+                                      viewInputs: { itemName: demoName! },
+                                      toParentMessage: (message) => GotDemoMessage({ message }),
+                                    }),
+                                  ],
+                                ),
+                              ]),
                           // Demo usage code — the actual view source, imported ?raw.
                           collapsibleCodeBlock(
                             h,

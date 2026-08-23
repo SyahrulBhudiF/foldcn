@@ -20,7 +20,7 @@ export const alertDialogView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
     [h.Class('flex flex-col items-start gap-4')],
     [
-      button<Message>({ onClick: ClickedOpenDialog() }, 'Show alert dialog', h),
+      button<Message>({ variant: 'outline', onClick: ClickedOpenDialog() }, 'Show Dialog', h),
       h.submodel({
         slotId: model.dialog.id,
         model: model.dialog,
@@ -31,12 +31,12 @@ export const alertDialogView = (model: Model, h: HtmlBuilder<Message>): Html =>
               AlertDialog.header(
                 {},
                 [
-                  AlertDialog.title(title, {}, ['Delete project'], h),
+                  AlertDialog.title(title, {}, ['Are you absolutely sure?'], h),
                   AlertDialog.description(
                     description,
                     {},
                     [
-                      'This action cannot be undone. This will permanently delete your project and remove your data from our servers.',
+                      'This action cannot be undone. This will permanently delete your account from our servers.',
                     ],
                     h,
                   ),
@@ -47,7 +47,7 @@ export const alertDialogView = (model: Model, h: HtmlBuilder<Message>): Html =>
                 {},
                 [
                   AlertDialog.cancelButton(closeButton, {}, ['Cancel'], h),
-                  AlertDialog.actionButton(closeButton, {}, ['Delete'], h),
+                  AlertDialog.actionButton(closeButton, {}, ['Continue'], h),
                 ],
                 h,
               ),

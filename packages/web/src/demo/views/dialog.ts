@@ -18,7 +18,7 @@ export const dialogView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
     [h.Class('flex flex-col items-start gap-4')],
     [
-      button<Message>({ onClick: ClickedOpenDialog() }, 'Open dialog', h),
+      button<Message>({ variant: 'outline', onClick: ClickedOpenDialog() }, 'Open Dialog', h),
       h.submodel({
         slotId: model.dialog.id,
         model: model.dialog,
@@ -26,27 +26,86 @@ export const dialogView = (model: Model, h: HtmlBuilder<Message>): Html =>
         viewInputs: Dialog.styledViewInputs(
           {
             content: ({ closeButton, title, description }, h) => [
-              h.h2([...title, h.Class('text-lg font-semibold')], ['Edit profile']),
-              h.p(
-                [...description, h.Class('text-sm text-muted-foreground')],
-                ['Make changes to your profile here. Click save when you are done.'],
+              Dialog.header(
+                {},
+                [
+                  Dialog.title(title, {}, ['Edit profile'], h),
+                  Dialog.description(
+                    description,
+                    {},
+                    ['Make changes to your profile here. Click save when you are done.'],
+                    h,
+                  ),
+                ],
+                h,
               ),
               h.div(
-                [h.Class('mt-4 bg-muted p-3 text-sm text-muted-foreground')],
-                ['This modal traps focus and closes on Esc or backdrop click.'],
+                [h.Class('grid gap-4 py-4')],
+                [
+                  h.div(
+                    [h.Class('grid gap-3')],
+                    [
+                      h.label(
+                        [
+                          h.Class('flex items-center gap-2 text-sm leading-none font-medium'),
+                          h.For('dialog-name-1'),
+                        ],
+                        ['Name'],
+                      ),
+                      h.input([
+                        h.Class(
+                          'flex h-8 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50',
+                        ),
+                        h.Id('dialog-name-1'),
+                        h.Attribute('name', 'name'),
+                        h.Attribute('defaultValue', 'Pedro Duarte'),
+                      ]),
+                    ],
+                  ),
+                  h.div(
+                    [h.Class('grid gap-3')],
+                    [
+                      h.label(
+                        [
+                          h.Class('flex items-center gap-2 text-sm leading-none font-medium'),
+                          h.For('dialog-username-1'),
+                        ],
+                        ['Username'],
+                      ),
+                      h.input([
+                        h.Class(
+                          'flex h-8 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50',
+                        ),
+                        h.Id('dialog-username-1'),
+                        h.Attribute('name', 'username'),
+                        h.Attribute('defaultValue', '@peduarte'),
+                      ]),
+                    ],
+                  ),
+                ],
               ),
-              h.div(
-                [h.Class('mt-6 flex justify-end gap-2')],
+              Dialog.footer(
+                {},
                 [
                   h.button(
-                    [...closeButton, h.Class('rounded-md border border-input px-4 py-2 text-sm')],
+                    [
+                      ...closeButton,
+                      h.Class(
+                        'inline-flex h-8 items-center justify-center rounded-lg border border-input bg-background px-3 text-sm font-medium hover:bg-accent hover:text-accent-foreground',
+                      ),
+                    ],
                     ['Cancel'],
                   ),
                   h.button(
-                    [h.Class('rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground')],
-                    ['Save'],
+                    [
+                      h.Class(
+                        'inline-flex h-8 items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground hover:bg-primary/90',
+                      ),
+                    ],
+                    ['Save changes'],
                   ),
                 ],
+                h,
               ),
             ],
           },

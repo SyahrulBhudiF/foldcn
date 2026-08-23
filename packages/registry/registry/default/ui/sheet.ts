@@ -29,6 +29,7 @@ export const view = FoldkitDialog.view
 
 export type InitConfig = FoldkitDialog.InitConfig
 export type RenderInfo = FoldkitDialog.RenderInfo
+export type ViewInputs = FoldkitDialog.ViewInputs
 
 // Derived from the shadcn v4 BASE registry:
 // apps/v4/registry/bases/base/ui/sheet.tsx. Class strings are identical to

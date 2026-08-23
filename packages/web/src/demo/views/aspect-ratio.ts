@@ -3,27 +3,29 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 import { aspectRatio } from '@foldcn/registry/styles/default/ui/aspect-ratio'
 
 import { defineSlice } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Message, Model } from '../assemble'
 
 export const aspectRatioView = (model: Model, h: HtmlBuilder<Message>): Html =>
-  h.div(
-    [h.Class('w-full max-w-sm')],
+  aspectRatio<Message>(
+    { ratio: 16 / 9, className: 'w-full max-w-sm rounded-lg bg-muted' },
     [
-      aspectRatio<Message>(
-        { ratio: 16 / 9 },
-        [
-          h.div(
-            [
-              h.Class(
-                'flex h-full w-full items-center justify-center rounded-lg border bg-muted text-sm text-muted-foreground',
-              ),
-            ],
-            ['16 / 9'],
-          ),
-        ],
-        h,
-      ),
+      h.img([
+        h.Src('https://avatar.vercel.sh/shadcn1'),
+        h.Alt('Photo'),
+        h.Class('rounded-lg object-cover grayscale dark:brightness-20'),
+        h.Style({
+          position: 'absolute',
+          height: '100%',
+          width: '100%',
+          left: '0',
+          top: '0',
+          right: '0',
+          bottom: '0',
+          color: 'transparent',
+        }),
+      ]),
     ],
+    h,
   )
 
 export const slice = defineSlice({

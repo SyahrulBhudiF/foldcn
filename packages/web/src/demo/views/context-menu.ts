@@ -8,14 +8,27 @@ import type { Model, Message } from '../assemble'
 
 import { GotMenuMessage } from './menu'
 
+// Presentational — mirrors apps/v4/examples/base/context-menu-demo.tsx.
+// Foldkit's Menu opens on activation at a fixed anchor (no right-click
+// anchoring); checkbox/radio/submenu/destructive kinds are not primitive-level
+// (see registry/default/ui/context-menu.ts gap notes). Visual labels match upstream.
 export const contextMenuView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.submodel({
     slotId: model.menu.id,
     model: model.menu,
     view: DemoMenu.view,
     viewInputs: ContextMenu.viewInputs<string>({
-      items: ['Profile', 'Billing', 'Team', 'Subscription'],
-      buttonContent: h.span([], ['Open context menu']),
+      items: [
+        'Back',
+        'Forward',
+        'Reload',
+        'More Tools',
+        'Show Bookmarks',
+        'Show Full URLs',
+        'Pedro Duarte',
+        'Colm Tuite',
+      ],
+      buttonContent: h.span([], ['Right click here']),
       itemToConfig: (item, { isActive }) => ({
         className: isActive ? 'font-medium' : '',
         content: h.span([], [item]),
@@ -24,9 +37,6 @@ export const contextMenuView = (model: Model, h: HtmlBuilder<Message>): Html =>
     toParentMessage: (message) => GotMenuMessage({ message }),
   })
 
-// The context-menu demo has no state of its own — it renders the shared
-// DemoMenu bundle bound to the menu slice's `menu` field, whose slice owns
-// all of the menu wiring.
 export const slice = defineSlice({
   fields: {},
   init: {},

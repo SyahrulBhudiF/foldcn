@@ -14,12 +14,16 @@ import type { Model, Message } from '../assemble'
 
 const GotCalendarMessage = m('GotCalendarMessage', { message: calendar.Message })
 
+// Single-date calendar mirroring apps/v4/examples/base/calendar-demo.tsx
 export const calendarView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.submodel({
     slotId: model.calendar.id,
     model: model.calendar,
     view: calendar.view,
-    viewInputs: calendar.styledViewInputs({ maybeSelectedDate: model.maybeSelectedDate }, h),
+    viewInputs: calendar.styledViewInputs(
+      { maybeSelectedDate: model.maybeSelectedDate, containerClass: 'rounded-lg border' },
+      h,
+    ),
     toParentMessage: (message) => GotCalendarMessage({ message }),
   })
 
@@ -58,7 +62,7 @@ export const slice = defineSlice({
       minDate: FoldkitCalendar.subtractYears(DEMO_TODAY, 1),
       maxDate: FoldkitCalendar.addYears(DEMO_TODAY, 1),
     }),
-    maybeSelectedDate: Option.none(),
+    maybeSelectedDate: Option.some(DEMO_TODAY),
   },
   messages: [GotCalendarMessage],
   handlers: (model: State) => ({

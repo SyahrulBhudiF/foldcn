@@ -20,7 +20,7 @@ export const sheetView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
     [h.Class('flex flex-col items-start gap-4')],
     [
-      button<Message>({ onClick: ClickedOpenDialog() }, 'Open sheet (right)', h),
+      button<Message>({ variant: 'outline', onClick: ClickedOpenDialog() }, 'Open', h),
       h.submodel({
         slotId: model.dialog.id,
         model: model.dialog,
@@ -42,11 +42,66 @@ export const sheetView = (model: Model, h: HtmlBuilder<Message>): Html =>
                 ],
                 h,
               ),
+              h.div(
+                [h.Class('grid flex-1 auto-rows-min gap-6 px-4')],
+                [
+                  h.div(
+                    [h.Class('grid gap-3')],
+                    [
+                      h.label(
+                        [
+                          h.Class('flex items-center gap-2 text-sm leading-none font-medium'),
+                          h.For('sheet-demo-name'),
+                        ],
+                        ['Name'],
+                      ),
+                      h.input([
+                        h.Class(
+                          'flex h-8 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50',
+                        ),
+                        h.Id('sheet-demo-name'),
+                        h.Attribute('defaultValue', 'Pedro Duarte'),
+                      ]),
+                    ],
+                  ),
+                  h.div(
+                    [h.Class('grid gap-3')],
+                    [
+                      h.label(
+                        [
+                          h.Class('flex items-center gap-2 text-sm leading-none font-medium'),
+                          h.For('sheet-demo-username'),
+                        ],
+                        ['Username'],
+                      ),
+                      h.input([
+                        h.Class(
+                          'flex h-8 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50',
+                        ),
+                        h.Id('sheet-demo-username'),
+                        h.Attribute('defaultValue', '@peduarte'),
+                      ]),
+                    ],
+                  ),
+                ],
+              ),
               Sheet.footer(
                 {},
                 [
-                  button<Message>({}, 'Save changes', h),
-                  Sheet.closeButton(closeButton, {}, ['Cancel'], h),
+                  h.button(
+                    [
+                      h.Class(
+                        'inline-flex h-8 items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground hover:bg-primary/90',
+                      ),
+                    ],
+                    ['Save changes'],
+                  ),
+                  Sheet.closeButton(
+                    closeButton,
+                    { className: 'border border-input bg-background hover:bg-accent' },
+                    ['Close'],
+                    h,
+                  ),
                 ],
                 h,
               ),

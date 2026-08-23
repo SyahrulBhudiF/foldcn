@@ -19,17 +19,92 @@ export const popoverView = (model: Model, h: HtmlBuilder<Message>): Html =>
     view: popover.view,
     viewInputs: popover.styledViewInputs(
       {
-        anchor: { placement: 'bottom-start', gap: 4, padding: 8 },
+        anchor: { placement: 'bottom', gap: 4, padding: 8 },
         trigger: 'Open popover',
         content: [
-          h.p([h.Class('text-sm font-medium')], ['Dimensions']),
-          h.p(
-            [h.Class('mt-1 text-sm text-muted-foreground')],
+          h.div(
+            [h.Class('grid gap-4')],
             [
-              'Set the dimensions for the layer. Positioned with an anchor, dismissed on outside press.',
+              h.div(
+                [h.Class('space-y-2')],
+                [
+                  h.h4([h.Class('leading-none font-medium')], ['Dimensions']),
+                  h.p([h.Class('text-sm text-muted-foreground')], ['Set the dimensions for the layer.']),
+                ],
+              ),
+              h.div(
+                [h.Class('grid gap-2')],
+                [
+                  h.div(
+                    [h.Class('grid grid-cols-3 items-center gap-4')],
+                    [
+                      h.label(
+                        [h.Class('text-sm font-medium'), h.For('popover-width')],
+                        ['Width'],
+                      ),
+                      h.input([
+                        h.Class(
+                          'col-span-2 flex h-8 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm',
+                        ),
+                        h.Id('popover-width'),
+                        h.Attribute('defaultValue', '100%'),
+                      ]),
+                    ],
+                  ),
+                  h.div(
+                    [h.Class('grid grid-cols-3 items-center gap-4')],
+                    [
+                      h.label(
+                        [h.Class('text-sm font-medium'), h.For('popover-maxWidth')],
+                        ['Max. width'],
+                      ),
+                      h.input([
+                        h.Class(
+                          'col-span-2 flex h-8 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm',
+                        ),
+                        h.Id('popover-maxWidth'),
+                        h.Attribute('defaultValue', '300px'),
+                      ]),
+                    ],
+                  ),
+                  h.div(
+                    [h.Class('grid grid-cols-3 items-center gap-4')],
+                    [
+                      h.label(
+                        [h.Class('text-sm font-medium'), h.For('popover-height')],
+                        ['Height'],
+                      ),
+                      h.input([
+                        h.Class(
+                          'col-span-2 flex h-8 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm',
+                        ),
+                        h.Id('popover-height'),
+                        h.Attribute('defaultValue', '25px'),
+                      ]),
+                    ],
+                  ),
+                  h.div(
+                    [h.Class('grid grid-cols-3 items-center gap-4')],
+                    [
+                      h.label(
+                        [h.Class('text-sm font-medium'), h.For('popover-maxHeight')],
+                        ['Max. height'],
+                      ),
+                      h.input([
+                        h.Class(
+                          'col-span-2 flex h-8 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm',
+                        ),
+                        h.Id('popover-maxHeight'),
+                        h.Attribute('defaultValue', 'none'),
+                      ]),
+                    ],
+                  ),
+                ],
+              ),
             ],
           ),
         ],
+        contentClass: 'w-80',
       },
       h,
     ),

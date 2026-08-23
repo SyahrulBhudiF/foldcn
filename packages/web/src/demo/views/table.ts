@@ -1,25 +1,70 @@
-import { Schema as S } from 'effect'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Table } from '@foldcn/registry/styles/default/ui/table'
 
 import { defineSlice } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Message, Model } from '../assemble'
+
+const invoices = [
+  {
+    invoice: 'INV001',
+    paymentStatus: 'Paid',
+    totalAmount: '$250.00',
+    paymentMethod: 'Credit Card',
+  },
+  {
+    invoice: 'INV002',
+    paymentStatus: 'Pending',
+    totalAmount: '$150.00',
+    paymentMethod: 'PayPal',
+  },
+  {
+    invoice: 'INV003',
+    paymentStatus: 'Unpaid',
+    totalAmount: '$350.00',
+    paymentMethod: 'Bank Transfer',
+  },
+  {
+    invoice: 'INV004',
+    paymentStatus: 'Paid',
+    totalAmount: '$450.00',
+    paymentMethod: 'Credit Card',
+  },
+  {
+    invoice: 'INV005',
+    paymentStatus: 'Paid',
+    totalAmount: '$550.00',
+    paymentMethod: 'PayPal',
+  },
+  {
+    invoice: 'INV006',
+    paymentStatus: 'Pending',
+    totalAmount: '$200.00',
+    paymentMethod: 'Bank Transfer',
+  },
+  {
+    invoice: 'INV007',
+    paymentStatus: 'Unpaid',
+    totalAmount: '$300.00',
+    paymentMethod: 'Credit Card',
+  },
+]
 
 export const tableView = (model: Model, h: HtmlBuilder<Message>): Html =>
   Table(
     {},
     [
-      Table.caption({}, ['A list of recent invoices.'], h),
+      Table.caption({}, ['A list of your recent invoices.'], h),
       Table.header(
         {},
         [
           Table.row(
             {},
             [
-              Table.head({}, ['Invoice'], h),
+              Table.head({ className: 'w-[100px]' }, ['Invoice'], h),
               Table.head({}, ['Status'], h),
-              Table.head({}, ['Amount'], h),
+              Table.head({}, ['Method'], h),
+              Table.head({ className: 'text-right' }, ['Amount'], h),
             ],
             h,
           ),
@@ -28,31 +73,35 @@ export const tableView = (model: Model, h: HtmlBuilder<Message>): Html =>
       ),
       Table.body(
         {},
+        invoices.map((invoice) =>
+          Table.row(
+            {},
+            [
+              Table.cell({ className: 'font-medium' }, [invoice.invoice], h),
+              Table.cell({}, [invoice.paymentStatus], h),
+              Table.cell({}, [invoice.paymentMethod], h),
+              Table.cell({ className: 'text-right' }, [invoice.totalAmount], h),
+            ],
+            h,
+          ),
+        ),
+        h,
+      ),
+      Table.footer(
+        {},
         [
           Table.row(
             {},
             [
-              Table.cell({}, ['INV001'], h),
-              Table.cell({}, ['Paid'], h),
-              Table.cell({}, ['$250.00'], h),
-            ],
-            h,
-          ),
-          Table.row(
-            {},
-            [
-              Table.cell({}, ['INV002'], h),
-              Table.cell({}, ['Pending'], h),
-              Table.cell({}, ['$150.00'], h),
-            ],
-            h,
-          ),
-          Table.row(
-            {},
-            [
-              Table.cell({}, ['INV003'], h),
-              Table.cell({}, ['Unpaid'], h),
-              Table.cell({}, ['$350.00'], h),
+              h.td(
+                [
+                  h.Class('cn-table-cell'),
+                  h.DataAttribute('slot', 'table-cell'),
+                  h.Colspan(3),
+                ],
+                ['Total'],
+              ),
+              Table.cell({ className: 'text-right' }, ['$2,500.00'], h),
             ],
             h,
           ),
@@ -63,13 +112,9 @@ export const tableView = (model: Model, h: HtmlBuilder<Message>): Html =>
     h,
   )
 
-const fields = {} as const
-const stateSchema = S.Struct(fields)
-type State = typeof stateSchema.Type
-
 export const slice = defineSlice({
-  fields,
+  fields: {},
   init: {},
   messages: [],
-  handlers: (_model: State) => ({}),
+  handlers: (_model: unknown) => ({}),
 })

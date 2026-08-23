@@ -5,7 +5,7 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { toggle } from '@foldcn/registry/styles/default/ui/toggle'
 import { icon } from '@foldcn/registry/styles/default/lib/icons'
-import { Bold } from 'lucide'
+import { Bookmark } from 'lucide'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message } from '../assemble'
@@ -18,17 +18,13 @@ export const toggleView = (model: Model, h: HtmlBuilder<Message>): Html =>
     [
       toggle<Message>(
         {
+          variant: 'outline',
+          size: 'sm',
           isPressed: model.isToggleOn,
           onToggle: (isPressed) => ToggledToggle({ isPressed }),
-          ariaLabel: 'Toggle bold',
+          ariaLabel: 'Toggle bookmark',
         },
-        h.span([], [icon(h, Bold), 'Bold']),
-        h,
-      ),
-      toggle<Message>({ isPressed: false, ariaLabel: 'Toggle italic' }, 'Italic', h),
-      toggle<Message>(
-        { variant: 'outline', isPressed: true, ariaLabel: 'Toggle underline' },
-        'On',
+        h.span([], [icon(h, Bookmark, 'size-4 shrink-0 group-aria-pressed/toggle:fill-foreground'), ' Bookmark']),
         h,
       ),
     ],

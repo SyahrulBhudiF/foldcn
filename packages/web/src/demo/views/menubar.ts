@@ -8,19 +8,22 @@ import type { Model, Message } from '../assemble'
 
 import { GotMenuMessage } from './menu'
 
+// Presentational menubar mirroring apps/v4/examples/base/menubar-demo.tsx.
+// Each trigger is an independent Menu bundle — no cross-menu arrow traversal
+// (see registry/default/ui/menubar.ts). "File" is interactive; the remaining
+// triggers are visual affordances.
 export const menubarView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
     [h.Class('flex flex-col items-start gap-4')],
     [
       Menubar.menubar(
         [
-          // Interactive "File" menu — a real Menu submodel instance.
           h.submodel({
             slotId: model.menu.id,
             model: model.menu,
             view: DemoMenu.view,
             viewInputs: Menubar.viewInputs<string>({
-              items: ['New File', 'New Window', 'Open', 'Save'],
+              items: ['New Tab', 'New Window', 'New Incognito Window', 'Share', 'Print…'],
               buttonContent: h.span([], ['File']),
               itemToConfig: (item, { isActive }) => ({
                 className: isActive ? 'font-medium' : '',
@@ -29,18 +32,15 @@ export const menubarView = (model: Model, h: HtmlBuilder<Message>): Html =>
             }),
             toParentMessage: (message) => GotMenuMessage({ message }),
           }),
-          // Static visual triggers that complete the bar.
           h.button([h.Class(Menubar.menubarTriggerClass)], ['Edit']),
           h.button([h.Class(Menubar.menubarTriggerClass)], ['View']),
+          h.button([h.Class(Menubar.menubarTriggerClass)], ['Profiles']),
         ],
         h,
       ),
     ],
   )
 
-// The menubar demo has no state of its own — it renders the shared DemoMenu
-// bundle bound to the menu slice's `menu` field, whose slice owns all of the
-// menu wiring.
 export const slice = defineSlice({
   fields: {},
   init: {},

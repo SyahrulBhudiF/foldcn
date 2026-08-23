@@ -1,6 +1,8 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Breadcrumb } from '@foldcn/registry/styles/default/ui/breadcrumb'
+import { icon } from '@foldcn/registry/styles/default/lib/icons'
+import { MoreHorizontal } from 'lucide'
 
 import { defineSlice } from '../slice'
 import type { Model, Message } from '../assemble'
@@ -13,6 +15,30 @@ export const breadcrumbView = (model: Model, h: HtmlBuilder<Message>): Html =>
         {},
         [
           Breadcrumb.item({}, [Breadcrumb.link({}, ['Home'], h)], h),
+          Breadcrumb.separator({}, [], h),
+          Breadcrumb.item(
+            {},
+            [
+              h.div(
+                [h.Class('relative inline-flex')],
+                [
+                  h.button(
+                    [
+                      h.Class(
+                        'inline-flex size-7 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                      ),
+                      h.AriaLabel('Toggle menu'),
+                    ],
+                    [
+                      icon(h, MoreHorizontal, 'size-4'),
+                      h.span([h.Class('sr-only')], ['Toggle menu']),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+            h,
+          ),
           Breadcrumb.separator({}, [], h),
           Breadcrumb.item({}, [Breadcrumb.link({}, ['Components'], h)], h),
           Breadcrumb.separator({}, [], h),

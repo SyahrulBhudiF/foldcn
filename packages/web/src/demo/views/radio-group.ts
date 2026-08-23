@@ -9,17 +9,15 @@ import { RadioGroup as FoldkitRadioGroup } from '@foldkit/ui'
 
 import * as radioGroup from '@foldcn/registry/styles/default/ui/radio-group'
 
-import { PlanRadioGroup, Plan } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message } from '../assemble'
 
 const GotRadioGroupMessage = m('GotRadioGroupMessage', { message: radioGroup.Message })
 
-const PLAN_DESCRIPTIONS: Record<Plan, string> = {
-  Startup: '12GB / 6 CPUs. Perfect for small projects',
-  Business: '16GB / 8 CPUs. For growing teams',
-  Enterprise: '32GB / 12 CPUs. Dedicated infrastructure',
-}
+const RadioValue = S.Literals(['default', 'comfortable', 'compact'])
+type RadioValue = typeof RadioValue.Type
+
+const RadioDemoGroup = radioGroup.create<RadioValue>()
 
 export const radioGroupView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -28,14 +26,14 @@ export const radioGroupView = (model: Model, h: HtmlBuilder<Message>): Html =>
       h.submodel({
         slotId: model.radioGroup.id,
         model: model.radioGroup,
-        view: PlanRadioGroup.view,
-        viewInputs: radioGroup.styledViewInputs<Message, Plan>(
+        view: RadioDemoGroup.view,
+        viewInputs: radioGroup.styledViewInputs<Message, RadioValue>(
           {
-            options: ['Startup', 'Business', 'Enterprise'],
-            selectedValue: model.maybePlan,
-            ariaLabel: 'Server plan',
-            optionLabel: (value) => value,
-            optionDescription: (value) => PLAN_DESCRIPTIONS[value],
+            options: ['default', 'comfortable', 'compact'],
+            selectedValue: model.maybeRadioValue,
+            ariaLabel: 'Density',
+            optionLabel: (value) => value.charAt(0).toUpperCase() + value.slice(1),
+            groupClass: 'w-fit',
           },
           h,
         ),
@@ -44,24 +42,24 @@ export const radioGroupView = (model: Model, h: HtmlBuilder<Message>): Html =>
     ],
   )
 
-const foldRadioGroupOutMessage = M.type<FoldkitRadioGroup.OutMessage<Plan>>().pipe(
+const foldRadioGroupOutMessage = M.type<FoldkitRadioGroup.OutMessage<RadioValue>>().pipe(
   M.withReturnType<Update.Step<State, unknown>>(),
   M.tagsExhaustive({
     Selected:
       ({ value }) =>
-      (model) => [evo(model, { maybePlan: () => Option.some(value) }), []],
+      (model) => [evo(model, { maybeRadioValue: () => Option.some(value) }), []],
   }),
 )
 
 const foldRadioGroup = Update.foldChild({
-  update: PlanRadioGroup.update,
+  update: RadioDemoGroup.update,
   read: (model: State) => Option.some(model.radioGroup),
   write: (model, next) => evo(model, { radioGroup: () => next }),
   toParentMessage: (message) => GotRadioGroupMessage({ message }),
   foldOutMessage: foldRadioGroupOutMessage,
 })
 
-const fields = { radioGroup: radioGroup.Model, maybePlan: S.Option(Plan) }
+const fields = { radioGroup: radioGroup.Model, maybeRadioValue: S.Option(RadioValue) }
 
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type
@@ -70,7 +68,7 @@ export const slice = defineSlice({
   fields,
   init: {
     radioGroup: radioGroup.init({ id: 'radio-group-demo' }),
-    maybePlan: Option.none(),
+    maybeRadioValue: Option.some('comfortable' as RadioValue),
   },
   messages: [GotRadioGroupMessage],
   handlers: (model: State) => ({
@@ -78,7 +76,4 @@ export const slice = defineSlice({
       foldRadioGroup(model, payload.message),
   }),
   samples: [],
-  // Selection flows through the submodel's out-messages; the public
-  // @foldkit/ui namespace exports no child-message constructors, so there
-  // are no top-level samples to feed update().
 })

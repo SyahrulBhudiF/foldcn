@@ -28,7 +28,7 @@ export type City = typeof City.Type
 export const Plan = S.Literals(['Startup', 'Business', 'Enterprise'])
 export type Plan = typeof Plan.Type
 
-export const DemoTab = S.Literals(['Overview', 'Settings', 'Billing'])
+export const DemoTab = S.Literals(['Overview', 'Analytics', 'Reports', 'Settings'])
 export type DemoTab = typeof DemoTab.Type
 
 export const DemoNav = S.Literals(['Overview', 'Components', 'Settings', 'Docs'])

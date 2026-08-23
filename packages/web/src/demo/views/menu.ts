@@ -15,14 +15,16 @@ import type { Model, Message } from '../assemble'
 
 export const GotMenuMessage = m('GotMenuMessage', { message: menu.Message })
 
+// Items mirror apps/v4/examples/base/dropdown-menu-demo.tsx (flat list;
+// foldcn's Menu has no checkbox/radio/submenu/destructive kinds — presentational gap noted in registry).
 export const menuView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.submodel({
     slotId: model.menu.id,
     model: model.menu,
     view: DemoMenu.view,
     viewInputs: menu.viewInputs<string>({
-      items: ['Edit', 'Duplicate', 'Archive', 'Delete'],
-      buttonContent: h.span([], ['Open menu']),
+      items: ['Profile', 'Billing', 'Settings', 'Team', 'Invite users', 'New Team', 'GitHub', 'Support', 'API', 'Log out'],
+      buttonContent: h.span([], ['Open']),
       itemToConfig: (item, { isActive }) => ({
         className: isActive ? 'font-medium' : '',
         content: h.span([], [item]),
@@ -65,7 +67,4 @@ export const slice = defineSlice({
       foldMenu(model, payload.message),
   }),
   samples: [],
-  // Menu selection flows through the submodel's out-messages; the public
-  // @foldkit/ui namespace exports no child-message constructors, so there
-  // are no top-level samples to feed update().
 })

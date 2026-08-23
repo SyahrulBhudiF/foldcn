@@ -3,16 +3,20 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 import { skeleton } from '@foldcn/registry/styles/default/ui/skeleton'
 
 import { defineSlice } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Message, Model } from '../assemble'
 
 export const skeletonView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
-    [h.Class('flex w-full max-w-sm flex-col gap-3')],
+    [h.Class('flex items-center gap-4')],
     [
-      skeleton<Message>({ className: 'h-4 w-[250px]' }, [], h),
-      skeleton<Message>({ className: 'h-4 w-[200px]' }, [], h),
-      skeleton<Message>({ className: 'h-4 w-[150px]' }, [], h),
-      skeleton<Message>({ className: 'h-32 w-full rounded-xl' }, [], h),
+      skeleton<Message>({ className: 'h-12 w-12 rounded-full' }, [], h),
+      h.div(
+        [h.Class('space-y-2')],
+        [
+          skeleton<Message>({ className: 'h-4 w-[250px]' }, [], h),
+          skeleton<Message>({ className: 'h-4 w-[200px]' }, [], h),
+        ],
+      ),
     ],
   )
 

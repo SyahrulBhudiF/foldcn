@@ -8,6 +8,7 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 import { Tabs as FoldkitTabs } from '@foldkit/ui'
 
 import * as tabs from '@foldcn/registry/styles/default/ui/tabs'
+import { Card } from '@foldcn/registry/styles/default/ui/card'
 
 import { DemoTabs, DemoTab } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'
@@ -15,15 +16,36 @@ import type { Model, Message } from '../assemble'
 
 const GotTabsMessage = m('GotTabsMessage', { message: tabs.Message })
 
-const TAB_CONTENT: Record<DemoTab, string> = {
-  Overview: 'Explore what this component does and how it is wired together.',
-  Settings: 'Tweak the options exposed by the submodel.',
-  Billing: 'See how it reports selection changes back to your update.',
+const TAB_DETAILS: Record<DemoTab, { title: string; description: string; content: string }> = {
+  Overview: {
+    title: 'Overview',
+    description:
+      'View your key metrics and recent project activity. Track progress across all your active projects.',
+    content: 'You have 12 active projects and 3 pending tasks.',
+  },
+  Analytics: {
+    title: 'Analytics',
+    description:
+      'Track performance and user engagement metrics. Monitor trends and identify growth opportunities.',
+    content: 'Page views are up 25% compared to last month.',
+  },
+  Reports: {
+    title: 'Reports',
+    description:
+      'Generate and download your detailed reports. Export data in multiple formats for analysis.',
+    content: 'You have 5 reports ready and available to export.',
+  },
+  Settings: {
+    title: 'Settings',
+    description:
+      'Manage your account preferences and options. Customize your experience to fit your needs.',
+    content: 'Configure notifications, security, and themes.',
+  },
 }
 
 export const tabsView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
-    [h.Class('w-full')],
+    [h.Class('w-full max-w-[400px]')],
     [
       h.submodel({
         slotId: model.tabs.id,
@@ -31,11 +53,31 @@ export const tabsView = (model: Model, h: HtmlBuilder<Message>): Html =>
         view: DemoTabs.view,
         viewInputs: tabs.styledViewInputs<Message, DemoTab>(
           {
-            tabs: ['Overview', 'Settings', 'Billing'],
+            tabs: ['Overview', 'Analytics', 'Reports', 'Settings'],
             selectedValue: model.activeTab,
             ariaLabel: 'Demo tabs',
-            panel: (tab, render, h) =>
-              h.p([h.Class('text-sm text-muted-foreground')], [TAB_CONTENT[tab]]),
+            panel: (tab, _render, h) => {
+              const details = TAB_DETAILS[tab]
+              return Card<Message>(
+                {},
+                [
+                  Card.header<Message>(
+                    {},
+                    [
+                      Card.title<Message>({}, [details.title], h),
+                      Card.description<Message>({}, [details.description], h),
+                    ],
+                    h,
+                  ),
+                  Card.content<Message>(
+                    {},
+                    [h.p([h.Class('text-sm text-muted-foreground')], [details.content])],
+                    h,
+                  ),
+                ],
+                h,
+              )
+            },
           },
           h,
         ),

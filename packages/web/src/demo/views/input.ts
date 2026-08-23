@@ -12,26 +12,17 @@ const UpdatedInputValue = m('UpdatedInputValue', { value: S.String })
 
 export const inputView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
-    [h.Class('flex w-full max-w-sm flex-col gap-4')],
+    [h.Class('w-full max-w-sm')],
     [
       input<Message>(
         {
-          id: 'input-email',
-          label: 'Email',
-          type: 'email',
+          id: 'input-demo-api-key',
+          label: 'API Key',
+          type: 'password',
           value: model.inputValue,
           onInput: (value) => UpdatedInputValue({ value }),
-          placeholder: 'you@example.com',
-          maybeDescription: 'We never share your email.',
-        },
-        h,
-      ),
-      input<Message>(
-        {
-          id: 'input-disabled',
-          label: 'Disabled',
-          value: 'Read only',
-          isDisabled: true,
+          placeholder: 'sk-...',
+          maybeDescription: 'Your API key is encrypted and stored securely.',
         },
         h,
       ),
@@ -53,5 +44,5 @@ export const slice = defineSlice({
       [],
     ],
   }),
-  samples: [UpdatedInputValue({ value: 'ada@example.com' })],
+  samples: [UpdatedInputValue({ value: 'sk-1234' })],
 })

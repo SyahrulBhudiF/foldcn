@@ -1,55 +1,50 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
+import { button } from '@foldcn/registry/styles/default/ui/button'
 import { Item } from '@foldcn/registry/styles/default/ui/item'
 import { icon } from '@foldcn/registry/styles/default/lib/icons'
-import { User } from 'lucide'
+import { BadgeCheck, ChevronRight } from 'lucide'
 
 import { defineSlice } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Message, Model } from '../assemble'
 
 export const itemView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
-    [h.Class('w-full max-w-md flex flex-col gap-3')],
+    [h.Class('flex w-full max-w-md flex-col gap-6')],
     [
-      Item.group<Message>(
-        {},
+      Item<Message>(
+        { variant: 'outline' },
         [
-          Item<Message>(
+          Item.content<Message>(
             {},
             [
-              Item.media<Message>({ variant: 'icon' }, [icon(h, User)], h),
-              Item.content<Message>(
+              Item.title<Message>({}, ['Basic Item'], h),
+              Item.description<Message>(
                 {},
-                [
-                  Item.title<Message>({}, ['Ada Lovelace'], h),
-                  Item.description<Message>({}, ['ada@example.com'], h),
-                ],
-                h,
-              ),
-              Item.actions<Message>(
-                {},
-                [h.button([h.Class('rounded-md border px-3 py-1 text-sm')], ['Edit'])],
+                ['A simple item with title and description.'],
                 h,
               ),
             ],
             h,
           ),
-          Item.separator<Message>({}, h),
-          Item<Message>(
-            { variant: 'muted' },
-            [
-              Item.media<Message>({ variant: 'icon' }, [icon(h, User)], h),
-              Item.content<Message>(
-                {},
-                [
-                  Item.title<Message>({}, ['Grace Hopper'], h),
-                  Item.description<Message>({}, ['grace@example.com'], h),
-                ],
-                h,
-              ),
-            ],
+          Item.actions<Message>(
+            {},
+            [button<Message>({ variant: 'outline', size: 'sm' }, 'Action', h)],
             h,
           ),
+        ],
+        h,
+      ),
+      Item<Message>(
+        { variant: 'outline', size: 'sm' },
+        [
+          Item.media<Message>({}, [icon(h, BadgeCheck, 'size-5')], h),
+          Item.content<Message>(
+            {},
+            [Item.title<Message>({}, ['Your profile has been verified.'], h)],
+            h,
+          ),
+          Item.actions<Message>({}, [icon(h, ChevronRight, 'size-4')], h),
         ],
         h,
       ),

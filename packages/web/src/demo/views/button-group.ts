@@ -1,43 +1,46 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { buttonGroup, buttonGroupItem } from '@foldcn/registry/styles/default/ui/button-group'
 import { button } from '@foldcn/registry/styles/default/ui/button'
+import { buttonGroup } from '@foldcn/registry/styles/default/ui/button-group'
+import { icon } from '@foldcn/registry/styles/default/lib/icons'
+import { ArrowLeft, MoreHorizontal } from 'lucide'
 
 import { defineSlice } from '../slice'
 import type { Model, Message } from '../assemble'
 
 export const buttonGroupView = (model: Model, h: HtmlBuilder<Message>): Html =>
-  h.div(
-    [h.Class('flex w-full max-w-sm flex-col gap-4')],
+  buttonGroup<Message>(
+    {},
     [
-      buttonGroup(
-        {},
+      buttonGroup<Message>(
+        { className: 'hidden sm:flex' },
         [
-          buttonGroupItem({}, 'One', h),
-          buttonGroupItem({}, 'Two', h),
-          buttonGroupItem({}, 'Three', h),
+          button<Message>({ variant: 'outline', size: 'icon' }, icon(h, ArrowLeft), h, [
+            h.AriaLabel('Go Back'),
+          ]),
         ],
         h,
       ),
-      buttonGroup(
+      buttonGroup<Message>(
         {},
         [
-          buttonGroupItem({ variant: 'default' }, 'Left', h),
-          buttonGroupItem({ variant: 'default' }, 'Middle', h),
-          buttonGroupItem({ variant: 'default' }, 'Right', h),
+          button<Message>({ variant: 'outline' }, 'Archive', h),
+          button<Message>({ variant: 'outline' }, 'Report', h),
         ],
         h,
       ),
-      buttonGroup(
+      buttonGroup<Message>(
         {},
         [
-          buttonGroupItem({ size: 'sm' }, 'A', h),
-          buttonGroupItem({ size: 'sm' }, 'B', h),
-          button<Message>({ size: 'sm', variant: 'outline' }, 'Standalone', h),
+          button<Message>({ variant: 'outline' }, 'Snooze', h),
+          button<Message>({ variant: 'outline', size: 'icon' }, icon(h, MoreHorizontal), h, [
+            h.AriaLabel('More Options'),
+          ]),
         ],
         h,
       ),
     ],
+    h,
   )
 
 export const slice = defineSlice({

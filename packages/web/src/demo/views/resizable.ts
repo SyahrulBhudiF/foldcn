@@ -10,9 +10,12 @@ import type { Model, Message } from '../assemble'
 
 const ResizedSplit = m('ResizedSplit', { percent: S.Number })
 
+// Two-pane horizontal split mirroring apps/v4/examples/base/resizable-demo.tsx
+// (upstream nests a vertical group in the second pane; foldcn's resizable is
+// fixed two panes, so we show One | Two).
 export const resizableView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
-    [h.Class('h-48 w-full rounded-md border')],
+    [h.Class('max-w-sm rounded-lg border')],
     [
       resizable<Message>(
         {
@@ -20,21 +23,15 @@ export const resizableView = (model: Model, h: HtmlBuilder<Message>): Html =>
           onValueChange: (percent) => ResizedSplit({ percent }),
           firstPane: {
             content: h.div(
-              [
-                h.Class(
-                  'flex h-full items-center justify-center p-4 text-sm text-muted-foreground',
-                ),
-              ],
-              ['Sidebar'],
+              [h.Class('flex h-[200px] items-center justify-center p-6')],
+              [h.span([h.Class('font-semibold')], ['One'])],
             ),
-            className: 'bg-muted/30',
           },
           secondPane: {
             content: h.div(
-              [h.Class('flex h-full items-center justify-center p-4 text-sm')],
-              ['Content'],
+              [h.Class('flex h-[200px] items-center justify-center p-6')],
+              [h.span([h.Class('font-semibold')], ['Two'])],
             ),
-            className: 'bg-muted/30',
           },
         },
         h,

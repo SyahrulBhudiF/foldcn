@@ -9,21 +9,15 @@ import { Combobox as FoldkitCombobox } from '@foldkit/ui'
 
 import * as combobox from '@foldcn/registry/styles/default/ui/combobox'
 
-import { CityCombobox, City } from '../bundles'
+import { City, CityCombobox } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message } from '../assemble'
 
 const GotComboboxMessage = m('GotComboboxMessage', { message: combobox.Message })
 
-const CITIES: ReadonlyArray<City> = [
-  'Johannesburg',
-  'Kyiv',
-  'Oxford',
-  'Plymouth',
-  'Quito',
-  'Wellington',
-  'Zurich',
-]
+// Frameworks mirror apps/v4/examples/base/combobox-demo.tsx (single-select).
+// Cast through City to reuse the shared CityCombobox bundle without adding a second bundle.
+const FRAMEWORKS = ['Next.js', 'SvelteKit', 'Nuxt.js', 'Remix', 'Astro'] as const
 
 export const comboboxView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -34,17 +28,17 @@ export const comboboxView = (model: Model, h: HtmlBuilder<Message>): Html =>
         model: model.combobox,
         view: CityCombobox.view,
         viewInputs: combobox.viewInputs<City>({
-          items: CITIES,
-          restingInputValue: Option.getOrElse(model.maybeComboboxValue, () => ''),
-          maybeSelectedValue: model.maybeComboboxValue,
-          itemToValue: (city) => city,
-          itemToDisplayText: (city) => city,
-          inputPlaceholder: 'Select a city...',
-          itemToConfig: (city, { isSelected, isActive }) => ({
+          items: FRAMEWORKS as unknown as ReadonlyArray<City>,
+          restingInputValue: Option.getOrElse(model.maybeComboboxValue as Option.Option<string>, () => ''),
+          maybeSelectedValue: model.maybeComboboxValue as Option.Option<City>,
+          itemToValue: (item) => item,
+          itemToDisplayText: (item) => item,
+          inputPlaceholder: 'Select framework...',
+          itemToConfig: (item, { isSelected, isActive }) => ({
             className: isActive ? 'font-medium' : '',
             content: h.span(
               [h.Class('flex w-full items-center justify-between gap-2')],
-              [h.span([], [city]), ...(isSelected ? [h.span([], ['✓'])] : [])],
+              [h.span([], [item]), ...(isSelected ? [h.span([], ['✓'])] : [])],
             ),
           }),
         }),
@@ -88,7 +82,4 @@ export const slice = defineSlice({
       foldCombobox(model, payload.message),
   }),
   samples: [],
-  // Selection flows through the submodel's out-messages; the public
-  // @foldkit/ui namespace exports no child-message constructors, so there
-  // are no top-level samples to feed update().
 })

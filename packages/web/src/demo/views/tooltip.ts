@@ -19,9 +19,9 @@ export const tooltipView = (model: Model, h: HtmlBuilder<Message>): Html =>
     view: tooltip.view,
     viewInputs: tooltip.styledViewInputs(
       {
-        anchor: { placement: 'top', gap: 8, padding: 8 },
-        trigger: 'Hover me',
-        content: 'Tooltip content',
+        anchor: { placement: 'top', gap: 4, padding: 8 },
+        trigger: 'Hover',
+        content: 'Add to library',
       },
       h,
     ),

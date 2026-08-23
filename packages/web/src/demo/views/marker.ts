@@ -1,32 +1,49 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Marker } from '@foldcn/registry/styles/default/ui/marker'
+import { spinner } from '@foldcn/registry/styles/default/ui/spinner'
 import { icon } from '@foldcn/registry/styles/default/lib/icons'
-import { Check } from 'lucide'
+import { GitBranch, Search } from 'lucide'
 
 import { defineSlice } from '../slice'
-import type { Model, Message } from '../assemble'
+import type { Message, Model } from '../assemble'
 
 export const markerView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
-    [h.Class('flex w-full max-w-md flex-col gap-2')],
+    [h.Class('flex w-full max-w-sm flex-col gap-8 py-12')],
     [
       Marker<Message>(
         {},
         [
-          Marker.icon<Message>({}, [icon(h, Check)], h),
-          Marker.content<Message>({}, ['Default marker with an icon and content.'], h),
+          Marker.icon<Message>({}, [icon(h, GitBranch)], h),
+          Marker.content<Message>({}, ['Switched to a new branch'], h),
         ],
         h,
       ),
+      h.div(
+        [h.Attribute('role', 'status')],
+        [
+          Marker<Message>(
+            {},
+            [
+              Marker.icon<Message>({}, [spinner<Message>({}, h)], h),
+              Marker.content<Message>({ className: 'shimmer' }, ['Thinking...'], h),
+            ],
+            h,
+          ),
+        ],
+      ),
       Marker<Message>(
         { variant: 'separator' },
-        [Marker.content<Message>({}, ['Separator marker'], h)],
+        [Marker.content<Message>({}, ['Conversation compacted'], h)],
         h,
       ),
       Marker<Message>(
-        { variant: 'border' },
-        [Marker.content<Message>({}, ['Border marker'], h)],
+        {},
+        [
+          Marker.icon<Message>({}, [icon(h, Search)], h),
+          Marker.content<Message>({}, ['Explored 4 files'], h),
+        ],
         h,
       ),
     ],

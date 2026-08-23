@@ -10,18 +10,22 @@ import type { Model, Message } from '../assemble'
 
 const ToggledCollapsible = m('ToggledCollapsible', { isOpen: S.Boolean })
 
+// Single-section disclosure mirroring apps/v4/examples/base/collapsible-demo.tsx
+// (Order #4189). The upstream demo shows an always-visible Status row outside
+// the collapsible; foldcn's Disclosure primitive owns the whole panel, so the
+// title carries the order header and the content holds the details that toggle.
 export const collapsibleView = (model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
-    [h.Class('flex w-full flex-col gap-4')],
+    [h.Class('flex w-[350px] flex-col gap-2')],
     [
       collapsible<Message>(
         {
           id: 'collapsible-demo',
           isOpen: model.isCollapsibleOpen,
           onToggle: (isOpen) => ToggledCollapsible({ isOpen }),
-          title: 'Can I collapse this?',
+          title: 'Order #4189 — Shipped',
           content:
-            'A single collapsible section — a trigger that toggles one panel open or closed.',
+            'Shipping address: 100 Market St, San Francisco · Items: 2× Studio Headphones',
         },
         h,
       ),

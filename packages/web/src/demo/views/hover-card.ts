@@ -19,23 +19,18 @@ export const hoverCardView = (model: Model, h: HtmlBuilder<Message>): Html =>
     view: HoverCard.view,
     viewInputs: HoverCard.styledViewInputs(
       {
-        trigger: '@foldcn on GitHub',
+        trigger: 'Hover Here',
         content: [
-          HoverCard.header(
-            {},
+          h.div(
+            [h.Class('flex flex-col gap-0.5 w-64')],
             [
-              HoverCard.title({}, ['@foldcn'], h),
-              HoverCard.description({}, ['A shadcn-style registry built on @foldkit/ui.'], h),
-            ],
-            h,
-          ),
-          h.p(
-            [h.Class('text-sm text-muted-foreground')],
-            [
-              'Opens on hover after a short delay, stays open while you move into the card, and closes after a grace period once you leave.',
+              h.div([h.Class('font-semibold')], ['@nextjs']),
+              h.div([h.Class('text-sm')], ['The React Framework – created and maintained by @vercel.']),
+              h.div([h.Class('mt-1 text-xs text-muted-foreground')], ['Joined December 2021']),
             ],
           ),
         ],
+        contentClass: 'w-64',
       },
       h,
     ),

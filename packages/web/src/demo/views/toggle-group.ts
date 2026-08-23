@@ -4,7 +4,6 @@ import { m } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { toggleGroup } from '@foldcn/registry/styles/default/ui/toggle-group'
-import { icon } from '@foldcn/registry/styles/default/lib/icons'
 import { Bold, Italic, Underline } from 'lucide'
 
 import { defineSlice, type UpdateReturn } from '../slice'
@@ -17,23 +16,16 @@ export const toggleGroupView = (model: Model, h: HtmlBuilder<Message>): Html =>
     [h.Class('flex w-full max-w-sm flex-col gap-4')],
     [
       toggleGroup<Message>(
-        { value: model.toggleGroupValue, onValueChange: (value) => SelectedToggleGroup({ value }) },
-        [
-          { value: 'bold', label: 'Bold', icon: Bold },
-          { value: 'italic', label: 'Italic', icon: Italic },
-          { value: 'underline', label: 'Underline', icon: Underline },
-        ],
-        h,
-      ),
-      toggleGroup<Message>(
         {
+          variant: 'outline',
           type: 'multiple',
           value: model.toggleGroupValue,
-          onValueChange: (value) => SelectedToggleGroup({ value }),
+          onValueChange: (value) => SelectedToggleGroup({ value: [...value] }),
         },
         [
           { value: 'bold', label: 'Bold', icon: Bold },
           { value: 'italic', label: 'Italic', icon: Italic },
+          { value: 'strikethrough', label: 'Strikethrough', icon: Underline },
         ],
         h,
       ),
@@ -47,13 +39,13 @@ type State = typeof stateSchema.Type
 
 export const slice = defineSlice({
   fields,
-  init: { toggleGroupValue: ['bold'] },
+  init: { toggleGroupValue: [] },
   messages: [SelectedToggleGroup],
   handlers: (model: State) => ({
     SelectedToggleGroup: ({ value }: typeof SelectedToggleGroup.Type): UpdateReturn => [
-      evo(model, { toggleGroupValue: () => value }),
+      evo(model, { toggleGroupValue: () => [...value] }),
       [],
     ],
   }),
-  samples: [SelectedToggleGroup({ value: ['bold', 'italic'] })],
+  samples: [SelectedToggleGroup({ value: ['bold'] })],
 })

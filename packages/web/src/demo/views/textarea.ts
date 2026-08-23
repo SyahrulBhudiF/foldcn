@@ -16,13 +16,11 @@ export const textareaView = (model: Model, h: HtmlBuilder<Message>): Html =>
     [
       textarea<Message>(
         {
-          id: 'textarea-bio',
-          label: 'Bio',
+          id: 'textarea-demo',
+          label: 'Message',
           value: model.textareaValue,
           onInput: (value) => UpdatedTextareaValue({ value }),
-          rows: 4,
-          placeholder: 'Tell us about yourself...',
-          maybeDescription: 'Appears on your public profile.',
+          placeholder: 'Type your message here.',
         },
         h,
       ),

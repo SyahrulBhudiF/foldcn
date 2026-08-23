@@ -23,7 +23,8 @@ export const gapsByItem: Readonly<Record<string, ReadonlyArray<string>>> = {
     'Toggles like a popover (click/activation), not on hover — foldkit has no hover-intent primitive yet.',
   ],
   sidebar: [
-    'Static presentational layout — no collapse state, mobile sheet path, keyboard shortcut, or persistence.',
+    'No cookie persistence — foldkit owns initial render through its own hydration rather than document.cookie (an SSR flash-prevention mechanism).',
+    'Collapsed-mode menu-button tooltips are not auto-composed — wrap menu buttons in Tooltip submodels yourself if you need them.',
   ],
   toast: [
     'No swipe-to-dismiss or stacked scale/peek choreography — auto-dismiss and manual close work as expected.',
