@@ -4,11 +4,6 @@ type Child = Html | string
 
 import { cn } from '@/lib/utils'
 
-/**
- * Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/empty.tsx.
- * Keep the class strings identical to upstream — visual styling lives in the central foldcn style definition. See docs/deriving-from-base.md.
- */
-
 export const emptyClass =
   'cn-empty flex w-full min-w-0 flex-1 flex-col items-center justify-center text-center text-balance'
 

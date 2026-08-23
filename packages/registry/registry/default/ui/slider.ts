@@ -4,12 +4,10 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 import { cn } from '@/lib/utils'
 
 /**
- * Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/slider.tsx.
- * Class strings are identical to upstream; visual styling lives in the central foldcn style definition. See docs/deriving-from-base.md.
- *
  * foldcn gap vs upstream: single value / single thumb only (upstream is
  * multi-thumb); vertical layout is configured but the styled view renders
  * horizontal.
+ * 
  */
 
 // Re-export the @foldkit/ui Slider submodel surface.

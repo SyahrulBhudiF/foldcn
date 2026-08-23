@@ -7,16 +7,6 @@ import { Search } from 'lucide'
 
 type Child = Html | string
 
-// Command is a presentational command-palette surface. `Command` is the
-// container; sub-builders are attached as properties: Command.input,
-// Command.list, Command.empty, Command.group, Command.item, Command.separator,
-// Command.shortcut. Filtering is handled by the consumer (wire Command.input to
-// your model), mirroring shadcn's `command` base surface.
-
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/command.tsx. Class strings are identical to
-// upstream; visual styling lives in the central foldcn style definition.
-//
 // foldcn gaps vs upstream: no cmdk behavior layer (filtering, arrow-key
 // selection and Enter-to-select are consumer-owned) and no Dialog wrapper;
 // the [cmdk-*] descendant selectors in the group token are inert here — use

@@ -4,9 +4,6 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 import { cn } from '@/lib/utils'
 
 /**
- * Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/switch.tsx.
- * Class strings are identical to upstream; visual styling lives in the central foldcn style definition. See docs/deriving-from-base.md.
- *
  * foldkit deltas (inlined at style resolution): foldkit emits aria-disabled/
  * data-disabled instead of native disabled, and only data-checked (never
  * data-unchecked) on the ROOT button — this view hand-emits data-unchecked
@@ -14,6 +11,7 @@ import { cn } from '@/lib/utils'
  * the THUMB itself (the travel/track variants like
  * group-data-[size=default]/switch:data-checked:* key on the thumb's own
  * attribute), so the thumb span mirrors the state attribute too.
+ * 
  */
 
 export const switchSizeKeys = ['default', 'sm'] as const

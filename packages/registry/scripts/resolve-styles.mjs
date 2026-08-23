@@ -74,8 +74,6 @@ const VERBATIM_DIRS = ['lib', 'blocks']
 const TOKEN_DIR = 'ui'
 const TOKEN_SOURCE_EXT = '.ts'
 
-// --- foldkit animation-state rewrite ---------------------------------------
-
 /**
  * tw-animate-css utilities + project keyframe animations whose Base UI
  * `data-open:` / `data-closed:` hooks must be re-keyed for foldkit.
@@ -210,7 +208,6 @@ function copyVerbatim(style, dir, outDir) {
   return []
 }
 
-// --- string-literal transformer ---------------------------------------------
 // Adapted from shadcn-ui/ui packages/shadcn/src/styles/transform-style-map.ts
 // (MIT): same extraction/removal/merge helpers, applied to every string
 // literal instead of only cva/className/mergeProps positions.
@@ -272,8 +269,6 @@ function assertNoTokenLiterals(file, output) {
     )
   }
 }
-
-// --- CLI entry ---------------------------------------------------------------
 
 const isMain = process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href
 

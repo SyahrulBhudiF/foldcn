@@ -29,11 +29,6 @@ export const view = FoldkitDialog.view
 export type InitConfig = FoldkitDialog.InitConfig
 export type RenderInfo = FoldkitDialog.RenderInfo
 
-// --- Class constants ---
-//
-// Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/dialog.tsx.
-// Keep the class strings identical to upstream — visual styling lives in the central foldcn style definition . See docs/deriving-from-base.md.
-
 /** foldkit delta: the host <dialog> element's own chrome (upstream Root renders
  *  nothing). Backdrop/panel are fixed-position; this only neutralizes the
  *  native dialog box. */
@@ -63,8 +58,6 @@ export const dialogHeaderClass = 'cn-dialog-header flex flex-col'
 export const dialogFooterClass =
   'cn-dialog-footer flex flex-col-reverse gap-2 sm:flex-row sm:justify-end'
 
-// --- Composable sub-components ---
-//
 // These abstract away element types, base classes, and attribute spreading.
 // Use inside `styledViewInputs` content callbacks:
 //
@@ -148,8 +141,6 @@ export const closeButton = <M>(
     ],
     children,
   )
-
-// --- styledViewInputs factory ---
 
 export type DialogContent<M> = Readonly<{
   closeButton: ReadonlyArray<Attribute<M> | ChildAttribute>

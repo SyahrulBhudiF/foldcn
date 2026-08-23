@@ -7,12 +7,6 @@ type Child = Html | string
 import { cn } from '@/lib/utils'
 
 // Re-export the @foldkit/ui Popover submodel surface.
-//
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/popover.tsx. Class strings are identical to
-// upstream; visual styling lives in the central foldcn style definition (enter/leave
-// animations are pre-transformed there). The panel emits data-side derived
-// from the anchor placement alongside foldkit's data-placement.
 
 export const Model = FoldkitPopover.Model
 export type Model = typeof Model.Type
@@ -33,8 +27,6 @@ export const view = FoldkitPopover.view
 
 export type InitConfig = FoldkitPopover.InitConfig
 export type RenderInfo = FoldkitPopover.RenderInfo
-
-// --- Class constants ---
 
 export const POPOVER_ANCHOR: AnchorConfig = {
   placement: 'bottom',
@@ -64,8 +56,6 @@ export const popoverTitleClass = 'font-medium'
 
 export const popoverDescriptionClass = 'text-sm text-muted-foreground'
 
-// --- Composable sub-components ---
-//
 // Use inside `styledViewInputs` content arrays:
 //
 //   content: [
@@ -113,8 +103,6 @@ export const description = <M>(
     ],
     children,
   )
-
-// --- styledViewInputs factory ---
 
 export type PopoverContent = Readonly<{
   button: ReadonlyArray<Child>

@@ -11,14 +11,6 @@ type Child = Html | string
 // around a connected input. The inner control carries
 // data-slot="input-group-control" so the group token's focus/invalid/disabled
 // frame states key off it.
-//
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/input-group.tsx. Class strings are identical
-// to upstream; visual styling lives in the central foldcn style definition.
-// Known foldkit ceiling: upstream's InputGroupAddon focuses the group's input
-// on click (skipping clicks that land on a button). foldkit has no scoped
-// click-to-focus attribute (OnClickFocus queries the whole document and
-// requires a message), so that behavior is not reproduced here.
 
 /** Upstream InputGroup root string. */
 export const inputGroupClass =

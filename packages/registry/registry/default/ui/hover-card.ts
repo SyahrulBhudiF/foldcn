@@ -100,8 +100,6 @@ export const init = (config: InitConfig): Model => ({
       : Duration.fromInputUnsafe(config.closeDelay),
 })
 
-// --- Class constants ---
-
 export const HOVER_CARD_ANCHOR: AnchorConfig = {
   placement: 'bottom',
   gap: 8,
@@ -111,11 +109,6 @@ export const HOVER_CARD_ANCHOR: AnchorConfig = {
 export const hoverCardTriggerClass =
   'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 underline-offset-4 hover:underline'
 
-/**
- * Derived from the shadcn v4 BASE registry:
- * apps/v4/registry/bases/base/ui/hover-card.tsx. Class strings are identical
- * to upstream; visual styling lives in the central foldcn style definition.
- */
 export const hoverCardContentClass =
   'cn-hover-card-content cn-hover-card-content-logical z-50 origin-(--transform-origin) outline-hidden'
 
@@ -129,8 +122,6 @@ export const hoverCardHeaderClass = 'cn-popover-header flex flex-col gap-1'
 export const hoverCardTitleClass = 'cn-popover-title font-medium'
 
 export const hoverCardDescriptionClass = 'cn-popover-description text-muted-foreground'
-
-// --- Composable sub-components ---
 
 type StyleConfig = Readonly<{ className?: string }>
 
@@ -152,13 +143,9 @@ export const description = <M>(
   h: HtmlBuilder<M>,
 ): Html => h.p([h.Class(cn(hoverCardDescriptionClass, config.className))], children)
 
-// --- Selectors ---
-
 // Kept for API parity with other registry items. The trigger is the embedded
 // popover's button.
 export const buttonId = FoldkitPopover.buttonId
-
-// --- Commands ---
 
 type UpdateReturn = readonly [
   Model,
@@ -184,8 +171,6 @@ const WaitBeforeHide = Command.define('WaitBeforeHide', {
   execute: ({ delay, version }) =>
     Effect.sleep(delay).pipe(Effect.as(CompletedWaitBeforeHide({ version }))),
 })
-
-// --- Update ---
 
 const isOpen = (model: Model): boolean => model.popover.isOpen
 
@@ -342,8 +327,6 @@ export const close = (model: Model): UpdateReturn =>
     }),
   )
 
-// --- View ---
-
 export type ViewInputs = Readonly<{
   anchor: AnchorConfig
   toView: (render: RenderInfo) => Html
@@ -430,8 +413,6 @@ export const view = defineView<Model, Message, ViewInputs>((model, viewInputs, h
     toParentMessage: toGotPopoverMessage,
   })
 })
-
-// --- Styled view factory ---
 
 export type StyledViewInputs = Readonly<{
   anchor?: AnchorConfig

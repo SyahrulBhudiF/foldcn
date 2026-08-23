@@ -5,14 +5,12 @@ type Child = Html | string
 import { cn } from '@/lib/utils'
 
 /**
- * Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/progress.tsx.
- * Class strings are identical to upstream; visual styling lives in the central foldcn style definition. See docs/deriving-from-base.md.
- *
  * foldkit gap: upstream drives the indicator transform and the value text
  * from the Base UI Progress primitive. Here `value` (0–100) positions the
  * indicator directly; `undefined` renders an EMPTY track — animated
  * indeterminate needs primitive support. The label/value builders render
  * static content the consumer owns.
+ * 
  */
 
 export const progressClass = 'cn-progress-root flex flex-wrap gap-3'

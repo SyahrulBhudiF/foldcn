@@ -5,16 +5,13 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 import { cn } from '@/lib/utils'
 
 /**
- * Derived from the shadcn v4 BASE registry:
- * apps/v4/registry/bases/base/ui/radio-group.tsx. Class strings are identical
- * to upstream; visual styling lives in the central foldcn style definition.
- *
  * Two rendering paths in `styledViewInputs`:
  *  - `optionLabel` (+ optional `optionDescription`) → upstream anatomy: a
  *    16px circle control carrying the foldkit attributes, an indicator dot
  *    mounted only while selected, and a wired label/description pair.
  *  - legacy `option` callback → consumer-owned row content inside a
  *    group-attributed wrapper (kept for backward compatibility).
+ * 
  */
 
 // Re-export the @foldkit/ui RadioGroup surface. Create a bundle once per

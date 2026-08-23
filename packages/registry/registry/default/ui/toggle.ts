@@ -5,10 +5,6 @@ import { cn } from '@/lib/utils'
 // Toggle is a two-state button (pressed / not) marked with `aria-pressed` and
 // `data-state`. It is a pure presentational control — wire `onToggle` to your
 // own model.
-//
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/toggle.tsx. Class strings are identical to
-// upstream; visual styling lives in the central foldcn style definition.
 
 export const toggleVariantKeys = ['default', 'outline'] as const
 export type ToggleVariant = (typeof toggleVariantKeys)[number]

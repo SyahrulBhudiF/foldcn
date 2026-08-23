@@ -4,8 +4,6 @@ type Child = Html | string
 
 import { cn } from '@/lib/utils'
 
-/** Derived from the shadcn v4 BASE registry:
- *  apps/v4/registry/bases/base/ui/label.tsx. */
 /** Upstream keys label disabling on a native peer-disabled sibling variant
  *  and `group-data-[disabled=true]`, neither of which matches under foldkit
  *  (no `.peer` sibling; `data-disabled` is emitted empty). Re-keyed onto a

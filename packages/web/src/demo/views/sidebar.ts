@@ -127,8 +127,6 @@ export const sidebarView = (model: Model, h: HtmlBuilder<Message>): Html =>
     ],
   )
 
-// --- Demo fragments (mirroring sidebar-demo.tsx data) ---
-
 const teamSwitcher = (h: HtmlBuilder<Message>): Html =>
   Sidebar.menu(
     {},

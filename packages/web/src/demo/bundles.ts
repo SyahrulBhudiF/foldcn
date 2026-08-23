@@ -8,7 +8,6 @@ import * as Select from '@foldcn/registry/styles/default/ui/select'
 import * as Tabs from '@foldcn/registry/styles/default/ui/tabs'
 import { Schema as S } from 'effect'
 
-// --- Shared fixture schemas ---
 //
 // Literals consumed by the typed bundles below live here so the bundles and
 // the demo slices that use them share one definition. Demo-only schemas
@@ -49,7 +48,6 @@ export type ListboxItem = typeof ListboxItem.Type
  *  Using the wall clock here would let the server and client disagree. */
 export const DEMO_TODAY = FoldkitCalendar.make(2025, 1, 15)
 
-// --- Shared typed submodel bundles ---
 //
 // List-style submodels are created once per item type and shared across
 // demos (DemoMenu serves menu, context-menu and menubar; LanguageSelect

@@ -5,33 +5,14 @@ type Child = Html | string
 
 import { cn } from '@/lib/utils'
 
-// Stateless field helpers mirroring shadcn's `field.tsx` (FieldSet,
-// FieldLegend, FieldGroup, Field, FieldContent, FieldLabel, FieldTitle,
-// FieldDescription, FieldSeparator, FieldError) plus the accessible
-// `fieldset` compound built on the @foldkit/ui Fieldset helper, which wires
-// the native fieldset/legend semantics (id, aria-describedby, disabled) that
-// the reference relies on at the call site.
-//
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/field.tsx. Class strings are identical to
-// upstream; visual styling lives in the central foldcn style definition.
-
-// --- FieldSet ---
-
 export const fieldsetClass =
   'cn-field-set group/field-set flex flex-col has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3'
-
-// --- FieldLegend ---
 
 export const fieldsetLegendClass =
   'cn-field-legend mb-1.5 font-medium data-[variant=legend]:text-base data-[variant=label]:text-sm'
 
-// --- FieldGroup ---
-
 export const fieldGroupClass =
   'cn-field-group group/field-group @container/field-group flex w-full flex-col data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4'
-
-// --- Field ---
 
 /** Upstream cva base + per-orientation variant strings. */
 export const fieldBaseClass = 'cn-field group/field flex w-full'
@@ -46,12 +27,8 @@ export const fieldOrientationClasses = {
 
 export type FieldOrientation = keyof typeof fieldOrientationClasses
 
-// --- FieldContent ---
-
 export const fieldContentClass =
   'cn-field-content group/field-content flex flex-1 flex-col leading-snug gap-0.5'
-
-// --- Label (base, from label.tsx) + FieldLabel ---
 
 /** Upstream keys label disabling on a native peer-disabled sibling variant
  *  (no foldkit `.peer` sibling exists) and `group-data-[disabled=true]`
@@ -63,16 +40,10 @@ export const labelClass =
 export const fieldLabelClass =
   'cn-field-label group/field-label peer/field-label flex w-fit has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col'
 
-// --- FieldTitle ---
-
 export const fieldTitleClass = 'cn-field-title flex w-fit items-center'
-
-// --- FieldDescription ---
 
 export const fieldDescriptionClass =
   'cn-field-description leading-normal font-normal group-has-data-horizontal/field:text-balance last:mt-0 nth-last-2:-mt-1 [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary'
-
-// --- FieldSeparator ---
 
 export const fieldSeparatorClass = 'cn-field-separator relative'
 
@@ -82,11 +53,7 @@ export const fieldSeparatorLineClass =
 export const fieldSeparatorContentClass =
   'cn-field-separator-content relative mx-auto block w-fit bg-background'
 
-// --- FieldError ---
-
 export const fieldErrorClass = 'cn-field-error font-normal'
-
-// --- Primitives ---
 
 type StyleConfig = Readonly<{ className?: string }>
 
@@ -285,8 +252,6 @@ export const fieldError = <M>(
     content,
   )
 }
-
-// --- Compound ---
 
 export type FieldsetConfig = Readonly<{
   id: string

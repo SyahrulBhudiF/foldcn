@@ -4,12 +4,6 @@ type Child = Html | string
 
 import { cn } from '@/lib/utils'
 
-// --- Class constants ---
-//
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/item.tsx. Class strings are identical to
-// upstream; visual styling lives in the central foldcn style definition.
-
 export const itemGroupClass = 'cn-item-group group/item-group flex w-full flex-col'
 
 export const itemSeparatorClass = 'cn-item-separator'
@@ -60,8 +54,6 @@ export const itemActionsClass = 'cn-item-actions flex items-center'
 export const itemHeaderClass = 'cn-item-header flex basis-full items-center justify-between'
 export const itemFooterClass = 'cn-item-footer flex basis-full items-center justify-between'
 
-// --- Types ---
-
 type StyleConfig = Readonly<{ className?: string }>
 
 type ItemConfig = Readonly<{
@@ -76,8 +68,6 @@ type ItemSeparatorConfig = Readonly<{
   orientation?: 'horizontal' | 'vertical'
   className?: string
 }>
-
-// --- Builders ---
 
 const itemGroup = <M>(
   config: StyleConfig,

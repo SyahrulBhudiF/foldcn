@@ -4,11 +4,6 @@ type Child = Html | string
 
 import { cn } from '@/lib/utils'
 
-/**
- * Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/alert.tsx.
- * Keep the class strings identical to upstream — visual styling lives in the central foldcn style definition. See docs/deriving-from-base.md.
- */
-
 export const alertVariantKeys = ['default', 'destructive'] as const
 export type AlertVariant = (typeof alertVariantKeys)[number]
 
@@ -79,8 +74,10 @@ const alertAction = <M>(
     children,
   )
 
-/** Styled alert — `Alert.title`, `Alert.description` and `Alert.action`
- *  sub-builders. Derived from the shadcn v4 BASE registry `alert.tsx`. */
+/**
+ * Styled alert — `Alert.title`, `Alert.description` and `Alert.action`
+ *  sub-builders.
+ */
 export const Alert = Object.assign(alertContainer, {
   title: alertTitle,
   description: alertDescription,

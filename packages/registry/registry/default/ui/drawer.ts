@@ -30,12 +30,6 @@ export const view = FoldkitDialog.view
 export type InitConfig = FoldkitDialog.InitConfig
 export type RenderInfo = FoldkitDialog.RenderInfo
 
-// --- Class constants ---
-//
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/drawer.tsx. Class strings are identical to
-// upstream; visual styling lives in the central foldcn style definition.
-//
 // foldcn gaps vs upstream: Base UI's Drawer is a gesture drawer (drag to
 // dismiss, snap points, nested stacks, swipe-progress-driven overlay
 // opacity). foldkit has no drag primitive, so this keeps the static
@@ -101,8 +95,6 @@ export const drawerFooterClass = 'cn-drawer-footer-base mt-auto flex shrink-0 fl
 /** Upstream DrawerClose is an unstyled passthrough; every base example
  *  styles it as `<Button variant="outline">`. */
 export const drawerCloseButtonClass = 'cn-button cn-button-variant-outline cn-button-size-default'
-
-// --- Composable sub-components ---
 
 type StyleConfig = Readonly<{ className?: string }>
 
@@ -181,8 +173,6 @@ export const closeButton = <M>(
     ],
     children,
   )
-
-// --- styledViewInputs factory ---
 
 export type DrawerContent<M> = Readonly<{
   closeButton: ReadonlyArray<Attribute<M> | ChildAttribute>

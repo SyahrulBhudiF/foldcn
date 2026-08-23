@@ -31,16 +31,10 @@ export type InitConfig = FoldkitDialog.InitConfig
 export type RenderInfo = FoldkitDialog.RenderInfo
 export type ViewInputs = FoldkitDialog.ViewInputs
 
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/sheet.tsx. Class strings are identical to
-// upstream; visual styling lives in the central foldcn style definition.
-//
 // foldkit delta: upstream keys enter/exit motion on
 // data-starting-style/data-ending-style, which foldkit cannot emit — the
 // equivalent declarations are inlined under data-enter/data-leave,
 // and the panel emits data-side (derived from the anchor placement).
-
-// --- Sides ---
 
 export type SheetSide = 'top' | 'bottom' | 'left' | 'right'
 
@@ -79,8 +73,6 @@ export const sheetDescriptionClass = 'cn-sheet-description'
 /** Upstream renders close via `<Button variant="ghost" size="icon-sm">`. */
 export const sheetCloseButtonClass =
   'cn-button cn-button-variant-ghost cn-button-size-icon-sm cn-sheet-close'
-
-// --- Composable sub-components ---
 
 type StyleConfig = Readonly<{ className?: string }>
 
@@ -148,8 +140,6 @@ export const closeButton = <M>(
     ],
     children,
   )
-
-// --- styledViewInputs factory ---
 
 export type SheetContent<M> = Readonly<{
   closeButton: ReadonlyArray<Attribute<M> | ChildAttribute>

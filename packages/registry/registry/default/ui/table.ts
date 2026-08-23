@@ -7,10 +7,6 @@ type Child = Html | string
 // Table is a pure presentational primitive. `Table` is the container
 // (`table`); sub-builders are attached as properties: Table.header, Table.body,
 // Table.footer, Table.row, Table.head, Table.cell, Table.caption.
-//
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/table.tsx. Class strings are identical to
-// upstream; visual styling lives in the central foldcn style definition.
 
 export const tableContainerClass = 'cn-table-container'
 

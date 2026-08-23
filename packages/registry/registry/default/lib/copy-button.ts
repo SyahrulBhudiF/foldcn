@@ -5,9 +5,7 @@ import { icon } from '@/lib/icons'
 
 import { Check, Copy } from 'lucide'
 
-// ---------------------------------------------------------------------------
 // Copy button — reusable component for copying text to clipboard.
-// ---------------------------------------------------------------------------
 
 export type CopyButtonConfig<M> = Readonly<{
   /** The string value that will be copied to the clipboard. */

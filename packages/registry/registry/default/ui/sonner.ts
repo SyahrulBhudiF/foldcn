@@ -12,10 +12,6 @@ import { cn } from '@/lib/utils'
 // stacked, auto-dismissing notifications with compact entries, close
 // affordance and per-variant icons.
 //
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/sonner.tsx (surface tokens) — the entry
-// card uses the cn-toast token like upstream's toastOptions.classNames.
-//
 // foldcn gaps vs upstream: no sonner-library passthrough props, no theme
 // sync (--normal-* vars), no swipe; the Foldkit toast engine drives
 // positioning/duration.

@@ -34,18 +34,12 @@ type Attributes<M> = ReadonlyArray<Attribute<M> | ChildAttribute>
 // derived collapse state; spread them onto any element to wire toggling
 // without lifting messages into your own universe.
 //
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/sidebar.tsx. Class strings are identical to
-// upstream; visual styling lives in the central foldcn style definition.
-//
 // foldcn gaps vs upstream: no cookie persistence (an SSR flash-prevention
 // mechanism — foldkit owns initial render through its own hydration), and
 // collapsed-mode menu-button tooltips are not auto-composed (each would need
 // a per-item Tooltip submodel; wrap menu buttons yourself if you need them).
 // Controlled/uncontrolled `open` collapses into one mode: the model you pass
 // IS the state.
-
-// --- Constants ---
 
 export const SIDEBAR_WIDTH = '16rem'
 export const SIDEBAR_WIDTH_MOBILE = '18rem'
@@ -55,8 +49,6 @@ export const SIDEBAR_KEYBOARD_SHORTCUT = 'b'
 /** Viewport below Tailwind's `md` breakpoint counts as mobile (upstream
  *  `useIsMobile`). */
 export const MOBILE_MEDIA_QUERY = '(max-width: 767px)'
-
-// --- Engine ---
 
 const Toggled = m('Toggled')
 const SetIsOpen = m('SetIsOpen', { isOpen: S.Boolean })
@@ -151,8 +143,6 @@ export const update = (model: Model, message: Message): Update.Return<Model, Mes
     }),
   )
 
-// --- Subscriptions ---
-
 /** Global listeners for an embedded sidebar: the upstream ⌘/Ctrl+B shortcut
  *  (always listening, like upstream's window keydown effect) and a media-query
  *  listener that keeps `isMobile` in sync with the viewport. Lift with
@@ -210,8 +200,6 @@ export const subscriptions = Subscription.make<Model, Message>()((entry) => ({
     },
   ),
 }))
-
-// --- Class strings (token-based; identical to upstream) ---
 
 export const sidebarProviderClass =
   'group/sidebar-wrapper flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar'
@@ -337,8 +325,6 @@ export const sidebarSeparatorClass = 'cn-sidebar-separator w-auto shrink-0 bg-bo
 /** Upstream SidebarTrigger: ghost icon-sm Button + trigger token. */
 export const sidebarTriggerClass =
   'cn-button cn-button-variant-ghost cn-button-size-icon-sm cn-sidebar-trigger text-sidebar-foreground'
-
-// --- Provider view (the interactive shell) ---
 
 export type SidebarSide = 'left' | 'right'
 export type SidebarVariant = 'sidebar' | 'floating' | 'inset'
@@ -510,9 +496,6 @@ export const view = defineView<Model, Message, ProviderViewInputs>((model, viewI
     ],
   )
 })
-
-
-// --- Composable sub-components ---
 
 type StyleConfig = Readonly<{ className?: string }>
 

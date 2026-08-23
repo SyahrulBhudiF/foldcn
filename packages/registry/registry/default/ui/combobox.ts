@@ -31,10 +31,6 @@ export type ViewInputs<Item extends string = string> = FoldkitCombobox.ViewInput
 export type ItemConfig = FoldkitCombobox.ItemConfig
 export type GroupHeading = FoldkitCombobox.GroupHeading
 
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/combobox.tsx. Class strings are identical
-// to upstream; visual styling lives in the central foldcn style definition.
-//
 // foldkit deltas: items highlight via data-active (upstream
 // data-highlighted:) per the derivation mapping. Gaps vs upstream: no chips
 // UI for multi-select, no clear button, no Empty row; filtering is

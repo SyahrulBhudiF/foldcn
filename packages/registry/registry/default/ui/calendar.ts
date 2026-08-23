@@ -27,11 +27,6 @@ export type MonthsModeAttributes = FoldkitCalendar.MonthsModeAttributes
 export type YearsModeAttributes = FoldkitCalendar.YearsModeAttributes
 export type Week = FoldkitCalendar.Week
 
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/calendar.tsx. Class strings are identical
-// to upstream; visual styling lives in the central foldcn style definition
-// (--cell-size / --cell-radius come from the cn-calendar token).
-//
 // foldcn gaps vs upstream: Days/Months/Years drill navigation instead of
 // dropdown captions, single-date selection only (no ranges/week numbers),
 // and state hooks ride on the cell's group data attrs (data-today/

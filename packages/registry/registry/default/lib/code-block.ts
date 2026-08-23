@@ -4,9 +4,7 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 import { cn } from '@/lib/utils'
 import { copyButton } from '@/lib/copy-button'
 
-// ---------------------------------------------------------------------------
 // Styled class constants — override these to re-skin the code block.
-// ---------------------------------------------------------------------------
 
 export const codeBlockWrapperClass = 'overflow-hidden rounded-lg border border-border'
 
@@ -24,9 +22,7 @@ export const codeBlockLineCountClass = 'text-xs text-muted-foreground'
 export const codeBlockCopyButtonClass =
   'inline-flex size-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer'
 
-// ---------------------------------------------------------------------------
 // Code block view — provides syntax highlighting, file header, and copy.
-// ---------------------------------------------------------------------------
 
 export type CodeBlockConfig<M> = Readonly<{
   /** File path shown in the header (e.g. "registry/default/ui/button.ts"). */

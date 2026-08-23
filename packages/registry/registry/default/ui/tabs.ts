@@ -22,12 +22,6 @@ export type InitConfig = FoldkitTabs.InitConfig
 export type ViewInputs<Value extends string = string> = FoldkitTabs.ViewInputs<Value>
 export type RenderInfo<Value extends string = string> = FoldkitTabs.RenderInfo<Value>
 
-// --- Class constants ---
-//
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/tabs.tsx. Class strings are identical to
-// upstream; visual styling lives in the central foldcn style definition.
-//
 // foldkit delta: foldkit emits data-selected (upstream Base UI emits
 // data-active) — the copied trigger string keeps the semantics with the
 // data-active prefix per docs/deriving-from-base.md. The group orientation
@@ -57,8 +51,6 @@ export const tabsTriggerClass = cn(
 
 export const tabsContentClass = 'cn-tabs-content flex-1 outline-none'
 
-// --- Composable sub-components ---
-//
 // Use inside `styledViewInputs` panel callbacks:
 //
 //   panel: (tab, render, h) =>
@@ -98,8 +90,6 @@ export const content = <M>(
     [h.DataAttribute('slot', 'tabs-content'), h.Class(cn(tabsContentClass, config.className))],
     children,
   )
-
-// --- styledViewInputs factory ---
 
 export type StyledViewInputs<M, Value extends string = string> = Readonly<{
   tabs: ReadonlyArray<Value>

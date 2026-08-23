@@ -4,12 +4,6 @@ type Child = Html | string
 
 import { cn } from '@/lib/utils'
 
-/**
- * Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/marker.tsx.
- * Keep the class strings identical to upstream — visual styling lives in the central foldcn style definition (cn-marker-variant-default is an intentional
- * no-op hook upstream too). See docs/deriving-from-base.md.
- */
-
 export const markerVariantKeys = ['default', 'separator', 'border'] as const
 export type MarkerVariant = (typeof markerVariantKeys)[number]
 

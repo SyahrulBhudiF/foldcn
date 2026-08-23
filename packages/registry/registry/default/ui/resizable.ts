@@ -8,12 +8,6 @@ type Child = Html | string
 // visually hidden range input so the split stays accessible and keyboard
 // operable; `onValueChange` reports the first pane's size as a percentage.
 //
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/resizable.tsx. Class strings are identical
-// to upstream; visual styling lives in the central foldcn style definition
-// (cn-resizable-panel-group / cn-resizable-handle are intentional no-op
-// hooks upstream — the effective classes are the literal strings).
-//
 // foldcn gaps vs upstream: fixed two panes (no N panels), no min/max/collapse
 // constraints, no autoSaveId persistence; the handle is a range input rather
 // than a pointer-drag separator.

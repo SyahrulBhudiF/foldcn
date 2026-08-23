@@ -4,13 +4,6 @@ import { Loader2 } from 'lucide'
 
 import { cn } from '@/lib/utils'
 
-/**
- * Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/spinner.tsx.
- * Upstream puts role/aria-label/class directly on the svg (no wrapper span),
- * so this builds the lucide icon inline instead of via the aria-hidden
- * `icon()` helper.
- */
-
 export const spinnerClass = 'size-4 animate-spin'
 
 type StyleConfig = Readonly<{ className?: string }>

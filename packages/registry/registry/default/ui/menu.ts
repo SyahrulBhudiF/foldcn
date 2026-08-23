@@ -8,10 +8,6 @@ import { cn } from '@/lib/utils'
 //
 //   export const ActionMenu = Menu.create<"Edit" | "Delete">()
 //
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/dropdown-menu.tsx. Class strings are
-// identical to upstream; visual styling lives in the central foldcn style definition.
-//
 // foldkit deltas: items highlight via data-active (upstream uses focus:) —
 // prefix adjusted per docs/deriving-from-base.md; panels emit data-side
 // derived from anchor placement. Gaps vs upstream: no checkbox/radio/submenu/

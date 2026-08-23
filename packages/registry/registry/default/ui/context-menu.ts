@@ -20,10 +20,6 @@ export type Message = typeof Message.Type
 export const OutMessage = FoldkitMenu.OutMessage
 export type OutMessage = typeof OutMessage.Type
 
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/context-menu.tsx. Class strings are
-// identical to upstream; visual styling lives in the central foldcn style definition.
-//
 // foldcn gap vs upstream: opens on activation at a fixed anchor — foldkit has
 // no right-click/pointer-position anchoring primitive (wire a region trigger
 // yourself). Items highlight via data-active (upstream focus:) per the

@@ -10,11 +10,6 @@ type Child = Html | string
 // (a `nav`); sub-builders are attached as properties: Breadcrumb.list,
 // Breadcrumb.item, Breadcrumb.link, Breadcrumb.page, Breadcrumb.separator,
 // Breadcrumb.ellipsis.
-//
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/breadcrumb.tsx. Class strings are identical
-// to upstream; visual styling lives in the central foldcn style definition
-// (cn-breadcrumb itself is an intentional no-op hook upstream).
 
 export const breadcrumbClass = 'cn-breadcrumb'
 

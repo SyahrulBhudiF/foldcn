@@ -8,10 +8,6 @@ import { cn } from '@/lib/utils'
 // Re-export the @foldkit/ui Dialog submodel surface. An alert dialog is a
 // Dialog variant: same headless behavior, destructive-confirm styling.
 //
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/alert-dialog.tsx. Class strings are
-// identical to upstream; visual styling lives in the central foldcn style definition. See docs/deriving-from-base.md.
-//
 // foldcn gaps vs upstream: no Media part slot wiring in styledViewInputs
 // (use AlertDialog.media inside content), and Action/Cancel compose Button
 // tokens instead of rendering the Button component.
@@ -36,8 +32,6 @@ export const view = FoldkitDialog.view
 
 export type InitConfig = FoldkitDialog.InitConfig
 export type RenderInfo = FoldkitDialog.RenderInfo
-
-// --- Class constants ---
 
 /** foldkit delta: host <dialog> element chrome (upstream Root renders
  *  nothing). See dialog.ts. */
@@ -71,8 +65,6 @@ export const alertDialogActionClass = 'cn-button cn-button-variant-default cn-bu
  *  kept for backward compatibility with the closeButton helper. */
 export const alertDialogCloseButtonClass =
   'cn-button cn-button-variant-ghost cn-button-size-icon-sm'
-
-// --- Composable sub-components ---
 
 type StyleConfig = Readonly<{ className?: string }>
 
@@ -198,8 +190,6 @@ export const cancelButton = <M>(
     ],
     children,
   )
-
-// --- styledViewInputs factory ---
 
 export type AlertDialogContent<M> = Readonly<{
   closeButton: ReadonlyArray<Attribute<M> | ChildAttribute>

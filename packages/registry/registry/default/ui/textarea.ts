@@ -3,8 +3,6 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { cn } from '@/lib/utils'
 
-/** Derived from the shadcn v4 BASE registry:
- *  apps/v4/registry/bases/base/ui/textarea.tsx. */
 export const textareaClass =
   'cn-textarea flex field-sizing-content min-h-16 w-full outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50'
 

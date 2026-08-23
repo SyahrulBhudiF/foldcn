@@ -31,8 +31,6 @@ import { fileURLToPath } from 'node:url'
 const REGISTRY_DIR = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const VENDORED_DIR = join(REGISTRY_DIR, 'registry', 'styles')
 
-// --- args -----------------------------------------------------------------
-
 const args = process.argv.slice(2)
 const readFlag = (name) => {
   const i = args.indexOf(name)
@@ -52,8 +50,6 @@ if (!existsSync(join(upstreamStylesDir, 'style-nova.css'))) {
   process.exit(1)
 }
 
-// --- upstream commit ------------------------------------------------------
-
 let upstreamCommit = 'unknown'
 try {
   upstreamCommit = execFileSync('git', ['-C', shadcnDir, 'rev-parse', '--short=7', 'HEAD'], {
@@ -63,8 +59,6 @@ try {
   console.error('warning: could not read HEAD commit from the shadcn checkout')
 }
 
-// --- collect upstream style files ------------------------------------------
-
 const styleFiles = readdirSync(upstreamStylesDir)
   .filter((f) => /^style-[\w-]+\.css$/.test(f))
   .sort()
@@ -73,8 +67,6 @@ if (!styleFiles.includes('style-nova.css')) {
   console.error('upstream styles directory has no style-nova.css — layout changed upstream?')
   process.exit(1)
 }
-
-// --- verify or write -------------------------------------------------------
 
 if (checkOnly) {
   const drifted = styleFiles.filter((file) => {

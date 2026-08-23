@@ -4,10 +4,6 @@ type Child = Html | string
 
 import { cn } from '@/lib/utils'
 
-/**
- * Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/kbd.tsx.
- * Keep the class strings identical to upstream — visual styling lives in the central foldcn style definition. See docs/deriving-from-base.md.
- */
 export const kbdClass =
   'cn-kbd pointer-events-none inline-flex items-center justify-center select-none'
 

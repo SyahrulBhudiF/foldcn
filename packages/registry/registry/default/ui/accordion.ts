@@ -12,11 +12,10 @@ import { cn } from '@/lib/utils'
 // keeps one open index). The primitive is stateless and controlled — the
 // parent owns each item's open state and dispatches `onToggle`.
 
-/** Derived from the shadcn v4 BASE registry:
- *  apps/v4/registry/bases/base/ui/accordion.tsx.
- *
+/**
  * foldcn gaps vs upstream: no single/multiple root semantics (parent-owned
- * state), and the chevron rotates instead of swapping icons. */
+ * state), and the chevron rotates instead of swapping icons. 
+ */
 
 export const buttonId = FoldkitDisclosure.buttonId
 

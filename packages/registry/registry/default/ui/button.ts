@@ -3,11 +3,6 @@ import type { Attribute, Html, HtmlBuilder } from 'foldkit/html'
 
 import { cn } from '@/lib/utils'
 
-/**
- * Derived from the shadcn v4 BASE registry: apps/v4/registry/bases/base/ui/button.tsx.
- * Keep the class strings identical to upstream — visual styling lives in the central foldcn style definition . See docs/deriving-from-base.md.
- */
-
 /** Button variant keys — keep in sync with `buttonVariants`. */
 export const buttonVariantKeys = [
   'default',

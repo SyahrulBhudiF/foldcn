@@ -72,8 +72,6 @@ import { slice as virtualListSlice } from './views/virtual-list'
 
 import type { UpdateReturn } from './slice'
 
-// --- Model -----------------------------------------------------------------
-
 const ModelSchema = S.Struct({
   ...accordionSlice.fields,
   ...alertDialogSlice.fields,
@@ -140,8 +138,6 @@ const ModelSchema = S.Struct({
 })
 export type Model = typeof ModelSchema.Type
 export const Model = ModelSchema
-
-// --- Message ----------------------------------------------------------------
 
 const MessageSchema = S.Union([
   ...accordionSlice.messages,
@@ -210,8 +206,6 @@ const MessageSchema = S.Union([
 export type Message = typeof MessageSchema.Type
 export const Message = MessageSchema
 
-// --- Init -------------------------------------------------------------------
-
 export const init = (): [Model, []] => [
   {
     ...accordionSlice.init,
@@ -279,8 +273,6 @@ export const init = (): [Model, []] => [
   } as Model,
   [],
 ]
-
-// --- Update -------------------------------------------------------------------
 
 export const update = (model: Model, message: Message): UpdateReturn =>
   M.value(message).pipe(

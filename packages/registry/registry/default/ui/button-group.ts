@@ -9,10 +9,6 @@ type Child = Html | string
 // ButtonGroup connects a run of controls into a single segmented control.
 // Children keep their own outlines; the group's corner-cutting rules join
 // them (upstream model).
-//
-// Derived from the shadcn v4 BASE registry:
-// apps/v4/registry/bases/base/ui/button-group.tsx. Class strings are
-// identical to upstream; visual styling lives in the central foldcn style definition.
 
 export const buttonGroupClass =
   "cn-button-group flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1"
