@@ -108,6 +108,18 @@ export const headerView = (model: Model, h: HtmlBuilder<Message>): Html =>
                 ],
                 ['Docs'],
               ),
+              h.a(
+                [
+                  h.Href('https://github.com/elianiva/foldcn'),
+                  h.Target('_blank'),
+                  h.Rel('noopener noreferrer'),
+                  h.Class(
+                    'hidden items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground sm:inline-flex',
+                  ),
+                  h.AriaLabel('View source on GitHub'),
+                ],
+                ['GitHub'],
+              ),
               themeSelector(model, h),
             ],
           ),
@@ -286,6 +298,15 @@ export const footerView = (h: HtmlBuilder<Message>): Html =>
               ),
               '. Built on @foldkit/ui with Foldkit TEA and Tailwind CSS.',
             ],
+          ),
+          h.a(
+            [
+              h.Href('https://github.com/elianiva/foldcn'),
+              h.Target('_blank'),
+              h.Rel('noopener noreferrer'),
+              h.Class('text-sm underline underline-offset-4 hover:text-foreground'),
+            ],
+            ['GitHub →'],
           ),
         ],
       ),

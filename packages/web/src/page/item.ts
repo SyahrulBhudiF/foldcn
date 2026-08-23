@@ -156,10 +156,7 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                           ...(demoName === 'sidebar'
                             ? [
                                 h.div(
-                                  [
-                                    h.Class('p-0'),
-                                    h.Style({ transform: 'translateZ(0)' }),
-                                  ],
+                                  [h.Class('p-0'), h.Style({ transform: 'translateZ(0)' })],
                                   [
                                     h.submodel({
                                       slotId: 'demo-harness',
@@ -193,6 +190,33 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                             demoExample.path,
                             demoExample.code,
                             'rounded-none border-x-0 border-b-0 border-t',
+                          ),
+                          h.div(
+                            [h.Class('border-t border-border bg-muted/30 px-4 py-3 font-mono')],
+                            [
+                              h.p(
+                                [h.Class('text-xs leading-relaxed text-muted-foreground')],
+                                [
+                                  'This code is shown verbatim — it\u2019s the exact file used for this preview. Much of the surrounding wiring (slice, fields, messages, handlers) belongs to this site\u2019s demo harness; you only need the view and the state that matters for your own app. Adapt what you need.',
+                                ],
+                              ),
+                              h.div(
+                                [h.Class('mt-2 flex flex-wrap items-center gap-2')],
+                                [
+                                  h.a(
+                                    [
+                                      h.Href(demoExample.githubUrl),
+                                      h.Target('_blank'),
+                                      h.Rel('noopener noreferrer'),
+                                      h.Class(
+                                        'inline-flex items-center gap-1 text-xs font-medium text-foreground underline decoration-1 decoration-border underline-offset-[3px] hover:decoration-foreground',
+                                      ),
+                                    ],
+                                    ['View source on GitHub'],
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ],
                       ),
