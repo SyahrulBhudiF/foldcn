@@ -26,6 +26,7 @@ const extractView = (moduleExports: Record<string, unknown>, file: string): Demo
   const view = moduleExports[names[0]!]
   if (typeof view !== 'function')
     throw new Error(`Demo view module "${file}" exports "${names[0]}" but it is not a function.`)
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return view as DemoView
 }
 

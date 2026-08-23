@@ -5,10 +5,11 @@ import { codeBlock as registryCodeBlock } from '@foldcn/registry/styles/default/
 import { separator } from '@foldcn/registry/styles/default/ui/separator'
 
 import { componentCount } from '../catalog'
-import { ClickedCopy, type Message } from '../message'
+import { Message } from '../message'
+import type { Message as AppMessage } from '../message'
 import type { Model } from '../model'
 
-export const homeView = (model: Model, h: HtmlBuilder<Message>): Html =>
+export const homeView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('flex-1')],
     [
@@ -40,7 +41,7 @@ export const homeView = (model: Model, h: HtmlBuilder<Message>): Html =>
               path: 'Terminal',
               code: 'npx shadcn@latest add @foldcn/foldcn',
               lang: 'shell',
-              onCopy: ClickedCopy({ value: 'npx shadcn@latest add @foldcn/foldcn' }),
+              onCopy: Message.ClickedCopy({ value: 'npx shadcn@latest add @foldcn/foldcn' }),
               isCopied: Option.exists(
                 model.maybeCopiedValue,
                 (v) => v === 'npx shadcn@latest add @foldcn/foldcn',
@@ -94,7 +95,7 @@ export const homeView = (model: Model, h: HtmlBuilder<Message>): Html =>
                       path: 'Terminal',
                       code: 'npx shadcn@latest registry add @foldcn=https://foldcn.elianiva.com/r/{name}.json',
                       lang: 'shell',
-                      onCopy: ClickedCopy({
+                      onCopy: Message.ClickedCopy({
                         value:
                           'npx shadcn@latest registry add @foldcn=https://foldcn.elianiva.com/r/{name}.json',
                       }),
@@ -144,7 +145,7 @@ export const homeView = (model: Model, h: HtmlBuilder<Message>): Html =>
     ],
   )
 
-export const notFoundView = (h: HtmlBuilder<Message>): Html =>
+export const notFoundView = (h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [
       h.Class(

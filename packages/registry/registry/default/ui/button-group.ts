@@ -94,8 +94,8 @@ export const buttonGroupItem = <M>(
   button<M>(
     {
       ...config,
-      size: config.size ?? ('default' as ButtonSize),
-      variant: config.variant ?? ('outline' as ButtonVariant),
+      size: config.size ?? ('default' satisfies ButtonSize),
+      variant: config.variant ?? ('outline' satisfies ButtonVariant),
       className: cn(config.className),
     },
     label,

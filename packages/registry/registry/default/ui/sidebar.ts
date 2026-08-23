@@ -58,11 +58,6 @@ export const Message = defineMessageUnion({
 })
 export type Message = typeof Message.Type
 
-export const Toggled = Message.Toggled
-export const SetIsOpen = Message.SetIsOpen
-export const SetIsMobile = Message.SetIsMobile
-export const GotSheetMessage = Message.GotSheetMessage
-
 /** Sidebar state: desktop expansion, mobile viewport flag, and the mobile
  *  off-canvas Sheet submodel that owns the open-on-mobile presentation. */
 export const Model = S.Struct({

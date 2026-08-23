@@ -11,7 +11,6 @@ import type { Model, Message as AppMessage } from '../assemble'
 const Message = defineMessageUnion({
   UpdatedTableSearch: { value: S.String },
 })
-const UpdatedTableSearch = Message.UpdatedTableSearch
 
 const INITIAL_ROWS: ReadonlyArray<{
   id: string
@@ -61,7 +60,7 @@ export const dataTableView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
             },
           })),
           searchValue: model.tableSearch,
-          onSearchInput: (value) => UpdatedTableSearch({ value }),
+          onSearchInput: (value) => Message.UpdatedTableSearch({ value }),
         },
         h,
       ),
@@ -76,12 +75,12 @@ type State = typeof stateSchema.Type
 export const slice = defineSlice({
   fields,
   init: { tableSearch: '' },
-  messages: [UpdatedTableSearch],
+  messages: [Message.UpdatedTableSearch],
   handlers: (model: State) => ({
-    UpdatedTableSearch: ({ value }: typeof UpdatedTableSearch.Type): UpdateReturn => [
+    UpdatedTableSearch: ({ value }: typeof Message.UpdatedTableSearch.Type): UpdateReturn => [
       evo(model, { tableSearch: () => value }),
       [],
     ],
   }),
-  samples: [UpdatedTableSearch({ value: 'ada' })],
+  samples: [Message.UpdatedTableSearch({ value: 'ada' })],
 })

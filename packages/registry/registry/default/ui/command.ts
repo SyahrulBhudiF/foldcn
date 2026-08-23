@@ -2,7 +2,6 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { cn } from '@/lib/utils'
 import { icon } from '@/lib/icons'
-import { inputClass } from './input'
 import { Search } from 'lucide'
 
 type Child = Html | string

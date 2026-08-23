@@ -70,7 +70,7 @@ export const slice = defineSlice({
   fields,
   init: {
     radioGroup: radioGroup.init({ id: 'radio-group-demo' }),
-    maybeRadioValue: Option.some('comfortable' as RadioValue),
+    maybeRadioValue: Option.some('comfortable' satisfies RadioValue),
   },
   messages: [Message.GotRadioGroupMessage],
   handlers: (model: State) => ({

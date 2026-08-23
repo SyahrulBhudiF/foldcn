@@ -5,7 +5,6 @@ import { icon } from '@/lib/icons'
 import { toggle, type ToggleSize, type ToggleVariant } from './toggle'
 
 type IconNode = Parameters<typeof icon>[1]
-type Child = Html | string
 
 // ToggleGroup is a set of toggles that share a single (or multiple) selection.
 // It is a pure presentational control — wire `onValueChange` to your own model.

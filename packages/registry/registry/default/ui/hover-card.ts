@@ -339,6 +339,7 @@ export type RenderInfo = Readonly<{
  *  nothing (matching shadcn), keeping keyboard activation. */
 const withoutClickToggle = (button: ReadonlyArray<ChildAttribute>): ReadonlyArray<ChildAttribute> =>
   button.filter((wrapped) => {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const tag = (wrapped.attribute as { readonly _tag?: string } | undefined)?._tag
     return tag !== 'OnPointerDown' && tag !== 'OnClick'
   })
