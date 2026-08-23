@@ -1,4 +1,8 @@
+import { Schema as S } from 'effect'
+import type * as Command from 'foldkit/command'
 import type { Html, HtmlBuilder } from 'foldkit/html'
+import { defineMessageUnion } from 'foldkit/message'
+import { defineView } from 'foldkit/submodel'
 
 type Child = Html | string
 
@@ -6,9 +10,10 @@ import { cn } from '@/lib/utils'
 
 /**
  * Known foldkit gap: upstream swaps image→fallback automatically via the
- * Base UI Avatar primitive; foldcn's image helper always renders <img>, so
- * consumers swap children themselves.
- * 
+ * Base UI Avatar primitive; foldkit has no such primitive, so `Avatar.image`
+ * always renders `<img>`. `Avatar.picture` (below) closes that gap itself —
+ * a tiny submodel that swaps to the fallback on load error — so most
+ * consumers never need to touch `Avatar.image`/`Avatar.fallback` directly.
  */
 
 export const avatarSizeKeys = ['default', 'sm', 'lg'] as const
@@ -58,6 +63,64 @@ const avatarImage = <M>(config: AvatarImageConfig, h: HtmlBuilder<M>): Html =>
     h.Class(cn(avatarImageClass, config.className)),
     h.DataAttribute('slot', 'avatar-image'),
   ])
+
+/** `Avatar.picture`'s submodel — tracks whether the image has errored, so
+ *  the fallback swap-in is owned by the component instead of the consumer. */
+export const Model = S.Struct({ hasError: S.Boolean })
+export type Model = typeof Model.Type
+
+export const init: Model = { hasError: false }
+
+export const Message = defineMessageUnion({
+  ImageErrored: {},
+})
+export type Message = typeof Message.Type
+
+export const update = (
+  _model: Model,
+  _message: Message,
+): readonly [Model, ReadonlyArray<Command.Command<Message>>] => [{ hasError: true }, []]
+
+export type PictureConfig = Readonly<{
+  id: string
+  src: string
+  alt?: string
+  fallback: ReadonlyArray<Child>
+  className?: string
+  fallbackClassName?: string
+}>
+
+const pictureView = defineView<Model, Message, PictureConfig>((model, config, h) =>
+  model.hasError
+    ? avatarFallback({ className: config.fallbackClassName }, config.fallback, h)
+    : h.img([
+        h.Src(config.src),
+        ...(config.alt === undefined ? [] : [h.Alt(config.alt)]),
+        h.Class(cn(avatarImageClass, config.className)),
+        h.DataAttribute('slot', 'avatar-image'),
+        h.OnError(Message.ImageErrored()),
+      ]),
+)
+
+/** Image with an automatic fallback swap on load error — the piece upstream
+ *  gets for free from the Base UI Avatar primitive. `model` is this
+ *  instance's own `Model` (usually a field on the consumer's own state, one
+ *  per avatar); `toParentMessage` maps this module's `Message` into the
+ *  consumer's own message type, the same way `h.submodel`'s callers do
+ *  elsewhere (see `Dialog`/`HoverCard`). */
+const avatarPicture = <M>(
+  config: PictureConfig,
+  model: Model,
+  toParentMessage: (message: Message) => M,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.submodel({
+    slotId: config.id,
+    model,
+    view: pictureView,
+    viewInputs: config,
+    toParentMessage,
+  })
 
 const avatarFallback = <M>(
   config: StyleConfig,
@@ -114,4 +177,5 @@ export const Avatar = Object.assign(avatarContainer, {
   badge: avatarBadge,
   group: avatarGroup,
   groupCount: avatarGroupCount,
+  picture: avatarPicture,
 })

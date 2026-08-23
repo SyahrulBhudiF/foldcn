@@ -32,9 +32,6 @@ export const gapsByItem: Readonly<Record<string, ReadonlyArray<string>>> = {
   sonner: [
     'No swipe-to-dismiss or stack expansion — auto-dismiss and manual close work as expected.',
   ],
-  avatar: [
-    'No automatic image-error fallback swap — conditionally render the fallback yourself when the image fails.',
-  ],
   drawer: ['Bottom-docked modal with handle visuals — no drag/snap gestures.'],
   resizable: [
     'Two-pane percentage splitter — no min/max constraints, collapsible panes, or N-pane layouts.',
