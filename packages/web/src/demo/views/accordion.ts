@@ -1,15 +1,17 @@
+import { Update } from 'foldkit'
+import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { accordion } from '@foldcn/registry/styles/default/ui/accordion'
+import * as accordion from '@foldcn/registry/styles/default/ui/accordion'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'
 
 const Message = defineMessageUnion({
-  ToggledAccordion: { value: S.Array(S.Boolean) },
+  GotAccordionMessage: { message: accordion.Message },
 })
 
 // Mirrors apps/v4/examples/base/accordion-demo.tsx
@@ -35,11 +37,11 @@ const ITEMS = [
 ] as const
 
 export const accordionView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
-  accordion<AppMessage>(
-    {
-      type: 'multiple',
-      value: model.accordionOpen,
-      onValueChange: (value) => Message.ToggledAccordion({ value }),
+  h.submodel({
+    slotId: model.accordion.id,
+    model: model.accordion,
+    view: accordion.view,
+    viewInputs: {
       className: 'max-w-lg',
       items: ITEMS.map((item) => ({
         id: item.id,
@@ -47,23 +49,49 @@ export const accordionView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
         content: item.content,
       })),
     },
-    h,
-  )
+    toParentMessage: (message) => Message.GotAccordionMessage({ message }),
+  })
 
-const fields = { accordionOpen: S.Array(S.Boolean) }
+const foldNoOp =
+  <Out>(): ((out: Out) => Update.Step<State, unknown>) =>
+  () =>
+  (model) => [model, []]
+
+const foldAccordionOutMessage = M.type<accordion.OutMessage>().pipe(
+  M.withReturnType<Update.Step<State, unknown>>(),
+  M.tagsExhaustive({
+    ChangedValue: foldNoOp(),
+  }),
+)
+
+const foldAccordion = Update.foldChild({
+  update: accordion.update,
+  read: (model: State) => Option.some(model.accordion),
+  write: (model, next) => evo(model, { accordion: () => next }),
+  toParentMessage: (message) => Message.GotAccordionMessage({ message }),
+  foldOutMessage: foldAccordionOutMessage,
+})
+
+const fields = { accordion: accordion.Model }
 
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type
 
 export const slice = defineSlice({
   fields,
-  init: { accordionOpen: [true, false, false] },
-  messages: [Message.ToggledAccordion],
+  init: {
+    accordion: accordion.init({
+      id: 'accordion-demo',
+      type: 'multiple',
+      value: [true, false, false],
+    }),
+  },
+  messages: [Message.GotAccordionMessage],
   handlers: (model: State) => ({
-    ToggledAccordion: (payload: typeof Message.ToggledAccordion.Type): UpdateReturn => [
-      evo(model, { accordionOpen: () => payload.value }),
-      [],
-    ],
+    GotAccordionMessage: (payload: typeof Message.GotAccordionMessage.Type): UpdateReturn =>
+      foldAccordion(model, payload.message),
   }),
-  samples: [Message.ToggledAccordion({ value: [true, false, false] })],
+  samples: [],
+  // Open state flows entirely through the submodel; the parent only sees the
+  // ChangedValue out-message, which this demo ignores.
 })

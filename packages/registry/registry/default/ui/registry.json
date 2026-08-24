@@ -349,7 +349,7 @@
       "name": "accordion",
       "type": "registry:ui",
       "title": "Accordion",
-      "description": "Vertical stack of collapsible sections with rotating chevron, built on the @foldkit/ui Disclosure helper.",
+      "description": "Vertical stack of collapsible sections with single or multi-open semantics, built on the @foldkit/ui Disclosure helper.",
       "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [{ "path": "accordion.ts", "type": "registry:ui" }]
     },
@@ -357,7 +357,7 @@
       "name": "collapsible",
       "type": "registry:ui",
       "title": "Collapsible",
-      "description": "Single-section collapsible panel with animated support, built on the @foldkit/ui Disclosure helper.",
+      "description": "Stateful single-section collapsible panel, built on the @foldkit/ui Disclosure helper.",
       "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [{ "path": "collapsible.ts", "type": "registry:ui" }]
     },
@@ -405,7 +405,7 @@
       "name": "toggle",
       "type": "registry:ui",
       "title": "Toggle",
-      "description": "Two-state toggle button marked with aria-pressed and data-state.",
+      "description": "Stateful two-state toggle button marked with aria-pressed and data-state.",
       "registryDependencies": ["@foldcn/utils"],
       "files": [{ "path": "toggle.ts", "type": "registry:ui" }]
     },
@@ -413,7 +413,7 @@
       "name": "toggle-group",
       "type": "registry:ui",
       "title": "Toggle Group",
-      "description": "Connected group of toggles with shared single or multiple selection.",
+      "description": "Stateful group of toggles with shared single or multiple selection.",
       "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [{ "path": "toggle-group.ts", "type": "registry:ui" }]
     },
@@ -469,7 +469,7 @@
       "name": "resizable",
       "type": "registry:ui",
       "title": "Resizable",
-      "description": "Two-pane split with a draggable, keyboard-accessible handle.",
+      "description": "Stateful two-pane split with a draggable, keyboard-accessible handle.",
       "registryDependencies": ["@foldcn/utils"],
       "files": [{ "path": "resizable.ts", "type": "registry:ui" }]
     }

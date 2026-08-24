@@ -3,6 +3,8 @@ import { Command } from 'foldkit'
 import type { Url } from 'foldkit'
 import * as Tabs from '@foldkit/ui/tabs'
 
+import * as ToggleGroup from '@foldcn/registry/styles/default/ui/toggle-group'
+
 import * as Demo from './demo'
 import { parseRoute } from './route'
 import { Message } from './message'
@@ -35,6 +37,7 @@ export const init = (url: Url.Url): InitReturn => {
       maybeCopiedValue: Option.none(),
       demo,
       installTabs,
+      themeToggleGroup: ToggleGroup.init({ id: 'theme-toggle-group', type: 'single' }),
       selectedPackageManager: 'pnpm',
       expandedCodeBlocks: new Set<string>(),
     },

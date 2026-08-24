@@ -9,7 +9,7 @@ import { icon } from '@foldcn/registry/styles/default/lib/icons'
 import { badge } from '@foldcn/registry/styles/default/ui/badge'
 import { separator } from '@foldcn/registry/styles/default/ui/separator'
 import { styledViewInputs as tabsStyledViewInputs } from '@foldcn/registry/styles/default/ui/tabs'
-import { toggleGroup } from '@foldcn/registry/styles/default/ui/toggle-group'
+import * as toggleGroup from '@foldcn/registry/styles/default/ui/toggle-group'
 import { ArrowRight, Computer, Moon, Sun } from 'lucide'
 
 import { Message } from '../message'
@@ -28,38 +28,24 @@ import {
   type ParityStatus,
 } from '../catalog/parity'
 
-export const themeSelector = (model: Model, h: HtmlBuilder<AppMessage>): Html => {
-  const selected = Option.getOrUndefined(model.maybeThemePreference)
-  return toggleGroup<AppMessage>(
-    {
-      type: 'single',
-      value: selected === undefined ? [] : [selected],
+export const themeSelector = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
+  h.submodel({
+    slotId: model.themeToggleGroup.id,
+    model: model.themeToggleGroup,
+    view: toggleGroup.view,
+    viewInputs: {
       variant: 'outline',
       size: 'sm',
       spacing: 0,
       ariaLabel: 'Theme preference',
-      onValueChange: (next) => {
-        const raw = next[0]
-        let value: ThemePreference | undefined
-        if (raw === 'Light' || raw === 'Dark' || raw === 'System') {
-          value = raw
-        } else {
-          value = undefined
-        }
-        // Ignore deselect (single toggle clears on re-click) — keep current preference.
-        if (value === undefined)
-          return Message.SelectedThemePreference({ preference: selected ?? 'System' })
-        return Message.SelectedThemePreference({ preference: value })
-      },
+      items: [
+        { value: 'Light', label: '', icon: Sun, ariaLabel: 'Light mode' },
+        { value: 'System', label: '', icon: Computer, ariaLabel: 'System mode' },
+        { value: 'Dark', label: '', icon: Moon, ariaLabel: 'Dark mode' },
+      ],
     },
-    [
-      { value: 'Light', label: '', icon: Sun, ariaLabel: 'Light mode' },
-      { value: 'System', label: '', icon: Computer, ariaLabel: 'System mode' },
-      { value: 'Dark', label: '', icon: Moon, ariaLabel: 'Dark mode' },
-    ],
-    h,
-  )
-}
+    toParentMessage: (message) => Message.GotThemeToggleGroupMessage({ message }),
+  })
 
 export const headerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.header(

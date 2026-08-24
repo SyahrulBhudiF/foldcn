@@ -5,6 +5,7 @@ import { UrlRequest } from 'foldkit/navigation'
 
 import { Message as DemoMessage } from './demo'
 import { Message as InstallTabsMessage } from '@foldkit/ui/tabs'
+import { Message as ToggleGroupMessage } from '@foldcn/registry/styles/default/ui/toggle-group'
 import { PackageManager, ResolvedTheme, ThemePreference } from './model'
 
 export const Message = defineMessageUnion({
@@ -24,6 +25,7 @@ export const Message = defineMessageUnion({
   CompletedCopy: { value: S.String },
   ToggledCodeBlock: { id: S.String },
   GotInstallTabsMessage: { message: InstallTabsMessage },
+  GotThemeToggleGroupMessage: { message: ToggleGroupMessage },
   CompletedSavePackageManager: {},
   CompletedNavigateInternal: {},
   CompletedLoadExternal: {},

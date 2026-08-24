@@ -1,15 +1,17 @@
+import { Update } from 'foldkit'
+import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { collapsible } from '@foldcn/registry/styles/default/ui/collapsible'
+import * as collapsible from '@foldcn/registry/styles/default/ui/collapsible'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'
 
 const Message = defineMessageUnion({
-  ToggledCollapsible: { isOpen: S.Boolean },
+  GotCollapsibleMessage: { message: collapsible.Message },
 })
 
 // Single-section disclosure mirroring apps/v4/examples/base/collapsible-demo.tsx
@@ -20,33 +22,54 @@ export const collapsibleView = (model: Model, h: HtmlBuilder<AppMessage>): Html 
   h.div(
     [h.Class('flex w-[350px] flex-col gap-2')],
     [
-      collapsible<AppMessage>(
-        {
-          id: 'collapsible-demo',
-          isOpen: model.isCollapsibleOpen,
-          onToggle: (isOpen) => Message.ToggledCollapsible({ isOpen }),
+      h.submodel({
+        slotId: model.collapsible.id,
+        model: model.collapsible,
+        view: collapsible.view,
+        viewInputs: {
           title: 'Order #4189 — Shipped',
-          content: 'Shipping address: 100 Market St, San Francisco · Items: 2× Studio Headphones',
+          content:
+            'Shipping address: 100 Market St, San Francisco · Items: 2× Studio Headphones',
         },
-        h,
-      ),
+        toParentMessage: (message) => Message.GotCollapsibleMessage({ message }),
+      }),
     ],
   )
 
-const fields = { isCollapsibleOpen: S.Boolean }
+const foldNoOp =
+  <Out>(): ((out: Out) => Update.Step<State, unknown>) =>
+  () =>
+  (model) => [model, []]
+
+const foldCollapsibleOutMessage = M.type<collapsible.OutMessage>().pipe(
+  M.withReturnType<Update.Step<State, unknown>>(),
+  M.tagsExhaustive({
+    ChangedOpen: foldNoOp(),
+  }),
+)
+
+const foldCollapsible = Update.foldChild({
+  update: collapsible.update,
+  read: (model: State) => Option.some(model.collapsible),
+  write: (model, next) => evo(model, { collapsible: () => next }),
+  toParentMessage: (message) => Message.GotCollapsibleMessage({ message }),
+  foldOutMessage: foldCollapsibleOutMessage,
+})
+
+const fields = { collapsible: collapsible.Model }
 
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type
 
 export const slice = defineSlice({
   fields,
-  init: { isCollapsibleOpen: false },
-  messages: [Message.ToggledCollapsible],
+  init: { collapsible: collapsible.init({ id: 'collapsible-demo', isAnimated: true }) },
+  messages: [Message.GotCollapsibleMessage],
   handlers: (model: State) => ({
-    ToggledCollapsible: (payload: typeof Message.ToggledCollapsible.Type): UpdateReturn => [
-      evo(model, { isCollapsibleOpen: () => payload.isOpen }),
-      [],
-    ],
+    GotCollapsibleMessage: (payload: typeof Message.GotCollapsibleMessage.Type): UpdateReturn =>
+      foldCollapsible(model, payload.message),
   }),
-  samples: [Message.ToggledCollapsible({ isOpen: true })],
+  samples: [],
+  // Open state flows entirely through the submodel; the parent only sees the
+  // ChangedOpen out-message, which this demo ignores.
 })

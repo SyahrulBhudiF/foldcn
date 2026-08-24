@@ -1,6 +1,8 @@
 import { Schema as S } from 'effect'
 import { Model as InstallTabsModel } from '@foldkit/ui/tabs'
 
+import { Model as ToggleGroupModel } from '@foldcn/registry/styles/default/ui/toggle-group'
+
 import { Model as DemoModelSchema } from './demo'
 import { AppRoute } from './route'
 
@@ -21,6 +23,9 @@ export const Model = S.Struct({
   maybeCopiedValue: S.Option(S.String),
   demo: DemoModelSchema,
   installTabs: InstallTabsModel,
+  /** The header's theme selector: a stateful ToggleGroup submodel whose
+   *  selection mirrors `maybeThemePreference`. */
+  themeToggleGroup: ToggleGroupModel,
   selectedPackageManager: PackageManager,
   /** Ids of collapsible code blocks that are currently expanded. */
   expandedCodeBlocks: S.ReadonlySet(S.String),

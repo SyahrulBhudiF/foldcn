@@ -96,7 +96,7 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 
 ### Disclosure & navigation
 
-- **accordion — MAJOR.** Array-of-controlled-items; no single/multiple root semantics (no multi-open); grid-rows animation vs `animate-accordion-down/up`; single rotating chevron vs icon swap; legacy py-4/ring-2 metrics.
+- **accordion — MAJOR.** Opinionated stack skin; grid-rows animation vs `animate-accordion-down/up`; single rotating chevron vs icon swap; legacy py-4/ring-2 metrics.
 - **collapsible — MAJOR.** Opinionated card skin (bordered trigger + panel) vs base's unstyled parts; single `title`/`content` config instead of free-form children.
 - **tabs — MINOR.** Full keyboard/activation parity (roving tabindex, orientation, automatic/manual). Diffs: `data-selected` vs `data-active`; h-9 vs h-8 list; line underline offset.
 - **navigation-menu — MAJOR.** Presentational bar; no viewport/indicator/popup management, no `aria-expanded`, no chevron; content is per-item absolute dropdown.

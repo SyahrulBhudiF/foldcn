@@ -1,10 +1,17 @@
-import type { Html, HtmlBuilder } from 'foldkit/html'
+import { Function, Option, Schema as S } from 'effect'
+import type { Command } from 'foldkit/command'
+import type { Html } from 'foldkit/html'
+import { defineMessageUnion } from 'foldkit/message'
+import type { Reflect } from 'foldkit/submodel'
+import { defineView } from 'foldkit/submodel'
+import { evo } from 'foldkit/struct'
 
 import { cn } from '@/lib/utils'
 
 // Toggle is a two-state button (pressed / not) marked with `aria-pressed` and
-// `data-state`. It is a pure presentational control — wire `onToggle` to your
-// own model.
+// `data-state`. It owns its pressed state as a Submodel: embed it with
+// `h.submodel` and listen for `ChangedPressed` if your app needs to react.
+// Conform an externally-driven pressed state (URL, storage) with `reflect`.
 
 export const toggleVariantKeys = ['default', 'outline'] as const
 export type ToggleVariant = (typeof toggleVariantKeys)[number]
@@ -28,35 +35,97 @@ export const toggleSizes: Record<ToggleSize, string> = {
 export const toggleBase =
   'cn-toggle group/toggle inline-flex items-center justify-center whitespace-nowrap outline-none hover:bg-muted focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0'
 
-export type ToggleConfig<M> = Readonly<{
+// MODEL
+
+export const Model = S.Struct({
+  id: S.String,
+  isPressed: S.Boolean,
+})
+export type Model = typeof Model.Type
+
+// MESSAGES
+
+/** The user clicked the toggle. Flips the pressed state. */
+export const Message = defineMessageUnion({
+  Toggled: {},
+})
+export type Message = typeof Message.Type
+
+/** Emitted when the pressed state changes. */
+export const OutMessage = defineMessageUnion({
+  ChangedPressed: { isPressed: S.Boolean },
+})
+export type OutMessage = typeof OutMessage.Type
+
+// INIT / UPDATE
+
+export type InitConfig = Readonly<{
+  id: string
+  isPressed?: boolean
+}>
+
+/** Creates an initial toggle model. */
+export const init = (config: InitConfig): Model => ({
+  id: config.id,
+  isPressed: config.isPressed ?? false,
+})
+
+/** Conforms an externally-driven pressed state onto the model without
+ *  emitting an OutMessage (the world is the source of truth). */
+export const reflect: Reflect<Model, boolean> = Function.dual(
+  2,
+  (model: Model, isPressed: boolean): Model => evo(model, { isPressed: () => isPressed }),
+)
+
+type UpdateReturn = readonly [Model, ReadonlyArray<Command<Message>>, Option.Option<OutMessage>]
+
+/** Processes a toggle message and returns the next model, commands, and an
+ *  optional out-message for the parent. */
+export const update = (model: Model, message: Message): UpdateReturn => {
+  switch (message._tag) {
+    case 'Toggled': {
+      const isPressed = !model.isPressed
+      return [
+        evo(model, { isPressed: () => isPressed }),
+        [],
+        Option.some(OutMessage.ChangedPressed({ isPressed })),
+      ]
+    }
+  }
+}
+
+// VIEW
+
+export type ViewInputs = Readonly<{
+  label: Html | string
   variant?: ToggleVariant
   size?: ToggleSize
-  isPressed?: boolean
+  /** Marks the toggle unavailable with a native disabled attribute. */
   isDisabled?: boolean
   ariaLabel?: string
-  onToggle?: (isPressed: boolean) => M
   className?: string
 }>
 
-/** A two-state toggle button. */
-export const toggle = <M>(config: ToggleConfig<M>, label: Html | string, h: HtmlBuilder<M>): Html =>
+/** Renders the two-state toggle button. Embedded via `h.submodel`. */
+export const view = defineView<Model, Message, ViewInputs>((model, viewInputs, h) =>
   h.button(
     [
       h.Type('button'),
-      ...(config.ariaLabel === undefined ? [] : [h.AriaLabel(config.ariaLabel)]),
-      ...(config.isDisabled === true ? [h.Disabled(true)] : []),
-      ...(config.onToggle === undefined ? [] : [h.OnClick(config.onToggle(!config.isPressed))]),
+      ...(viewInputs.ariaLabel === undefined ? [] : [h.AriaLabel(viewInputs.ariaLabel)]),
+      ...(viewInputs.isDisabled === true ? [h.Disabled(true)] : []),
+      h.OnClick(Message.Toggled()),
       h.DataAttribute('slot', 'toggle'),
-      h.DataAttribute('state', config.isPressed === true ? 'on' : 'off'),
-      ...(config.isPressed === true ? [h.AriaPressed('true')] : [h.AriaPressed('false')]),
+      h.DataAttribute('state', model.isPressed ? 'on' : 'off'),
+      h.AriaPressed(model.isPressed ? 'true' : 'false'),
       h.Class(
         cn(
           toggleBase,
-          toggleVariants[config.variant ?? 'default'],
-          toggleSizes[config.size ?? 'default'],
-          config.className,
+          toggleVariants[viewInputs.variant ?? 'default'],
+          toggleSizes[viewInputs.size ?? 'default'],
+          viewInputs.className,
         ),
       ),
     ],
-    [label],
-  )
+    [viewInputs.label],
+  ),
+)

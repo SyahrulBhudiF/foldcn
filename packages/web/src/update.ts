@@ -9,6 +9,7 @@ import { parseRoute } from './route'
 import { Message } from './message'
 import type { Message as AppMessage } from './message'
 import { Model, PackageManager, ResolvedTheme, ThemePreference } from './model'
+import * as ToggleGroup from '@foldcn/registry/styles/default/ui/toggle-group'
 
 export const THEME_STORAGE_KEY = 'foldcn-theme'
 export const PACKAGE_MANAGER_STORAGE_KEY = 'foldcn-package-manager'
@@ -139,6 +140,43 @@ const systemPrefersDark = (): ResolvedTheme =>
 const resolveTheme = (model: Model, preference: ThemePreference): ResolvedTheme =>
   preference === 'System' ? systemPrefersDark() : preference
 
+/** Stores a theme preference, resolves it against the system scheme, applies
+ *  it, persists it, and mirrors the selection onto the header's ToggleGroup
+ *  submodel. Shared by the direct SelectedThemePreference message and the
+ *  ToggleGroup's ChangedValue out-message. */
+const applyThemePreference = (model: Model, preference: ThemePreference): UpdateReturn => [
+  evo(model, {
+    maybeThemePreference: () => Option.some(preference),
+    resolvedTheme: () => resolveTheme(model, preference),
+    themeToggleGroup: () => ToggleGroup.reflect(model.themeToggleGroup, [preference]),
+  }),
+  [ApplyTheme({ theme: resolveTheme(model, preference) }), SaveThemePreference({ preference })],
+]
+
+const foldThemeToggleGroup = (model: Model, message: ToggleGroup.Message): UpdateReturn => {
+  const [next, commands, maybeOutMessage] = ToggleGroup.update(model.themeToggleGroup, message)
+  const mappedCommands = Command.mapMessages(commands, (m) =>
+    Message.GotThemeToggleGroupMessage({ message: m }),
+  )
+
+  return Option.match(maybeOutMessage, {
+    onNone: () => [evo(model, { themeToggleGroup: () => next }), mappedCommands],
+    onSome: (outMessage) => {
+      switch (outMessage._tag) {
+        case 'ChangedValue': {
+          const raw = outMessage.value[0]
+          const preference =
+            raw === 'Light' || raw === 'Dark' || raw === 'System'
+              ? raw
+              : // Ignore deselect (single toggle clears on re-click) — keep current preference.
+                (Option.getOrUndefined(model.maybeThemePreference) ?? 'System')
+          return applyThemePreference(model, preference)
+        }
+      }
+    },
+  })
+}
+
 /** Boot-time load of everything only the browser knows: the stored theme
  *  preference and package manager plus the live system color scheme. init
  *  stays deterministic so hydration adopts the prerendered DOM; the runtime
@@ -207,17 +245,9 @@ export const update = (model: Model, message: AppMessage): UpdateReturn =>
       ChangedUrl: ({ url }) => [evo(model, { route: () => parseRoute(url) }), [ScrollToTop()]],
       GotDemoMessage: ({ message }) => foldDemo(model, message),
       GotInstallTabsMessage: ({ message }) => foldInstallTabs(model, message),
+      GotThemeToggleGroupMessage: ({ message }) => foldThemeToggleGroup(model, message),
 
-      SelectedThemePreference: ({ preference }) => [
-        evo(model, {
-          maybeThemePreference: () => Option.some(preference),
-          resolvedTheme: () => resolveTheme(model, preference),
-        }),
-        [
-          ApplyTheme({ theme: resolveTheme(model, preference) }),
-          SaveThemePreference({ preference }),
-        ],
-      ],
+      SelectedThemePreference: ({ preference }) => applyThemePreference(model, preference),
       ChangedSystemTheme: ({ theme }) =>
         Option.exists(model.maybeThemePreference, (p) => p === 'System')
           ? [evo(model, { resolvedTheme: () => theme }), [ApplyTheme({ theme })]]
@@ -236,6 +266,14 @@ export const update = (model: Model, message: AppMessage): UpdateReturn =>
             maybeThemePreference: () => maybePreference,
             resolvedTheme: () => resolvedTheme,
             selectedPackageManager: () => packageManager,
+            themeToggleGroup: () =>
+              ToggleGroup.reflect(
+                model.themeToggleGroup,
+                Option.match(maybePreference, {
+                  onNone: () => [],
+                  onSome: (preference) => [preference],
+                }),
+              ),
           }),
           // Re-applies the class the inline head script already set pre-paint,
           // keeping documentElement and the meta theme-color on one code path.
