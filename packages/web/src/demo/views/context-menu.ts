@@ -6,7 +6,7 @@ import { DemoMenu } from '../bundles'
 import { defineSlice } from '../slice'
 import type { Model, Message } from '../assemble'
 
-import { GotMenuMessage } from './menu'
+import { Message as MenuMessage } from './menu'
 
 // Presentational — mirrors apps/v4/examples/base/context-menu-demo.tsx.
 // Foldkit's Menu opens on activation at a fixed anchor (no right-click
@@ -34,7 +34,7 @@ export const contextMenuView = (model: Model, h: HtmlBuilder<Message>): Html =>
         content: h.span([], [item]),
       }),
     }),
-    toParentMessage: (message) => GotMenuMessage({ message }),
+    toParentMessage: (message) => MenuMessage.GotMenuMessage({ message }),
   })
 
 export const slice = defineSlice({

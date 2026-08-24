@@ -1,3 +1,7 @@
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as Sheet from '@/components/ui/sheet'`
+ */
 import { Dialog as FoldkitDialog } from '@foldkit/ui'
 import type { AnchorConfig } from '@foldkit/ui/anchor'
 import type { Attribute, ChildAttribute, Html, HtmlBuilder } from 'foldkit/html'
@@ -74,10 +78,15 @@ export const sheetDescriptionClass = 'cn-sheet-description'
 export const sheetCloseButtonClass =
   'cn-button cn-button-variant-ghost cn-button-size-icon-sm cn-sheet-close'
 
-type StyleConfig = Readonly<{ className?: string }>
+type StyleConfig<M> = Readonly<{
+  className?: string
+  /** Submodel-provided attributes (from the `styledViewInputs` content
+   *  callback render bundle) to merge onto the element. */
+  attributes?: ReadonlyArray<Attribute<M> | ChildAttribute>
+}>
 
 export const header = <M>(
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
@@ -87,14 +96,13 @@ export const header = <M>(
   )
 
 export const title = <M>(
-  attributes: ReadonlyArray<Attribute<M> | ChildAttribute>,
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
   h.h2(
     [
-      ...attributes,
+      ...(config.attributes ?? []),
       h.DataAttribute('slot', 'sheet-title'),
       h.Class(cn(sheetTitleClass, config.className)),
     ],
@@ -102,14 +110,13 @@ export const title = <M>(
   )
 
 export const description = <M>(
-  attributes: ReadonlyArray<Attribute<M> | ChildAttribute>,
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
   h.p(
     [
-      ...attributes,
+      ...(config.attributes ?? []),
       h.DataAttribute('slot', 'sheet-description'),
       h.Class(cn(sheetDescriptionClass, config.className)),
     ],
@@ -117,7 +124,7 @@ export const description = <M>(
   )
 
 export const footer = <M>(
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
@@ -127,14 +134,13 @@ export const footer = <M>(
   )
 
 export const closeButton = <M>(
-  attributes: ReadonlyArray<Attribute<M> | ChildAttribute>,
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
   h.button(
     [
-      ...attributes,
+      ...(config.attributes ?? []),
       h.DataAttribute('slot', 'sheet-close'),
       h.Class(cn(sheetCloseButtonClass, config.className)),
     ],

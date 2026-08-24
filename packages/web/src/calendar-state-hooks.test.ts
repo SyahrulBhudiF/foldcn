@@ -177,7 +177,10 @@ describe('calendar state hooks', () => {
       { update: Calendar.update, view: Scene.withViewInputs(Calendar.view, viewInputs)() },
       Scene.given(model),
       Scene.Subscription.emit(FoldkitCalendar.Message.ClickedHeading({})),
-      Scene.Command.resolve(FoldkitCalendar.FocusGrid, FoldkitCalendar.Message.CompletedFocusGrid({})),
+      Scene.Command.resolve(
+        FoldkitCalendar.FocusGrid,
+        FoldkitCalendar.Message.CompletedFocusGrid({}),
+      ),
       Scene.tap((sim) =>
         assertHtml(sim, (html) => {
           const cells = cellsWithAttr(html, 'data-today') // current month in Months view
@@ -194,7 +197,8 @@ describe('calendar state hooks', () => {
     Scene.scene(
       { update: Calendar.update, view: Scene.withViewInputs(Calendar.view, viewInputs)() },
       Scene.given(model),
-      Scene.Subscription.emit(FoldkitCalendar.Message.FocusedGrid({})),      Scene.tap((sim) =>
+      Scene.Subscription.emit(FoldkitCalendar.Message.FocusedGrid({})),
+      Scene.tap((sim) =>
         assertHtml(sim, (html) => {
           const focused = cellsWithAttr(html, 'data-focused')
           expect(focused.length).toBeGreaterThanOrEqual(1)

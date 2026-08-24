@@ -88,6 +88,8 @@ export const slice = defineSlice({
       foldSelect(model, payload.message),
   }),
   samples: [
-    Message.GotSelectMessage({ message: FoldkitListbox.Message.Opened({ maybeActiveItemIndex: Option.none() }) }),
+    Message.GotSelectMessage({
+      message: FoldkitListbox.Message.Opened({ maybeActiveItemIndex: Option.none() }),
+    }),
   ],
 })

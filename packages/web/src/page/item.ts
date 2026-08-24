@@ -2,10 +2,7 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Alert } from '@foldcn/registry/styles/default/ui/alert'
 import { badge } from '@foldcn/registry/styles/default/ui/badge'
-import {
-  Breadcrumb,
-  breadcrumbLinkClass,
-} from '@foldcn/registry/styles/default/ui/breadcrumb'
+import { Breadcrumb, breadcrumbLinkClass } from '@foldcn/registry/styles/default/ui/breadcrumb'
 import { Card } from '@foldcn/registry/styles/default/ui/card'
 import { cn } from '@/lib/utils'
 import { icon } from '@foldcn/registry/styles/default/lib/icons'
@@ -16,7 +13,8 @@ import { type DemoItemName, hasDemo } from '../demo/view'
 import { gapsByItem } from '../catalog/gaps'
 import { itemByName } from '../catalog'
 import type { Item } from '../catalog/types'
-import { GotDemoMessage, type Message } from '../message'
+import { Message } from '../message'
+import type { Message as AppMessage } from '../message'
 import type { Model } from '../model'
 
 import { demoExampleByName } from '../demo/examples'
@@ -27,33 +25,33 @@ const categoryLabel = (category: Item['category']): string =>
   ({ Base: 'Base', Lib: 'Lib', Components: 'Components', Blocks: 'Blocks' })[category]
 
 /** Known behavioral differences vs the shadcn/ui counterpart — see catalog/gaps.ts. */
-const gapsCallout = (name: string, h: HtmlBuilder<Message>): Html => {
+const gapsCallout = (name: string, h: HtmlBuilder<AppMessage>): Html => {
   const gaps = gapsByItem[name]
   if (gaps === undefined) return h.div([], [])
-  return Alert<Message>(
+  return Alert<AppMessage>(
     { className: 'mt-4' },
     [
       icon(h, TriangleAlert),
-      Alert.title<Message>({}, ['Differences vs shadcn/ui'], h),
-      Alert.description<Message>(
-        {},
-        [h.ul([h.Class('list-disc space-y-1 pl-4')], gaps)],
-        h,
-      ),
+      Alert.title<AppMessage>({}, ['Differences vs shadcn/ui'], h),
+      Alert.description<AppMessage>({}, [h.ul([h.Class('list-disc space-y-1 pl-4')], gaps)], h),
     ],
     h,
   )
 }
 
 const dependencyChips = (
-  h: HtmlBuilder<Message>,
+  h: HtmlBuilder<AppMessage>,
   dependencies: ReadonlyArray<string> | undefined,
 ): ReadonlyArray<Html> =>
   (dependencies ?? []).map((dependency) =>
-    badge<Message>({ variant: 'secondary', className: 'font-mono font-normal' }, [dependency], h),
+    badge<AppMessage>(
+      { variant: 'secondary', className: 'font-mono font-normal' },
+      [dependency],
+      h,
+    ),
   )
 
-export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): Html => {
+export const itemPage = (model: Model, name: string, h: HtmlBuilder<AppMessage>): Html => {
   const item = itemByName[name]
   if (item === undefined)
     return h.div(
@@ -74,13 +72,13 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
             [h.Class('mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 font-mono')],
             [
               // breadcrumb — dogfoods registry/breadcrumb tokens
-              Breadcrumb<Message>(
+              Breadcrumb<AppMessage>(
                 { className: 'mb-6' },
                 [
-                  Breadcrumb.list<Message>(
+                  Breadcrumb.list<AppMessage>(
                     {},
                     [
-                      Breadcrumb.item<Message>(
+                      Breadcrumb.item<AppMessage>(
                         {},
                         [
                           h.a(
@@ -94,16 +92,16 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                         ],
                         h,
                       ),
-                      Breadcrumb.separator<Message>({}, [], h),
-                      Breadcrumb.item<Message>(
+                      Breadcrumb.separator<AppMessage>({}, [], h),
+                      Breadcrumb.item<AppMessage>(
                         {},
-                        [Breadcrumb.page<Message>({}, [categoryLabel(item.category)], h)],
+                        [Breadcrumb.page<AppMessage>({}, [categoryLabel(item.category)], h)],
                         h,
                       ),
-                      Breadcrumb.separator<Message>({}, [], h),
-                      Breadcrumb.item<Message>(
+                      Breadcrumb.separator<AppMessage>({}, [], h),
+                      Breadcrumb.item<AppMessage>(
                         {},
-                        [Breadcrumb.page<Message>({ isCurrent: true }, [item.title], h)],
+                        [Breadcrumb.page<AppMessage>({ isCurrent: true }, [item.title], h)],
                         h,
                       ),
                     ],
@@ -155,10 +153,10 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                 ? (() => {
                     const demoExample = demoExampleByName[demoName]!
                     return [
-                      Card<Message>(
+                      Card<AppMessage>(
                         { className: 'mt-10 overflow-hidden font-sans py-0 gap-0' },
                         [
-                          Card.header<Message>(
+                          Card.header<AppMessage>(
                             { className: 'flex-row items-center justify-between border-b py-2.5' },
                             [
                               h.span(
@@ -192,7 +190,8 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                                       model: model.demo,
                                       view: Demo.view,
                                       viewInputs: { itemName: demoName! },
-                                      toParentMessage: (message) => GotDemoMessage({ message }),
+                                      toParentMessage: (message) =>
+                                        Message.GotDemoMessage({ message }),
                                     }),
                                   ],
                                 ),
@@ -206,7 +205,8 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<Message>): H
                                       model: model.demo,
                                       view: Demo.view,
                                       viewInputs: { itemName: demoName! },
-                                      toParentMessage: (message) => GotDemoMessage({ message }),
+                                      toParentMessage: (message) =>
+                                        Message.GotDemoMessage({ message }),
                                     }),
                                   ],
                                 ),

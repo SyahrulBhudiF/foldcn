@@ -31,7 +31,10 @@ export const popoverView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 [h.Class('space-y-2')],
                 [
                   h.h4([h.Class('leading-none font-medium')], ['Dimensions']),
-                  h.p([h.Class('text-sm text-muted-foreground')], ['Set the dimensions for the layer.']),
+                  h.p(
+                    [h.Class('text-sm text-muted-foreground')],
+                    ['Set the dimensions for the layer.'],
+                  ),
                 ],
               ),
               h.div(
@@ -40,10 +43,7 @@ export const popoverView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                   h.div(
                     [h.Class('grid grid-cols-3 items-center gap-4')],
                     [
-                      h.label(
-                        [h.Class('text-sm font-medium'), h.For('popover-width')],
-                        ['Width'],
-                      ),
+                      h.label([h.Class('text-sm font-medium'), h.For('popover-width')], ['Width']),
                       h.input([
                         h.Class(
                           'col-span-2 flex h-8 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm',

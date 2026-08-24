@@ -21,7 +21,7 @@ export const inputWrapperClass = 'group/field flex flex-col gap-1.5 w-full'
 export type InputConfig<M> = Readonly<{
   id: string
   label: string
-  maybeDescription?: string
+  description?: string
   onInput?: (value: string) => M
   value?: string
   isDisabled?: boolean
@@ -72,14 +72,14 @@ export const input = <M>(config: InputConfig<M>, h: HtmlBuilder<M>): Html =>
               h.DataAttribute('slot', 'input'),
               h.Class(cn(inputClass, config.className)),
             ]),
-            config.maybeDescription === undefined
+            config.description === undefined
               ? h.empty
               : h.span(
                   [
                     ...attributes.description,
                     h.Class(cn(inputDescriptionClass, config.descriptionClass)),
                   ],
-                  [config.maybeDescription],
+                  [config.description],
                 ),
           ],
         ),

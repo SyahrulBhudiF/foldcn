@@ -33,9 +33,7 @@ export const alertView = (model: Model, h: HtmlBuilder<Message>): Html =>
           Alert.title<Message>({}, ['New feature available'], h),
           Alert.description<Message>(
             {},
-            [
-              "We've added dark mode support. You can enable it in your account settings.",
-            ],
+            ["We've added dark mode support. You can enable it in your account settings."],
             h,
           ),
         ],

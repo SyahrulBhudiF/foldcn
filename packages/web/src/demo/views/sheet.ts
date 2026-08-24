@@ -1,5 +1,4 @@
 import { Match as M, Option } from 'effect'
-import { Schema as S } from 'effect'
 import { Command, Update } from 'foldkit'
 import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
@@ -17,14 +16,12 @@ const Message = defineMessageUnion({
   GotDialogMessage: { message: Sheet.Message },
   ClickedOpenDialog: {},
 })
-const GotDialogMessage = Message.GotDialogMessage
-const ClickedOpenDialog = Message.ClickedOpenDialog
 
 export const sheetView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('flex flex-col items-start gap-4')],
     [
-      button<AppMessage>({ variant: 'outline', onClick: ClickedOpenDialog() }, 'Open', h),
+      button<AppMessage>({ variant: 'outline', onClick: Message.ClickedOpenDialog() }, 'Open', h),
       h.submodel({
         slotId: model.dialog.id,
         model: model.dialog,
@@ -36,10 +33,9 @@ export const sheetView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
               Sheet.header(
                 {},
                 [
-                  Sheet.title(title, {}, ['Edit profile'], h),
+                  Sheet.title({ attributes: title }, ['Edit profile'], h),
                   Sheet.description(
-                    description,
-                    {},
+                    { attributes: description },
                     ['Make changes to your profile here. Click save when you are done.'],
                     h,
                   ),
@@ -101,8 +97,10 @@ export const sheetView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                     ['Save changes'],
                   ),
                   Sheet.closeButton(
-                    closeButton,
-                    { className: 'border border-input bg-background hover:bg-accent' },
+                    {
+                      attributes: closeButton,
+                      className: 'border border-input bg-background hover:bg-accent',
+                    },
                     ['Close'],
                     h,
                   ),
@@ -113,7 +111,7 @@ export const sheetView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           },
           h,
         ),
-        toParentMessage: (message) => GotDialogMessage({ message }),
+        toParentMessage: (message) => Message.GotDialogMessage({ message }),
       }),
     ],
   )
@@ -137,24 +135,24 @@ const foldSheet = Update.foldChild({
   update: Sheet.update,
   read: (model: State) => Option.some(model.dialog),
   write: (model, next) => evo(model, { dialog: () => next }),
-  toParentMessage: (message) => GotDialogMessage({ message }),
+  toParentMessage: (message) => Message.GotDialogMessage({ message }),
   foldOutMessage: foldSheetOutMessage,
 })
 
 export const slice = defineSlice({
   fields: {},
   init: {},
-  messages: [GotDialogMessage, ClickedOpenDialog],
+  messages: [Message.GotDialogMessage, Message.ClickedOpenDialog],
   handlers: (model: State) => ({
-    GotDialogMessage: (payload: typeof GotDialogMessage.Type): UpdateReturn =>
+    GotDialogMessage: (payload: typeof Message.GotDialogMessage.Type): UpdateReturn =>
       foldSheet(model, payload.message),
     ClickedOpenDialog: (): UpdateReturn => {
       const [next, commands] = Sheet.open(model.dialog)
       return [
         evo(model, { dialog: () => next }),
-        Command.mapMessages(commands, (message) => GotDialogMessage({ message })),
+        Command.mapMessages(commands, (message) => Message.GotDialogMessage({ message })),
       ]
     },
   }),
-  samples: [ClickedOpenDialog()],
+  samples: [Message.ClickedOpenDialog()],
 })

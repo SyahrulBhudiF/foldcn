@@ -1,3 +1,7 @@
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as RadioGroup from '@/components/ui/radio-group'`
+ */
 import { RadioGroup as FoldkitRadioGroup } from '@foldkit/ui'
 import type { Option } from 'effect/Option'
 import type { Html, HtmlBuilder } from 'foldkit/html'
@@ -11,7 +15,7 @@ import { cn } from '@/lib/utils'
  *    mounted only while selected, and a wired label/description pair.
  *  - legacy `option` callback → consumer-owned row content inside a
  *    group-attributed wrapper (kept for backward compatibility).
- * 
+ *
  */
 
 // Re-export the @foldkit/ui RadioGroup surface. Create a bundle once per
@@ -103,7 +107,7 @@ export type StyledViewInputs<M, Value extends string = string> = Readonly<{
 const defaultOptionRow = <M, Value extends string>(
   info: FoldkitRadioGroup.OptionInfo<Value>,
   labelText: string,
-  maybeDescriptionText: string | undefined,
+  descriptionText: string | undefined,
   optionClass: string | undefined,
   h: HtmlBuilder<M>,
 ): Html =>
@@ -129,7 +133,7 @@ const defaultOptionRow = <M, Value extends string>(
         ],
         [labelText],
       ),
-      ...(maybeDescriptionText === undefined
+      ...(descriptionText === undefined
         ? []
         : [
             h.span(
@@ -138,7 +142,7 @@ const defaultOptionRow = <M, Value extends string>(
                 h.DataAttribute('slot', 'radio-group-item-description'),
                 h.Class(radioItemDescriptionClass),
               ],
-              [maybeDescriptionText],
+              [descriptionText],
             ),
           ]),
     ],

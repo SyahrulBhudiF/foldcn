@@ -1,3 +1,11 @@
+/** ⚠ BEHAVIOR GAP vs upstream shadcn: toggles on click like a popover, not on hover — foldkit has no hover-intent/grace primitive yet.
+ *  The styled surface matches, but this behavior is absent — do not use
+ *  where that behavior is required.
+ */
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as HoverCard from '@/components/ui/hover-card'`
+ */
 import { Duration, Effect, Match as M, Option, Schema as S } from 'effect'
 import * as Command from 'foldkit/command'
 import type { AnchorConfig } from '@foldkit/ui/anchor'
@@ -165,7 +173,9 @@ const foldPopover = Update.foldChild({
   write: (model, nextPopover) => evo(model, { popover: () => nextPopover }),
   toParentMessage: toGotPopoverMessage,
   toParentOutMessage: (outMessage: FoldkitPopover.OutMessage): Option.Option<OutMessage> =>
-    outMessage._tag === 'Opened' ? Option.some(OutMessage.Opened()) : Option.some(OutMessage.Closed()),
+    outMessage._tag === 'Opened'
+      ? Option.some(OutMessage.Opened())
+      : Option.some(OutMessage.Closed()),
 })
 
 const scheduleShow = (model: Model): UpdateReturn => {
@@ -339,6 +349,7 @@ export type RenderInfo = Readonly<{
  *  nothing (matching shadcn), keeping keyboard activation. */
 const withoutClickToggle = (button: ReadonlyArray<ChildAttribute>): ReadonlyArray<ChildAttribute> =>
   button.filter((wrapped) => {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     const tag = (wrapped.attribute as { readonly _tag?: string } | undefined)?._tag
     return tag !== 'OnPointerDown' && tag !== 'OnClick'
   })
@@ -356,7 +367,9 @@ export const view = defineView<Model, Message, ViewInputs>((model, viewInputs, h
         h.OnFocus(Message.FocusedTrigger()),
         h.OnBlur(Message.BlurredTrigger()),
         h.OnKeyDownPreventDefault((key) =>
-          key === 'Escape' && model.popover.isOpen ? Option.some(Message.PressedEscape()) : Option.none(),
+          key === 'Escape' && model.popover.isOpen
+            ? Option.some(Message.PressedEscape())
+            : Option.none(),
         ),
       ]
 

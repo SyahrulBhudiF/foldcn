@@ -23,7 +23,10 @@ export const avatarView = (model: Model, h: HtmlBuilder<Message>): Html =>
       Avatar<Message>(
         {},
         [
-          Avatar.image<Message>({ src: 'https://github.com/evilrabbit.png', alt: '@evilrabbit' }, h),
+          Avatar.image<Message>(
+            { src: 'https://github.com/evilrabbit.png', alt: '@evilrabbit' },
+            h,
+          ),
           Avatar.fallback<Message>({}, ['ER'], h),
           Avatar.badge<Message>({ className: 'bg-green-600 dark:bg-green-800' }, [], h),
         ],
@@ -43,7 +46,10 @@ export const avatarView = (model: Model, h: HtmlBuilder<Message>): Html =>
           Avatar<Message>(
             {},
             [
-              Avatar.image<Message>({ src: 'https://github.com/maxleiter.png', alt: '@maxleiter' }, h),
+              Avatar.image<Message>(
+                { src: 'https://github.com/maxleiter.png', alt: '@maxleiter' },
+                h,
+              ),
               Avatar.fallback<Message>({}, ['LR'], h),
             ],
             h,
@@ -51,7 +57,10 @@ export const avatarView = (model: Model, h: HtmlBuilder<Message>): Html =>
           Avatar<Message>(
             {},
             [
-              Avatar.image<Message>({ src: 'https://github.com/evilrabbit.png', alt: '@evilrabbit' }, h),
+              Avatar.image<Message>(
+                { src: 'https://github.com/evilrabbit.png', alt: '@evilrabbit' },
+                h,
+              ),
               Avatar.fallback<Message>({}, ['ER'], h),
             ],
             h,

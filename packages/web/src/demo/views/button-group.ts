@@ -15,9 +15,11 @@ export const buttonGroupView = (model: Model, h: HtmlBuilder<Message>): Html =>
       buttonGroup<Message>(
         { className: 'hidden sm:flex' },
         [
-          button<Message>({ variant: 'outline', size: 'icon' }, icon(h, ArrowLeft), h, [
-            h.AriaLabel('Go Back'),
-          ]),
+          button<Message>(
+            { variant: 'outline', size: 'icon', attributes: [h.AriaLabel('Go Back')] },
+            icon(h, ArrowLeft),
+            h,
+          ),
         ],
         h,
       ),
@@ -33,9 +35,11 @@ export const buttonGroupView = (model: Model, h: HtmlBuilder<Message>): Html =>
         {},
         [
           button<Message>({ variant: 'outline' }, 'Snooze', h),
-          button<Message>({ variant: 'outline', size: 'icon' }, icon(h, MoreHorizontal), h, [
-            h.AriaLabel('More Options'),
-          ]),
+          button<Message>(
+            { variant: 'outline', size: 'icon', attributes: [h.AriaLabel('More Options')] },
+            icon(h, MoreHorizontal),
+            h,
+          ),
         ],
         h,
       ),

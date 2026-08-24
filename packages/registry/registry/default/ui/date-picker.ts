@@ -1,3 +1,7 @@
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as DatePicker from '@/components/ui/date-picker'`
+ */
 import { Option } from 'effect'
 import { DatePicker as FoldkitDatePicker } from '@foldkit/ui'
 import type { AnchorConfig } from '@foldkit/ui/anchor'

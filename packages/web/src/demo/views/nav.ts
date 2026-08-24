@@ -12,7 +12,6 @@ import type { Model, Message as AppMessage } from '../assemble'
 const Message = defineMessageUnion({
   SelectedNav: { value: DemoNav },
 })
-const SelectedNav = Message.SelectedNav
 
 const NAV_ITEMS = ['Overview', 'Components', 'Settings', 'Docs'] as const
 
@@ -23,7 +22,7 @@ export const navView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
       ariaLabel: 'Primary',
       toHref: () => '#',
       isItemCurrent: (value) => value === model.activeNav,
-      onItemClick: (value) => SelectedNav({ value }),
+      onItemClick: (value) => Message.SelectedNav({ value }),
       toLabel: (value) => value,
     },
     h,
@@ -37,12 +36,12 @@ type State = typeof stateSchema.Type
 export const slice = defineSlice({
   fields,
   init: { activeNav: 'Components' },
-  messages: [SelectedNav],
+  messages: [Message.SelectedNav],
   handlers: (model: State) => ({
-    SelectedNav: ({ value }: typeof SelectedNav.Type): UpdateReturn => [
+    SelectedNav: ({ value }: typeof Message.SelectedNav.Type): UpdateReturn => [
       evo(model, { activeNav: () => value }),
       [],
     ],
   }),
-  samples: [SelectedNav({ value: 'Docs' })],
+  samples: [Message.SelectedNav({ value: 'Docs' })],
 })

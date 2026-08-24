@@ -1,3 +1,7 @@
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as Calendar from '@/components/ui/calendar'`
+ */
 import { Match as M, Option } from 'effect'
 import { Calendar as FoldkitCalendar } from '@foldkit/ui'
 import type { CalendarDate } from 'foldkit/calendar'

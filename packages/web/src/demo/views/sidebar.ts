@@ -29,7 +29,6 @@ import type { Model, Message as AppMessage } from '../assemble'
 const Message = defineMessageUnion({
   GotSidebarMessage: { message: Sidebar.Message },
 })
-const GotSidebarMessage = Message.GotSidebarMessage
 
 // Mimics apps/v4/examples/base/sidebar-demo.tsx (the flagship Team
 // Switcher + collapsible Platform + Projects w/ actions + User footer
@@ -69,14 +68,11 @@ export const sidebarView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
               // Inside the 420px preview card the upstream `min-h-svh`
               // / `h-svh` (viewport units) overflow. Override to `h-full`
               // so the shell is contained by the transformed preview box.
-              className: '!min-h-0 !h-full [&_[data-slot=sidebar]]:!h-full [&_[data-slot=sidebar-container]]:!h-full',
+              className:
+                '!min-h-0 !h-full [&_[data-slot=sidebar]]:!h-full [&_[data-slot=sidebar-container]]:!h-full',
               content: (slots) => [
                 Sidebar.header({}, [teamSwitcher(h)], h),
-                Sidebar.content(
-                  {},
-                  [navMain(h), navProjects(h), secondarySupportGroup(h)],
-                  h,
-                ),
+                Sidebar.content({}, [navMain(h), navProjects(h), secondarySupportGroup(h)], h),
                 Sidebar.footer({}, [navUser(h)], h),
                 Sidebar.rail(slots.rail, {}, h),
               ],
@@ -91,18 +87,21 @@ export const sidebarView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                         ),
                       ],
                       [
-                        h.div([h.Class('flex items-center gap-2 px-4')], [
-                          Sidebar.trigger(slots.trigger, {}, h),
-                          Sidebar.separator({ className: '-ml-px mr-2 h-4' }, h),
-                          h.span(
-                            [h.Class('text-sm font-medium')],
-                            [
-                              slots.state === 'collapsed'
-                                ? 'Collapsed — hover the icons or press ⌘B'
-                                : 'Acme Inc — Playground / Starred',
-                            ],
-                          ),
-                        ]),
+                        h.div(
+                          [h.Class('flex items-center gap-2 px-4')],
+                          [
+                            Sidebar.trigger(slots.trigger, {}, h),
+                            Sidebar.separator({ className: '-ml-px mr-2 h-4' }, h),
+                            h.span(
+                              [h.Class('text-sm font-medium')],
+                              [
+                                slots.state === 'collapsed'
+                                  ? 'Collapsed — hover the icons or press ⌘B'
+                                  : 'Acme Inc — Playground / Starred',
+                              ],
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                     h.div(
@@ -123,7 +122,7 @@ export const sidebarView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 ),
               ],
             },
-            toParentMessage: (message) => GotSidebarMessage({ message }),
+            toParentMessage: (message) => Message.GotSidebarMessage({ message }),
           }),
         ],
       ),
@@ -138,16 +137,27 @@ const teamSwitcher = (h: HtmlBuilder<AppMessage>): Html =>
         {},
         [
           Sidebar.menuButton(
-            { size: 'lg', className: 'data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground' },
+            {
+              size: 'lg',
+              className:
+                'data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground',
+            },
             [
               h.div(
-                [h.Class('flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground')],
+                [
+                  h.Class(
+                    'flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground',
+                  ),
+                ],
                 [icon(h, GalleryVerticalEnd, 'size-4')],
               ),
-              h.div([h.Class('grid flex-1 text-left text-sm leading-tight')], [
-                h.span([h.Class('truncate font-medium')], ['Acme Inc']),
-                h.span([h.Class('truncate text-xs')], ['Enterprise']),
-              ]),
+              h.div(
+                [h.Class('grid flex-1 text-left text-sm leading-tight')],
+                [
+                  h.span([h.Class('truncate font-medium')], ['Acme Inc']),
+                  h.span([h.Class('truncate text-xs')], ['Enterprise']),
+                ],
+              ),
               icon(h, ChevronsUpDown, 'ml-auto'),
             ],
             h,
@@ -310,9 +320,7 @@ const secondarySupportGroup = (h: HtmlBuilder<AppMessage>): Html =>
         [
           Sidebar.menuItem(
             {},
-            [
-              Sidebar.menuButton({}, [icon(h, Sparkles), h.span([], ['What\u2019s new'])], h),
-            ],
+            [Sidebar.menuButton({}, [icon(h, Sparkles), h.span([], ['What\u2019s new'])], h)],
             h,
           ),
           Sidebar.menuItem(
@@ -335,7 +343,11 @@ const navUser = (h: HtmlBuilder<AppMessage>): Html =>
         {},
         [
           Sidebar.menuButton(
-            { size: 'lg', className: 'data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground' },
+            {
+              size: 'lg',
+              className:
+                'data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground',
+            },
             [
               h.span(
                 [
@@ -345,10 +357,13 @@ const navUser = (h: HtmlBuilder<AppMessage>): Html =>
                 ],
                 ['CN'],
               ),
-              h.div([h.Class('grid flex-1 text-left text-sm leading-tight')], [
-                h.span([h.Class('truncate font-medium')], ['shadcn']),
-                h.span([h.Class('truncate text-xs')], ['m@example.com']),
-              ]),
+              h.div(
+                [h.Class('grid flex-1 text-left text-sm leading-tight')],
+                [
+                  h.span([h.Class('truncate font-medium')], ['shadcn']),
+                  h.span([h.Class('truncate text-xs')], ['m@example.com']),
+                ],
+              ),
               icon(h, ChevronsUpDown, 'ml-auto size-4'),
             ],
             h,
@@ -368,20 +383,23 @@ const foldSidebar = Update.foldChild({
   update: Sidebar.update,
   read: (model: State) => Option.some(model.sidebar),
   write: (model, next) => evo(model, { sidebar: () => next }),
-  toParentMessage: (message) => GotSidebarMessage({ message }),
+  toParentMessage: (message) => Message.GotSidebarMessage({ message }),
 })
 
 export const slice = defineSlice({
   fields,
   init: { sidebar: Sidebar.init({ id: 'sidebar-demo', defaultOpen: true }) },
-  messages: [GotSidebarMessage],
+  messages: [Message.GotSidebarMessage],
   handlers: (model: State) => ({
-    GotSidebarMessage: (payload: typeof GotSidebarMessage.Type): UpdateReturn =>
+    GotSidebarMessage: (payload: typeof Message.GotSidebarMessage.Type): UpdateReturn =>
       foldSidebar(model, payload.message),
   }),
-  samples: [GotSidebarMessage({ message: Sidebar.Toggled() })],
-  subscriptions: Subscription.lift(Sidebar.subscriptions)<State, typeof GotSidebarMessage.Type>({
+  samples: [Message.GotSidebarMessage({ message: Sidebar.Message.Toggled() })],
+  subscriptions: Subscription.lift(Sidebar.subscriptions)<
+    State,
+    typeof Message.GotSidebarMessage.Type
+  >({
     toChildModel: (model) => model.sidebar,
-    toParentMessage: (message) => GotSidebarMessage({ message }),
+    toParentMessage: (message) => Message.GotSidebarMessage({ message }),
   }),
 })

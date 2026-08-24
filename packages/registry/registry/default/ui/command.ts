@@ -1,8 +1,11 @@
+/** ⚠ BEHAVIOR GAP vs upstream shadcn: no filtering, no arrow-key/Enter selection, no roving tabindex and no Dialog wrapper — all behavior is consumer-owned. Consider `combobox` for a searchable dropdown with real behavior.
+ *  The styled surface matches, but this behavior is absent — do not use
+ *  where that behavior is required.
+ */
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { cn } from '@/lib/utils'
 import { icon } from '@/lib/icons'
-import { inputClass } from './input'
 import { Search } from 'lucide'
 
 type Child = Html | string

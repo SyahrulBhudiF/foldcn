@@ -1,14 +1,31 @@
-import type { Html, HtmlBuilder } from 'foldkit/html'
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as ToggleGroup from '@/components/ui/toggle-group'`
+ */
+import { Function, Option, Schema as S } from 'effect'
+import type { Command } from 'foldkit/command'
+import type { Html } from 'foldkit/html'
+import { defineMessageUnion } from 'foldkit/message'
+import type { Reflect } from 'foldkit/submodel'
+import { defineView } from 'foldkit/submodel'
+import { evo } from 'foldkit/struct'
 
 import { cn } from '@/lib/utils'
 import { icon } from '@/lib/icons'
-import { toggle, type ToggleSize, type ToggleVariant } from './toggle'
+import {
+  toggleBase,
+  toggleSizes,
+  toggleVariants,
+  type ToggleSize,
+  type ToggleVariant,
+} from './toggle'
 
 type IconNode = Parameters<typeof icon>[1]
-type Child = Html | string
 
 // ToggleGroup is a set of toggles that share a single (or multiple) selection.
-// It is a pure presentational control — wire `onValueChange` to your own model.
+// It owns the selection as a Submodel: embed it with `h.submodel` and listen
+// for `ChangedValue` to lift selection changes into your own model. Conform an
+// externally-driven selection with `reflect`.
 //
 // Upstream renders a loose flex row joined only when spacing is 0; foldcn
 // keeps the same model via the `spacing` config (default 2, matching
@@ -22,7 +39,8 @@ export const toggleGroupClass =
 export const toggleGroupItemClass =
   'cn-toggle-group-item shrink-0 focus:z-10 focus-visible:z-10 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-l-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-l group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t'
 
-export type ToggleGroupType = 'single' | 'multiple'
+export const Type = S.Literals(['single', 'multiple'])
+export type ToggleGroupType = typeof Type.Type
 
 export type ToggleGroupOrientation = 'horizontal' | 'vertical'
 
@@ -33,20 +51,29 @@ export type ToggleGroupItem = Readonly<{
   ariaLabel?: string
 }>
 
-export type ToggleGroupConfig<M> = Readonly<{
-  type?: ToggleGroupType
-  value: ReadonlyArray<string>
-  onValueChange?: (value: ReadonlyArray<string>) => M
-  isDisabled?: boolean
-  variant?: ToggleVariant
-  size?: ToggleSize
-  /** Gap between items in spacing units. `0` joins items into a strip.
-   *  Defaults to 2 like upstream. */
-  spacing?: number
-  orientation?: ToggleGroupOrientation
-  ariaLabel?: string
-  className?: string
-}>
+// MODEL
+
+export const Model = S.Struct({
+  id: S.String,
+  type: Type,
+  value: S.Array(S.String),
+})
+export type Model = typeof Model.Type
+
+// MESSAGES
+
+/** The user clicked one of the toggles. Flips that item's membership in the
+ *  selection — replacing it entirely when `type` is `single`. */
+export const Message = defineMessageUnion({
+  ToggledItem: { value: S.String },
+})
+export type Message = typeof Message.Type
+
+/** Emitted when the selection changes. */
+export const OutMessage = defineMessageUnion({
+  ChangedValue: { value: S.Array(S.String) },
+})
+export type OutMessage = typeof OutMessage.Type
 
 const nextValue = (
   current: ReadonlyArray<string>,
@@ -58,45 +85,101 @@ const nextValue = (
   return isSelected ? current.filter((v) => v !== value) : [...current, value]
 }
 
-/** A group of toggles with shared selection. */
-export const toggleGroup = <M>(
-  config: ToggleGroupConfig<M>,
-  items: ReadonlyArray<ToggleGroupItem>,
-  h: HtmlBuilder<M>,
-): Html => {
-  const type = config.type ?? 'single'
-  const value = config.value
-  const spacing = config.spacing ?? 2
-  const orientation = config.orientation ?? 'horizontal'
+// INIT / UPDATE
+
+export type InitConfig = Readonly<{
+  id: string
+  type?: ToggleGroupType
+  value?: ReadonlyArray<string>
+}>
+
+/** Creates an initial toggle group model. */
+export const init = (config: InitConfig): Model => ({
+  id: config.id,
+  type: config.type ?? 'single',
+  value: config.value === undefined ? [] : [...config.value],
+})
+
+/** Conforms an externally-driven selection onto the model without emitting an
+ *  OutMessage (the world is the source of truth). */
+export const reflect: Reflect<Model, ReadonlyArray<string>> = Function.dual(
+  2,
+  (model: Model, value: ReadonlyArray<string>): Model => evo(model, { value: () => [...value] }),
+)
+
+type UpdateReturn = readonly [Model, ReadonlyArray<Command<Message>>, Option.Option<OutMessage>]
+
+/** Processes a toggle group message and returns the next model, commands, and
+ *  an optional out-message for the parent. */
+export const update = (model: Model, message: Message): UpdateReturn => {
+  switch (message._tag) {
+    case 'ToggledItem': {
+      const value = nextValue(model.value, message.value, model.type)
+      return [evo(model, { value: () => [...value] }), [], Option.some(OutMessage.ChangedValue({ value }))]
+    }
+  }
+}
+
+// VIEW
+
+export type ViewInputs = Readonly<{
+  items: ReadonlyArray<ToggleGroupItem>
+  variant?: ToggleVariant
+  size?: ToggleSize
+  isDisabled?: boolean
+  /** Gap between items in spacing units. `0` joins items into a strip.
+   *  Defaults to 2 like upstream. */
+  spacing?: number
+  orientation?: ToggleGroupOrientation
+  ariaLabel?: string
+  className?: string
+}>
+
+/** Renders the group of toggles sharing the submodel's selection. Embedded
+ *  via `h.submodel`. */
+export const view = defineView<Model, Message, ViewInputs>((model, viewInputs, h) => {
+  const spacing = viewInputs.spacing ?? 2
+  const orientation = viewInputs.orientation ?? 'horizontal'
   return h.div(
     [
-      ...(config.ariaLabel === undefined ? [] : [h.AriaLabel(config.ariaLabel)]),
+      ...(viewInputs.ariaLabel === undefined ? [] : [h.AriaLabel(viewInputs.ariaLabel)]),
       h.Role('group'),
-      h.Class(cn(toggleGroupClass, config.className)),
+      h.Class(cn(toggleGroupClass, viewInputs.className)),
       h.DataAttribute('slot', 'toggle-group'),
       h.DataAttribute('orientation', orientation),
       h.DataAttribute('spacing', String(spacing)),
-      h.DataAttribute('variant', config.variant ?? 'default'),
-      h.DataAttribute('size', config.size ?? 'default'),
+      h.DataAttribute('variant', viewInputs.variant ?? 'default'),
+      h.DataAttribute('size', viewInputs.size ?? 'default'),
       ...(orientation === 'vertical'
         ? [h.DataAttribute('vertical', '')]
         : [h.DataAttribute('horizontal', '')]),
       h.Style({ '--gap': String(spacing) }),
     ],
-    items.map((item) =>
-      toggle<M>(
-        {
-          variant: config.variant ?? 'default',
-          size: config.size ?? 'default',
-          isPressed: value.includes(item.value),
-          isDisabled: config.isDisabled,
-          ariaLabel: item.ariaLabel ?? item.label,
-          className: toggleGroupItemClass,
-          onToggle: () => config.onValueChange!(nextValue(value, item.value, type)),
-        },
-        item.icon === undefined ? item.label : h.span([], [icon(h, item.icon), item.label]),
-        h,
+    viewInputs.items.map((item) =>
+      h.button(
+        [
+          h.Type('button'),
+          ...(item.ariaLabel === undefined ? [] : [h.AriaLabel(item.ariaLabel)]),
+          ...(viewInputs.isDisabled === true ? [h.Disabled(true)] : []),
+          h.OnClick(Message.ToggledItem({ value: item.value })),
+          h.DataAttribute('slot', 'toggle'),
+          h.DataAttribute('state', model.value.includes(item.value) ? 'on' : 'off'),
+          h.AriaPressed(model.value.includes(item.value) ? 'true' : 'false'),
+          h.Class(
+            cn(
+              toggleBase,
+              toggleVariants[viewInputs.variant ?? 'default'],
+              toggleSizes[viewInputs.size ?? 'default'],
+              toggleGroupItemClass,
+            ),
+          ),
+        ],
+        [
+          item.icon === undefined
+            ? item.label
+            : h.span([], [icon(h, item.icon), item.label]),
+        ],
       ),
     ),
   )
-}
+})

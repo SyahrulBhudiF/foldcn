@@ -1,3 +1,7 @@
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as Tabs from '@/components/ui/tabs'`
+ */
 import { Tabs as FoldkitTabs } from '@foldkit/ui'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 

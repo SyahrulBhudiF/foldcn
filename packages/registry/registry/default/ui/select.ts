@@ -1,4 +1,8 @@
-import { Listbox as FoldkitListbox, Select as FoldkitSelect } from '@foldkit/ui'
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as Select from '@/components/ui/select'`
+ */
+import { Listbox as FoldkitListbox } from '@foldkit/ui'
 import type { AnchorConfig } from '@foldkit/ui/listbox'
 import { Option } from 'effect'
 import { childAttributes, type Html, type HtmlBuilder } from 'foldkit/html'
@@ -7,10 +11,19 @@ import { icon } from '@/lib/icons'
 import { Check, ChevronDown } from 'lucide'
 import { cn } from '@/lib/utils'
 
-// Re-export the @foldkit/ui Listbox surface so consumers can create the
-// single-select bundle that backs the themed custom select:
-//
-//   export const LanguageSelect = Select.create<{ value: string; label: string }, string>()
+/** Themed custom dropdown select backed by the @foldkit/ui Listbox submodel.
+ *
+ *  Usage: `import * as Select from '@/components/ui/select'`
+ *
+ *  1. Create a typed bundle once (module scope):
+ *       export const LanguageSelect = Select.create<{ value: string; label: string }, string>()
+ *  2. Embed its Model in your app Model (`languageSelect: Select.Model`),
+ *     init it (`Select.init({ id: 'language' })`), route its Message through
+ *     your update, and render via `h.submodel({ ..., view: LanguageSelect.view,
+ *     viewInputs: Select.styledViewInputs({ ... }, h) })`.
+ *
+ *  For a plain native `<select>` helper, see `@/components/ui/native-select`.
+ */
 
 export const create = FoldkitListbox.create
 export const init = (config: InitConfig): Model =>
@@ -28,7 +41,8 @@ export type InitConfig = FoldkitListbox.InitConfig
 export type ViewInputs<Item, Value extends string = string> = FoldkitListbox.ViewInputs<Item, Value>
 export type ItemConfig = FoldkitListbox.ItemConfig
 
-export type SelectSize = 'default' | 'sm'
+export const selectSizeKeys = ['default', 'sm'] as const
+export type SelectSize = (typeof selectSizeKeys)[number]
 
 // foldkit deltas: items highlight via data-active (upstream focus:) per the
 // derivation mapping; the panel emits data-side from the anchor placement.
@@ -161,81 +175,3 @@ export const selectDescription = <M>(
 
 export const selectChevron = <M>(h: HtmlBuilder<M>): Html =>
   h.span([h.Class('shrink-0 text-muted-foreground')], [icon(h, ChevronDown, 'size-4')])
-
-export type SelectConfig<M> = Readonly<{
-  id: string
-  label: string
-  maybeDescription?: string
-  onChange?: (value: string) => M
-  value?: string
-  size?: SelectSize
-  isDisabled?: boolean
-  isInvalid?: boolean
-  isAutofocus?: boolean
-  name?: string
-  options: ReadonlyArray<Html | string>
-  className?: string
-  labelClass?: string
-  descriptionClass?: string
-  wrapperClass?: string
-}>
-
-/** Styled native select with label, chevron and optional description, built
- *  on the @foldkit/ui Select helper. Mirrors the shadcn v4 `native-select.tsx`:
- *  an `appearance-none` select whose chevron overlays the control at its right
- *  edge. Pass `<option>` markup via `options`. */
-export const select = <M>(config: SelectConfig<M>, h: HtmlBuilder<M>): Html =>
-  FoldkitSelect.view<M>(
-    {
-      id: config.id,
-      onChange: config.onChange,
-      value: config.value,
-      isDisabled: config.isDisabled,
-      isInvalid: config.isInvalid,
-      isAutofocus: config.isAutofocus,
-      name: config.name,
-      toView: (attributes) =>
-        h.div(
-          [h.Class(cn(selectWrapperClass, config.wrapperClass))],
-          [
-            h.label(
-              [...attributes.label, h.Class(cn(selectLabelClass, config.labelClass))],
-              [config.label],
-            ),
-            h.div(
-              [h.Class('relative w-full')],
-              [
-                h.select(
-                  [
-                    ...attributes.select,
-                    h.DataAttribute('slot', 'native-select'),
-                    h.DataAttribute('size', config.size ?? 'default'),
-                    h.Class(cn(selectTriggerClass, 'appearance-none pr-8', config.className)),
-                  ],
-                  config.options,
-                ),
-                h.span(
-                  [
-                    h.DataAttribute('slot', 'native-select-icon'),
-                    h.Class(
-                      'pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 select-none',
-                    ),
-                  ],
-                  [selectChevron(h)],
-                ),
-              ],
-            ),
-            config.maybeDescription === undefined
-              ? h.empty
-              : h.span(
-                  [
-                    ...attributes.description,
-                    h.Class(cn(selectDescriptionClass, config.descriptionClass)),
-                  ],
-                  [config.maybeDescription],
-                ),
-          ],
-        ),
-    },
-    h,
-  )

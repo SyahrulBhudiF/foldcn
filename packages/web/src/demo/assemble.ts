@@ -47,6 +47,7 @@ import { slice as markerSlice } from './views/marker'
 import { slice as menuSlice } from './views/menu'
 import { slice as menubarSlice } from './views/menubar'
 import { slice as navSlice } from './views/nav'
+import { slice as nativeSelectSlice } from './views/native-select'
 import { slice as navigationMenuSlice } from './views/navigation-menu'
 import { slice as popoverSlice } from './views/popover'
 import { slice as progressSlice } from './views/progress'
@@ -114,6 +115,7 @@ const ModelSchema = S.Struct({
   ...menubarSlice.fields,
   ...navSlice.fields,
   ...navigationMenuSlice.fields,
+  ...nativeSelectSlice.fields,
   ...popoverSlice.fields,
   ...progressSlice.fields,
   ...radioGroupSlice.fields,
@@ -181,6 +183,7 @@ const MessageSchema = S.Union([
   ...menubarSlice.messages,
   ...navSlice.messages,
   ...navigationMenuSlice.messages,
+  ...nativeSelectSlice.messages,
   ...popoverSlice.messages,
   ...progressSlice.messages,
   ...radioGroupSlice.messages,
@@ -206,8 +209,9 @@ const MessageSchema = S.Union([
 export type Message = typeof MessageSchema.Type
 export const Message = MessageSchema
 
-export const init = (): [Model, []] => [
-  {
+export const init = (): [Model, []] => {
+  // oxlint-disable-next-line typescript/consistent-type-assertions
+  const model = {
     ...accordionSlice.init,
     ...alertDialogSlice.init,
     ...alertSlice.init,
@@ -249,6 +253,7 @@ export const init = (): [Model, []] => [
     ...menubarSlice.init,
     ...navSlice.init,
     ...navigationMenuSlice.init,
+  ...nativeSelectSlice.init,
     ...popoverSlice.init,
     ...progressSlice.init,
     ...radioGroupSlice.init,
@@ -270,9 +275,9 @@ export const init = (): [Model, []] => [
     ...toggleSlice.init,
     ...tooltipSlice.init,
     ...virtualListSlice.init,
-  } as Model,
-  [],
-]
+  } as Model
+  return [model, []]
+}
 
 export const update = (model: Model, message: Message): UpdateReturn =>
   M.value(message).pipe(
@@ -304,6 +309,7 @@ export const update = (model: Model, message: Message): UpdateReturn =>
       ...menuSlice.handlers(model),
       ...navSlice.handlers(model),
       ...navigationMenuSlice.handlers(model),
+  ...nativeSelectSlice.handlers(model),
       ...popoverSlice.handlers(model),
       ...radioGroupSlice.handlers(model),
       ...resizableSlice.handlers(model),

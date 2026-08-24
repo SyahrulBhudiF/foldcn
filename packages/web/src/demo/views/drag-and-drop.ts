@@ -15,7 +15,6 @@ import type { Model, Message as AppMessage } from '../assemble'
 const Message = defineMessageUnion({
   GotDragAndDropMessage: { message: DragAndDrop.Message },
 })
-const GotDragAndDropMessage = Message.GotDragAndDropMessage
 
 export const DemoCard = S.Struct({ id: S.String, label: S.String })
 export type DemoCard = typeof DemoCard.Type
@@ -100,7 +99,7 @@ const cardView = (
       ...DragAndDrop.draggable(
         {
           model: model.dragAndDrop,
-          toParentMessage: (message) => GotDragAndDropMessage({ message }),
+          toParentMessage: (message) => Message.GotDragAndDropMessage({ message }),
           itemId: card.id,
           containerId,
           index,
@@ -249,7 +248,7 @@ const foldDragAndDrop = Update.foldChild({
   update: DragAndDrop.update,
   read: (model: State) => Option.some(model.dragAndDrop),
   write: (model, next) => evo(model, { dragAndDrop: () => next }),
-  toParentMessage: (message) => GotDragAndDropMessage({ message }),
+  toParentMessage: (message) => Message.GotDragAndDropMessage({ message }),
   foldOutMessage: foldDragAndDropOutMessage,
 })
 
@@ -286,9 +285,9 @@ export const subscriptions = Subscription.lift({
   dragEscape: DragAndDrop.subscriptions.documentEscape,
   dragKeyboard: DragAndDrop.subscriptions.documentKeyboard,
   autoScroll: DragAndDrop.subscriptions.autoScroll,
-})<State, typeof GotDragAndDropMessage.Type>({
+})<State, typeof Message.GotDragAndDropMessage.Type>({
   toChildModel: (model) => model.dragAndDrop,
-  toParentMessage: (message) => GotDragAndDropMessage({ message }),
+  toParentMessage: (message) => Message.GotDragAndDropMessage({ message }),
 })
 
 export const slice = defineSlice({
@@ -297,9 +296,9 @@ export const slice = defineSlice({
     dragAndDrop: DragAndDrop.init({ id: 'drag-and-drop-demo' }),
     dragColumns: DRAG_COLUMNS,
   },
-  messages: [GotDragAndDropMessage],
+  messages: [Message.GotDragAndDropMessage],
   handlers: (model: State) => ({
-    GotDragAndDropMessage: (payload: typeof GotDragAndDropMessage.Type): UpdateReturn =>
+    GotDragAndDropMessage: (payload: typeof Message.GotDragAndDropMessage.Type): UpdateReturn =>
       foldDragAndDrop(model, payload.message),
   }),
   samples: [],

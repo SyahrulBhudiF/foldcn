@@ -20,8 +20,10 @@ jobs:
       - uses: pnpm/action-setup@v4
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Generate registry styles
+        run: pnpm --filter @foldcn/registry run resolve
       - name: Format
-        run: pnpm fmt
+        run: pnpm fmt -- --check
       - name: Lint
         run: pnpm lint
       - name: Typecheck

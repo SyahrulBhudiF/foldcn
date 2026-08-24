@@ -5,6 +5,7 @@ import { UrlRequest } from 'foldkit/navigation'
 
 import { Message as DemoMessage } from './demo'
 import { Message as InstallTabsMessage } from '@foldkit/ui/tabs'
+import { Message as ToggleGroupMessage } from '@foldcn/registry/styles/default/ui/toggle-group'
 import { PackageManager, ResolvedTheme, ThemePreference } from './model'
 
 export const Message = defineMessageUnion({
@@ -24,26 +25,10 @@ export const Message = defineMessageUnion({
   CompletedCopy: { value: S.String },
   ToggledCodeBlock: { id: S.String },
   GotInstallTabsMessage: { message: InstallTabsMessage },
+  GotThemeToggleGroupMessage: { message: ToggleGroupMessage },
   CompletedSavePackageManager: {},
   CompletedNavigateInternal: {},
   CompletedLoadExternal: {},
   CompletedScrollToTop: {},
 })
 export type Message = typeof Message.Type
-
-export const ClickedLink = Message.ClickedLink
-export const ChangedUrl = Message.ChangedUrl
-export const GotDemoMessage = Message.GotDemoMessage
-export const SelectedThemePreference = Message.SelectedThemePreference
-export const ChangedSystemTheme = Message.ChangedSystemTheme
-export const CompletedApplyTheme = Message.CompletedApplyTheme
-export const CompletedSaveThemePreference = Message.CompletedSaveThemePreference
-export const LoadedBrowserEnvironment = Message.LoadedBrowserEnvironment
-export const ClickedCopy = Message.ClickedCopy
-export const CompletedCopy = Message.CompletedCopy
-export const ToggledCodeBlock = Message.ToggledCodeBlock
-export const GotInstallTabsMessage = Message.GotInstallTabsMessage
-export const CompletedSavePackageManager = Message.CompletedSavePackageManager
-export const CompletedNavigateInternal = Message.CompletedNavigateInternal
-export const CompletedLoadExternal = Message.CompletedLoadExternal
-export const CompletedScrollToTop = Message.CompletedScrollToTop

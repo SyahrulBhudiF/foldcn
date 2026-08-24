@@ -1,3 +1,11 @@
+/** ⚠ BEHAVIOR GAP vs upstream shadcn: does not open on right-click / long-press; it opens on activation at a fixed anchor (foldkit has no pointer-position anchor primitive yet).
+ *  The styled surface matches, but this behavior is absent — do not use
+ *  where that behavior is required.
+ */
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as ContextMenu from '@/components/ui/context-menu'`
+ */
 import { Menu as FoldkitMenu } from '@foldkit/ui'
 import type { AnchorConfig } from '@foldkit/ui/menu'
 import type { Html } from 'foldkit/html'

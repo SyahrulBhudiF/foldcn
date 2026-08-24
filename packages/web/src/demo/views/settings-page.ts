@@ -33,7 +33,8 @@ export const settingsPageView = (model: Model, h: HtmlBuilder<AppMessage>): Html
           language: model.settingsLanguage,
           onLanguageChange: (value) => Message.UpdatedSettingsLanguage({ value }),
           isEmailNotificationsEnabled: model.settingsEmailNotifs,
-          onToggleEmailNotifications: (isChecked) => Message.ToggledSettingsEmailNotifs({ isChecked }),
+          onToggleEmailNotifications: (isChecked) =>
+            Message.ToggledSettingsEmailNotifs({ isChecked }),
           isTwoFactorEnabled: model.settingsTfa,
           onToggleTwoFactor: (isChecked) => Message.ToggledSettingsTfa({ isChecked }),
           onSave: Message.ClickedSaveSettings(),
@@ -101,7 +102,9 @@ export const slice = defineSlice({
       evo(model, { settingsBio: () => value }),
       [],
     ],
-    UpdatedSettingsLanguage: ({ value }: typeof Message.UpdatedSettingsLanguage.Type): UpdateReturn => [
+    UpdatedSettingsLanguage: ({
+      value,
+    }: typeof Message.UpdatedSettingsLanguage.Type): UpdateReturn => [
       evo(model, { settingsLanguage: () => value }),
       [],
     ],

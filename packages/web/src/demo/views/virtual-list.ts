@@ -17,8 +17,6 @@ const Message = defineMessageUnion({
   GotVirtualListMessage: { message: virtualList.Message },
   ClickedScrollToMiddle: {},
 })
-const GotVirtualListMessage = Message.GotVirtualListMessage
-const ClickedScrollToMiddle = Message.ClickedScrollToMiddle
 
 export const VIRTUAL_LIST_ROW_COUNT = 100_000
 
@@ -29,7 +27,7 @@ export const virtualListView = (model: Model, h: HtmlBuilder<AppMessage>): Html 
       h.button(
         [
           h.Class('rounded-md border border-input bg-background px-4 py-2 text-sm font-medium'),
-          h.OnClick(ClickedScrollToMiddle()),
+          h.OnClick(Message.ClickedScrollToMiddle()),
         ],
         ['Scroll to middle'],
       ),
@@ -54,7 +52,7 @@ export const virtualListView = (model: Model, h: HtmlBuilder<AppMessage>): Html 
                 ),
               itemToRowHeightPx: () => 56,
             }),
-            toParentMessage: (message) => GotVirtualListMessage({ message }),
+            toParentMessage: (message) => Message.GotVirtualListMessage({ message }),
           }),
         ],
       ),
@@ -65,7 +63,7 @@ const foldVirtualList = Update.foldChild({
   update: virtualList.update,
   read: (model: State) => Option.some(model.virtualList),
   write: (model, next) => evo(model, { virtualList: () => next }),
-  toParentMessage: (message) => GotVirtualListMessage({ message }),
+  toParentMessage: (message) => Message.GotVirtualListMessage({ message }),
 })
 
 const fields = {
@@ -77,9 +75,9 @@ type State = typeof stateSchema.Type
 
 export const subscriptions = Subscription.lift({
   virtualListContainerEvents: FoldkitVirtualList.subscriptions.containerEvents,
-})<State, typeof GotVirtualListMessage.Type>({
+})<State, typeof Message.GotVirtualListMessage.Type>({
   toChildModel: (model) => model.virtualList,
-  toParentMessage: (message) => GotVirtualListMessage({ message }),
+  toParentMessage: (message) => Message.GotVirtualListMessage({ message }),
 })
 
 export const slice = defineSlice({
@@ -87,9 +85,9 @@ export const slice = defineSlice({
   init: {
     virtualList: virtualList.init({ id: 'virtual-list-demo', rowHeightPx: 56 }),
   },
-  messages: [GotVirtualListMessage, ClickedScrollToMiddle],
+  messages: [Message.GotVirtualListMessage, Message.ClickedScrollToMiddle],
   handlers: (model: State) => ({
-    GotVirtualListMessage: (payload: typeof GotVirtualListMessage.Type): UpdateReturn =>
+    GotVirtualListMessage: (payload: typeof Message.GotVirtualListMessage.Type): UpdateReturn =>
       foldVirtualList(model, payload.message),
     ClickedScrollToMiddle: (): UpdateReturn => {
       const [next, commands] = FoldkitVirtualList.scrollToIndex(
@@ -98,7 +96,7 @@ export const slice = defineSlice({
       )
       return [
         evo(model, { virtualList: () => next }),
-        Command.mapMessages(commands, (message) => GotVirtualListMessage({ message })),
+        Command.mapMessages(commands, (message) => Message.GotVirtualListMessage({ message })),
       ]
     },
   }),

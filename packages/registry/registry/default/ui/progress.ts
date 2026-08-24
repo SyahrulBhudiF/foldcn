@@ -1,3 +1,7 @@
+/** ⚠ BEHAVIOR GAP vs upstream shadcn: no animated indeterminate mode — `value: undefined` renders an empty track until foldkit's primitives support it.
+ *  The styled surface matches, but this behavior is absent — do not use
+ *  where that behavior is required.
+ */
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 type Child = Html | string
@@ -10,7 +14,7 @@ import { cn } from '@/lib/utils'
  * indicator directly; `undefined` renders an EMPTY track — animated
  * indeterminate needs primitive support. The label/value builders render
  * static content the consumer owns.
- * 
+ *
  */
 
 export const progressClass = 'cn-progress-root flex flex-wrap gap-3'
