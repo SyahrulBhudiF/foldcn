@@ -1,5 +1,4 @@
 import { Match as M, Option } from 'effect'
-import { Schema as S } from 'effect'
 import { Command, Update } from 'foldkit'
 import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
@@ -17,14 +16,16 @@ const Message = defineMessageUnion({
   GotDialogMessage: { message: Drawer.Message },
   ClickedOpenDialog: {},
 })
-const GotDialogMessage = Message.GotDialogMessage
-const ClickedOpenDialog = Message.ClickedOpenDialog
 
 export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('flex flex-col items-start gap-4')],
     [
-      button<AppMessage>({ variant: 'outline', onClick: ClickedOpenDialog() }, 'Open Drawer', h),
+      button<AppMessage>(
+        { variant: 'outline', onClick: Message.ClickedOpenDialog() },
+        'Open Drawer',
+        h,
+      ),
       h.submodel({
         slotId: model.dialog.id,
         model: model.dialog,
@@ -36,10 +37,9 @@ export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
               Drawer.header(
                 {},
                 [
-                  Drawer.title(title, {}, ['Pick a delivery time'], h),
+                  Drawer.title({ attributes: title }, ['Pick a delivery time'], h),
                   Drawer.description(
-                    description,
-                    {},
+                    { attributes: description },
                     ['We’ll prepare your order as soon as possible.'],
                     h,
                   ),
@@ -63,20 +63,24 @@ export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                           h.div(
                             [h.Class('flex flex-1 flex-col gap-0.5')],
                             [
-                              h.span([h.Class('flex items-center gap-2 font-medium')], [
-                                'Standard delivery',
-                                h.span(
-                                  [
-                                    h.Class(
-                                      'inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground',
-                                    ),
-                                  ],
-                                  ['Fastest'],
-                                ),
-                              ]),
-                              h.span([h.Class('text-xs text-muted-foreground')], [
-                                '25–35 min · Driver assigned now',
-                              ]),
+                              h.span(
+                                [h.Class('flex items-center gap-2 font-medium')],
+                                [
+                                  'Standard delivery',
+                                  h.span(
+                                    [
+                                      h.Class(
+                                        'inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground',
+                                      ),
+                                    ],
+                                    ['Fastest'],
+                                  ),
+                                ],
+                              ),
+                              h.span(
+                                [h.Class('text-xs text-muted-foreground')],
+                                ['25–35 min · Driver assigned now'],
+                              ),
                             ],
                           ),
                           h.input([
@@ -101,9 +105,10 @@ export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                             [h.Class('flex flex-1 flex-col gap-0.5')],
                             [
                               h.span([h.Class('font-medium')], ['5:00 PM – 5:15 PM']),
-                              h.span([h.Class('text-xs text-muted-foreground')], [
-                                'Prep starts at 4:45 PM',
-                              ]),
+                              h.span(
+                                [h.Class('text-xs text-muted-foreground')],
+                                ['Prep starts at 4:45 PM'],
+                              ),
                             ],
                           ),
                           h.input([
@@ -130,7 +135,7 @@ export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                     ],
                     ['Confirm Delivery Time'],
                   ),
-                  Drawer.closeButton(closeButton, {}, ['Cancel'], h),
+                  Drawer.closeButton({ attributes: closeButton }, ['Cancel'], h),
                 ],
                 h,
               ),
@@ -138,7 +143,7 @@ export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           },
           h,
         ),
-        toParentMessage: (message) => GotDialogMessage({ message }),
+        toParentMessage: (message) => Message.GotDialogMessage({ message }),
       }),
     ],
   )
@@ -162,24 +167,24 @@ const foldDrawer = Update.foldChild({
   update: Drawer.update,
   read: (model: State) => Option.some(model.dialog),
   write: (model, next) => evo(model, { dialog: () => next }),
-  toParentMessage: (message) => GotDialogMessage({ message }),
+  toParentMessage: (message) => Message.GotDialogMessage({ message }),
   foldOutMessage: foldDrawerOutMessage,
 })
 
 export const slice = defineSlice({
   fields: {},
   init: {},
-  messages: [GotDialogMessage, ClickedOpenDialog],
+  messages: [Message.GotDialogMessage, Message.ClickedOpenDialog],
   handlers: (model: State) => ({
-    GotDialogMessage: (payload: typeof GotDialogMessage.Type): UpdateReturn =>
+    GotDialogMessage: (payload: typeof Message.GotDialogMessage.Type): UpdateReturn =>
       foldDrawer(model, payload.message),
     ClickedOpenDialog: (): UpdateReturn => {
       const [next, commands] = Drawer.open(model.dialog)
       return [
         evo(model, { dialog: () => next }),
-        Command.mapMessages(commands, (message) => GotDialogMessage({ message })),
+        Command.mapMessages(commands, (message) => Message.GotDialogMessage({ message })),
       ]
     },
   }),
-  samples: [ClickedOpenDialog()],
+  samples: [Message.ClickedOpenDialog()],
 })

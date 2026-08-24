@@ -13,10 +13,9 @@ import { DemoMenu } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'
 
-const Message = defineMessageUnion({
+export const Message = defineMessageUnion({
   GotMenuMessage: { message: menu.Message },
 })
-export const GotMenuMessage = Message.GotMenuMessage
 
 // Items mirror apps/v4/examples/base/dropdown-menu-demo.tsx (flat list;
 // foldcn's Menu has no checkbox/radio/submenu/destructive kinds — presentational gap noted in registry).
@@ -26,7 +25,18 @@ export const menuView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
     model: model.menu,
     view: DemoMenu.view,
     viewInputs: menu.viewInputs<string>({
-      items: ['Profile', 'Billing', 'Settings', 'Team', 'Invite users', 'New Team', 'GitHub', 'Support', 'API', 'Log out'],
+      items: [
+        'Profile',
+        'Billing',
+        'Settings',
+        'Team',
+        'Invite users',
+        'New Team',
+        'GitHub',
+        'Support',
+        'API',
+        'Log out',
+      ],
       buttonContent: h.span([], ['Open']),
       itemToConfig: (item, { isActive }) => ({
         className: isActive ? 'font-medium' : '',

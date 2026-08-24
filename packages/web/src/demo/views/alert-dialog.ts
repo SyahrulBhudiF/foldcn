@@ -1,5 +1,4 @@
 import { Match as M, Option } from 'effect'
-import { Schema as S } from 'effect'
 import { Command, Update } from 'foldkit'
 import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
@@ -22,7 +21,11 @@ export const alertDialogView = (model: Model, h: HtmlBuilder<AppMessage>): Html 
   h.div(
     [h.Class('flex flex-col items-start gap-4')],
     [
-      button<AppMessage>({ variant: 'outline', onClick: Message.ClickedOpenDialog() }, 'Show Dialog', h),
+      button<AppMessage>(
+        { variant: 'outline', onClick: Message.ClickedOpenDialog() },
+        'Show Dialog',
+        h,
+      ),
       h.submodel({
         slotId: model.dialog.id,
         model: model.dialog,
@@ -33,10 +36,9 @@ export const alertDialogView = (model: Model, h: HtmlBuilder<AppMessage>): Html 
               AlertDialog.header(
                 {},
                 [
-                  AlertDialog.title(title, {}, ['Are you absolutely sure?'], h),
+                  AlertDialog.title({ attributes: title }, ['Are you absolutely sure?'], h),
                   AlertDialog.description(
-                    description,
-                    {},
+                    { attributes: description },
                     [
                       'This action cannot be undone. This will permanently delete your account from our servers.',
                     ],
@@ -48,8 +50,8 @@ export const alertDialogView = (model: Model, h: HtmlBuilder<AppMessage>): Html 
               AlertDialog.footer(
                 {},
                 [
-                  AlertDialog.cancelButton(closeButton, {}, ['Cancel'], h),
-                  AlertDialog.actionButton(closeButton, {}, ['Continue'], h),
+                  AlertDialog.cancelButton({ attributes: closeButton }, ['Cancel'], h),
+                  AlertDialog.actionButton({ attributes: closeButton }, ['Continue'], h),
                 ],
                 h,
               ),

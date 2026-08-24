@@ -6,20 +6,10 @@ import * as Tabs from '@foldkit/ui/tabs'
 
 import * as Demo from './demo'
 import { parseRoute } from './route'
-import {
-  CompletedApplyTheme,
-  CompletedCopy,
-  CompletedLoadExternal,
-  CompletedNavigateInternal,
-  CompletedSavePackageManager,
-  CompletedSaveThemePreference,
-  CompletedScrollToTop,
-  GotDemoMessage,
-  GotInstallTabsMessage,
-  LoadedBrowserEnvironment,
-  type Message,
-} from './message'
+import { Message } from './message'
+import type { Message as AppMessage } from './message'
 import { Model, PackageManager, ResolvedTheme, ThemePreference } from './model'
+import * as ToggleGroup from '@foldcn/registry/styles/default/ui/toggle-group'
 
 export const THEME_STORAGE_KEY = 'foldcn-theme'
 export const PACKAGE_MANAGER_STORAGE_KEY = 'foldcn-package-manager'
@@ -27,12 +17,12 @@ export const PACKAGE_MANAGER_STORAGE_KEY = 'foldcn-package-manager'
 // Create a tabs bundle for package manager selection
 const PackageManagerTabs = Tabs.create<PackageManager>()
 
-type UpdateReturn = readonly [Model, ReadonlyArray<Command.Command<Message>>]
+type UpdateReturn = readonly [Model, ReadonlyArray<Command.Command<AppMessage>>]
 const withUpdateReturn = M.withReturnType<UpdateReturn>()
 
 const ApplyTheme = Command.define('ApplyTheme', {
   args: { theme: ResolvedTheme },
-  messages: [CompletedApplyTheme],
+  messages: [Message.CompletedApplyTheme],
   execute: ({ theme }) =>
     Effect.sync(() => {
       if (typeof document !== 'undefined') {
@@ -45,25 +35,25 @@ const ApplyTheme = Command.define('ApplyTheme', {
         const meta = document.querySelector('meta[name="theme-color"]')
         meta?.setAttribute('content', theme === 'Dark' ? '#09090b' : '#ffffff')
       }
-      return CompletedApplyTheme()
+      return Message.CompletedApplyTheme()
     }),
 })
 
 const SaveThemePreference = Command.define('SaveThemePreference', {
   args: { preference: ThemePreference },
-  messages: [CompletedSaveThemePreference],
+  messages: [Message.CompletedSaveThemePreference],
   execute: ({ preference }) =>
     Effect.sync(() => {
       if (typeof localStorage !== 'undefined') {
         localStorage.setItem(THEME_STORAGE_KEY, preference.toLowerCase())
       }
-      return CompletedSaveThemePreference()
+      return Message.CompletedSaveThemePreference()
     }),
 })
 
 const CopyText = Command.define('CopyText', {
   args: { value: S.String },
-  messages: [CompletedCopy],
+  messages: [Message.CompletedCopy],
   execute: ({ value }) =>
     Effect.gen(function* () {
       yield* Effect.promise(() =>
@@ -73,41 +63,41 @@ const CopyText = Command.define('CopyText', {
       )
       // Leave the "Copied" affordance visible for a beat before clearing.
       yield* Effect.sleep('1500 millis')
-      return CompletedCopy({ value })
+      return Message.CompletedCopy({ value })
     }),
 })
 
 const NavigateInternal = Command.define('NavigateInternal', {
   args: { url: S.String },
-  messages: [CompletedNavigateInternal],
-  execute: ({ url }) => pushUrl(url).pipe(Effect.as(CompletedNavigateInternal())),
+  messages: [Message.CompletedNavigateInternal],
+  execute: ({ url }) => pushUrl(url).pipe(Effect.as(Message.CompletedNavigateInternal())),
 })
 
 const ScrollToTop = Command.define('ScrollToTop', {
-  messages: [CompletedScrollToTop],
+  messages: [Message.CompletedScrollToTop],
   execute: Effect.sync(() => {
     if (typeof window !== 'undefined') {
       window.scrollTo(0, 0)
     }
-    return CompletedScrollToTop()
+    return Message.CompletedScrollToTop()
   }),
 })
 
 const LoadExternal = Command.define('LoadExternal', {
   args: { href: S.String },
-  messages: [CompletedLoadExternal],
-  execute: ({ href }) => load(href).pipe(Effect.as(CompletedLoadExternal())),
+  messages: [Message.CompletedLoadExternal],
+  execute: ({ href }) => load(href).pipe(Effect.as(Message.CompletedLoadExternal())),
 })
 
 const SavePackageManager = Command.define('SavePackageManager', {
   args: { packageManager: PackageManager },
-  messages: [CompletedSavePackageManager],
+  messages: [Message.CompletedSavePackageManager],
   execute: ({ packageManager }) =>
     Effect.sync(() => {
       if (typeof localStorage !== 'undefined') {
         localStorage.setItem(PACKAGE_MANAGER_STORAGE_KEY, packageManager)
       }
-      return CompletedSavePackageManager()
+      return Message.CompletedSavePackageManager()
     }),
 })
 
@@ -150,14 +140,51 @@ const systemPrefersDark = (): ResolvedTheme =>
 const resolveTheme = (model: Model, preference: ThemePreference): ResolvedTheme =>
   preference === 'System' ? systemPrefersDark() : preference
 
+/** Stores a theme preference, resolves it against the system scheme, applies
+ *  it, persists it, and mirrors the selection onto the header's ToggleGroup
+ *  submodel. Shared by the direct SelectedThemePreference message and the
+ *  ToggleGroup's ChangedValue out-message. */
+const applyThemePreference = (model: Model, preference: ThemePreference): UpdateReturn => [
+  evo(model, {
+    maybeThemePreference: () => Option.some(preference),
+    resolvedTheme: () => resolveTheme(model, preference),
+    themeToggleGroup: () => ToggleGroup.reflect(model.themeToggleGroup, [preference]),
+  }),
+  [ApplyTheme({ theme: resolveTheme(model, preference) }), SaveThemePreference({ preference })],
+]
+
+const foldThemeToggleGroup = (model: Model, message: ToggleGroup.Message): UpdateReturn => {
+  const [next, commands, maybeOutMessage] = ToggleGroup.update(model.themeToggleGroup, message)
+  const mappedCommands = Command.mapMessages(commands, (m) =>
+    Message.GotThemeToggleGroupMessage({ message: m }),
+  )
+
+  return Option.match(maybeOutMessage, {
+    onNone: () => [evo(model, { themeToggleGroup: () => next }), mappedCommands],
+    onSome: (outMessage) => {
+      switch (outMessage._tag) {
+        case 'ChangedValue': {
+          const raw = outMessage.value[0]
+          const preference =
+            raw === 'Light' || raw === 'Dark' || raw === 'System'
+              ? raw
+              : // Ignore deselect (single toggle clears on re-click) — keep current preference.
+                (Option.getOrUndefined(model.maybeThemePreference) ?? 'System')
+          return applyThemePreference(model, preference)
+        }
+      }
+    },
+  })
+}
+
 /** Boot-time load of everything only the browser knows: the stored theme
  *  preference and package manager plus the live system color scheme. init
  *  stays deterministic so hydration adopts the prerendered DOM; the runtime
  *  runs this Command once hydration has completed and never during SSR. */
 export const LoadBrowserEnvironment = Command.define('LoadBrowserEnvironment', {
-  messages: [LoadedBrowserEnvironment],
+  messages: [Message.LoadedBrowserEnvironment],
   execute: Effect.sync(() =>
-    LoadedBrowserEnvironment({
+    Message.LoadedBrowserEnvironment({
       maybePreference: readStoredPreference(),
       systemTheme: systemPrefersDark(),
       packageManager: readStoredPackageManager(),
@@ -166,19 +193,22 @@ export const LoadBrowserEnvironment = Command.define('LoadBrowserEnvironment', {
 })
 
 const foldDemo = (model: Model, message: Demo.DemoMessage): UpdateReturn => {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   const [nextDemo, demoCommands] = Demo.update(model.demo, message) as unknown as [
     Demo.DemoModel,
     ReadonlyArray<Command.Command<Demo.DemoMessage>>,
   ]
   return [
     evo(model, { demo: () => nextDemo }),
-    Command.mapMessages(demoCommands, (m) => GotDemoMessage({ message: m })),
+    Command.mapMessages(demoCommands, (m) => Message.GotDemoMessage({ message: m })),
   ]
 }
 
 const foldInstallTabs = (model: Model, message: Tabs.Message): UpdateReturn => {
   const [next, commands, maybeOutMessage] = PackageManagerTabs.update(model.installTabs, message)
-  const mappedCommands = Command.mapMessages(commands, (m) => GotInstallTabsMessage({ message: m }))
+  const mappedCommands = Command.mapMessages(commands, (m) =>
+    Message.GotInstallTabsMessage({ message: m }),
+  )
 
   return Option.match(maybeOutMessage, {
     onNone: () => [evo(model, { installTabs: () => next }), mappedCommands],
@@ -200,7 +230,7 @@ const foldInstallTabs = (model: Model, message: Tabs.Message): UpdateReturn => {
   })
 }
 
-export const update = (model: Model, message: Message): UpdateReturn =>
+export const update = (model: Model, message: AppMessage): UpdateReturn =>
   M.value(message).pipe(
     withUpdateReturn,
     M.tagsExhaustive({
@@ -215,17 +245,9 @@ export const update = (model: Model, message: Message): UpdateReturn =>
       ChangedUrl: ({ url }) => [evo(model, { route: () => parseRoute(url) }), [ScrollToTop()]],
       GotDemoMessage: ({ message }) => foldDemo(model, message),
       GotInstallTabsMessage: ({ message }) => foldInstallTabs(model, message),
+      GotThemeToggleGroupMessage: ({ message }) => foldThemeToggleGroup(model, message),
 
-      SelectedThemePreference: ({ preference }) => [
-        evo(model, {
-          maybeThemePreference: () => Option.some(preference),
-          resolvedTheme: () => resolveTheme(model, preference),
-        }),
-        [
-          ApplyTheme({ theme: resolveTheme(model, preference) }),
-          SaveThemePreference({ preference }),
-        ],
-      ],
+      SelectedThemePreference: ({ preference }) => applyThemePreference(model, preference),
       ChangedSystemTheme: ({ theme }) =>
         Option.exists(model.maybeThemePreference, (p) => p === 'System')
           ? [evo(model, { resolvedTheme: () => theme }), [ApplyTheme({ theme })]]
@@ -244,6 +266,14 @@ export const update = (model: Model, message: Message): UpdateReturn =>
             maybeThemePreference: () => maybePreference,
             resolvedTheme: () => resolvedTheme,
             selectedPackageManager: () => packageManager,
+            themeToggleGroup: () =>
+              ToggleGroup.reflect(
+                model.themeToggleGroup,
+                Option.match(maybePreference, {
+                  onNone: () => [],
+                  onSome: (preference) => [preference],
+                }),
+              ),
           }),
           // Re-applies the class the inline head script already set pre-paint,
           // keeping documentElement and the meta theme-color on one code path.

@@ -31,7 +31,7 @@ export const checkboxView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
         {
           id: 'terms-checkbox-2',
           label: 'Accept terms and conditions',
-          maybeDescription: 'By clicking this checkbox, you agree to the terms.',
+          description: 'By clicking this checkbox, you agree to the terms.',
           isChecked: model.isCheckboxWithDescriptionChecked,
           onToggle: (isChecked) => Message.ToggledCheckboxWithDescription({ isChecked }),
         },
@@ -51,7 +51,7 @@ export const checkboxView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
         {
           id: 'toggle-checkbox-2',
           label: 'Enable notifications',
-          maybeDescription: 'You can enable or disable notifications at any time.',
+          description: 'You can enable or disable notifications at any time.',
           isChecked: model.isCheckboxNotificationsChecked,
           onToggle: (isChecked) => Message.ToggledCheckboxNotifications({ isChecked }),
         },
@@ -76,7 +76,11 @@ export const slice = defineSlice({
     isCheckboxWithDescriptionChecked: true,
     isCheckboxNotificationsChecked: false,
   },
-  messages: [Message.ToggledCheckbox, Message.ToggledCheckboxWithDescription, Message.ToggledCheckboxNotifications],
+  messages: [
+    Message.ToggledCheckbox,
+    Message.ToggledCheckboxWithDescription,
+    Message.ToggledCheckboxNotifications,
+  ],
   handlers: (model: State) => ({
     ToggledCheckbox: ({ isChecked }: typeof Message.ToggledCheckbox.Type): UpdateReturn => [
       evo(model, { isCheckboxChecked: () => isChecked }),

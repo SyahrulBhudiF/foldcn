@@ -12,9 +12,11 @@ export const buttonView = (model: Model, h: HtmlBuilder<Message>): Html =>
     [h.Class('flex flex-wrap items-center gap-2 md:flex-row')],
     [
       button<Message>({ variant: 'outline' }, 'Button', h),
-      button<Message>({ variant: 'outline', size: 'icon' }, icon(h, ArrowUp), h, [
-        h.AriaLabel('Submit'),
-      ]),
+      button<Message>(
+        { variant: 'outline', size: 'icon', attributes: [h.AriaLabel('Submit')] },
+        icon(h, ArrowUp),
+        h,
+      ),
     ],
   )
 

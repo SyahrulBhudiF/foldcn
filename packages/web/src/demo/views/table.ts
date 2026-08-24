@@ -94,11 +94,7 @@ export const tableView = (model: Model, h: HtmlBuilder<Message>): Html =>
             {},
             [
               h.td(
-                [
-                  h.Class('cn-table-cell'),
-                  h.DataAttribute('slot', 'table-cell'),
-                  h.Colspan(3),
-                ],
+                [h.Class('cn-table-cell'), h.DataAttribute('slot', 'table-cell'), h.Colspan(3)],
                 ['Total'],
               ),
               Table.cell({ className: 'text-right' }, ['$2,500.00'], h),

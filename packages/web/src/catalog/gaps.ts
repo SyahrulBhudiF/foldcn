@@ -27,10 +27,7 @@ export const gapsByItem: Readonly<Record<string, ReadonlyArray<string>>> = {
     'Collapsed-mode menu-button tooltips are not auto-composed — wrap menu buttons in Tooltip submodels yourself if you need them.',
   ],
   toast: [
-    'No swipe-to-dismiss or stacked scale/peek choreography — auto-dismiss and manual close work as expected.',
-  ],
-  sonner: [
-    'No swipe-to-dismiss or stack expansion — auto-dismiss and manual close work as expected.',
+    'No swipe-to-dismiss — foldkit has no pointer-move gesture primitive yet. Auto-dismiss, hover-pause, hover-to-expand and manual close work as expected.',
   ],
   drawer: ['Bottom-docked modal with handle visuals — no drag/snap gestures.'],
   resizable: [

@@ -19,7 +19,12 @@ const Message = defineMessageUnion({
 // selection) are inert in foldcn (see registry/default/ui/command.ts).
 const GROUPS: ReadonlyArray<{
   heading: string
-  items: ReadonlyArray<{ label: string; icon: typeof Calendar; disabled?: boolean; shortcut?: string }>
+  items: ReadonlyArray<{
+    label: string
+    icon: typeof Calendar
+    disabled?: boolean
+    shortcut?: string
+  }>
 }> = [
   {
     heading: 'Suggestions',

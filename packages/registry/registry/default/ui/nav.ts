@@ -14,13 +14,13 @@ export const navLinkClass =
 
 export type NavConfig<M, Value extends string = string> = Readonly<{
   items: ReadonlyArray<Value>
-  ariaLabel: string
   toHref: (value: Value, index: number) => string
   isItemCurrent: (value: Value, index: number) => boolean
+  toLabel: (value: Value, index: number) => Html | string
+  ariaLabel: string
   onItemClick?: (value: Value, index: number) => M
   className?: string
   linkClass?: string
-  toLabel: (value: Value, index: number) => Html | string
 }>
 
 /** Styled navigation landmark built on the @foldkit/ui Nav helper. The

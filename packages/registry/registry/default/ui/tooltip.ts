@@ -1,3 +1,7 @@
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as Tooltip from '@/components/ui/tooltip'`
+ */
 import { Tooltip as FoldkitTooltip } from '@foldkit/ui'
 import type { AnchorConfig } from '@foldkit/ui/tooltip'
 import type { Html, HtmlBuilder } from 'foldkit/html'
@@ -52,7 +56,7 @@ export const tooltipTriggerClass =
 /**
  * The foldkit anchor writes the resolved side to `data-placement`; this view
  * additionally emits `data-side` so upstream's data-[side=…] variants resolve.
- * 
+ *
  */
 export const tooltipContentClass =
   'cn-tooltip-content cn-tooltip-content-logical z-50 w-fit max-w-xs origin-(--transform-origin) bg-foreground text-background'

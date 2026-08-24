@@ -1,13 +1,10 @@
 # Contributing to foldcn
 
-Thanks for your interest in contributing! Here's how to get started.
+Thanks for picking this up! This doc covers the implicit stuff like the gotchas and conventions you won't get from just browsing the tree. Your agents can explore the codebase freely; use this as the cheat sheet :)
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) ≥ 20
-- [pnpm](https://pnpm.io/) 11+
-
-## Setup
+- Node ≥ 20, pnpm 11+
 
 ```bash
 git clone git@github.com:elianiva/foldcn.git
@@ -15,74 +12,66 @@ cd foldcn
 pnpm install
 ```
 
-## Project structure
+## How it fits together
 
-```
-foldcn/
-├── packages/
-│   ├── registry/          ← shadcn registry manifests + component sources
-│   │   └── registry/default/
-│   │       ├── style/     ← base style (CSS vars, deps)
-│   │       ├── ui/        ← individual components (.ts)
-│   │       ├── lib/       ← utilities (cn, icons)
-│   │       └── blocks/    ← composed page sections
-│   └── web/               ← showcase site (Foldkit SSG app)
-└── alchemy.run.ts         ← Cloudflare deployment
-```
+- **Authored source** lives in `packages/registry/registry/default/`, one file per component.
+- **Resolved source** in `packages/registry/styles/default/` is gitignored and generated. Don't edit it. They're generated based on the selected shadcn style based on the components in the registry.
+- **Showcase site** in `packages/web/` auto-discovers components and demos as long as you follow the convention.
 
-## Development workflow
+Check `CONTEXT.md` for ADRs and `docs/deriving-from-base.md` for the full derivation recipe.
+
+## The two things that will bite you
+
+**1. `cn-*` tokens, not real classes**
+
+Authored components emit only `cn-*` tokens (e.g. `cn-button cn-button-variant-default`), kept character-identical to upstream shadcn base so diffs stay clean. `scripts/resolve-styles.mjs` swaps them for concrete Tailwind classes at build time.
+
+- Never inline resolved utilities in authored files.
+- Never edit vendored `registry/styles/style-*.css` (byte-identical to upstream). Foldkit-specific deltas go in `registry/default/style/cn-compat.css`.
+
+**2. Never run bare `shadcn build`**
+
+It would ship unresolved `cn-*` tokens. Always:
 
 ```bash
-pnpm dev          # start the showcase site
-pnpm typecheck    # typecheck all packages
-pnpm test         # run tests
+pnpm --filter @foldcn/registry run build   # resolve → shadcn build → token swap
+```
+
+For local dev / typecheck / tests, the web's `predev`/`prebuild` hooks re-resolve automatically — just run:
+
+```bash
+pnpm dev          # showcase site
+pnpm typecheck
+pnpm test
+pnpm validate     # registry schema check
 ```
 
 ## Adding a component
 
-Contributing a component is a **3-touchpoint flow** — the showcase site derives its catalog, source display and demo registration automatically from the registry manifests and demo files. No site code needs to change.
+Three things:
 
-1. **Create the source file** at `packages/registry/registry/default/ui/<name>.ts`. It must be a self-contained module — types, logic, and styled view all in one file. Follow one of the three established patterns:
-   - **Stateless helpers** (Button, Input, etc.): export a view function that takes a config object + builder callback.
-   - **Stateful submodels** (Dialog, Popover, etc.): re-export `init`, `update`, `view` from `@foldkit/ui` plus a `styledViewInputs` factory.
-   - **List-style submodels** (Menu, Listbox, etc.): use the `create<Value>()` bundle pattern.
+**1. Source** - `packages/registry/registry/default/ui/<name>.ts`
+Self-contained module: types, logic, styled view in one file. Match the pattern of a nearby component (helper vs submodel vs presentational. See `CONTEXT.md` ADR-011).
 
-2. **Register it** in `packages/registry/registry/default/ui/registry.json` with `name`, `type` (`registry:ui`), `title`, `description` and `registryDependencies`. Declare `dependencies` only for packages beyond what the base style already installs (see ADR-006 in CONTEXT.md).
+**2. Manifest** - `packages/registry/registry/default/ui/registry.json`
+Add `name`, `type`, `title`, `description`, `files`. Only declare `dependencies` beyond what the base style already provides (`foldkit`, `effect`, `@foldkit/ui`, `clsx`, `tailwind-merge`, `lucide`, `tw-animate-css`). If it intentionally diverges from shadcn (primitive ceiling, no pointer anchoring, etc.), add a short note to `packages/web/src/catalog/gaps.ts`.
 
-3. **Add a demo view** at `packages/web/src/demo/views/<name>.ts` exporting `<camel>NameView(model, h)` (e.g. `buttonView`). The showcase picks it up automatically for its catalog, source display and demo registration.
+**3. Demo** - `packages/web/src/demo/views/<name>.ts`
+Export a `slice` + view. Import from `@foldcn/registry/styles/default/ui/<name>` (the resolved path, not the authored one). `assemble.ts` picks it up automatically. See any existing file in `demo/views/`. The shape is always the same.
 
-Then validate and build:
+Then:
 
 ```bash
-pnpm --filter @foldcn/registry validate   # schema gate for the manifests
-pnpm --filter @foldcn/registry build      # resolve styles + build + ship
+pnpm --filter @foldcn/registry run validate
+pnpm typecheck && pnpm test
 ```
 
-> **Never run bare `npx shadcn build`** — it would ship unresolved `cn-*` token classes. Always go through `scripts/build.mjs`, which runs `resolve-styles.mjs` first, then the shadcn build, then swaps in the resolved sources.
+## Submitting
 
-## Code conventions
+Fork, branch, keep commits focused, run `pnpm fmt && pnpm typecheck && pnpm test && pnpm validate`, open a PR with what/why.
 
-- **Pure Foldkit** — no React. Model/Message/update/View throughout.
-- **TypeScript strict** — `noUncheckedIndexedAccess`, no `any`.
-- **Single-file modules** — each component is one `.ts` file.
-- **`@/` aliases** — imports use `@/lib/utils`, `@/components/ui/*` (rewritten on install).
-- **Tailwind CSS** — style via shadcn's CSS variable tokens (`bg-background`, `text-foreground`, etc.).
-
-## Submitting changes
-
-1. Fork the repo and create a feature branch.
-2. Make your changes, keeping commits focused.
-3. Run `pnpm typecheck && pnpm test` before pushing.
-4. Open a PR with a clear description of what changed and why.
-
-## Reporting issues
-
-Open an issue on [GitHub](https://github.com/elianiva/foldcn/issues) with:
-
-- What you expected to happen
-- What actually happened
-- Steps to reproduce
+Issues → [github.com/elianiva/foldcn/issues](https://github.com/elianiva/foldcn/issues)
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the [MIT License](LICENSE).
+By contributing, you agree your contributions are [MIT](LICENSE).

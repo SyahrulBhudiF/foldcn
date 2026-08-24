@@ -21,7 +21,7 @@ export const textareaWrapperClass = 'group/field flex flex-col gap-1.5 w-full'
 export type TextareaConfig<M> = Readonly<{
   id: string
   label: string
-  maybeDescription?: string
+  description?: string
   onInput?: (value: string) => M
   value?: string
   isDisabled?: boolean
@@ -72,14 +72,14 @@ export const textarea = <M>(config: TextareaConfig<M>, h: HtmlBuilder<M>): Html 
               h.DataAttribute('slot', 'textarea'),
               h.Class(cn(textareaClass, config.className)),
             ]),
-            config.maybeDescription === undefined
+            config.description === undefined
               ? h.empty
               : h.span(
                   [
                     ...attributes.description,
                     h.Class(cn(textareaDescriptionClass, config.descriptionClass)),
                   ],
-                  [config.maybeDescription],
+                  [config.description],
                 ),
           ],
         ),

@@ -1,4 +1,4 @@
-import { Command, Update } from 'foldkit'
+import { Update } from 'foldkit'
 import { Match as M, Option } from 'effect'
 import { Schema as S } from 'effect'
 import { evo } from 'foldkit/struct'
@@ -16,8 +16,6 @@ const Message = defineMessageUnion({
   GotAnimationMessage: { message: animation.Message },
   ToggledAnimation: {},
 })
-const GotAnimationMessage = Message.GotAnimationMessage
-const ToggledAnimation = Message.ToggledAnimation
 
 export const animationView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
@@ -26,7 +24,7 @@ export const animationView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
       h.button(
         [
           h.Class('rounded-md border border-input bg-background px-4 py-2 text-sm font-medium'),
-          h.OnClick(ToggledAnimation()),
+          h.OnClick(Message.ToggledAnimation()),
         ],
         [model.isAnimationShowing ? 'Hide content' : 'Show content'],
       ),
@@ -49,7 +47,7 @@ export const animationView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
             ],
           ),
         }),
-        toParentMessage: (message) => GotAnimationMessage({ message }),
+        toParentMessage: (message) => Message.GotAnimationMessage({ message }),
       }),
     ],
   )
@@ -73,7 +71,7 @@ const foldAnimation = Update.foldChild({
   update: animation.update,
   read: (model: State) => Option.some(model.animation),
   write: (model, next) => evo(model, { animation: () => next }),
-  toParentMessage: (message) => GotAnimationMessage({ message }),
+  toParentMessage: (message) => Message.GotAnimationMessage({ message }),
   foldOutMessage: foldAnimationOutMessage,
 })
 
@@ -91,9 +89,9 @@ export const slice = defineSlice({
     animation: animation.init({ id: 'animation-demo' }),
     isAnimationShowing: false,
   },
-  messages: [GotAnimationMessage, ToggledAnimation],
+  messages: [Message.GotAnimationMessage, Message.ToggledAnimation],
   handlers: (model: State) => ({
-    GotAnimationMessage: (payload: typeof GotAnimationMessage.Type): UpdateReturn =>
+    GotAnimationMessage: (payload: typeof Message.GotAnimationMessage.Type): UpdateReturn =>
       foldAnimation(model, payload.message),
     ToggledAnimation: (): UpdateReturn => {
       const nextShowing = !model.isAnimationShowing
@@ -103,5 +101,5 @@ export const slice = defineSlice({
       )
     },
   }),
-  samples: [ToggledAnimation()],
+  samples: [Message.ToggledAnimation()],
 })

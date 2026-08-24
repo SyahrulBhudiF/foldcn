@@ -1,3 +1,7 @@
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as FileDrop from '@/components/ui/file-drop'`
+ */
 import { FileDrop as FoldkitFileDrop } from '@foldkit/ui'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 

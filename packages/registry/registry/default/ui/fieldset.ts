@@ -256,7 +256,7 @@ export const fieldError = <M>(
 export type FieldsetConfig = Readonly<{
   id: string
   legend: string
-  maybeDescription?: string
+  description?: string
   isDisabled?: boolean
   className?: string
   legendClass?: string
@@ -290,7 +290,7 @@ export const fieldset = <M>(config: FieldsetConfig, h: HtmlBuilder<M>): Html =>
               ],
               [config.legend],
             ),
-            config.maybeDescription === undefined
+            config.description === undefined
               ? h.empty
               : h.p(
                   [
@@ -298,7 +298,7 @@ export const fieldset = <M>(config: FieldsetConfig, h: HtmlBuilder<M>): Html =>
                     h.DataAttribute('slot', 'field-description'),
                     h.Class(cn(fieldDescriptionClass, config.descriptionClass)),
                   ],
-                  [config.maybeDescription],
+                  [config.description],
                 ),
             h.div(
               [

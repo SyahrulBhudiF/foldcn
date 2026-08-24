@@ -5,8 +5,15 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
-    "test": {},
-    "typecheck": {},
+    "resolve": {
+      "outputs": ["styles/**"]
+    },
+    "test": {
+      "dependsOn": ["^resolve"]
+    },
+    "typecheck": {
+      "dependsOn": ["^resolve"]
+    },
     "validate": {},
     "dev": {
       "cache": false,

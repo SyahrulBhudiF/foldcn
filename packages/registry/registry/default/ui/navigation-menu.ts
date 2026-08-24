@@ -1,3 +1,7 @@
+/** ⚠ BEHAVIOR GAP vs upstream shadcn: purely presentational — no trigger/content show-hide behavior, unlike upstream's navigation menu.
+ *  The styled surface matches, but this behavior is absent — do not use
+ *  where that behavior is required.
+ */
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { cn } from '@/lib/utils'

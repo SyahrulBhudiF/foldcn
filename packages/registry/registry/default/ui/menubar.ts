@@ -1,3 +1,11 @@
+/** ⚠ BEHAVIOR GAP vs upstream shadcn: each trigger is an independent menu bundle — no ArrowLeft/Right traversal between menus and no open-on-hover-of-next-trigger.
+ *  The styled surface matches, but this behavior is absent — do not use
+ *  where that behavior is required.
+ */
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as Menubar from '@/components/ui/menubar'`
+ */
 import { Menu as FoldkitMenu } from '@foldkit/ui'
 import type { AnchorConfig } from '@foldkit/ui/menu'
 import type { Html, HtmlBuilder } from 'foldkit/html'

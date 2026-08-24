@@ -16,16 +16,8 @@ export const cardView = (model: Model, h: HtmlBuilder<Message>): Html =>
         {},
         [
           Card.title<Message>({}, ['Login to your account'], h),
-          Card.description<Message>(
-            {},
-            ['Enter your email below to login to your account'],
-            h,
-          ),
-          Card.action<Message>(
-            {},
-            [button<Message>({ variant: 'link' }, 'Sign Up', h)],
-            h,
-          ),
+          Card.description<Message>({}, ['Enter your email below to login to your account'], h),
+          Card.action<Message>({}, [button<Message>({ variant: 'link' }, 'Sign Up', h)], h),
         ],
         h,
       ),
@@ -88,11 +80,7 @@ export const cardView = (model: Model, h: HtmlBuilder<Message>): Html =>
         { className: 'flex-col gap-2' },
         [
           button<Message>({ type: 'submit', className: 'w-full' }, 'Login', h),
-          button<Message>(
-            { variant: 'outline', className: 'w-full' },
-            'Login with Google',
-            h,
-          ),
+          button<Message>({ variant: 'outline', className: 'w-full' }, 'Login with Google', h),
         ],
         h,
       ),

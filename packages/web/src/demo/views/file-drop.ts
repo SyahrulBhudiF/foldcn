@@ -16,8 +16,6 @@ const Message = defineMessageUnion({
   GotFileDropMessage: { message: fileDrop.Message },
   ClickedRemoveFile: { fileIndex: S.Number },
 })
-const GotFileDropMessage = Message.GotFileDropMessage
-const ClickedRemoveFile = Message.ClickedRemoveFile
 
 export const fileDropView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
@@ -41,7 +39,7 @@ export const fileDropView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           },
           h,
         ),
-        toParentMessage: (message) => GotFileDropMessage({ message }),
+        toParentMessage: (message) => Message.GotFileDropMessage({ message }),
       }),
       ...model.fileDropFiles.map((_, index) =>
         h.div(
@@ -55,7 +53,7 @@ export const fileDropView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
             h.button(
               [
                 h.Class('text-sm text-muted-foreground transition-colors hover:text-destructive'),
-                h.OnClick(ClickedRemoveFile({ fileIndex: index })),
+                h.OnClick(Message.ClickedRemoveFile({ fileIndex: index })),
               ],
               ['Remove'],
             ),
@@ -82,7 +80,7 @@ const foldFileDrop = Update.foldChild({
   update: fileDrop.update,
   read: (model: State) => Option.some(model.fileDrop),
   write: (model, next) => evo(model, { fileDrop: () => next }),
-  toParentMessage: (message) => GotFileDropMessage({ message }),
+  toParentMessage: (message) => Message.GotFileDropMessage({ message }),
   foldOutMessage: foldFileDropOutMessage,
 })
 
@@ -100,11 +98,11 @@ export const slice = defineSlice({
     fileDrop: fileDrop.init({ id: 'file-drop-demo' }),
     fileDropFiles: [],
   },
-  messages: [GotFileDropMessage, ClickedRemoveFile],
+  messages: [Message.GotFileDropMessage, Message.ClickedRemoveFile],
   handlers: (model: State) => ({
-    GotFileDropMessage: (payload: typeof GotFileDropMessage.Type): UpdateReturn =>
+    GotFileDropMessage: (payload: typeof Message.GotFileDropMessage.Type): UpdateReturn =>
       foldFileDrop(model, payload.message),
-    ClickedRemoveFile: ({ fileIndex }: typeof ClickedRemoveFile.Type): UpdateReturn => [
+    ClickedRemoveFile: ({ fileIndex }: typeof Message.ClickedRemoveFile.Type): UpdateReturn => [
       evo(model, {
         fileDropFiles: () => Array.remove(model.fileDropFiles, fileIndex),
       }),

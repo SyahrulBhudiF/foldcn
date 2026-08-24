@@ -35,7 +35,7 @@ Users configure `components.json` with `"@foldcn": "https://foldcn.elianiva.com/
 
 ### ADR-004: Self-contained component modules
 
-Each `registry:ui` item is a single `.ts` file containing everything: Model type, Message type, update function, and styled view function. Users copy the file and it works — no manual wiring of types. For stateless helpers (Button, Input, etc.), the file exports a view function. For stateful submodels (Dialog, Menu, etc.), it re-exports init/update/view from @foldkit/ui with styled view wrappers.
+Each `registry:ui` item is a single `.ts` file containing everything: Model type, Message type, update function, and styled view function. Users copy the file and it works — no manual wiring of types. For stateless helpers (Button, Input, etc.), the file exports a view function. For stateful submodels (Dialog, Menu, etc.), the file exports Model/Message/OutMessage/init/update/view wired via `h.submodel` — either re-exported from a backing @foldkit/ui submodel or, when no such primitive exists (toggle, toggle-group, accordion, collapsible, resizable), authored in the file itself following the same conventions.
 
 ### ADR-005: Tailwind CSS with shadcn's token vocabulary
 
@@ -94,12 +94,12 @@ All 60 `registry:ui` items from `packages/registry/registry/default/ui/registry.
 | button      | Styled button with variants and sizes, built on the @foldkit/ui Button helper.                             |
 | input       | Styled text input with label and description, built on the @foldkit/ui Input helper.                       |
 | textarea    | Styled multi-line textarea with label and description, built on the @foldkit/ui Textarea helper.           |
-| select      | Styled native select with label, chevron and description, built on the @foldkit/ui Select helper.          |
+| select      | Styled custom dropdown select (single/multi) backed by the @foldkit/ui Listbox submodel — a real submodel you embed via h.submodel. For a plain native `<select>` helper, use native-select. |
+| native-select | Styled native `<select>` with label, chevron and description, built on the @foldkit/ui Select helper. Stateless; for a searchable dropdown submodel use select. |
 | card        | Composable card primitives (Card…CardFooter). A pure layout primitive.                                     |
 | checkbox    | Styled checkbox with label, indeterminate state and description, built on the @foldkit/ui Checkbox helper. |
 | switch      | Styled switch toggle with label and description, built on the @foldkit/ui Switch helper.                   |
 | fieldset    | Styled fieldset with legend and description, built on the @foldkit/ui Fieldset helper.                     |
-| collapsible | Single-section collapsible panel with animated support, built on the @foldkit/ui Disclosure helper.        |
 | nav         | Styled navigation landmark with current-page marking, built on the @foldkit/ui Nav helper.                 |
 
 ### Stateful submodels (registry:ui)
@@ -117,11 +117,16 @@ All 60 `registry:ui` items from `packages/registry/registry/default/ui/registry.
 | slider        | Styled numeric range slider, built on the @foldkit/ui Slider submodel.                                           |
 | calendar      | Styled inline calendar grid with locale support, built on the @foldkit/ui Calendar submodel.                     |
 | date-picker   | Styled date picker combining trigger, popover and calendar, built on the @foldkit/ui DatePicker submodel.        |
-| toast         | Styled transient notification stack with auto-dismiss, built on the @foldkit/ui Toast component.                 |
+| toast         | Stacked toast notifications matching Base UI's measured-height choreography (uniform collapsed stack, hover-to-expand, limit 3), built on the @foldkit/ui Toast submodel wrapped with a height-measuring model. |
 | animation     | Styled enter/leave animation coordinator, built on the @foldkit/ui Animation submodel.                           |
 | drag-and-drop | Styled sortable lists and cross-container movement, built on the @foldkit/ui DragAndDrop submodel.               |
 | file-drop     | Styled file input with drag-and-drop support, built on the @foldkit/ui FileDrop submodel.                        |
 | virtual-list  | Styled virtualized list for large datasets, built on the @foldkit/ui VirtualList submodel.                       |
+| collapsible   | Stateful single-section collapsible panel, built on the @foldkit/ui Disclosure helper.                           |
+| accordion     | Vertical stack of collapsible sections with single or multi-open semantics, built on the @foldkit/ui Disclosure helper. |
+| toggle        | Stateful two-state toggle button marked with aria-pressed and data-state.                                        |
+| toggle-group  | Stateful group of toggles with shared single or multiple selection.                                              |
+| resizable     | Stateful two-pane split with a draggable, keyboard-accessible handle.                                            |
 
 ### Presentational ports (registry:ui)
 
@@ -147,22 +152,16 @@ Pure-layout ports of shadcn's presentational components — no submodel backing 
 | sheet           | Edge-anchored modal panel (top/bottom/left/right), built on the @foldkit/ui Dialog submodel.                |
 | drawer          | Bottom-docked modal with grab handle, built on the @foldkit/ui Dialog submodel.                             |
 | hover-card      | Card-styled floating panel, built on the @foldkit/ui Popover submodel.                                      |
-| accordion       | Vertical stack of collapsible sections with rotating chevron, built on the @foldkit/ui Disclosure helper.   |
-| collapsible     | Single-section collapsible panel, built on the @foldkit/ui Disclosure helper — see `collapsible`.           |
 | context-menu    | Right-click style menu, built on the @foldkit/ui Menu submodel.                                             |
 | menubar         | Horizontal bar of menus, built on the @foldkit/ui Menu submodel.                                            |
-| sonner          | Stacked auto-dismissing notifications, built on the @foldkit/ui Toast submodel.                             |
 | button-group    | Connected run of buttons forming a single segmented control, built on the @foldkit/ui Button helper.        |
 | input-group     | Shared bordered box with text/icon add-ons around a connected input, built on the @foldkit/ui Input helper. |
-| toggle          | Two-state toggle button marked with aria-pressed and data-state.                                            |
-| toggle-group    | Connected group of toggles with shared single or multiple selection.                                        |
 | input-otp       | Row of single-character slots backed by one combined value.                                                 |
 | breadcrumb      | Presentational breadcrumb landmark with list, link, page and separator builders.                            |
 | navigation-menu | Presentational top-level navigation bar with trigger and content builders.                                  |
 | sidebar         | Presentational sidebar layout — provider, rail, menu, group and inset builders.                             |
 | table           | Presentational table with header, body, footer, row, head, cell and caption builders.                       |
 | command         | Presentational command-palette surface with input, list, group and item builders.                           |
-| resizable       | Two-pane split with a draggable, keyboard-accessible handle.                                                |
 
 ### Utilities (registry:lib)
 

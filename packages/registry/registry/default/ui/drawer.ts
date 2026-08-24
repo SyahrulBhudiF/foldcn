@@ -1,3 +1,7 @@
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as Drawer from '@/components/ui/drawer'`
+ */
 import { Dialog as FoldkitDialog } from '@foldkit/ui'
 import type { Attribute, ChildAttribute, Html, HtmlBuilder } from 'foldkit/html'
 
@@ -96,10 +100,15 @@ export const drawerFooterClass = 'cn-drawer-footer-base mt-auto flex shrink-0 fl
  *  styles it as `<Button variant="outline">`. */
 export const drawerCloseButtonClass = 'cn-button cn-button-variant-outline cn-button-size-default'
 
-type StyleConfig = Readonly<{ className?: string }>
+type StyleConfig<M> = Readonly<{
+  className?: string
+  /** Submodel-provided attributes (from the `styledViewInputs` content
+   *  callback render bundle) to merge onto the element. */
+  attributes?: ReadonlyArray<Attribute<M> | ChildAttribute>
+}>
 
 /** Grab handle (upstream DrawerSwipeHandle; aria-hidden). */
-export const handle = <M>(config: StyleConfig, h: HtmlBuilder<M>): Html =>
+export const handle = <M>(config: StyleConfig<M>, h: HtmlBuilder<M>): Html =>
   h.div(
     [
       h.AriaHidden(true),
@@ -110,7 +119,7 @@ export const handle = <M>(config: StyleConfig, h: HtmlBuilder<M>): Html =>
   )
 
 export const header = <M>(
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
@@ -120,14 +129,13 @@ export const header = <M>(
   )
 
 export const title = <M>(
-  attributes: ReadonlyArray<Attribute<M> | ChildAttribute>,
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
   h.h2(
     [
-      ...attributes,
+      ...(config.attributes ?? []),
       h.DataAttribute('slot', 'drawer-title'),
       h.Class(cn(drawerTitleClass, config.className)),
     ],
@@ -135,14 +143,13 @@ export const title = <M>(
   )
 
 export const description = <M>(
-  attributes: ReadonlyArray<Attribute<M> | ChildAttribute>,
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
   h.p(
     [
-      ...attributes,
+      ...(config.attributes ?? []),
       h.DataAttribute('slot', 'drawer-description'),
       h.Class(cn(drawerDescriptionClass, config.className)),
     ],
@@ -150,7 +157,7 @@ export const description = <M>(
   )
 
 export const footer = <M>(
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
@@ -160,14 +167,13 @@ export const footer = <M>(
   )
 
 export const closeButton = <M>(
-  attributes: ReadonlyArray<Attribute<M> | ChildAttribute>,
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
   h.button(
     [
-      ...attributes,
+      ...(config.attributes ?? []),
       h.DataAttribute('slot', 'drawer-close'),
       h.Class(cn(drawerCloseButtonClass, config.className)),
     ],

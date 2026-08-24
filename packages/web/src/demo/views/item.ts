@@ -19,11 +19,7 @@ export const itemView = (model: Model, h: HtmlBuilder<Message>): Html =>
             {},
             [
               Item.title<Message>({}, ['Basic Item'], h),
-              Item.description<Message>(
-                {},
-                ['A simple item with title and description.'],
-                h,
-              ),
+              Item.description<Message>({}, ['A simple item with title and description.'], h),
             ],
             h,
           ),

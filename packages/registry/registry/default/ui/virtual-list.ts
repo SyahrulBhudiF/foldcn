@@ -1,3 +1,7 @@
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as VirtualList from '@/components/ui/virtual-list'`
+ */
 import { VirtualList as FoldkitVirtualList } from '@foldkit/ui'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 import { childAttributes } from 'foldkit/html'

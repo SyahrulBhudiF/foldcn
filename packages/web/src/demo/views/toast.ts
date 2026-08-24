@@ -11,8 +11,7 @@ import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'
 import { Toast } from '../toast'
 
-// Exported for the sonner demo, which renders the same shared toast stack.
-const Message = defineMessageUnion({
+export const Message = defineMessageUnion({
   GotToastMessage: { message: Toast.Message },
   ClickedShowInfoToast: {},
   ClickedShowSuccessToast: {},
@@ -20,12 +19,6 @@ const Message = defineMessageUnion({
   ClickedShowErrorToast: {},
   ClickedDismissAllToasts: {},
 })
-export const GotToastMessage = Message.GotToastMessage
-export const ClickedShowInfoToast = Message.ClickedShowInfoToast
-export const ClickedShowSuccessToast = Message.ClickedShowSuccessToast
-export const ClickedShowWarningToast = Message.ClickedShowWarningToast
-export const ClickedShowErrorToast = Message.ClickedShowErrorToast
-export const ClickedDismissAllToasts = Message.ClickedDismissAllToasts
 
 export const toastView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
@@ -34,10 +27,10 @@ export const toastView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
       h.div(
         [h.Class('flex flex-wrap gap-2')],
         [
-          hButton(h, 'Info', ClickedShowInfoToast()),
-          hButton(h, 'Success', ClickedShowSuccessToast()),
-          hButton(h, 'Warning', ClickedShowWarningToast()),
-          hButton(h, 'Error', ClickedShowErrorToast()),
+          hButton(h, 'Info', Message.ClickedShowInfoToast()),
+          hButton(h, 'Success', Message.ClickedShowSuccessToast()),
+          hButton(h, 'Warning', Message.ClickedShowWarningToast()),
+          hButton(h, 'Error', Message.ClickedShowErrorToast()),
         ],
       ),
       h.div(
@@ -46,7 +39,7 @@ export const toastView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           h.button(
             [
               h.Class('rounded-md border border-input bg-background px-4 py-2 text-sm font-medium'),
-              h.OnClick(ClickedDismissAllToasts()),
+              h.OnClick(Message.ClickedDismissAllToasts()),
             ],
             ['Dismiss all'],
           ),
@@ -56,26 +49,23 @@ export const toastView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
         slotId: model.toast.id,
         model: model.toast,
         view: Toast.view,
-        viewInputs: {
-          position: 'BottomRight',
-          entryToView: (entry, handlers) =>
-            Toast.entryView({
-              entry,
-              handlers,
-              h,
-              toContent: (entry) => [
-                h.p([h.Class(ToastModule.toastTitleClass)], [entry.payload.title]),
-                ...Option.match(entry.payload.maybeDescription, {
-                  onNone: () => [],
-                  onSome: (description) => [
-                    h.p([h.Class(ToastModule.toastDescriptionClass)], [description]),
-                  ],
-                }),
-              ],
-            }),
-          entryClassName: ToastModule.toastEntryClass,
-        },
-        toParentMessage: (message) => GotToastMessage({ message }),
+        viewInputs: Toast.styledViewInputs(
+          model.toast,
+          {
+            position: 'BottomRight',
+            toContent: (entry, h) => [
+              h.p([h.Class(ToastModule.toastTitleClass)], [entry.payload.title]),
+              ...Option.match(entry.payload.description, {
+                onNone: () => [],
+                onSome: (description) => [
+                  h.p([h.Class(ToastModule.toastDescriptionClass)], [description]),
+                ],
+              }),
+            ],
+          },
+          h,
+        ),
+        toParentMessage: (message) => Message.GotToastMessage({ message }),
       }),
     ],
   )
@@ -106,7 +96,7 @@ const foldToast = Update.foldChild({
   update: Toast.update,
   read: (model: State) => Option.some(model.toast),
   write: (model, next) => evo(model, { toast: () => next }),
-  toParentMessage: (message) => GotToastMessage({ message }),
+  toParentMessage: (message) => Message.GotToastMessage({ message }),
   foldOutMessage: foldToastOutMessage,
 })
 
@@ -114,15 +104,15 @@ const showToast = (
   model: State,
   variant: 'Info' | 'Success' | 'Warning' | 'Error',
   title: string,
-  maybeDescription: Option.Option<string>,
+  description: Option.Option<string>,
 ): UpdateReturn => {
   const [next, commands] = Toast.show(model.toast, {
     variant,
-    payload: { title, maybeDescription },
+    payload: { title, description },
   })
   return [
     evo(model, { toast: () => next }),
-    Command.mapMessages(commands, (message) => GotToastMessage({ message })),
+    Command.mapMessages(commands, (message) => Message.GotToastMessage({ message })),
   ]
 }
 
@@ -135,15 +125,15 @@ export const slice = defineSlice({
   fields,
   init: { toast: Toast.init({ id: 'toast-demo' }) },
   messages: [
-    GotToastMessage,
-    ClickedShowInfoToast,
-    ClickedShowSuccessToast,
-    ClickedShowWarningToast,
-    ClickedShowErrorToast,
-    ClickedDismissAllToasts,
+    Message.GotToastMessage,
+    Message.ClickedShowInfoToast,
+    Message.ClickedShowSuccessToast,
+    Message.ClickedShowWarningToast,
+    Message.ClickedShowErrorToast,
+    Message.ClickedDismissAllToasts,
   ],
   handlers: (model: State) => ({
-    GotToastMessage: (payload: typeof GotToastMessage.Type): UpdateReturn =>
+    GotToastMessage: (payload: typeof Message.GotToastMessage.Type): UpdateReturn =>
       foldToast(model, payload.message),
     ClickedShowInfoToast: (): UpdateReturn =>
       showToast(model, 'Info', 'Changes saved', Option.some('Your preferences have been updated.')),
@@ -172,9 +162,9 @@ export const slice = defineSlice({
       const [next, commands] = Toast.dismissAll(model.toast)
       return [
         evo(model, { toast: () => next }),
-        Command.mapMessages(commands, (message) => GotToastMessage({ message })),
+        Command.mapMessages(commands, (message) => Message.GotToastMessage({ message })),
       ]
     },
   }),
-  samples: [ClickedShowInfoToast()],
+  samples: [Message.ClickedShowInfoToast()],
 })

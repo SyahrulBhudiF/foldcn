@@ -20,7 +20,11 @@ export const dialogView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class('flex flex-col items-start gap-4')],
     [
-      button<AppMessage>({ variant: 'outline', onClick: Message.ClickedOpenDialog() }, 'Open Dialog', h),
+      button<AppMessage>(
+        { variant: 'outline', onClick: Message.ClickedOpenDialog() },
+        'Open Dialog',
+        h,
+      ),
       h.submodel({
         slotId: model.dialog.id,
         model: model.dialog,
@@ -31,10 +35,9 @@ export const dialogView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
               Dialog.header(
                 {},
                 [
-                  Dialog.title(title, {}, ['Edit profile'], h),
+                  Dialog.title({ attributes: title }, ['Edit profile'], h),
                   Dialog.description(
-                    description,
-                    {},
+                    { attributes: description },
                     ['Make changes to your profile here. Click save when you are done.'],
                     h,
                   ),

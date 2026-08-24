@@ -1,12 +1,24 @@
-import type { Html, HtmlBuilder } from 'foldkit/html'
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as Resizable from '@/components/ui/resizable'`
+ */
+import { Function, Option, Schema as S } from 'effect'
+import type { Command } from 'foldkit/command'
+import type { Html } from 'foldkit/html'
+import { defineMessageUnion } from 'foldkit/message'
+import type { Reflect } from 'foldkit/submodel'
+import { defineView } from 'foldkit/submodel'
+import { evo } from 'foldkit/struct'
 
 import { cn } from '@/lib/utils'
 
-type Child = Html | string
-
-// Resizable is a two-pane split with a draggable handle. The handle carries a
-// visually hidden range input so the split stays accessible and keyboard
-// operable; `onValueChange` reports the first pane's size as a percentage.
+// Resizable is a two-pane split with a draggable handle. It owns the split
+// position as a Submodel: embed it with `h.submodel` and listen for
+// `ChangedValue` to lift the first pane's size (as a percentage) into your
+// own model. Conform an externally-driven split with `reflect`.
+//
+// The handle carries a visually hidden range input so the split stays
+// accessible and keyboard operable.
 //
 // foldcn gaps vs upstream: fixed two panes (no N panels), no min/max/collapse
 // constraints, no autoSaveId persistence; the handle is a range input rather
@@ -28,26 +40,85 @@ export const resizableHandleHorizontalClass = ''
 
 export const resizableHandleVerticalClass = ''
 
-export type ResizablePane = Readonly<{ content: Child; className?: string }>
+export type ResizablePane = Readonly<{ content: Html | string; className?: string }>
 
-export type ResizableConfig<M> = Readonly<{
-  value: number
-  onValueChange?: (value: number) => M
+// MODEL
+
+export const Model = S.Struct({
+  id: S.String,
+  /** First pane's size as a percentage (0–100). */
+  value: S.Number,
+})
+export type Model = typeof Model.Type
+
+// MESSAGES
+
+/** The user moved the handle. Clamps into 0–100 and stores the new split. */
+export const Message = defineMessageUnion({
+  Resized: { value: S.Number },
+})
+export type Message = typeof Message.Type
+
+/** Emitted when the split changes. */
+export const OutMessage = defineMessageUnion({
+  ChangedValue: { value: S.Number },
+})
+export type OutMessage = typeof OutMessage.Type
+
+// INIT / UPDATE
+
+export type InitConfig = Readonly<{
+  id: string
+  initialValue?: number
+}>
+
+/** Creates an initial resizable model. The value is clamped into 0–100. */
+export const init = (config: InitConfig): Model => ({
+  id: config.id,
+  value: clamp(config.initialValue ?? 50),
+})
+
+const clamp = (value: number): number => Math.min(100, Math.max(0, value))
+
+/** Conforms an externally-driven split onto the model without emitting an
+ *  OutMessage (the world is the source of truth). Clamps into 0–100. */
+export const reflect: Reflect<Model, number> = Function.dual(
+  2,
+  (model: Model, value: number): Model => evo(model, { value: () => clamp(value) }),
+)
+
+type UpdateReturn = readonly [Model, ReadonlyArray<Command<Message>>, Option.Option<OutMessage>]
+
+/** Processes a resizable message and returns the next model, commands, and an
+ *  optional out-message for the parent. */
+export const update = (model: Model, message: Message): UpdateReturn => {
+  switch (message._tag) {
+    case 'Resized': {
+      const value = clamp(message.value)
+      return [evo(model, { value: () => value }), [], Option.some(OutMessage.ChangedValue({ value }))]
+    }
+  }
+}
+
+// VIEW
+
+export type ViewInputs = Readonly<{
   direction?: 'horizontal' | 'vertical'
   firstPane: ResizablePane
   secondPane: ResizablePane
   className?: string
 }>
 
-/** A two-pane layout with a draggable split handle. */
-export const resizable = <M>(config: ResizableConfig<M>, h: HtmlBuilder<M>): Html => {
-  const isHorizontal = (config.direction ?? 'horizontal') === 'horizontal'
+/** Renders the two-pane layout with the draggable split handle. Embedded via
+ *  `h.submodel`. */
+export const view = defineView<Model, Message, ViewInputs>((model, viewInputs, h) => {
+  const isHorizontal = (viewInputs.direction ?? 'horizontal') === 'horizontal'
   const firstStyle: Record<string, string> = isHorizontal
-    ? { width: `${config.value}%` }
-    : { height: `${config.value}%` }
+    ? { width: `${model.value}%` }
+    : { height: `${model.value}%` }
   const secondStyle: Record<string, string> = isHorizontal
-    ? { width: `${100 - config.value}%` }
-    : { height: `${100 - config.value}%` }
+    ? { width: `${100 - model.value}%` }
+    : { height: `${100 - model.value}%` }
   const handle = h.div(
     [
       h.Class(
@@ -65,10 +136,8 @@ export const resizable = <M>(config: ResizableConfig<M>, h: HtmlBuilder<M>): Htm
         h.Min('0'),
         h.Max('100'),
         h.Step('1'),
-        h.Value(String(config.value)),
-        ...(config.onValueChange === undefined
-          ? []
-          : [h.OnInput((raw) => config.onValueChange!(Number(raw)))]),
+        h.Value(String(model.value)),
+        h.OnInput((raw) => Message.Resized({ value: Number(raw) })),
         h.AriaLabel('Resize panels'),
         h.Class(
           cn(
@@ -84,7 +153,7 @@ export const resizable = <M>(config: ResizableConfig<M>, h: HtmlBuilder<M>): Htm
       h.Class(
         cn(
           isHorizontal ? resizableContainerClass : resizableContainerVerticalClass,
-          config.className,
+          viewInputs.className,
         ),
       ),
       h.DataAttribute('slot', 'resizable'),
@@ -93,20 +162,20 @@ export const resizable = <M>(config: ResizableConfig<M>, h: HtmlBuilder<M>): Htm
       h.div(
         [
           h.Style(firstStyle),
-          h.Class(cn(resizablePanelClass, config.firstPane.className)),
+          h.Class(cn(resizablePanelClass, viewInputs.firstPane.className)),
           h.DataAttribute('slot', 'resizable-panel'),
         ],
-        [config.firstPane.content],
+        [viewInputs.firstPane.content],
       ),
       handle,
       h.div(
         [
           h.Style(secondStyle),
-          h.Class(cn(resizablePanelClass, config.secondPane.className)),
+          h.Class(cn(resizablePanelClass, viewInputs.secondPane.className)),
           h.DataAttribute('slot', 'resizable-panel'),
         ],
-        [config.secondPane.content],
+        [viewInputs.secondPane.content],
       ),
     ],
   )
-}
+})

@@ -1,3 +1,7 @@
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as Combobox from '@/components/ui/combobox'`
+ */
 import { Combobox as FoldkitCombobox } from '@foldkit/ui'
 import type { AnchorConfig } from '@foldkit/ui/combobox'
 import type { Option } from 'effect/Option'
