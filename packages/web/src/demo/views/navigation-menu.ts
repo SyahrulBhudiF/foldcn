@@ -1,12 +1,22 @@
+import { Option } from 'effect'
 import { Schema as S } from 'effect'
+import { evo } from 'foldkit/struct'
+import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
+import * as Update from 'foldkit/update'
 
-import { NavigationMenu } from '@foldcn/registry/styles/default/ui/navigation-menu'
+import * as NavMenu from '@foldcn/registry/styles/default/ui/navigation-menu'
 import { icon } from '@foldcn/registry/styles/default/lib/icons'
 import { CircleAlert, CircleCheck, CircleDashed } from 'lucide'
 
-import { defineSlice } from '../slice'
-import type { Model, Message } from '../assemble'
+import { defineSlice, type UpdateReturn } from '../slice'
+import type { Model, Message as AppMessage } from '../assemble'
+
+const NavigationMenu = NavMenu.NavigationMenu
+
+const Message = defineMessageUnion({
+  GotNavigationMenuMessage: { message: NavMenu.Message },
+})
 
 // Mirrors apps/v4/examples/base/navigation-menu-demo.tsx (minimal)
 const COMPONENTS: ReadonlyArray<{ title: string; href: string; description: string }> = [
@@ -42,90 +52,91 @@ const COMPONENTS: ReadonlyArray<{ title: string; href: string; description: stri
   },
 ]
 
-export const navigationMenuView = (model: Model, h: HtmlBuilder<Message>): Html =>
+const toParentMessage = (message: NavMenu.Message): AppMessage =>
+  Message.GotNavigationMenuMessage({ message })
+
+// Single source of truth for item ids — both `NAV_ITEM_IDS` (passed to
+// `NavMenu.init`) and the `navDropdown` calls below reference these
+// constants instead of repeating string literals, so the model and the view
+// can't drift out of sync on a typo.
+const GETTING_STARTED_ID = 'getting-started'
+const COMPONENTS_ID = 'components'
+const WITH_ICON_ID = 'with-icon'
+const NAV_ITEM_IDS = [GETTING_STARTED_ID, COMPONENTS_ID, WITH_ICON_ID] as const
+
+/** One stateful dropdown item: `NavigationMenu.item` (the `<li>`, owned
+ *  here, not by the registry) wrapping an `h.submodel` built from
+ *  `NavMenu.dropdownViewInputs`. */
+const navDropdown = (
+  id: string,
+  trigger: string,
+  content: ReadonlyArray<Html>,
+  model: Model,
+  h: HtmlBuilder<AppMessage>,
+): Html =>
+  NavigationMenu.item(
+    {},
+    [
+      h.submodel({
+        slotId: id,
+        model: NavMenu.getPopover(model.navigationMenu, id),
+        view: NavMenu.view,
+        viewInputs: NavMenu.dropdownViewInputs({ id, trigger }, content, h),
+        toParentMessage: (message) => toParentMessage(NavMenu.Message.GotItemMessage({ id, message })),
+      }),
+    ],
+    h,
+  )
+
+export const navigationMenuView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   NavigationMenu(
     {},
     [
       NavigationMenu.list(
         {},
         [
-          NavigationMenu.item(
-            {},
+          navDropdown(
+            GETTING_STARTED_ID,
+            'Getting started',
             [
-              NavigationMenu.trigger({}, ['Getting started'], h),
-              NavigationMenu.content(
-                {},
+              h.ul(
+                [h.Class('grid w-96 gap-1')],
                 [
-                  h.ul(
-                    [h.Class('grid w-96 gap-1')],
-                    [
-                      navListItem(
-                        h,
-                        'Introduction',
-                        '/docs',
-                        'Re-usable components built with Tailwind CSS.',
-                      ),
-                      navListItem(
-                        h,
-                        'Installation',
-                        '/docs/installation',
-                        'How to install dependencies and structure your app.',
-                      ),
-                      navListItem(
-                        h,
-                        'Typography',
-                        '/docs/primitives/typography',
-                        'Styles for headings, paragraphs, lists...etc',
-                      ),
-                    ],
-                  ),
+                  navListItem(h, 'Introduction', '/docs', 'Re-usable components built with Tailwind CSS.'),
+                  navListItem(h, 'Installation', '/docs/installation', 'How to install dependencies and structure your app.'),
+                  navListItem(h, 'Typography', '/docs/primitives/typography', 'Styles for headings, paragraphs, lists...etc'),
                 ],
-                h,
               ),
             ],
+            model,
             h,
           ),
-          NavigationMenu.item(
-            {},
+          navDropdown(
+            COMPONENTS_ID,
+            'Components',
             [
-              NavigationMenu.trigger({}, ['Components'], h),
-              NavigationMenu.content(
-                {},
-                [
-                  h.ul(
-                    [h.Class('grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]')],
-                    COMPONENTS.map((c) => navListItem(h, c.title, c.href, c.description)),
-                  ),
-                ],
-                h,
+              h.ul(
+                [h.Class('grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]')],
+                COMPONENTS.map((c) => navListItem(h, c.title, c.href, c.description)),
               ),
             ],
+            model,
             h,
           ),
-          NavigationMenu.item(
-            {},
+          navDropdown(
+            WITH_ICON_ID,
+            'With Icon',
             [
-              NavigationMenu.trigger({}, ['With Icon'], h),
-              NavigationMenu.content(
-                {},
+              h.ul(
+                [h.Class('grid w-[200px] gap-1')],
                 [
-                  h.ul(
-                    [h.Class('grid w-[200px] gap-1')],
-                    [
-                      h.li(
-                        [],
-                        [
-                          NavigationMenu.link({}, [icon(h, CircleAlert, 'size-4'), ' Backlog'], h),
-                          NavigationMenu.link({}, [icon(h, CircleDashed, 'size-4'), ' To Do'], h),
-                          NavigationMenu.link({}, [icon(h, CircleCheck, 'size-4'), ' Done'], h),
-                        ],
-                      ),
-                    ],
-                  ),
+                  h.li([], [NavigationMenu.link({}, [icon(h, CircleAlert, 'size-4'), ' Backlog'], h)]),
+                  h.li([], [NavigationMenu.link({}, [icon(h, CircleDashed, 'size-4'), ' To Do'], h)]),
+                  h.li([], [NavigationMenu.link({}, [icon(h, CircleCheck, 'size-4'), ' Done'], h)]),
                 ],
-                h,
               ),
             ],
+            model,
             h,
           ),
           NavigationMenu.item({}, [NavigationMenu.link({}, ['Docs'], h)], h),
@@ -136,12 +147,7 @@ export const navigationMenuView = (model: Model, h: HtmlBuilder<Message>): Html 
     h,
   )
 
-const navListItem = (
-  h: HtmlBuilder<Message>,
-  title: string,
-  href: string,
-  description: string,
-): Html =>
+const navListItem = (h: HtmlBuilder<AppMessage>, title: string, href: string, description: string): Html =>
   h.li(
     [],
     [
@@ -161,13 +167,31 @@ const navListItem = (
     ],
   )
 
-const fields = {} as const
+const fields = { navigationMenu: NavMenu.Model }
+
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type
 
+// The demo doesn't react to which item opened or closed, so a single
+// no-op covers both `OutMessage` tags — no need to match on `_tag`.
+const foldNavigationMenu = Update.foldChild({
+  update: NavMenu.update,
+  read: (model: State) => Option.some(model.navigationMenu),
+  write: (model, next) => evo(model, { navigationMenu: () => next }),
+  toParentMessage,
+  foldOutMessage: (): Update.Step<State, unknown> => (model) => [model, []],
+})
+
 export const slice = defineSlice({
   fields,
-  init: {},
-  messages: [],
-  handlers: (_model: State) => ({}),
+  init: { navigationMenu: NavMenu.init(NAV_ITEM_IDS) },
+  messages: [Message.GotNavigationMenuMessage],
+  handlers: (model: State) => ({
+    GotNavigationMenuMessage: (payload: typeof Message.GotNavigationMenuMessage.Type): UpdateReturn =>
+      foldNavigationMenu(model, payload.message),
+  }),
+  samples: [],
+  // Open/close/dismiss flows entirely through the embedded Popover
+  // submodels (click, outside click, Escape); the menu emits no parent
+  // commands, so there are no top-level samples.
 })

@@ -197,8 +197,11 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<AppMessage>)
                                 ),
                               ]
                             : [
+                                // 400px (up from 260px) so Floating UI-anchored
+                                // panels (Popover/HoverCard/nav-menu dropdowns) have
+                                // room to open without clipping inside this box.
                                 h.div(
-                                  [h.Class('flex min-h-[260px] items-center justify-center p-6')],
+                                  [h.Class('flex min-h-[400px] items-center justify-center p-6')],
                                   [
                                     h.submodel({
                                       slotId: 'demo-harness',
