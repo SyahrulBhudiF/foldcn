@@ -94,7 +94,8 @@ All 60 `registry:ui` items from `packages/registry/registry/default/ui/registry.
 | button      | Styled button with variants and sizes, built on the @foldkit/ui Button helper.                             |
 | input       | Styled text input with label and description, built on the @foldkit/ui Input helper.                       |
 | textarea    | Styled multi-line textarea with label and description, built on the @foldkit/ui Textarea helper.           |
-| select      | Styled native select with label, chevron and description, built on the @foldkit/ui Select helper.          |
+| select      | Styled custom dropdown select (single/multi) backed by the @foldkit/ui Listbox submodel — a real submodel you embed via h.submodel. For a plain native `<select>` helper, use native-select. |
+| native-select | Styled native `<select>` with label, chevron and description, built on the @foldkit/ui Select helper. Stateless; for a searchable dropdown submodel use select. |
 | card        | Composable card primitives (Card…CardFooter). A pure layout primitive.                                     |
 | checkbox    | Styled checkbox with label, indeterminate state and description, built on the @foldkit/ui Checkbox helper. |
 | switch      | Styled switch toggle with label and description, built on the @foldkit/ui Switch helper.                   |
@@ -116,7 +117,7 @@ All 60 `registry:ui` items from `packages/registry/registry/default/ui/registry.
 | slider        | Styled numeric range slider, built on the @foldkit/ui Slider submodel.                                           |
 | calendar      | Styled inline calendar grid with locale support, built on the @foldkit/ui Calendar submodel.                     |
 | date-picker   | Styled date picker combining trigger, popover and calendar, built on the @foldkit/ui DatePicker submodel.        |
-| toast         | Styled transient notification stack with auto-dismiss, built on the @foldkit/ui Toast component.                 |
+| toast         | Stacked toast notifications matching Base UI's measured-height choreography (uniform collapsed stack, hover-to-expand, limit 3), built on the @foldkit/ui Toast submodel wrapped with a height-measuring model. |
 | animation     | Styled enter/leave animation coordinator, built on the @foldkit/ui Animation submodel.                           |
 | drag-and-drop | Styled sortable lists and cross-container movement, built on the @foldkit/ui DragAndDrop submodel.               |
 | file-drop     | Styled file input with drag-and-drop support, built on the @foldkit/ui FileDrop submodel.                        |
@@ -153,7 +154,6 @@ Pure-layout ports of shadcn's presentational components — no submodel backing 
 | hover-card      | Card-styled floating panel, built on the @foldkit/ui Popover submodel.                                      |
 | context-menu    | Right-click style menu, built on the @foldkit/ui Menu submodel.                                             |
 | menubar         | Horizontal bar of menus, built on the @foldkit/ui Menu submodel.                                            |
-| sonner          | Stacked auto-dismissing notifications, built on the @foldkit/ui Toast submodel.                             |
 | button-group    | Connected run of buttons forming a single segmented control, built on the @foldkit/ui Button helper.        |
 | input-group     | Shared bordered box with text/icon add-ons around a connected input, built on the @foldkit/ui Input helper. |
 | input-otp       | Row of single-character slots backed by one combined value.                                                 |

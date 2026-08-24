@@ -30,7 +30,7 @@ export const fieldsetView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
     {
       id: 'fieldset-contact',
       legend: 'Contact details',
-      maybeDescription: 'Used for shipping and billing.',
+      description: 'Used for shipping and billing.',
       children: [
         input<AppMessage>(
           {

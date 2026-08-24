@@ -1,3 +1,7 @@
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as AlertDialog from '@/components/ui/alert-dialog'`
+ */
 import { Dialog as FoldkitDialog } from '@foldkit/ui'
 import type { Attribute, ChildAttribute, Html, HtmlBuilder } from 'foldkit/html'
 
@@ -66,11 +70,16 @@ export const alertDialogActionClass = 'cn-button cn-button-variant-default cn-bu
 export const alertDialogCloseButtonClass =
   'cn-button cn-button-variant-ghost cn-button-size-icon-sm'
 
-type StyleConfig = Readonly<{ className?: string }>
+type StyleConfig<M> = Readonly<{
+  className?: string
+  /** Submodel-provided attributes (from the `styledViewInputs` content
+   *  callback render bundle) to merge onto the element. */
+  attributes?: ReadonlyArray<Attribute<M> | ChildAttribute>
+}>
 
 /** Alert dialog header wrapper. */
 export const header = <M>(
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
@@ -84,7 +93,7 @@ export const header = <M>(
 
 /** Media slot — icon/media area above the title (upstream AlertDialogMedia). */
 export const media = <M>(
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
@@ -98,14 +107,13 @@ export const media = <M>(
 
 /** Alert dialog title — merges with the submodel's title attributes. */
 export const title = <M>(
-  attributes: ReadonlyArray<Attribute<M> | ChildAttribute>,
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
   h.h2(
     [
-      ...attributes,
+      ...(config.attributes ?? []),
       h.DataAttribute('slot', 'alert-dialog-title'),
       h.Class(cn(alertDialogTitleClass, config.className)),
     ],
@@ -114,14 +122,13 @@ export const title = <M>(
 
 /** Alert dialog description — merges with the submodel's description attributes. */
 export const description = <M>(
-  attributes: ReadonlyArray<Attribute<M> | ChildAttribute>,
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
   h.p(
     [
-      ...attributes,
+      ...(config.attributes ?? []),
       h.DataAttribute('slot', 'alert-dialog-description'),
       h.Class(cn(alertDialogDescriptionClass, config.className)),
     ],
@@ -130,7 +137,7 @@ export const description = <M>(
 
 /** Alert dialog footer wrapper. */
 export const footer = <M>(
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
@@ -144,31 +151,29 @@ export const footer = <M>(
 
 /** Close button — merges with the submodel's closeButton attributes. */
 export const closeButton = <M>(
-  attributes: ReadonlyArray<Attribute<M> | ChildAttribute>,
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
   h.button(
     [
-      ...attributes,
+      ...(config.attributes ?? []),
       h.DataAttribute('slot', 'alert-dialog-close'),
       h.Class(cn(alertDialogCloseButtonClass, config.className)),
     ],
     children,
   )
 
-/** Destructive action button. Spread the submodel's `closeButton` attributes so
- *  a confirm also dismisses the dialog. */
+/** Destructive action button. Pass the submodel's `closeButton` attributes
+ *  via `attributes` so a confirm also dismisses the dialog. */
 export const actionButton = <M>(
-  attributes: ReadonlyArray<Attribute<M> | ChildAttribute>,
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
   h.button(
     [
-      ...attributes,
+      ...(config.attributes ?? []),
       h.DataAttribute('slot', 'alert-dialog-action'),
       h.Class(cn(alertDialogActionClass, config.className)),
     ],
@@ -177,14 +182,13 @@ export const actionButton = <M>(
 
 /** Secondary cancel button. */
 export const cancelButton = <M>(
-  attributes: ReadonlyArray<Attribute<M> | ChildAttribute>,
-  config: StyleConfig,
+  config: StyleConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
   h.button(
     [
-      ...attributes,
+      ...(config.attributes ?? []),
       h.DataAttribute('slot', 'alert-dialog-cancel'),
       h.Class(cn(alertDialogCancelClass, config.className)),
     ],

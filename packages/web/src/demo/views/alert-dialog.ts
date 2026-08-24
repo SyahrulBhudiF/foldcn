@@ -36,10 +36,9 @@ export const alertDialogView = (model: Model, h: HtmlBuilder<AppMessage>): Html 
               AlertDialog.header(
                 {},
                 [
-                  AlertDialog.title(title, {}, ['Are you absolutely sure?'], h),
+                  AlertDialog.title({ attributes: title }, ['Are you absolutely sure?'], h),
                   AlertDialog.description(
-                    description,
-                    {},
+                    { attributes: description },
                     [
                       'This action cannot be undone. This will permanently delete your account from our servers.',
                     ],
@@ -51,8 +50,8 @@ export const alertDialogView = (model: Model, h: HtmlBuilder<AppMessage>): Html 
               AlertDialog.footer(
                 {},
                 [
-                  AlertDialog.cancelButton(closeButton, {}, ['Cancel'], h),
-                  AlertDialog.actionButton(closeButton, {}, ['Continue'], h),
+                  AlertDialog.cancelButton({ attributes: closeButton }, ['Cancel'], h),
+                  AlertDialog.actionButton({ attributes: closeButton }, ['Continue'], h),
                 ],
                 h,
               ),

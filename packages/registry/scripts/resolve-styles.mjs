@@ -218,20 +218,42 @@ function transformSourceFile(sourceFile, styleMap, unmappedTokens) {
 
     const value = node.getLiteralText()
     const tokens = extractCnClasses(value)
-    if (tokens.length === 0) return
 
-    for (const token of tokens) {
-      if (!(token in styleMap)) unmappedTokens.add(token)
+    let merged = value
+    if (tokens.length > 0) {
+      for (const token of tokens) {
+        if (!(token in styleMap)) unmappedTokens.add(token)
+      }
+
+      const resolution = tokens
+        .map((token) => styleMap[token])
+        .filter((classes) => Boolean(classes))
+        .join(' ')
+
+      merged = removeCnClasses(mergeClasses(resolution, value))
     }
 
-    const resolution = tokens
-      .map((token) => styleMap[token])
-      .filter((classes) => Boolean(classes))
-      .join(' ')
-
-    node.setLiteralValue(removeCnClasses(mergeClasses(resolution, value)))
+    // Inert-selector cleanup runs on EVERY literal — resolved tokens and
+    // hand-written tails alike — so upstream-copied selectors that can never
+    // match foldkit's emitted attributes don't ship to users:
+    //   - `[cmdk-*]` descendant selectors (no cmdk behavior layer)
+    //   - `data-[selected=true]:…` (foldkit emits data-selected as EMPTY attr)
+    //   - `data-[disabled=true]` → `data-[disabled]` (same empty-attr rule as
+  //     the style-map foldkitCompat pass above)
+    const cleaned = stripInertUtilities(merged)
+    if (cleaned !== value) node.setLiteralValue(cleaned)
   })
 }
+
+const stripInertUtilities = (classes) =>
+  classes
+    .split(/\s+/)
+    .filter(
+      (utility) =>
+        utility !== '' && !utility.includes('[cmdk-') && !/^data-\[selected=true\]:/.test(utility),
+    )
+    .map((utility) => utility.replace(/data-\[disabled=true\]/g, 'data-[disabled]'))
+    .join(' ')
 
 function isStringLiteralLike(node) {
   return Node.isStringLiteral(node) || Node.isNoSubstitutionTemplateLiteral(node)

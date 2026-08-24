@@ -1,3 +1,7 @@
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as Resizable from '@/components/ui/resizable'`
+ */
 import { Function, Option, Schema as S } from 'effect'
 import type { Command } from 'foldkit/command'
 import type { Html } from 'foldkit/html'

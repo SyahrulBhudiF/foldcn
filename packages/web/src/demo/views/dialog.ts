@@ -35,10 +35,9 @@ export const dialogView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
               Dialog.header(
                 {},
                 [
-                  Dialog.title(title, {}, ['Edit profile'], h),
+                  Dialog.title({ attributes: title }, ['Edit profile'], h),
                   Dialog.description(
-                    description,
-                    {},
+                    { attributes: description },
                     ['Make changes to your profile here. Click save when you are done.'],
                     h,
                   ),

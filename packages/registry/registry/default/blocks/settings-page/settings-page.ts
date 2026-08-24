@@ -3,7 +3,7 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 import { button } from '@/components/ui/button'
 import { fieldset } from '@/components/ui/fieldset'
 import { input } from '@/components/ui/input'
-import { select } from '@/components/ui/select'
+import { nativeSelect } from '@/components/ui/native-select'
 import { switch_ } from '@/components/ui/switch'
 import { textarea } from '@/components/ui/textarea'
 
@@ -45,7 +45,7 @@ export const settingsPage = <M>(config: SettingsPageConfig<M>, h: HtmlBuilder<M>
         {
           id: 'settings-profile',
           legend: 'Profile',
-          maybeDescription: 'This information will be displayed publicly.',
+          description: 'This information will be displayed publicly.',
           children: [
             input<M>(
               {
@@ -79,7 +79,7 @@ export const settingsPage = <M>(config: SettingsPageConfig<M>, h: HtmlBuilder<M>
               },
               h,
             ),
-            select<M>(
+            nativeSelect<M>(
               {
                 id: 'settings-language',
                 label: 'Language',
@@ -103,13 +103,13 @@ export const settingsPage = <M>(config: SettingsPageConfig<M>, h: HtmlBuilder<M>
         {
           id: 'settings-preferences',
           legend: 'Preferences',
-          maybeDescription: 'Control how you receive notifications.',
+          description: 'Control how you receive notifications.',
           children: [
             switch_<M>(
               {
                 id: 'settings-email-notifications',
                 label: 'Email notifications',
-                maybeDescription: 'Receive emails about your account activity.',
+                description: 'Receive emails about your account activity.',
                 isChecked: config.isEmailNotificationsEnabled,
                 onToggle: config.onToggleEmailNotifications,
               },
@@ -119,7 +119,7 @@ export const settingsPage = <M>(config: SettingsPageConfig<M>, h: HtmlBuilder<M>
               {
                 id: 'settings-two-factor',
                 label: 'Two-factor authentication',
-                maybeDescription: 'Add an extra layer of security to your account.',
+                description: 'Add an extra layer of security to your account.',
                 isChecked: config.isTwoFactorEnabled,
                 onToggle: config.onToggleTwoFactor,
               },

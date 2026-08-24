@@ -41,7 +41,7 @@ export type SwitchConfig<M> = Readonly<{
   isChecked: boolean
   onToggle: (isChecked: boolean) => M
   label: string
-  maybeDescription?: string
+  description?: string
   isDisabled?: boolean
   isReadOnly?: boolean
   name?: string
@@ -97,14 +97,14 @@ export const switch_ = <M>(config: SwitchConfig<M>, h: HtmlBuilder<M>): Html =>
                   [...attributes.label, h.Class(cn(switchLabelClass, config.labelClass))],
                   [config.label],
                 ),
-                config.maybeDescription === undefined
+                config.description === undefined
                   ? h.empty
                   : h.p(
                       [
                         ...attributes.description,
                         h.Class(cn(switchDescriptionClass, config.descriptionClass)),
                       ],
-                      [config.maybeDescription],
+                      [config.description],
                     ),
               ],
             ),

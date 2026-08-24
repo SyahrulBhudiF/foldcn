@@ -11,7 +11,6 @@ import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'
 import { Toast } from '../toast'
 
-// Exported for the sonner demo, which renders the same shared toast stack.
 export const Message = defineMessageUnion({
   GotToastMessage: { message: Toast.Message },
   ClickedShowInfoToast: {},
@@ -50,25 +49,22 @@ export const toastView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
         slotId: model.toast.id,
         model: model.toast,
         view: Toast.view,
-        viewInputs: {
-          position: 'BottomRight',
-          entryToView: (entry, handlers) =>
-            Toast.entryView({
-              entry,
-              handlers,
-              h,
-              toContent: (entry) => [
-                h.p([h.Class(ToastModule.toastTitleClass)], [entry.payload.title]),
-                ...Option.match(entry.payload.maybeDescription, {
-                  onNone: () => [],
-                  onSome: (description) => [
-                    h.p([h.Class(ToastModule.toastDescriptionClass)], [description]),
-                  ],
-                }),
-              ],
-            }),
-          entryClassName: ToastModule.toastEntryClass,
-        },
+        viewInputs: Toast.styledViewInputs(
+          model.toast,
+          {
+            position: 'BottomRight',
+            toContent: (entry, h) => [
+              h.p([h.Class(ToastModule.toastTitleClass)], [entry.payload.title]),
+              ...Option.match(entry.payload.description, {
+                onNone: () => [],
+                onSome: (description) => [
+                  h.p([h.Class(ToastModule.toastDescriptionClass)], [description]),
+                ],
+              }),
+            ],
+          },
+          h,
+        ),
         toParentMessage: (message) => Message.GotToastMessage({ message }),
       }),
     ],
@@ -108,11 +104,11 @@ const showToast = (
   model: State,
   variant: 'Info' | 'Success' | 'Warning' | 'Error',
   title: string,
-  maybeDescription: Option.Option<string>,
+  description: Option.Option<string>,
 ): UpdateReturn => {
   const [next, commands] = Toast.show(model.toast, {
     variant,
-    payload: { title, maybeDescription },
+    payload: { title, description },
   })
   return [
     evo(model, { toast: () => next }),

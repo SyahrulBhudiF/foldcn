@@ -3,7 +3,9 @@ import type { Attribute, Html, HtmlBuilder } from 'foldkit/html'
 
 import { cn } from '@/lib/utils'
 
-/** Button variant keys — keep in sync with `buttonVariants`. */
+/** Button variant keys. Sync with `buttonVariants` is compiler-enforced:
+ *  `buttonVariants` is `Record<ButtonVariant, string>` (missing key = error)
+ *  and annotated object literals reject unknown keys. */
 export const buttonVariantKeys = [
   'default',
   'destructive',
@@ -24,7 +26,7 @@ export const buttonVariants: Record<ButtonVariant, string> = {
 
 export type ButtonVariant = (typeof buttonVariantKeys)[number]
 
-/** Button size keys — keep in sync with `buttonSizes`. */
+/** Button size keys. Sync with `buttonSizes` is compiler-enforced (see above). */
 export const buttonSizeKeys = [
   'default',
   'xs',
@@ -59,6 +61,9 @@ export type ButtonConfig<M> = Readonly<{
   variant?: ButtonVariant
   size?: ButtonSize
   className?: string
+  /** Extra attributes merged onto the button element (ids, handlers,
+   *  popoover anchors, …). */
+  attributes?: ReadonlyArray<Attribute<M>>
 }>
 
 /** Styled button built on the @foldkit/ui Button helper. */
@@ -66,7 +71,6 @@ export const button = <M>(
   config: ButtonConfig<M>,
   label: Html | string,
   h: HtmlBuilder<M>,
-  extraAttributes: ReadonlyArray<Attribute<M>> = [],
 ): Html =>
   FoldkitButton.view<M>(
     {
@@ -87,7 +91,7 @@ export const button = <M>(
               ),
             ),
             h.DataAttribute('slot', 'button'),
-            ...extraAttributes,
+            ...(config.attributes ?? []),
           ],
           [label],
         ),

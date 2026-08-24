@@ -1,3 +1,11 @@
+/** ⚠ BEHAVIOR GAP vs upstream shadcn: toggles on click like a popover, not on hover — foldkit has no hover-intent/grace primitive yet.
+ *  The styled surface matches, but this behavior is absent — do not use
+ *  where that behavior is required.
+ */
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as HoverCard from '@/components/ui/hover-card'`
+ */
 import { Duration, Effect, Match as M, Option, Schema as S } from 'effect'
 import * as Command from 'foldkit/command'
 import type { AnchorConfig } from '@foldkit/ui/anchor'

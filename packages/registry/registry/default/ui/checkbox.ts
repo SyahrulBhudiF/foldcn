@@ -25,7 +25,7 @@ export type CheckboxConfig<M> = Readonly<{
   isChecked: boolean
   onToggle: (isChecked: boolean) => M
   label: string
-  maybeDescription?: string
+  description?: string
   isDisabled?: boolean
   isReadOnly?: boolean
   isIndeterminate?: boolean
@@ -92,14 +92,14 @@ export const checkbox = <M>(config: CheckboxConfig<M>, h: HtmlBuilder<M>): Html 
                 ),
               ],
             ),
-            config.maybeDescription === undefined
+            config.description === undefined
               ? h.empty
               : h.p(
                   [
                     ...attributes.description,
                     h.Class(cn('text-sm text-muted-foreground', config.descriptionClass)),
                   ],
-                  [config.maybeDescription],
+                  [config.description],
                 ),
           ],
         ),

@@ -1,3 +1,11 @@
+/** ⚠ BEHAVIOR GAP vs upstream shadcn: no cookie/localStorage persistence of the collapsed state — seed it from your own persisted Model at init.
+ *  The styled surface matches, but this behavior is absent — do not use
+ *  where that behavior is required.
+ */
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as Sidebar from '@/components/ui/sidebar'`
+ */
 import { Effect, Match, Option, Queue, Schema as S, Stream } from 'effect'
 import {
   childAttributes,
@@ -408,8 +416,8 @@ export const view = defineView<Model, Message, ProviderViewInputs>((model, viewI
           h.div(
             [h.Class('sr-only flex flex-col')],
             [
-              Sheet.title(title, {}, ['Sidebar'], sheetH),
-              Sheet.description(description, {}, ['Displays the mobile sidebar.'], sheetH),
+              Sheet.title({ attributes: title }, ['Sidebar'], sheetH),
+              Sheet.description({ attributes: description }, ['Displays the mobile sidebar.'], sheetH),
             ],
           ),
           h.div([h.Class('flex h-full w-full flex-col')], viewInputs.content(slots)),
@@ -624,27 +632,29 @@ export const menuItem = <M>(
     children,
   )
 
-export type MenuButtonConfig = Readonly<{
+export type MenuButtonConfig<M> = Readonly<{
   isActive?: boolean
   variant?: MenuButtonVariant
   size?: MenuButtonSize
   className?: string
+  /** Extra attributes merged onto the button (click handlers, hrefs via
+   *  delegation, …). */
+  attributes?: Attributes<M>
 }>
 
-/** Menu item button. Wire clicks/navigation through `extraAttributes`; wrap
- *  the label in a `<span>` so icon-mode truncation applies. */
+/** Menu item button. Wire clicks/navigation through `config.attributes`;
+ *  wrap the label in a `<span>` so icon-mode truncation applies. */
 export const menuButton = <M>(
-  config: MenuButtonConfig,
+  config: MenuButtonConfig<M>,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
-  extraAttributes: Attributes<M> = [],
 ): Html => {
   const variant = config.variant ?? 'default'
   const size = config.size ?? 'default'
   return h.button(
     [
       h.Type('button'),
-      ...extraAttributes,
+      ...(config.attributes ?? []),
       h.Class(
         cn(
           sidebarMenuButtonClass,

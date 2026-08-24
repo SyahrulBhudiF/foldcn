@@ -1,3 +1,7 @@
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as Tooltip from '@/components/ui/tooltip'`
+ */
 import { Tooltip as FoldkitTooltip } from '@foldkit/ui'
 import type { AnchorConfig } from '@foldkit/ui/tooltip'
 import type { Html, HtmlBuilder } from 'foldkit/html'

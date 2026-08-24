@@ -37,10 +37,9 @@ export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
               Drawer.header(
                 {},
                 [
-                  Drawer.title(title, {}, ['Pick a delivery time'], h),
+                  Drawer.title({ attributes: title }, ['Pick a delivery time'], h),
                   Drawer.description(
-                    description,
-                    {},
+                    { attributes: description },
                     ['We’ll prepare your order as soon as possible.'],
                     h,
                   ),
@@ -136,7 +135,7 @@ export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                     ],
                     ['Confirm Delivery Time'],
                   ),
-                  Drawer.closeButton(closeButton, {}, ['Cancel'], h),
+                  Drawer.closeButton({ attributes: closeButton }, ['Cancel'], h),
                 ],
                 h,
               ),

@@ -24,7 +24,7 @@ export const inputView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           value: model.inputValue,
           onInput: (value) => Message.UpdatedInputValue({ value }),
           placeholder: 'sk-...',
-          maybeDescription: 'Your API key is encrypted and stored securely.',
+          description: 'Your API key is encrypted and stored securely.',
         },
         h,
       ),

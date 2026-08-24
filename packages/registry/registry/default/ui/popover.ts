@@ -1,3 +1,7 @@
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as Popover from '@/components/ui/popover'`
+ */
 import { Popover as FoldkitPopover } from '@foldkit/ui'
 import type { AnchorConfig } from '@foldkit/ui/popover'
 import type { Html, HtmlBuilder } from 'foldkit/html'

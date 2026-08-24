@@ -27,6 +27,7 @@ import listboxViewSource from './views/listbox.ts?raw'
 import loginFormViewSource from './views/login-form.ts?raw'
 import markerViewSource from './views/marker.ts?raw'
 import menuViewSource from './views/menu.ts?raw'
+import nativeSelectViewSource from './views/native-select.ts?raw'
 import navViewSource from './views/nav.ts?raw'
 import popoverViewSource from './views/popover.ts?raw'
 import progressViewSource from './views/progress.ts?raw'
@@ -45,7 +46,6 @@ import accordionViewSource from './views/accordion.ts?raw'
 import collapsibleViewSource from './views/collapsible.ts?raw'
 import contextMenuViewSource from './views/context-menu.ts?raw'
 import menubarViewSource from './views/menubar.ts?raw'
-import sonnerViewSource from './views/sonner.ts?raw'
 import buttonGroupViewSource from './views/button-group.ts?raw'
 import inputGroupViewSource from './views/input-group.ts?raw'
 import toggleViewSource from './views/toggle.ts?raw'
@@ -232,6 +232,11 @@ export const demoExampleByName: Readonly<Record<DemoItemName, DemoExample>> = {
     code: radioGroupViewSource,
     githubUrl: gh('src/demo/views/radio-group.ts'),
   },
+  'native-select': {
+    path: 'src/demo/views/native-select.ts',
+    code: nativeSelectViewSource,
+    githubUrl: gh('src/demo/views/native-select.ts'),
+  },
   select: {
     path: 'src/demo/views/select.ts',
     code: selectViewSource,
@@ -301,11 +306,6 @@ export const demoExampleByName: Readonly<Record<DemoItemName, DemoExample>> = {
     path: 'src/demo/views/menubar.ts',
     code: menubarViewSource,
     githubUrl: gh('src/demo/views/menubar.ts'),
-  },
-  sonner: {
-    path: 'src/demo/views/sonner.ts',
-    code: sonnerViewSource,
-    githubUrl: gh('src/demo/views/sonner.ts'),
   },
   'button-group': {
     path: 'src/demo/views/button-group.ts',

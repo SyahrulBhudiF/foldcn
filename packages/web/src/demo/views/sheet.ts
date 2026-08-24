@@ -33,10 +33,9 @@ export const sheetView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
               Sheet.header(
                 {},
                 [
-                  Sheet.title(title, {}, ['Edit profile'], h),
+                  Sheet.title({ attributes: title }, ['Edit profile'], h),
                   Sheet.description(
-                    description,
-                    {},
+                    { attributes: description },
                     ['Make changes to your profile here. Click save when you are done.'],
                     h,
                   ),
@@ -98,8 +97,10 @@ export const sheetView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                     ['Save changes'],
                   ),
                   Sheet.closeButton(
-                    closeButton,
-                    { className: 'border border-input bg-background hover:bg-accent' },
+                    {
+                      attributes: closeButton,
+                      className: 'border border-input bg-background hover:bg-accent',
+                    },
                     ['Close'],
                     h,
                   ),

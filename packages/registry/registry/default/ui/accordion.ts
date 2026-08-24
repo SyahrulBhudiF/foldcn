@@ -1,3 +1,7 @@
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as Accordion from '@/components/ui/accordion'`
+ */
 import { Function, Option, Schema as S } from 'effect'
 import { Disclosure as FoldkitDisclosure } from '@foldkit/ui'
 import type { Command } from 'foldkit/command'

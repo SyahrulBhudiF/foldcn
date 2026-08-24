@@ -1,3 +1,7 @@
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as DragAndDrop from '@/components/ui/drag-and-drop'`
+ */
 import { DragAndDrop as FoldkitDragAndDrop } from '@foldkit/ui'
 
 // Re-export the @foldkit/ui DragAndDrop surface. Drag and drop is heavily

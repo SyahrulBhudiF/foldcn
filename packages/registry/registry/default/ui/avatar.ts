@@ -1,3 +1,7 @@
+/** ⚠ BEHAVIOR GAP vs upstream shadcn: no image loading/error fallback chain — the fallback renders alongside the img; swap visibility from your own state.
+ *  The styled surface matches, but this behavior is absent — do not use
+ *  where that behavior is required.
+ */
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 type Child = Html | string

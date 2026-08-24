@@ -1,3 +1,7 @@
+/** Stateful submodel — import the whole module as a namespace and wire its
+ *  Model/Message/init/update into your app:
+ *  `import * as Animation from '@/components/ui/animation'`
+ */
 import { Animation as FoldkitAnimation } from '@foldkit/ui'
 import type { ChildAttribute, Html, TagName } from 'foldkit/html'
 

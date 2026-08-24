@@ -94,6 +94,8 @@ export type InputGroupInputConfig<M> = Readonly<{
   name?: string
   type?: string
   className?: string
+  /** Extra attributes merged onto the input element. */
+  attributes?: ReadonlyArray<Attribute<M>>
 }>
 
 /** The connected input for use inside `inputGroup`. Emits
@@ -101,7 +103,6 @@ export type InputGroupInputConfig<M> = Readonly<{
 export const inputGroupInput = <M>(
   config: InputGroupInputConfig<M>,
   h: HtmlBuilder<M>,
-  extraAttributes: ReadonlyArray<Attribute<M>> = [],
 ): Html =>
   h.input([
     h.Id(config.id),
@@ -115,7 +116,7 @@ export const inputGroupInput = <M>(
     ...(config.placeholder === undefined ? [] : [h.Placeholder(config.placeholder)]),
     h.DataAttribute('slot', 'input-group-control'),
     h.Class(cn(inputClass, inputGroupInputClass, config.className)),
-    ...extraAttributes,
+    ...(config.attributes ?? []),
   ])
 
 export type InputGroupButtonConfig<M> = Omit<ButtonConfig<M>, 'size'> &
@@ -139,10 +140,13 @@ export const inputGroupButton = <M>(
       ...buttonConfig,
       variant: config.variant ?? 'ghost',
       className: cn(inputGroupButtonClass, inputGroupButtonSizeClasses[size], config.className),
+      attributes: [
+        h.DataAttribute('size', size),
+        ...(config.attributes ?? []),
+      ],
     },
     label,
     h,
-    [h.DataAttribute('size', size)],
   )
 }
 
