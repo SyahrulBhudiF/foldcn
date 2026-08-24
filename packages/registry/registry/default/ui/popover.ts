@@ -133,8 +133,10 @@ export type StyledViewInputs = Readonly<{
 }>
 
 /** Derives upstream's data-side from a foldkit anchor placement
- *  ("bottom-start" → "bottom"). Logical sides have no foldkit equivalent. */
-const placementToSide = (placement: string): string => placement.split('-')[0] || 'bottom'
+ *  ("bottom-start" → "bottom"). Logical sides have no foldkit equivalent.
+ *  Exported so other Popover-backed components (e.g. navigation-menu) share
+ *  this mapping instead of duplicating it. */
+export const placementToSide = (placement: string): string => placement.split('-')[0] || 'bottom'
 
 /** Build styled `Popover.ViewInputs`. Pass your view's `h` so the trigger
  *  and content can dispatch your app's own messages. */

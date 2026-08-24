@@ -8,17 +8,23 @@ import { defineMessageUnion } from 'foldkit/message'
 type Child = Html | string
 
 import { cn } from '@/lib/utils'
+import { placementToSide } from './popover'
 
 // NavigationMenu is a top-level nav bar. `NavigationMenu` is the container
 // (`nav`); sub-builders are attached as properties: `.list`, `.item`,
-// `.link`, `.trigger`, `.content` (fully presentational, for hand-rolled
-// composition) and `.dropdown` (stateful — see below).
+// `.link` (fully presentational, for static links) and `dropdownViewInputs`
+// (stateful — see below).
 //
-// `.dropdown` embeds one @foldkit/ui Popover submodel per item, keyed by
-// id. Popover already supplies click-toggle, outside-click/Escape
-// dismissal, and focus management — the nav menu doesn't reimplement any
-// of that; `update` only adds "opening one item's dropdown closes any
-// other open one," since a nav bar shows at most one dropdown at a time.
+// `dropdownViewInputs` builds the `ViewInputs` for one @foldkit/ui Popover
+// submodel per item, keyed by id; the consumer wires it up with `h.submodel`
+// themselves, the same way `Menubar.viewInputs`/`HoverCard.styledViewInputs`
+// do — this keeps `h.submodel`, `model`, and `toParentMessage` visible at the
+// call site instead of hidden behind a bespoke `(config, children, model,
+// toParentMessage, h)` signature. Popover already supplies click-toggle,
+// outside-click/Escape dismissal, and focus management — the nav menu
+// doesn't reimplement any of that; `update` only adds "opening one item's
+// dropdown closes any other open one," since a nav bar shows at most one
+// dropdown at a time.
 //
 // foldcn gaps vs upstream: no shared/animated Viewport (Radix's single
 // morphing panel with a slide-direction indicator) — each dropdown is its
@@ -48,15 +54,30 @@ export const OutMessage = defineMessageUnion({
 })
 export type OutMessage = typeof OutMessage.Type
 
+/** Re-export of the underlying Popover submodel's `view`, for `h.submodel`
+ *  calls built from `dropdownViewInputs`. */
+export const view = FoldkitPopover.view
+
 type UpdateReturn = readonly [
   Model,
   ReadonlyArray<Command.Command<Message>>,
   Option.Option<OutMessage>,
 ]
 
-/** Derives upstream's data-side from a foldkit anchor placement
- *  ("bottom-start" → "bottom"). Logical sides have no foldkit equivalent. */
-const placementToSide = (placement: string): string => placement.split('-')[0] || 'bottom'
+/** Looks up the Popover model for `id`, throwing a message that names the
+ *  bad id and the ids that were actually passed to `init` — the mismatch is
+ *  otherwise easy to miss until the dropdown silently never opens. */
+export const getPopover = (model: Model, id: string): FoldkitPopover.Model => {
+  const popover = model.popovers[id]
+  if (popover === undefined) {
+    const knownIds = Object.keys(model.popovers)
+    throw new Error(
+      `NavigationMenu: unknown item id "${id}" — add it to the array passed to NavigationMenu.init. ` +
+        `Known ids: ${knownIds.length > 0 ? knownIds.join(', ') : '(none — init was called with an empty array)'}.`,
+    )
+  }
+  return popover
+}
 
 const toItemMessage =
   (id: string) =>
@@ -64,7 +85,10 @@ const toItemMessage =
     Message.GotItemMessage({ id, message })
 
 /** Processes a nav-menu message. Opening one item's popover force-closes any
- *  other currently-open item, so at most one dropdown shows at a time. */
+ *  other currently-open item, so at most one dropdown shows at a time.
+ *  That auto-close is silent: only the newly opened id's `OutMessage.Opened`
+ *  is emitted, the siblings are closed purely via commands with no matching
+ *  `Closed` out message, so don't expect one for the item that got bumped. */
 export const update = (model: Model, message: Message): UpdateReturn => {
   const { id, message: popoverMessage } = message
   const current = model.popovers[id]
@@ -135,9 +159,7 @@ export const navigationMenuTriggerClass =
 export const navigationMenuContentClass =
   'z-50 rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10 data-enter:animate-in data-leave:animate-out data-leave:fade-out-0 data-enter:fade-in-0 data-leave:zoom-out-95 data-enter:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-100 origin-(--transform-origin) outline-hidden'
 
-export const navigationMenuViewportClass = 'cn-navigation-menu-positioner isolate z-50'
-
-export const NAVIGATION_MENU_ANCHOR: AnchorConfig = { placement: 'bottom', gap: 8 }
+export const NAVIGATION_MENU_ANCHOR: AnchorConfig = { placement: 'bottom', gap: 8, padding: 8 }
 
 type StyleConfig = Readonly<{ className?: string }>
 
@@ -187,33 +209,6 @@ const navigationMenuLink = <M>(
     children,
   )
 
-const navigationMenuTrigger = <M>(
-  config: StyleConfig,
-  children: ReadonlyArray<Child>,
-  h: HtmlBuilder<M>,
-): Html =>
-  h.button(
-    [
-      h.Type('button'),
-      h.Class(cn(navigationMenuTriggerClass, config.className)),
-      h.DataAttribute('slot', 'navigation-menu-trigger'),
-    ],
-    children,
-  )
-
-const navigationMenuContent = <M>(
-  config: StyleConfig,
-  children: ReadonlyArray<Child>,
-  h: HtmlBuilder<M>,
-): Html =>
-  h.div(
-    [
-      h.Class(cn(navigationMenuContentClass, config.className)),
-      h.DataAttribute('slot', 'navigation-menu-content'),
-    ],
-    children,
-  )
-
 export type DropdownConfig = Readonly<{
   id: string
   trigger: Child
@@ -222,72 +217,56 @@ export type DropdownConfig = Readonly<{
   contentClass?: string
 }>
 
-/** A stateful nav item: trigger button + Popover-backed dropdown panel.
- *  `model` is this nav menu's `Model` (usually a field on the consumer's own
- *  state); `toParentMessage` maps this module's `Message` into the
- *  consumer's own message type, the same way `h.submodel`'s callers do
- *  elsewhere. Requires `id` to have been passed to `init`. */
-const navigationMenuDropdown = <M>(
+/** Builds a Popover `ViewInputs` for one nav-item's trigger + dropdown
+ *  panel. The consumer owns `h.submodel` (model: `NavigationMenu.getPopover(model, config.id)`,
+ *  view: `FoldkitPopover.view`) and the surrounding `<li>` — wrap the
+ *  `h.submodel` call in `NavigationMenu.item` yourself, the same way
+ *  `Menubar.viewInputs`/`HoverCard.styledViewInputs` leave their wrapping
+ *  markup to the caller instead of hiding it behind a bespoke signature. */
+export const dropdownViewInputs = <M>(
   config: DropdownConfig,
   content: ReadonlyArray<Child>,
-  model: Model,
-  toParentMessage: (message: Message) => M,
   h: HtmlBuilder<M>,
-): Html => {
-  const popoverModel = model.popovers[config.id]
-  if (popoverModel === undefined) {
-    throw new Error(
-      `NavigationMenu.dropdown: unknown item id "${config.id}" — pass it to NavigationMenu.init.`,
-    )
-  }
+): FoldkitPopover.ViewInputs => {
   const anchor = config.anchor ?? NAVIGATION_MENU_ANCHOR
-  return h.submodel({
-    slotId: config.id,
-    model: popoverModel,
-    view: FoldkitPopover.view,
-    viewInputs: {
-      anchor,
-      toView: ({ button, panel, isVisible }) =>
-        h.li(
-          [h.Class(cn(navigationMenuItemClass)), h.DataAttribute('slot', 'navigation-menu-item')],
-          [
-            h.button(
-              [
-                ...button,
-                h.Class(cn(navigationMenuTriggerClass, config.triggerClass)),
-                h.DataAttribute('slot', 'navigation-menu-trigger'),
-              ],
-              [config.trigger],
-            ),
-            ...(isVisible
-              ? [
-                  h.div(
-                    [
-                      ...panel,
-                      h.Class(cn(navigationMenuContentClass, config.contentClass)),
-                      h.DataAttribute('slot', 'navigation-menu-content'),
-                      h.DataAttribute('side', placementToSide(anchor.placement ?? 'bottom')),
-                    ],
-                    content,
-                  ),
-                ]
-              : []),
-          ],
-        ),
-    },
-    toParentMessage: (message) => toParentMessage(Message.GotItemMessage({ id: config.id, message })),
-  })
+  return {
+    anchor,
+    toView: ({ button, panel, isVisible }) =>
+      h.div(
+        [h.Class('contents')],
+        [
+          h.button(
+            [
+              ...button,
+              h.Class(cn(navigationMenuTriggerClass, config.triggerClass)),
+              h.DataAttribute('slot', 'navigation-menu-trigger'),
+            ],
+            [config.trigger],
+          ),
+          ...(isVisible
+            ? [
+                h.div(
+                  [
+                    ...panel,
+                    h.Class(cn(navigationMenuContentClass, config.contentClass)),
+                    h.DataAttribute('slot', 'navigation-menu-content'),
+                    h.DataAttribute('side', placementToSide(anchor.placement ?? 'bottom')),
+                  ],
+                  content,
+                ),
+              ]
+            : []),
+        ],
+      ),
+  }
 }
 
 /** Composable navigation menu — `NavigationMenu` is the container, with
  *  sub-builders as properties: `NavigationMenu.list`, `NavigationMenu.item`,
- *  `NavigationMenu.link`, `NavigationMenu.trigger`, `NavigationMenu.content`
- *  (presentational), and `NavigationMenu.dropdown` (stateful, Popover-backed). */
+ *  `NavigationMenu.link` (presentational). Build a stateful dropdown item
+ *  with `dropdownViewInputs` + `h.submodel` + `NavigationMenu.item`. */
 export const NavigationMenu = Object.assign(navigationMenuContainer, {
   list: navigationMenuList,
   item: navigationMenuItem,
   link: navigationMenuLink,
-  trigger: navigationMenuTrigger,
-  content: navigationMenuContent,
-  dropdown: navigationMenuDropdown,
 })
