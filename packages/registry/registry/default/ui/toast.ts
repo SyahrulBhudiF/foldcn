@@ -22,8 +22,9 @@
  *  up from below the viewport; dismissed ones slide back down while the
  *  survivors glide into their new slots; at most 3 entries are visible
  *  (older overflow renders with `data-limited`, matching Base UI's default
- *  limit). All motion rides CSS transitions on `transform`, `opacity`, and
- *  `height`.
+ *  limit). All motion rides compositor-only CSS transitions on
+ *  `transform` and `opacity` (`height` is applied instantly without a
+ *  transition to avoid layout thrashing — see `toastEntryClass`).
  *
  *  Like Base UI, entry heights are measured in the DOM: after each `show`,
  *  a background command reads the new card's natural height after paint and
@@ -89,13 +90,13 @@ export const toastVariantClass = (variant: Variant): string =>
  *  exactly like the reference root class. Entries beyond `LIMIT` render with
  *  `data-limited` and are fully hidden until a slot frees up. */
 export const toastEntryClass =
-  'pointer-events-auto absolute right-0 bottom-0 w-80 origin-bottom rounded-lg border bg-popover text-popover-foreground shadow-lg will-change-transform outline-none select-none after:absolute after:top-full after:left-0 after:h-[calc(0.75rem+1px)] after:w-full after:content-[""] [transition:transform_500ms_cubic-bezier(0.22,1,0.36,1),opacity_500ms,height_150ms] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[limited]:pointer-events-none data-[limited]:opacity-0'
+  'pointer-events-auto absolute right-0 bottom-0 w-80 origin-bottom rounded-lg border bg-popover text-popover-foreground shadow-lg [transform:translateZ(0)] [contain:layout] [backface-visibility:hidden] outline-none select-none after:absolute after:top-full after:left-0 after:h-[calc(0.75rem+1px)] after:w-full after:content-[""] [transition:transform_350ms_cubic-bezier(0.22,1,0.36,1),opacity_350ms] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[limited]:pointer-events-none data-[limited]:opacity-0'
 
 /** Content row — the reference `ToastContent`: full card height, clipped,
  *  fading out while hidden behind the frontmost layer (`data-behind`) and
  *  back in when the stack expands (`data-expanded`). */
 export const toastContentClass =
-  'flex h-full w-full items-center gap-3 overflow-hidden p-4 transition-opacity duration-[250ms] ease-[cubic-bezier(0.22,1,0.36,1)] data-[behind]:opacity-0 data-[expanded]:opacity-100'
+  'flex h-full w-full items-center gap-3 overflow-hidden p-4 transition-opacity duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] data-[behind]:opacity-0 data-[expanded]:opacity-100'
 
 export const toastTitleClass = 'text-sm font-medium'
 
@@ -157,10 +158,23 @@ const measureHeights = (containerId: string): Readonly<Record<string, number>> =
     return {}
   }
   const heights: Record<string, number> = {}
-  for (const item of Array.from(container.querySelectorAll(':scope > li[id]'))) {
+  // Batched read: single query + single layout pass via
+  // getBoundingClientRect (sub-pixel accurate, coalesced after paint).
+  // offsetHeight per-card would each force a reflow. Cards whose heights
+  // are already known render with the frontmost's forced height, so the
+  // natural value is irrelevant — mergeHeights discards those reads.
+  const items = container.querySelectorAll(':scope > li[id]')
+  for (const item of Array.from(items)) {
+    if (!(item instanceof HTMLElement) || item.id === '') {
+      continue
+    }
     const card = item.querySelector(':scope > [data-slot="toast"]')
-    if (card instanceof HTMLElement && card.offsetHeight > 0 && item.id !== '') {
-      heights[item.id] = card.offsetHeight
+    if (!(card instanceof HTMLElement)) {
+      continue
+    }
+    const h = card.getBoundingClientRect().height
+    if (h > 0) {
+      heights[item.id] = Math.round(h)
     }
   }
   return heights
@@ -178,7 +192,8 @@ const measureHeights = (containerId: string): Readonly<Record<string, number>> =
  *  - Expanded (any entry hovered): layers separate to their own measured
  *    height, offset by the cumulative height of the layers in front plus
  *    one gap each.
- *  - Enter start / leaving: `translateY(150%)` — below the viewport.
+ *  - Enter start / leaving: `translate3d(0, 150%, 0)` — below the viewport
+ *    (translate3d promotes to the compositor, unlike translateY).
  */
 type Placement = Readonly<{
   transform: string
@@ -238,7 +253,7 @@ const makePlacementFor = (
 
     if (isLeavingState(state)) {
       return {
-        transform: 'translateY(150%)',
+        transform: 'translate3d(0, 150%, 0)',
         height:
           ownHeight === undefined
             ? 'auto'
@@ -253,7 +268,7 @@ const makePlacementFor = (
       // Starting style: mount below the viewport at the collapsed height;
       // the next frame drops this and the transition glides the card in.
       return {
-        transform: 'translateY(150%)',
+        transform: 'translate3d(0, 150%, 0)',
         height: ownHeight === undefined ? 'auto' : `${frontHeight ?? ownHeight}px`,
         isBehind: false,
         isLimited,
@@ -267,7 +282,7 @@ const makePlacementFor = (
       // frees up. Never joins the expanded spread.
       const scale = Math.max(0, 1 - indexFromFront * SCALE_STEP)
       return {
-        transform: `translateY(${-(indexFromFront * GAP_PX + (1 - scale) * (frontHeight ?? ownHeight ?? 0))}px) scale(${scale.toFixed(2)})`,
+        transform: `translate3d(0, ${-(indexFromFront * GAP_PX + (1 - scale) * (frontHeight ?? ownHeight ?? 0))}px, 0) scale(${scale.toFixed(2)})`,
         height: ownHeight === undefined ? 'auto' : `${frontHeight ?? ownHeight}px`,
         isBehind: true,
         isLimited: true,
@@ -277,7 +292,7 @@ const makePlacementFor = (
 
     if (isExpanded) {
       return {
-        transform: `translateY(${expandedOffset.get(entry.id) ?? 0}px)`,
+        transform: `translate3d(0, ${expandedOffset.get(entry.id) ?? 0}px, 0)`,
         height: ownHeight === undefined ? 'auto' : `${ownHeight}px`,
         isBehind: false,
         isLimited,
@@ -289,8 +304,9 @@ const makePlacementFor = (
     if (frontHeight !== undefined && ownHeight !== undefined) {
       // Measured: exact lift — peek offset plus this layer's scale shrink
       // against the frontmost's height (the uniform collapsed card height).
+      // translate3d keeps this on the compositor thread.
       return {
-        transform: `translateY(${-(indexFromFront * GAP_PX + (1 - scale) * frontHeight)}px) scale(${scale.toFixed(2)})`,
+        transform: `translate3d(0, ${-(indexFromFront * GAP_PX + (1 - scale) * frontHeight)}px, 0) scale(${scale.toFixed(2)})`,
         height: `${frontHeight}px`,
         isBehind: indexFromFront > 0,
         isLimited,
@@ -300,7 +316,7 @@ const makePlacementFor = (
     // Pre-measurement fallback: lift by percentages of the card's own height
     // until the measure command reports back.
     return {
-      transform: `translateY(calc(${indexFromFront * -GAP_PX}px - ${indexFromFront * SCALE_STEP * 100}%)) scale(${scale.toFixed(2)})`,
+      transform: `translate3d(0, calc(${indexFromFront * -GAP_PX}px - ${indexFromFront * SCALE_STEP * 100}%), 0) scale(${scale.toFixed(2)})`,
       height: 'auto',
       isBehind: indexFromFront > 0,
       isLimited,
