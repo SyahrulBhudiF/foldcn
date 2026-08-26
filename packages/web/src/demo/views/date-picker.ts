@@ -6,7 +6,7 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import * as datePicker from '@foldcn/registry/styles/default/ui/date-picker'
+import * as datePicker from '../../generated/registry/ui/date-picker'
 
 import { DEMO_TODAY } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'

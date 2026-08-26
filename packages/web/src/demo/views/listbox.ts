@@ -7,7 +7,7 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Listbox as FoldkitListbox } from '@foldkit/ui'
 
-import * as listbox from '@foldcn/registry/styles/default/ui/listbox'
+import * as listbox from '../../generated/registry/ui/listbox'
 
 import { ItemListbox, ListboxItem } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'

@@ -48,15 +48,26 @@ export default defineConfig({
     alias: [
       {
         // Blocks compose components via the user-facing `@/components/ui`
-        // alias (kept intact for shadcn installs); in the demo app it resolves
-        // to the resolved tree.
+        // alias (kept intact for shadcn installs). In the demo app these
+        // resolve to the generated style shims — NOT a fixed tree — so a
+        // block from the lyra tree composes lyra components and follows
+        // live style switches like every other consumer.
         find: '@/components/ui',
-        replacement: path.resolve(here, '../registry/styles/default/ui'),
+        replacement: path.resolve(here, 'src/generated/registry/ui'),
       },
       {
-        // Everything the demos render resolves inside the resolved tree:
-        // components import `@/lib/utils`, lib helpers import `@/ui/*` —
-        // all served from styles/default so no raw cn-* code ever loads.
+        // Everything the demos render resolves through the shims: tree
+        // modules import `@/lib/utils`, `@/lib/icons`, and `@/ui/*`; the
+        // shims rebind on style switches so no fixed-tree code loads.
+        find: '@/lib',
+        replacement: path.resolve(here, 'src/generated/registry/lib'),
+      },
+      {
+        find: '@/ui',
+        replacement: path.resolve(here, 'src/generated/registry/ui'),
+      },
+      {
+        // Fallback for any other `@/` import: the default resolved tree.
         find: '@/',
         replacement: `${path.resolve(here, '../registry/styles/default')}/`,
       },

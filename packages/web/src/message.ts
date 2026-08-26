@@ -5,8 +5,9 @@ import { UrlRequest } from 'foldkit/navigation'
 
 import { Message as DemoMessage } from './demo'
 import { Message as InstallTabsMessage } from '@foldkit/ui/tabs'
-import { Message as ToggleGroupMessage } from '@foldcn/registry/styles/default/ui/toggle-group'
+import { Message as ToggleGroupMessage } from './generated/registry/ui/toggle-group'
 import { PackageManager, ResolvedTheme, ThemePreference } from './model'
+import { RegistryStyle } from './active-style'
 
 export const Message = defineMessageUnion({
   ClickedLink: { request: UrlRequest },
@@ -20,11 +21,13 @@ export const Message = defineMessageUnion({
     maybePreference: S.Option(ThemePreference),
     systemTheme: ResolvedTheme,
     packageManager: PackageManager,
+    style: RegistryStyle,
   },
   ClickedCopy: { value: S.String },
   CompletedCopy: { value: S.String },
   ToggledCodeBlock: { id: S.String },
   GotInstallTabsMessage: { message: InstallTabsMessage },
+  SelectedRegistryStyle: { style: RegistryStyle },
   GotThemeToggleGroupMessage: { message: ToggleGroupMessage },
   CompletedSavePackageManager: {},
   CompletedNavigateInternal: {},

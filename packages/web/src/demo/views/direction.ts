@@ -1,6 +1,6 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { direction } from '@foldcn/registry/styles/default/ui/direction'
+import { direction } from '../../generated/registry/ui/direction'
 
 import { defineSlice } from '../slice'
 import type { Model, Message } from '../assemble'

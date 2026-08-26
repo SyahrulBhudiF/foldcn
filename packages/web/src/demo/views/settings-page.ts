@@ -3,7 +3,7 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { settingsPage } from '@foldcn/registry/styles/default/blocks/settings-page/settings-page'
+import { settingsPage } from '../../generated/registry/blocks/settings-page/settings-page'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

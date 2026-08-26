@@ -3,7 +3,7 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { inputOtp } from '@foldcn/registry/styles/default/ui/input-otp'
+import { inputOtp } from '../../generated/registry/ui/input-otp'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

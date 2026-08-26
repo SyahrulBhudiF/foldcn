@@ -3,7 +3,7 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { textarea } from '@foldcn/registry/styles/default/ui/textarea'
+import { textarea } from '../../generated/registry/ui/textarea'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

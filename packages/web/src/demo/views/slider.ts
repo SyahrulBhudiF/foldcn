@@ -6,7 +6,7 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Slider as FoldkitSlider } from '@foldkit/ui'
 
-import * as Slider from '@foldcn/registry/styles/default/ui/slider'
+import * as Slider from '../../generated/registry/ui/slider'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

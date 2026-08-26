@@ -1,8 +1,8 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { button } from '@foldcn/registry/styles/default/ui/button'
-import { Empty } from '@foldcn/registry/styles/default/ui/empty'
-import { icon } from '@foldcn/registry/styles/default/lib/icons'
+import { button } from '../../generated/registry/ui/button'
+import { Empty } from '../../generated/registry/ui/empty'
+import { icon } from '../../generated/registry/lib/icons'
 import { ArrowUpRight, FolderCode } from 'lucide'
 
 import { defineSlice } from '../slice'

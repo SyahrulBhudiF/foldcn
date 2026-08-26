@@ -6,7 +6,7 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import * as toggleGroup from '@foldcn/registry/styles/default/ui/toggle-group'
+import * as toggleGroup from '../../generated/registry/ui/toggle-group'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

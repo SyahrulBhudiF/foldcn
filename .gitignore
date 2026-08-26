@@ -6,4 +6,5 @@ public/
 *.tgz
 .DS_Store
 packages/registry/styles/
+packages/web/src/generated/
 

@@ -6,8 +6,8 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { cn } from '@foldcn/registry/styles/default/lib/utils'
-import * as DragAndDrop from '@foldcn/registry/styles/default/ui/drag-and-drop'
+import { cn } from '../../generated/registry/lib/utils'
+import * as DragAndDrop from '../../generated/registry/ui/drag-and-drop'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

@@ -1,7 +1,7 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { badge } from '@foldcn/registry/styles/default/ui/badge'
-import { separator } from '@foldcn/registry/styles/default/ui/separator'
+import { badge } from '../generated/registry/ui/badge'
+import { separator } from '../generated/registry/ui/separator'
 
 import { items } from '../catalog'
 import type { Category, Item } from '../catalog/types'

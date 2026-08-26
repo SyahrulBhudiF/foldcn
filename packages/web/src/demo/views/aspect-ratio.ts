@@ -1,6 +1,6 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { aspectRatio } from '@foldcn/registry/styles/default/ui/aspect-ratio'
+import { aspectRatio } from '../../generated/registry/ui/aspect-ratio'
 
 import { defineSlice } from '../slice'
 import type { Message, Model } from '../assemble'

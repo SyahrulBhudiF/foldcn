@@ -1,8 +1,8 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { button } from '@foldcn/registry/styles/default/ui/button'
-import { Item } from '@foldcn/registry/styles/default/ui/item'
-import { icon } from '@foldcn/registry/styles/default/lib/icons'
+import { button } from '../../generated/registry/ui/button'
+import { Item } from '../../generated/registry/ui/item'
+import { icon } from '../../generated/registry/lib/icons'
 import { BadgeCheck, ChevronRight } from 'lucide'
 
 import { defineSlice } from '../slice'

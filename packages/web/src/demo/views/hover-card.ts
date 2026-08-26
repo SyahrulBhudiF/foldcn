@@ -5,7 +5,7 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import * as HoverCard from '@foldcn/registry/styles/default/ui/hover-card'
+import * as HoverCard from '../../generated/registry/ui/hover-card'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

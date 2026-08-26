@@ -1,6 +1,6 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { badge } from '@foldcn/registry/styles/default/ui/badge'
+import { badge } from '../../generated/registry/ui/badge'
 
 import { defineSlice } from '../slice'
 import type { Model, Message } from '../assemble'

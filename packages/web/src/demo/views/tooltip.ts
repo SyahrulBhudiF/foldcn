@@ -5,7 +5,7 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import * as tooltip from '@foldcn/registry/styles/default/ui/tooltip'
+import * as tooltip from '../../generated/registry/ui/tooltip'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

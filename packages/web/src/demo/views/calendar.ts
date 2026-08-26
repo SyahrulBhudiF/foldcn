@@ -6,7 +6,7 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import * as calendar from '@foldcn/registry/styles/default/ui/calendar'
+import * as calendar from '../../generated/registry/ui/calendar'
 
 import { DEMO_TODAY } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'

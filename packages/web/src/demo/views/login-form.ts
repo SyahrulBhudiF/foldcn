@@ -3,7 +3,7 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { loginForm } from '@foldcn/registry/styles/default/blocks/login-form/login-form'
+import { loginForm } from '../../generated/registry/blocks/login-form/login-form'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

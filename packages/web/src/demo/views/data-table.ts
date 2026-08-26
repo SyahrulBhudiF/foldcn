@@ -3,7 +3,7 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { dataTable } from '@foldcn/registry/styles/default/blocks/data-table/data-table'
+import { dataTable } from '../../generated/registry/blocks/data-table/data-table'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

@@ -6,7 +6,19 @@
  * classes at build time (packages/registry/scripts/resolve-styles.mjs), so no
  * token CSS is loaded here. Regenerate that tree before dev/build.
  */
+/* Demos import the ACTIVE style's resolved tree via generated shims
+ * (src/generated/registry — see active-style.ts), so utilities from every
+ * resolved tree must be scanned for the picker's other styles to render
+ * correctly after a switch. Regenerate the trees before dev/build. */
 @source "../../registry/styles/default/**/*.{ts,tsx}";
+@source "../../registry/styles/nova/**/*.{ts,tsx}";
+@source "../../registry/styles/vega/**/*.{ts,tsx}";
+@source "../../registry/styles/maia/**/*.{ts,tsx}";
+@source "../../registry/styles/lyra/**/*.{ts,tsx}";
+@source "../../registry/styles/mira/**/*.{ts,tsx}";
+@source "../../registry/styles/luma/**/*.{ts,tsx}";
+@source "../../registry/styles/sera/**/*.{ts,tsx}";
+@source "../../registry/styles/rhea/**/*.{ts,tsx}";
 
 @custom-variant dark (&:is(.dark *));
 

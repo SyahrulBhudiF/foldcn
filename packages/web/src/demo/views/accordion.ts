@@ -5,7 +5,7 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import * as accordion from '@foldcn/registry/styles/default/ui/accordion'
+import * as accordion from '../../generated/registry/ui/accordion'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

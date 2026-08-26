@@ -1,14 +1,15 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { Alert } from '@foldcn/registry/styles/default/ui/alert'
-import { badge } from '@foldcn/registry/styles/default/ui/badge'
-import { Breadcrumb, breadcrumbLinkClass } from '@foldcn/registry/styles/default/ui/breadcrumb'
-import { Card } from '@foldcn/registry/styles/default/ui/card'
+import { Alert } from '../generated/registry/ui/alert'
+import { badge } from '../generated/registry/ui/badge'
+import { Breadcrumb, breadcrumbLinkClass } from '../generated/registry/ui/breadcrumb'
+import { Card } from '../generated/registry/ui/card'
 import { cn } from '@/lib/utils'
-import { icon } from '@foldcn/registry/styles/default/lib/icons'
+import { icon } from '../generated/registry/lib/icons'
 import { TriangleAlert } from 'lucide'
 
 import * as Demo from '../demo'
+import { REGISTRY_STYLES, styleLabel } from '../active-style'
 import { type DemoItemName, hasDemo } from '../demo/view'
 import { gapsByItem } from '../catalog/gaps'
 import { itemByName } from '../catalog'
@@ -163,13 +164,31 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<AppMessage>)
                                 [h.Class('text-xs font-medium text-muted-foreground')],
                                 ['Preview'],
                               ),
-                              h.span(
+                              h.label(
+                                [h.Class('flex items-center gap-2 text-xs text-muted-foreground')],
                                 [
-                                  h.Class(
-                                    'flex items-center gap-1.5 text-xs text-muted-foreground',
+                                  'Style',
+                                  h.select(
+                                    [
+                                      h.Id('demo-style-picker'),
+                                      h.AriaLabel('Registry style applied to the preview'),
+                                      h.Class(
+                                        'rounded-md border border-input bg-transparent px-2 py-1 text-xs text-foreground outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50',
+                                      ),
+                                      h.OnChange((value) => {
+                                        const style =
+                                          REGISTRY_STYLES.find((s) => s === value) ?? model.selectedStyle
+                                        return Message.SelectedRegistryStyle({ style })
+                                      }),
+                                    ],
+                                    REGISTRY_STYLES.map((style) =>
+                                      h.option(
+                                        [h.Value(style), h.Selected(model.selectedStyle === style)],
+                                        [styleLabel(style)],
+                                      ),
+                                    ),
                                   ),
                                 ],
-                                ['Interactive demo'],
                               ),
                             ],
                             h,

@@ -1,8 +1,8 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { Marker } from '@foldcn/registry/styles/default/ui/marker'
-import { spinner } from '@foldcn/registry/styles/default/ui/spinner'
-import { icon } from '@foldcn/registry/styles/default/lib/icons'
+import { Marker } from '../../generated/registry/ui/marker'
+import { spinner } from '../../generated/registry/ui/spinner'
+import { icon } from '../../generated/registry/lib/icons'
 import { GitBranch, Search } from 'lucide'
 
 import { defineSlice } from '../slice'

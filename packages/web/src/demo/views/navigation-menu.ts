@@ -5,8 +5,8 @@ import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 import * as Update from 'foldkit/update'
 
-import * as NavMenu from '@foldcn/registry/styles/default/ui/navigation-menu'
-import { icon } from '@foldcn/registry/styles/default/lib/icons'
+import * as NavMenu from '../../generated/registry/ui/navigation-menu'
+import { icon } from '../../generated/registry/lib/icons'
 import { CircleAlert, CircleCheck, CircleDashed } from 'lucide'
 
 import { defineSlice, type UpdateReturn } from '../slice'

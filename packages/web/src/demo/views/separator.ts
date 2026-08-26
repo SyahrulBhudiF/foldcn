@@ -1,6 +1,6 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { separator } from '@foldcn/registry/styles/default/ui/separator'
+import { separator } from '../../generated/registry/ui/separator'
 
 import { defineSlice } from '../slice'
 import type { Model, Message } from '../assemble'

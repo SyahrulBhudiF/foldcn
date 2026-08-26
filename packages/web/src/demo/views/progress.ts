@@ -1,6 +1,6 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { progress } from '@foldcn/registry/styles/default/ui/progress'
+import { progress } from '../../generated/registry/ui/progress'
 
 import { defineSlice } from '../slice'
 import type { Message, Model } from '../assemble'

@@ -20,8 +20,8 @@ import {
   SquareTerminal,
 } from 'lucide'
 
-import { icon } from '@foldcn/registry/styles/default/lib/icons'
-import * as Sidebar from '@foldcn/registry/styles/default/ui/sidebar'
+import { icon } from '../../generated/registry/lib/icons'
+import * as Sidebar from '../../generated/registry/ui/sidebar'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

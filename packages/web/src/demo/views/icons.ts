@@ -1,6 +1,6 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { icon } from '@foldcn/registry/styles/default/lib/icons'
+import { icon } from '../../generated/registry/lib/icons'
 import { Check, ChevronDown, ChevronLeft, ChevronRight, Minus, X } from 'lucide'
 
 import { defineSlice } from '../slice'
@@ -24,7 +24,7 @@ export const iconsView = (model: Model, h: HtmlBuilder<Message>): Html =>
       h.p(
         [h.Class('mb-4 text-sm text-muted-foreground')],
         [
-          'Lucide icons rendered as Foldkit virtual DOM via the h builder. Import `icon(h, node, className?)` from `@foldcn/registry/styles/default/lib/icons`.',
+          'Lucide icons rendered as Foldkit virtual DOM via the h builder. Install `@foldcn/icons` and import `icon(h, node, className?)` from it.',
         ],
       ),
       ...ICON_ROWS.map((row) =>

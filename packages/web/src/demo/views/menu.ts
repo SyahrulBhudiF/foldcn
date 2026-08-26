@@ -7,7 +7,7 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Menu as FoldkitMenu } from '@foldkit/ui'
 
-import * as menu from '@foldcn/registry/styles/default/ui/menu'
+import * as menu from '../../generated/registry/ui/menu'
 
 import { DemoMenu } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'

@@ -1,6 +1,6 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { Kbd } from '@foldcn/registry/styles/default/ui/kbd'
+import { Kbd } from '../../generated/registry/ui/kbd'
 
 import { defineSlice } from '../slice'
 import type { Message, Model } from '../assemble'

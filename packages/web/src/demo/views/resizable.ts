@@ -5,7 +5,7 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import * as resizable from '@foldcn/registry/styles/default/ui/resizable'
+import * as resizable from '../../generated/registry/ui/resizable'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

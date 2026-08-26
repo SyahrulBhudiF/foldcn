@@ -1,6 +1,6 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { Table } from '@foldcn/registry/styles/default/ui/table'
+import { Table } from '../../generated/registry/ui/table'
 
 import { defineSlice } from '../slice'
 import type { Message, Model } from '../assemble'

@@ -8,7 +8,7 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { VirtualList as FoldkitVirtualList } from '@foldkit/ui'
 
-import * as virtualList from '@foldcn/registry/styles/default/ui/virtual-list'
+import * as virtualList from '../../generated/registry/ui/virtual-list'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

@@ -1,7 +1,7 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { Alert } from '@foldcn/registry/styles/default/ui/alert'
-import { icon } from '@foldcn/registry/styles/default/lib/icons'
+import { Alert } from '../../generated/registry/ui/alert'
+import { icon } from '../../generated/registry/lib/icons'
 import { CheckCircle2, Info } from 'lucide'
 
 import { defineSlice } from '../slice'

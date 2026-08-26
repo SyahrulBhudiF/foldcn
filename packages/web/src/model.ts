@@ -1,9 +1,10 @@
 import { Schema as S } from 'effect'
 import { Model as InstallTabsModel } from '@foldkit/ui/tabs'
 
-import { Model as ToggleGroupModel } from '@foldcn/registry/styles/default/ui/toggle-group'
+import { Model as ToggleGroupModel } from './generated/registry/ui/toggle-group'
 
 import { Model as DemoModelSchema } from './demo'
+import { RegistryStyle } from './active-style'
 import { AppRoute } from './route'
 
 export const ThemePreference = S.Literals(['Dark', 'Light', 'System'])
@@ -27,6 +28,8 @@ export const Model = S.Struct({
    *  selection mirrors `maybeThemePreference`. */
   themeToggleGroup: ToggleGroupModel,
   selectedPackageManager: PackageManager,
+  /** The registry style applied to the live demo previews (see active-style.ts). */
+  selectedStyle: RegistryStyle,
   /** Ids of collapsible code blocks that are currently expanded. */
   expandedCodeBlocks: S.ReadonlySet(S.String),
 })

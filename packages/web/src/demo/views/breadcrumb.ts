@@ -1,7 +1,7 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { Breadcrumb } from '@foldcn/registry/styles/default/ui/breadcrumb'
-import { icon } from '@foldcn/registry/styles/default/lib/icons'
+import { Breadcrumb } from '../../generated/registry/ui/breadcrumb'
+import { icon } from '../../generated/registry/lib/icons'
 import { MoreHorizontal } from 'lucide'
 
 import { defineSlice } from '../slice'

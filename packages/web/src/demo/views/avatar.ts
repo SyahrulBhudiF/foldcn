@@ -5,7 +5,7 @@ import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 import * as Update from 'foldkit/update'
 
-import * as AvatarModule from '@foldcn/registry/styles/default/ui/avatar'
+import * as AvatarModule from '../../generated/registry/ui/avatar'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

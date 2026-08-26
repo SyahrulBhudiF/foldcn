@@ -7,8 +7,8 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Tabs as FoldkitTabs } from '@foldkit/ui'
 
-import * as tabs from '@foldcn/registry/styles/default/ui/tabs'
-import { Card } from '@foldcn/registry/styles/default/ui/card'
+import * as tabs from '../../generated/registry/ui/tabs'
+import { Card } from '../../generated/registry/ui/card'
 
 import { DemoTabs, DemoTab } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'

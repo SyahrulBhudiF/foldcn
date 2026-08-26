@@ -1,11 +1,11 @@
 import { Calendar as FoldkitCalendar } from 'foldkit'
 
-import * as Combobox from '@foldcn/registry/styles/default/ui/combobox'
-import * as Listbox from '@foldcn/registry/styles/default/ui/listbox'
-import * as Menu from '@foldcn/registry/styles/default/ui/menu'
-import * as RadioGroup from '@foldcn/registry/styles/default/ui/radio-group'
-import * as Select from '@foldcn/registry/styles/default/ui/select'
-import * as Tabs from '@foldcn/registry/styles/default/ui/tabs'
+import * as Combobox from '../generated/registry/ui/combobox'
+import * as Listbox from '../generated/registry/ui/listbox'
+import * as Menu from '../generated/registry/ui/menu'
+import * as RadioGroup from '../generated/registry/ui/radio-group'
+import * as Select from '../generated/registry/ui/select'
+import * as Tabs from '../generated/registry/ui/tabs'
 import { Schema as S } from 'effect'
 
 //

@@ -1,7 +1,7 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { Item } from '@foldcn/registry/styles/default/ui/item'
-import { spinner } from '@foldcn/registry/styles/default/ui/spinner'
+import { Item } from '../../generated/registry/ui/item'
+import { spinner } from '../../generated/registry/ui/spinner'
 
 import { defineSlice } from '../slice'
 import type { Message, Model } from '../assemble'

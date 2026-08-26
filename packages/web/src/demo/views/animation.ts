@@ -7,7 +7,7 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Animation as FoldkitAnimation } from '@foldkit/ui'
 
-import * as animation from '@foldcn/registry/styles/default/ui/animation'
+import * as animation from '../../generated/registry/ui/animation'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

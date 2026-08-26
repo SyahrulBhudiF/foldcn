@@ -4,8 +4,8 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { button } from '@foldcn/registry/styles/default/ui/button'
-import * as Sheet from '@foldcn/registry/styles/default/ui/sheet'
+import { button } from '../../generated/registry/ui/button'
+import * as Sheet from '../../generated/registry/ui/sheet'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

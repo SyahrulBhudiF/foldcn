@@ -3,7 +3,7 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { nav } from '@foldcn/registry/styles/default/ui/nav'
+import { nav } from '../../generated/registry/ui/nav'
 
 import { DemoNav } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'

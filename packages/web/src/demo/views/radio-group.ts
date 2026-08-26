@@ -7,7 +7,7 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { RadioGroup as FoldkitRadioGroup } from '@foldkit/ui'
 
-import * as radioGroup from '@foldcn/registry/styles/default/ui/radio-group'
+import * as radioGroup from '../../generated/registry/ui/radio-group'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

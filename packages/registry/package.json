@@ -12,7 +12,7 @@
     "./registry/default/lib/registry.json": "./registry/default/lib/registry.json",
     "./registry/default/blocks/registry.json": "./registry/default/blocks/registry.json",
     "./registry/default/style/registry.json": "./registry/default/style/registry.json",
-    "./styles/default/*": "./styles/default/*"
+    "./styles/*": "./styles/*"
   },
   "scripts": {
     "build": "node scripts/build.mjs",

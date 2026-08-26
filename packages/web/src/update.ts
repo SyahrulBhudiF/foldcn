@@ -5,11 +5,12 @@ import { evo } from 'foldkit/struct'
 import * as Tabs from '@foldkit/ui/tabs'
 
 import * as Demo from './demo'
+import { readStoredStyle, setActiveStyle, type RegistryStyle } from './active-style'
 import { parseRoute } from './route'
 import { Message } from './message'
 import type { Message as AppMessage } from './message'
 import { Model, PackageManager, ResolvedTheme, ThemePreference } from './model'
-import * as ToggleGroup from '@foldcn/registry/styles/default/ui/toggle-group'
+import * as ToggleGroup from './generated/registry/ui/toggle-group'
 
 export const THEME_STORAGE_KEY = 'foldcn-theme'
 export const PACKAGE_MANAGER_STORAGE_KEY = 'foldcn-package-manager'
@@ -188,6 +189,7 @@ export const LoadBrowserEnvironment = Command.define('LoadBrowserEnvironment', {
       maybePreference: readStoredPreference(),
       systemTheme: systemPrefersDark(),
       packageManager: readStoredPackageManager(),
+      style: readStoredStyle(),
     }),
   ),
 })
@@ -256,7 +258,7 @@ export const update = (model: Model, message: AppMessage): UpdateReturn =>
       CompletedSaveThemePreference: () => [model, []],
       CompletedSavePackageManager: () => [model, []],
 
-      LoadedBrowserEnvironment: ({ maybePreference, systemTheme, packageManager }) => {
+      LoadedBrowserEnvironment: ({ maybePreference, systemTheme, packageManager, style }) => {
         const resolvedTheme = Option.match(maybePreference, {
           onNone: () => systemTheme,
           onSome: (preference) => (preference === 'System' ? systemTheme : preference),
@@ -266,6 +268,7 @@ export const update = (model: Model, message: AppMessage): UpdateReturn =>
             maybeThemePreference: () => maybePreference,
             resolvedTheme: () => resolvedTheme,
             selectedPackageManager: () => packageManager,
+            selectedStyle: () => style,
             themeToggleGroup: () =>
               ToggleGroup.reflect(
                 model.themeToggleGroup,
@@ -296,6 +299,14 @@ export const update = (model: Model, message: AppMessage): UpdateReturn =>
         }),
         [],
       ],
+      SelectedRegistryStyle: ({ style }) => {
+        // Synchronous side effect before returning: the runtime re-renders the
+        // view right after update, and the re-render must observe the shim
+        // exports rebound to the new tree. Persistence lives inside
+        // setActiveStyle — no reload, so demo state survives the switch.
+        setActiveStyle(style)
+        return [evo(model, { selectedStyle: () => style }), []]
+      },
       CompletedNavigateInternal: () => [model, []],
       CompletedLoadExternal: () => [model, []],
       CompletedScrollToTop: () => [model, []],

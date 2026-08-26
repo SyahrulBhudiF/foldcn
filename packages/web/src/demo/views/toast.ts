@@ -5,7 +5,7 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import * as ToastModule from '@foldcn/registry/styles/default/ui/toast'
+import * as ToastModule from '../../generated/registry/ui/toast'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

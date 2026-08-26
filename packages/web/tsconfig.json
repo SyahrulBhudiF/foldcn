@@ -17,6 +17,7 @@
       "@/components/ui/*": ["../registry/styles/default/ui/*"],
       "@foldcn/registry": ["../registry/registry.json"],
       "@foldcn/registry/styles/default/*": ["../registry/styles/default/*"],
+      "@foldcn/registry/styles/*": ["../registry/styles/*"],
       "@foldcn/registry/registry/default/ui/registry.json": [
         "../registry/registry/default/ui/registry.json"
       ],

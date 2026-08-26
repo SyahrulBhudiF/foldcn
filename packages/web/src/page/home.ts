@@ -1,8 +1,8 @@
 import { Option } from 'effect'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { codeBlock as registryCodeBlock } from '@foldcn/registry/styles/default/lib/code-block'
-import { separator } from '@foldcn/registry/styles/default/ui/separator'
+import { codeBlock as registryCodeBlock } from '../generated/registry/lib/code-block'
+import { separator } from '../generated/registry/ui/separator'
 
 import { componentCount } from '../catalog'
 import { Message } from '../message'

@@ -5,8 +5,8 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import * as toggle from '@foldcn/registry/styles/default/ui/toggle'
-import { icon } from '@foldcn/registry/styles/default/lib/icons'
+import * as toggle from '../../generated/registry/ui/toggle'
+import { icon } from '../../generated/registry/lib/icons'
 import { Bookmark } from 'lucide'
 
 import { defineSlice, type UpdateReturn } from '../slice'

@@ -7,7 +7,7 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Combobox as FoldkitCombobox } from '@foldkit/ui'
 
-import * as combobox from '@foldcn/registry/styles/default/ui/combobox'
+import * as combobox from '../../generated/registry/ui/combobox'
 
 import { City, CityCombobox } from '../bundles'
 import { defineSlice, type UpdateReturn } from '../slice'

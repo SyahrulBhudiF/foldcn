@@ -3,8 +3,8 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { Command, commandGroupHeadingClass } from '@foldcn/registry/styles/default/ui/command'
-import { icon } from '@foldcn/registry/styles/default/lib/icons'
+import { Command, commandGroupHeadingClass } from '../../generated/registry/ui/command'
+import { icon } from '../../generated/registry/lib/icons'
 import { Calculator, Calendar, CreditCard, Settings, Smile, User } from 'lucide'
 
 import { defineSlice, type UpdateReturn } from '../slice'

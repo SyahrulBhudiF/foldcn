@@ -4,8 +4,8 @@ import {
   inputGroup,
   inputGroupAddon,
   inputGroupInput,
-} from '@foldcn/registry/styles/default/ui/input-group'
-import { icon } from '@foldcn/registry/styles/default/lib/icons'
+} from '../../generated/registry/ui/input-group'
+import { icon } from '../../generated/registry/lib/icons'
 import { Search } from 'lucide'
 
 import { defineSlice } from '../slice'

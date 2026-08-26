@@ -1,9 +1,9 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { button } from '@foldcn/registry/styles/default/ui/button'
-import { Card } from '@foldcn/registry/styles/default/ui/card'
-import { inputClass } from '@foldcn/registry/styles/default/ui/input'
-import { label } from '@foldcn/registry/styles/default/ui/label'
+import { button } from '../../generated/registry/ui/button'
+import { Card } from '../../generated/registry/ui/card'
+import { inputClass } from '../../generated/registry/ui/input'
+import { label } from '../../generated/registry/ui/label'
 
 import { defineSlice } from '../slice'
 import type { Message, Model } from '../assemble'
