@@ -77,11 +77,18 @@ The registry repo's source files live under `registry/default/` and are the inpu
 
 foldcn components are derivations of `shadcn-ui/ui` `apps/v4/registry/bases/base/ui/*.tsx` (Base UI registry, `nova` style) — not the legacy inline-class registry they were originally seeded from. Authored component files emit only `cn-*` utility-token classes, kept character-identical to upstream so class strings stay diffable. The token definitions are vendored verbatim from upstream (`registry/styles/style-*.css`, see ADR-015), merged with hand-written foldkit deltas (`style/cn-compat.css`). Matching shadcn's own pipeline, `scripts/resolve-styles.mjs` substitutes every token occurrence with its resolved Tailwind classes into the gitignored `styles/default/{ui,lib,blocks}` tree — that tree is what the web demo renders and what `shadcn build` ships, so neither demos nor installs need the token CSS loaded (the style item carries only theme setup). foldkit state-attribute differences (enter/leave animation windows, aria-disabled instead of native disabled, placement vs side) are resolved in the compat layer, by emitting derived attributes in the view, or by rewriting animation-state hooks in the resolve step — never by editing copied class strings or vendored CSS. Recipe: `docs/deriving-from-base.md`.
 
+**Preset propagation.** Upstream leaves preset-dependent tokens (`cn-font-heading`, `cn-menu-target`, `cn-menu-translucent`, `cn-logical-sides`, `cn-rtl-flip`) unresolved in shipped sources for CLI-side rewriting at install time. foldcn resolves every token at build time instead, because those CLI transformers (`transform-font`/`transform-menu`/`transform-cleanup`) only inspect JSX `className` attributes, `cva()` and `mergeProps()` arguments — positions foldcn's `.ts` class constants never occupy — so preserved tokens would ship as dead classes (verified against shadcn 4.19 installs). Consequences, by preset field:
+
+- `fontHeading`: `cn-font-heading` resolves to the real `font-heading` utility, wired via `cssVars.theme` (`font-heading: var(--font-heading)`) on the style item and every item whose sources reference the token — additive on component installs (existing user vars are never overwritten), so a heading-font preset keeps working; without one, titles inherit the body font. See `cn-compat.css`.
+- `menuColor` / `menuAccent`: unsupported — no CSS-var equivalent and unreachable by the CLI transformer; foldcn menus render the default menu color regardless of preset.
+- `iconLibrary`: fixed to `lucide` per ADR-007.
+- `theme`, `baseColor`, `chartColor`, `radius`, `font`: these were never token-based upstream either — they propagate through CSS variables, which foldcn ships unchanged.
+
 ### ADR-015: Vendor shadcn's per-style token CSS verbatim
 
 The shadcn token layers (`apps/v4/registry/styles/style-*.css`, one file per style) are vendored **byte-identical** into `packages/registry/registry/styles/` and credited to shadcn (MIT). We deliberately do NOT build runtime compatibility against the live shadcn registry: vendored copies keep foldcn self-contained and make syncing a dumb copy (`scripts/sync-styles.mjs`, run periodically against a local checkout; provenance commit + date recorded in `registry/styles/README.md`). Byte-identity is the contract: no headers, no reformatting, no foldkit rewrites inside these files — drift against a fresh checkout is always reviewable with plain `diff`. The foldkit animation-state rewrite (`data-open:`/`data-closed:` → `data-enter:`/`data-leave:`) therefore happens at resolve time in `resolve-styles.mjs`, not in the artifact.
 
-`style-nova.css` is wired as foldcn's default style today. The other seven styles (vega, maia, lyra, mira, luma, sera, rhea) ship as inert data so a future opt-in style needs no new sourcing step — only pipeline wiring (resolved tree + registry item), which is intentionally deferred until there is a product reason.
+`style-nova.css` is wired as foldcn's default style. All eight vendored styles are resolved and shipped: `default` (nova) feeds the web demo and the top-level `/r/{name}.json` catalog, and every style — nova included — gets its own installable catalog under `/r/styles/<style>/{name}.json` so users opt in by pointing their namespace at that URL (e.g. `"@foldcn": "https://foldcn.elianiva.com/r/styles/lyra/{name}.json"`). The per-style catalogs also carry the lib/style items, so a single namespace entry is all a style needs. Tokens a style does not define (e.g. lyra lacks `cn-dialog-footer`) strip to nothing during resolution — identical to what upstream's own pipeline ships for that style.
 
 ## Component Inventory
 
@@ -221,11 +228,11 @@ packages/registry/
 │           │   └── login-form.ts         ← component source
 │           ├── settings-page/
 │           └── data-table/
-├── styles/default/                       ← RESOLVED trees (gitignored), output of resolve-styles.mjs
-│   ├── ui/                                  consumed by the web demo + swapped into shipped JSONs
-│   ├── lib/
-│   └── blocks/
+├── styles/                               ← RESOLVED trees (gitignored), output of resolve-styles.mjs
+│   ├── default/{ui,lib,blocks}             nova-derived; consumed by the web demo + shipped at /r/*.json
+│   ├── {nova,vega,maia,lyra,mira,luma,sera,rhea}/  per-style trees, swapped into /r/styles/<style>/*.json
 └── dist/r/                               ← build output: flattened catalog + per-item JSONs (served by the deploy)
+    └── styles/<style>/                   ← full opt-in style catalogs (same item set, style-resolved sources)
 ```
 
 ## User Installation Flow

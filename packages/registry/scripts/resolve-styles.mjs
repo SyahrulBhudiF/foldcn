@@ -29,8 +29,17 @@
  * appear as static string literals (variable/object-literal initializers,
  * `cn(...)` arguments), so walking every string literal subsumes upstream's
  * cva/className/mergeProps appliers. Unlike upstream we keep NO allowlist —
- * foldcn resolves every token, including `cn-font-heading` / `cn-rtl-flip`
- * which are defined in cn-compat.css rather than left for CLI-side rewriting.
+ * foldcn resolves every token at build time. Upstream leaves preset-dependent
+ * tokens (`cn-font-heading`, `cn-menu-*`) in shipped sources for CLI-side
+ * rewriting, but those transformers only inspect JSX className attributes /
+ * cva() / mergeProps() arguments — positions foldcn's `.ts` class constants
+ * never occupy — so preserved tokens would leak as dead classes. Instead,
+ * preset-dependent styling propagates through CSS variables: cn-font-heading
+ * resolves to the `font-heading` utility (deferring to a runtime
+ * --font-heading var via cssVars.theme — see cn-compat.css), so a user's
+ * heading-font preset keeps working without any install-time rewrite. Menu
+ * color/accent and icon-library presets have no CSS-var equivalent and are
+ * unsupported by design (ADR-014).
  *
  * Usage: node scripts/resolve-styles.mjs
  */
@@ -55,18 +64,26 @@ const DEFAULT_DIR = join(REGISTRY_DIR, 'registry', 'default')
 const STYLES_OUT_ROOT = join(REGISTRY_DIR, 'styles')
 
 /**
- * Style combinations to emit. foldcn derives from the vendored shadcn `nova`
- * style tokens (registry/styles/style-nova.css — see ADR-015); add entries
- * here when additional vendored styles are adopted. Compat CSS concatenates
- * FIRST so its deltas win tailwind-merge conflicts against the vendored layer.
+ * Style combinations to emit. All eight are derived from the vendored shadcn
+ * style tokens (registry/styles/style-*.css — see ADR-015); compat CSS
+ * concatenates FIRST so its deltas win tailwind-merge conflicts against the
+ * vendored layer.
+ *
+ *   - "default" (nova) feeds the web demo imports
+ *     (@foldcn/registry/styles/default/*) and the top-level /r/*.json catalog.
+ *   - every vendored style additionally gets its own resolved tree + installable
+ *     catalog under /r/styles/<style>/ so users can opt in by pointing their
+ *     namespace at https://foldcn.elianiva.com/r/styles/<style>/{name}.json.
  */
-const STYLES = [
-  {
-    name: 'default',
-    title: 'Default',
-    cssFiles: ['registry/default/style/cn-compat.css', 'registry/styles/style-nova.css'],
-  },
-]
+const COMPAT_CSS = 'registry/default/style/cn-compat.css'
+const DEFAULT_STYLE = { name: 'default', cssFiles: [COMPAT_CSS, 'registry/styles/style-nova.css'] }
+const OPT_IN_STYLES = ['nova', 'vega', 'maia', 'lyra', 'mira', 'luma', 'sera', 'rhea'].map(
+  (name) => ({
+    name,
+    cssFiles: [COMPAT_CSS, `registry/styles/style-${name}.css`],
+  }),
+)
+const STYLES = [DEFAULT_STYLE, ...OPT_IN_STYLES]
 
 // Directories copied verbatim into each style tree. They contain no `cn-*`
 // references today; the assertion below keeps that guarantee honest.

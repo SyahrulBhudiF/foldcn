@@ -86,6 +86,11 @@
       "registryDependencies": [
         "@foldcn/utils"
       ],
+      "cssVars": {
+        "theme": {
+          "font-heading": "var(--font-heading)"
+        }
+      },
       "files": [
         {
           "path": "card.ts",
@@ -162,6 +167,11 @@
       "registryDependencies": [
         "@foldcn/utils"
       ],
+      "cssVars": {
+        "theme": {
+          "font-heading": "var(--font-heading)"
+        }
+      },
       "files": [
         {
           "path": "dialog.ts",
@@ -512,6 +522,11 @@
       "registryDependencies": [
         "@foldcn/utils"
       ],
+      "cssVars": {
+        "theme": {
+          "font-heading": "var(--font-heading)"
+        }
+      },
       "files": [
         {
           "path": "empty.ts",
@@ -618,6 +633,11 @@
       "registryDependencies": [
         "@foldcn/utils"
       ],
+      "cssVars": {
+        "theme": {
+          "font-heading": "var(--font-heading)"
+        }
+      },
       "files": [
         {
           "path": "alert-dialog.ts",
@@ -633,6 +653,11 @@
       "registryDependencies": [
         "@foldcn/utils"
       ],
+      "cssVars": {
+        "theme": {
+          "font-heading": "var(--font-heading)"
+        }
+      },
       "files": [
         {
           "path": "sheet.ts",
@@ -648,6 +673,11 @@
       "registryDependencies": [
         "@foldcn/utils"
       ],
+      "cssVars": {
+        "theme": {
+          "font-heading": "var(--font-heading)"
+        }
+      },
       "files": [
         {
           "path": "drawer.ts",

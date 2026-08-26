@@ -7,7 +7,6 @@ import { resolveStyles } from './resolve-styles.mjs'
 
 const REGISTRY_DIR = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const OUT_DIR = resolve(REGISTRY_DIR, 'dist/r')
-const STYLES_DIR = resolve(REGISTRY_DIR, 'styles', 'default', 'ui')
 
 const run = (command, args) => {
   const result = spawnSync(command, args, {
@@ -39,33 +38,67 @@ const itemFiles = readdirSync(OUT_DIR)
   .filter((file) => file.endsWith('.json') && file !== 'registry.json')
   .sort()
 
+/** Swap ui sources in one parsed item for the resolved tree of `styleName`. */
+const swapItemSources = (item, styleName) => {
+  let swapped = 0
+  for (const entry of item.files ?? []) {
+    const match = entry.path?.match(/^registry\/default\/ui\/([\w-]+\.ts)$/)
+    if (!match) continue
+    const resolved = readFileSync(
+      resolve(REGISTRY_DIR, 'styles', styleName, 'ui', match[1]),
+      'utf8',
+    )
+    if (entry.content !== resolved) {
+      entry.content = resolved
+      swapped += 1
+    }
+  }
+  return swapped
+}
+
 let swapped = 0
 for (const file of itemFiles) {
   const itemPath = resolve(OUT_DIR, file)
   const item = JSON.parse(readFileSync(itemPath, 'utf8'))
-  let changed = false
-  for (const entry of item.files ?? []) {
-    const match = entry.path?.match(/^registry\/default\/ui\/([\w-]+\.ts)$/)
-    if (!match) continue
-    const resolved = readFileSync(resolve(STYLES_DIR, match[1]), 'utf8')
-    if (entry.content !== resolved) {
-      entry.content = resolved
-      changed = true
-      swapped += 1
-    }
-  }
-  if (changed) writeFileSync(itemPath, `${JSON.stringify(item, null, 2)}\n`)
+  swapped += swapItemSources(item, 'default')
+  writeFileSync(itemPath, `${JSON.stringify(item, null, 2)}\n`)
 }
 console.log(
   `resolved sources swapped into ${swapped} file(s) across ${itemFiles.length} item JSONs`,
 )
 
+// 2c. Emit opt-in style catalogs under /r/styles/<style>/ — full copies of the
+//     catalog with ui sources swapped for that style's resolved tree. The
+//     default (nova) top-level catalog stays at /r/*.json; users opt in by
+//     pointing their namespace at /r/styles/<style>/{name}.json.
+const OPT_IN_STYLES = ['nova', 'vega', 'maia', 'lyra', 'mira', 'luma', 'sera', 'rhea']
+let styleItems = []
+for (const style of OPT_IN_STYLES) {
+  const styleOutDir = resolve(OUT_DIR, 'styles', style)
+  mkdirSync(styleOutDir, { recursive: true })
+  writeFileSync(
+    resolve(styleOutDir, 'registry.json'),
+    readFileSync(resolve(OUT_DIR, 'registry.json')),
+  )
+  let styleSwapped = 0
+  for (const file of itemFiles) {
+    const item = JSON.parse(readFileSync(resolve(OUT_DIR, file), 'utf8'))
+    styleSwapped += swapItemSources(item, style)
+    const outPath = resolve(styleOutDir, file)
+    writeFileSync(outPath, `${JSON.stringify(item, null, 2)}\n`)
+    styleItems.push(`styles/${style}/${file}`)
+  }
+  console.log(`style catalog ${style}: ${itemFiles.length} items → styles/${style}/ (${styleSwapped} sources swapped)`)
+}
+const allItemFiles = [...itemFiles, ...styleItems]
+
 // 2b. Assert the shipped sources keep the resolver's guarantee: no `cn-*`
 //     tokens inside string literals (comments may still reference upstream
-//     token names as behavioral documentation).
+//     token names as behavioral documentation). Covers the top-level catalog
+//     and every opt-in style catalog.
 const { Node, Project } = await import('ts-morph')
 const literalOffenders = []
-for (const file of itemFiles) {
+for (const file of allItemFiles) {
   const item = JSON.parse(readFileSync(resolve(OUT_DIR, file), 'utf8'))
   for (const entry of item.files ?? []) {
     if (!entry.path?.endsWith('.ts') || !entry.content) continue
@@ -90,11 +123,14 @@ if (literalOffenders.length > 0) {
 }
 
 // 3. Generate a worker index over the built item JSONs so the deploy worker
-//    can serve /r/{name}.json without knowing the item list ahead of time.
+//    can serve /r/{name}.json and /r/styles/<style>/{name}.json without knowing
+//    the item list ahead of time.
 const identifierFor = (file) => `_${file.slice(0, -'.json'.length).replace(/[^a-zA-Z0-9]/g, '_')}`
 
-const importLines = itemFiles.map((file) => `import ${identifierFor(file)} from './${file}'`)
-const itemEntries = itemFiles.map(
+const importLines = allItemFiles.map(
+  (file) => `import ${identifierFor(file)} from './${file}'`,
+)
+const itemEntries = allItemFiles.map(
   (file) => `  ${JSON.stringify(file.slice(0, -'.json'.length))}: ${identifierFor(file)},`,
 )
 
@@ -124,5 +160,7 @@ export declare const items: Record<string, unknown>
 )
 
 const catalog = JSON.parse(readFileSync(resolve(OUT_DIR, 'registry.json'), 'utf8'))
-console.log(`registry build complete: ${itemFiles.length + 1} items → ${OUT_DIR}`)
+console.log(
+  `registry build complete: ${itemFiles.length + 1} items × ${OPT_IN_STYLES.length} styles (${1 + OPT_IN_STYLES.length} catalogs) → ${OUT_DIR}`,
+)
 console.log(`catalog: ${catalog.name} — homepage ${catalog.homepage}`)

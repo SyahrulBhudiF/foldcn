@@ -6,6 +6,8 @@ export type ThemeColorMap = Readonly<Record<string, string>>
 export type MaybeTheme = Readonly<{
   light?: ThemeColorMap
   dark?: ThemeColorMap
+  /** Tailwind theme mappings (e.g. the font-heading utility wiring). */
+  theme?: ThemeColorMap
 }>
 
 /** A loose structural type for a sub-registry manifest group. */

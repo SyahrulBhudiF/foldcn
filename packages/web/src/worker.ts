@@ -4,7 +4,8 @@ import type { WorkerEnv } from '../../../alchemy.run'
  * foldcn runs on Cloudflare Workers via alchemy (`Cloudflare.Website` with
  * `assets.runWorkerFirst`). Routing:
  *
- *   - `/r/{name}.json` and `/r/registry.json` — the shadcn install contract.
+ *   - `/r/{name}.json`, `/r/registry.json` and the opt-in style catalogs
+ *     `/r/styles/<style>/{name}.json` — the shadcn install contract.
  *     The compiled registry is copied into the static assets during the build
  *     (`dist/client/r`), so we fetch it through `env.ASSETS` and attach cache
  *     headers tuned for an immutable, content-addressed-ish registry: clients
@@ -17,7 +18,7 @@ const REGISTRY_CACHE = 'public, max-age=600, stale-while-revalidate=86400'
 const registryPath = (pathname: string): string | undefined =>
   pathname === '/r/registry.json'
     ? '/r/registry.json'
-    : /^\/r\/[a-z0-9-]+\.json$/i.test(pathname)
+    : /^\/r\/(styles\/[a-z0-9-]+\/)?[a-z0-9-]+\.json$/i.test(pathname)
       ? pathname
       : undefined
 

@@ -14,8 +14,13 @@
         "tailwind-merge",
         "lucide"
       ],
-      "devDependencies": ["tw-animate-css"],
-      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
+      "devDependencies": [
+        "tw-animate-css"
+      ],
+      "registryDependencies": [
+        "@foldcn/utils",
+        "@foldcn/icons"
+      ],
       "files": [],
       "cssVars": {
         "theme": {
@@ -44,6 +49,7 @@
           "color-chart-4": "var(--chart-4)",
           "color-chart-5": "var(--chart-5)",
           "font-sans": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "font-heading": "var(--font-heading)",
           "font-mono": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
           "radius-sm": "calc(var(--radius) * 0.6)",
           "radius-md": "calc(var(--radius) * 0.8)",

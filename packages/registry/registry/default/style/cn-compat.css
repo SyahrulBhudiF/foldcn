@@ -16,10 +16,20 @@
  *    control token needs aria-/data- twins below.
  */
 
-/* Upstream defines cn-font-heading app-side (shadcn docs globals.css).
- * Point it at your heading font; font-sans keeps the default look. */
+/* Upstream leaves cn-font-heading in shipped sources and lets the CLI rewrite
+ * it at install time (transform-font → `font-heading` iff the project CSS
+ * defines `--font-heading:`). foldcn cannot use that path — the CLI
+ * transformers only inspect JSX className attributes / cva() / mergeProps()
+ * arguments, which foldcn's `.ts` class constants never are (verified against
+ * transform-font.ts/transform-cleanup.ts) — so the token resolves here to the
+ * real `font-heading` utility. The utility defers to a runtime --font-heading
+ * variable (wired via cssVars.theme on the style item and every item whose
+ * sources reference this token): a shadcn preset that set a heading font keeps
+ * working (component installs never overwrite existing user vars), and without
+ * one the var is undefined so titles inherit the body font.
+ */
 .cn-font-heading {
-  @apply font-sans;
+  @apply font-heading;
 }
 
 /* Upstream rewrites this marker to rtl:rotate-180 at install time via the

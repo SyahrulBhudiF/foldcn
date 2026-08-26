@@ -159,6 +159,11 @@
   --font-sans:
     ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
     'Noto Color Emoji';
+  /* Resolved component sources emit the `font-heading` utility (cn-font-heading
+   * token → font-heading, see registry cn-compat.css). Same wiring the style
+   * item ships: the utility defers to a runtime --font-heading if one exists
+   * (e.g. a shadcn heading-font preset), otherwise titles inherit. */
+  --font-heading: var(--font-heading);
   --font-mono:
     'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
     'Courier New', monospace;
