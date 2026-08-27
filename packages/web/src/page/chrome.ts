@@ -18,6 +18,7 @@ import type { Model, PackageManager, ThemePreference } from '../model'
 
 import { categoryGroups, componentCount } from '../catalog'
 import { gapsByItem } from '../catalog/gaps'
+import { requestComponentUrl } from '../catalog/issues'
 import {
   parityIcon,
   parityLabel,
@@ -240,6 +241,30 @@ export const sidebarView = (model: Model, h: HtmlBuilder<AppMessage>): Html => {
                 ],
               )
             }),
+          ),
+          h.div(
+            [h.Class('mt-6 rounded-lg border border-border bg-muted/20 px-3 py-3')],
+            [
+              h.p(
+                [h.Class('text-xs font-medium text-foreground')],
+                ['Missing something?'],
+              ),
+              h.p(
+                [h.Class('mt-1 text-xs leading-relaxed text-muted-foreground')],
+                ['Request a component'],
+              ),
+              h.a(
+                [
+                  h.Href(requestComponentUrl()),
+                  h.Target('_blank'),
+                  h.Rel('noopener noreferrer'),
+                  h.Class(
+                    'mt-2 inline-flex items-center justify-center rounded-md border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted',
+                  ),
+                ],
+                ['Request a component →'],
+              ),
+            ],
           ),
         ],
       ),

@@ -4,6 +4,7 @@ import { badge } from '../generated/registry/ui/badge'
 import { separator } from '../generated/registry/ui/separator'
 
 import { items } from '../catalog'
+import { requestComponentUrl } from '../catalog/issues'
 import type { Category, Item } from '../catalog/types'
 import type { Message } from '../message'
 import type { Model } from '../model'
@@ -110,6 +111,31 @@ export const componentsIndexView = (model: Model, h: HtmlBuilder<Message>): Html
               ),
             ]
           }),
+          separator<Message>({ className: 'mt-10' }, h),
+          h.div(
+            [h.Class('mt-10 rounded-lg border border-border bg-muted/20 px-4 py-4')],
+            [
+              h.h2(
+                [h.Class('text-base font-semibold text-foreground')],
+                ['Missing a component?'],
+              ),
+              h.p(
+                [h.Class('mt-2 text-sm text-muted-foreground')],
+                ['Can\u0027t find what you need? Request a component and we\u0027ll consider adding it.'],
+              ),
+              h.a(
+                [
+                  h.Href(requestComponentUrl()),
+                  h.Target('_blank'),
+                  h.Rel('noopener noreferrer'),
+                  h.Class(
+                    'mt-3 inline-flex items-center justify-center rounded-md border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted',
+                  ),
+                ],
+                ['Request a component \u2192'],
+              ),
+            ],
+          ),
         ],
       ),
     ],

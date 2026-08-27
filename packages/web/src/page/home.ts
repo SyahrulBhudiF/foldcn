@@ -36,6 +36,24 @@ export const homeView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
               ' copy-paste components built with @foldkit/ui, Foldkit TEA architecture, and Tailwind CSS.',
             ],
           ),
+          h.p(
+            [h.Class('mt-3 text-sm')],
+            [
+              'Foldkit-only \u2014 not a React drop-in. If you use React, stay on ',
+              h.a(
+                [
+                  h.Href('https://ui.shadcn.com'),
+                  h.Target('_blank'),
+                  h.Rel('noopener noreferrer'),
+                  h.Class(
+                    'text-foreground underline decoration-1 decoration-border underline-offset-[3px] hover:decoration-foreground',
+                  ),
+                ],
+                ['shadcn/ui'],
+              ),
+              '.',
+            ],
+          ),
           registryCodeBlock<Message>(
             {
               path: 'Terminal',
@@ -78,9 +96,9 @@ export const homeView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           h.p(
             [h.Class('mt-5')],
             [
-              'Two steps: register the ',
+              'Three steps: register the ',
               h.code([h.Class('font-mono text-[0.9em]')], ['@foldcn']),
-              ' namespace, then install the base style (the command above) to write the theme variables and core dependencies into your project.',
+              ' namespace, install the base style (the command above) to write the theme variables and core dependencies into your project, then add components as you need them.',
             ],
           ),
           h.ol(
@@ -120,6 +138,28 @@ export const homeView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                     [
                       'Use the command above — it writes the theme variables and core dependencies into your project.',
                     ],
+                  ),
+                ],
+              ),
+              h.li(
+                [h.Class('mt-[0.375rem]')],
+                [
+                  h.div([], ['Add components as you need them']),
+                  registryCodeBlock<Message>(
+                    {
+                      path: 'Terminal',
+                      code: 'npx shadcn@latest add @foldcn/button @foldcn/dialog',
+                      lang: 'shell',
+                      onCopy: Message.ClickedCopy({
+                        value: 'npx shadcn@latest add @foldcn/button @foldcn/dialog',
+                      }),
+                      isCopied: Option.exists(
+                        model.maybeCopiedValue,
+                        (v) => v === 'npx shadcn@latest add @foldcn/button @foldcn/dialog',
+                      ),
+                      className: 'mt-2',
+                    },
+                    h,
                   ),
                 ],
               ),

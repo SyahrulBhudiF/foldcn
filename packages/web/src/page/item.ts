@@ -6,12 +6,15 @@ import { Breadcrumb, breadcrumbLinkClass } from '../generated/registry/ui/breadc
 import { Card } from '../generated/registry/ui/card'
 import { cn } from '@/lib/utils'
 import { icon } from '../generated/registry/lib/icons'
-import { TriangleAlert } from 'lucide'
+import { Bug, ExternalLink, TriangleAlert } from 'lucide'
 
 import * as Demo from '../demo'
 import { REGISTRY_STYLES, styleLabel } from '../active-style'
 import { type DemoItemName, hasDemo } from '../demo/view'
 import { gapsByItem } from '../catalog/gaps'
+import { parityStatus } from '../catalog/parity'
+import { incompatibilityIssueUrl } from '../catalog/issues'
+import { shadcnUrlFor } from '../catalog/upstream'
 import { itemByName } from '../catalog'
 import type { Item } from '../catalog/types'
 import { Message } from '../message'
@@ -34,7 +37,11 @@ const gapsCallout = (name: string, h: HtmlBuilder<AppMessage>): Html => {
     [
       icon(h, TriangleAlert),
       Alert.title<AppMessage>({}, ['Differences vs shadcn/ui'], h),
-      Alert.description<AppMessage>({}, [h.ul([h.Class('list-disc space-y-1 pl-4')], gaps)], h),
+      Alert.description<AppMessage>(
+        {},
+        [h.ul([h.Class('list-disc space-y-1 pl-4')], gaps)],
+        h,
+      ),
     ],
     h,
   )
@@ -112,26 +119,66 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<AppMessage>)
                 h,
               ),
 
-              // title
-              h.div(
-                [h.Class('flex flex-wrap items-center gap-2 font-mono')],
-                [
-                  h.h1([h.Class('text-3xl font-bold tracking-tight sm:text-4xl')], [item.title]),
-                  h.span(
+              // title — e.g. "accordion            [view original | report issue]"
+              ...(() => {
+                const upstream =
+                  item.category === 'Components' ? shadcnUrlFor(item.name) : undefined
+                const gaps = gapsByItem[item.name] ?? []
+                const reportUrl = incompatibilityIssueUrl(
+                  item.name,
+                  gaps,
+                  parityStatus(item.name),
+                )
+                const headerActions = h.div(
+                  [h.Class('flex items-center overflow-hidden rounded-md border border-border')],
+                  [
+                    ...(upstream
+                      ? [
+                          h.a(
+                            [
+                              h.Href(upstream),
+                              h.Target('_blank'),
+                              h.Rel('noopener noreferrer'),
+                              h.Class(
+                                'inline-flex items-center justify-center gap-1.5 bg-background px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted',
+                              ),
+                            ],
+                            ['View original', icon(h, ExternalLink, 'size-3')],
+                          ),
+                          h.div([h.Class('w-px self-stretch bg-border')], []),
+                        ]
+                      : []),
+                    h.a(
+                      [
+                        h.Href(reportUrl),
+                        h.Target('_blank'),
+                        h.Rel('noopener noreferrer'),
+                        h.Class(
+                          'inline-flex items-center justify-center gap-1.5 bg-background px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted',
+                        ),
+                      ],
+                      [icon(h, Bug, 'size-3'), 'Report issue'],
+                    ),
+                  ],
+                )
+                return [
+                  h.div(
+                    [h.Class('flex flex-wrap items-center justify-between gap-4 font-mono')],
                     [
-                      h.Class(
-                        'rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground',
+                      h.h1(
+                        [h.Class('text-3xl font-bold tracking-tight sm:text-4xl')],
+                        [item.title],
                       ),
+                      headerActions,
                     ],
-                    [item.type],
                   ),
-                ],
-              ),
-              h.p(
-                [h.Class('mt-4 text-pretty text-muted-foreground font-mono')],
-                [item.description],
-              ),
-              gapsCallout(item.name, h),
+                  h.p(
+                    [h.Class('mt-4 text-pretty text-muted-foreground font-mono')],
+                    [item.description],
+                  ),
+                  gapsCallout(item.name, h),
+                ]
+              })(),
 
               // dependencies
               ...(item.maybeDependencies && item.maybeDependencies.length > 0
@@ -158,32 +205,43 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<AppMessage>)
                         { className: 'mt-10 overflow-hidden font-sans py-0 gap-0' },
                         [
                           Card.header<AppMessage>(
-                            { className: 'flex-row items-center justify-between border-b py-2.5' },
+                            { className: 'flex flex-wrap items-center justify-between gap-3 border-b py-2.5' },
                             [
                               h.span(
                                 [h.Class('text-xs font-medium text-muted-foreground')],
                                 ['Preview'],
                               ),
-                              h.label(
-                                [h.Class('flex items-center gap-2 text-xs text-muted-foreground')],
+                              h.div(
+                                [h.Class('flex flex-wrap items-center gap-1')],
                                 [
-                                  'Style',
-                                  h.select(
-                                    [
-                                      h.Id('demo-style-picker'),
-                                      h.AriaLabel('Registry style applied to the preview'),
-                                      h.Class(
-                                        'rounded-md border border-input bg-transparent px-2 py-1 text-xs text-foreground outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50',
-                                      ),
-                                      h.OnChange((value) => {
-                                        const style =
-                                          REGISTRY_STYLES.find((s) => s === value) ?? model.selectedStyle
-                                        return Message.SelectedRegistryStyle({ style })
-                                      }),
-                                    ],
+                                  h.span(
+                                    [h.Class('mr-1 text-xs text-muted-foreground')],
+                                    ['Style'],
+                                  ),
+                                  h.div(
+                                    [h.Class('flex flex-wrap gap-1')],
                                     REGISTRY_STYLES.map((style) =>
-                                      h.option(
-                                        [h.Value(style), h.Selected(model.selectedStyle === style)],
+                                      h.button(
+                                        [
+                                          h.Type('button'),
+                                          h.AriaLabel(`Switch to ${styleLabel(style)} style`),
+                                          h.AriaPressed(String(model.selectedStyle === style)),
+                                          h.DataAttribute(
+                                            'state',
+                                            model.selectedStyle === style ? 'on' : 'off',
+                                          ),
+                                          h.Class(
+                                            cn(
+                                              'inline-flex items-center justify-center rounded-md border px-2.5 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
+                                              model.selectedStyle === style
+                                                ? 'bg-primary text-primary-foreground border-primary shadow-sm'
+                                                : 'bg-background text-muted-foreground border-input hover:bg-accent hover:text-accent-foreground',
+                                            ),
+                                          ),
+                                          h.OnClick(
+                                            Message.SelectedRegistryStyle({ style }),
+                                          ),
+                                        ],
                                         [styleLabel(style)],
                                       ),
                                     ),

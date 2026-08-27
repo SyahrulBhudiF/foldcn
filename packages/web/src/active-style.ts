@@ -88,6 +88,5 @@ export const setActiveStyle = (style: RegistryStyle): void => {
   for (const reloader of styleReloaders) reloader()
 }
 
-/** Human-facing label shown in the demo's style picker ("default" included). */
-export const styleLabel = (style: RegistryStyle): string =>
-  style === 'default' ? 'default (nova)' : style
+/** Human-facing label shown in the demo's style picker. */
+export const styleLabel = (style: RegistryStyle): string => style
