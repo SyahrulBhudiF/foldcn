@@ -3,7 +3,7 @@
 > **Status (post-migration):** every file in `packages/registry/registry/default/ui/*.ts`
 > now derives from `bases/base/ui` per `docs/deriving-from-base.md` — class strings are
 > the upstream `cn-*` token compositions, resolved at build time from the vendored
-> `registry/styles/style-nova.css` plus hand-written deltas in `style/cn-compat.css` (see ADR-014/ADR-015). The verdicts below were written
+> `registry/styles/style-nova.css` plus hand-written deltas in `style/cn-compat.css` (see [ADR-014](adr/014-derive-from-base-via-tokens.md)/[ADR-015](adr/015-vendor-token-css-verbatim.md)). The verdicts below were written
 > against the **pre-migration legacy port** and are kept for the functional-gap analysis
 > only; class-material diffs (radius/surface/ring columns) are resolved as of this
 > branch. Primitive-level gaps (menus without submenu/checkbox kinds, static sidebar,
@@ -141,7 +141,7 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 ## What parity would require
 
 > 2026-08 update: the foundation for this is in place — see `docs/deriving-from-base.md`
-> and ADR-014. Components now derive from `bases/base/ui` via the generated `cn-*`
+> and [ADR-014](adr/014-derive-from-base-via-tokens.md). Components now derive from `bases/base/ui` via the generated `cn-*`
 > token layer (`button` is migrated as the reference). Functional gaps #1–#4
 > (button disabled, progress indeterminate, switch hidden input, input-otp
 > onComplete) were fixed as of 2026-08-22 — see the Status blockquote above for

@@ -18,7 +18,7 @@ pnpm install
 - **Resolved source** in `packages/registry/styles/default/` is gitignored and generated. Don't edit it. They're generated based on the selected shadcn style based on the components in the registry.
 - **Showcase site** in `packages/web/` auto-discovers components and demos as long as you follow the convention.
 
-Check `CONTEXT.md` for ADRs and `docs/deriving-from-base.md` for the full derivation recipe.
+Check `docs/adr/` for architecture decisions and `docs/deriving-from-base.md` for the full derivation recipe.
 
 ## The two things that will bite you
 
@@ -51,7 +51,7 @@ pnpm validate     # registry schema check
 Three things:
 
 **1. Source** - `packages/registry/registry/default/ui/<name>.ts`
-Self-contained module: types, logic, styled view in one file. Match the pattern of a nearby component (helper vs submodel vs presentational. See `CONTEXT.md` ADR-011).
+Self-contained module: types, logic, styled view in one file. Match the pattern of a nearby component (helper vs submodel vs presentational — see `docs/adr/011-styled-view-factories.md`).
 
 **2. Manifest** - `packages/registry/registry/default/ui/registry.json`
 Add `name`, `type`, `title`, `description`, `files`. Only declare `dependencies` beyond what the base style already provides (`foldkit`, `effect`, `@foldkit/ui`, `clsx`, `tailwind-merge`, `lucide`, `tw-animate-css`). If it intentionally diverges from shadcn (primitive ceiling, no pointer anchoring, etc.), add a short note to `packages/web/src/catalog/gaps.ts`.

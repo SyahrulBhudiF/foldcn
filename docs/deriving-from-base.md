@@ -1,6 +1,6 @@
 # Deriving foldcn components from the shadcn v4 base registry
 
-Since ADR-014, foldcn components are **derivations of the shadcn v4 BASE registry**
+Since [ADR-014](adr/014-derive-from-base-via-tokens.md), foldcn components are **derivations of the shadcn v4 BASE registry**
 (`shadcn-ui/ui/apps/v4/registry/bases/base/ui/*.tsx`, styled by `style-nova.css`) —
 not of the legacy inline-class registry. This doc is the recipe.
 
@@ -12,7 +12,7 @@ shadcn/ui checkout (upstream)
   styles/style-*.css                ← .cn-* token definitions (per style)
         │
         │  packages/registry/scripts/sync-styles.mjs
-        ▼ (verbatim byte-identical copies — see ADR-015)
+        ▼ (verbatim byte-identical copies — see [ADR-015](adr/015-vendor-token-css-verbatim.md))
 registry/styles/style-{nova,...}.css    ← VENDORED upstream styles (do not edit)
 registry/default/style/cn-compat.css    ← hand-written foldkit deltas (edit here)
         │
@@ -39,7 +39,7 @@ every string literal (same mechanism as upstream's `build-registry.mts`).
    defaults, `data-slot` names, and every `cn-*` class it references.
 2. Rewrite the foldcn file so each part's class string is **character-identical**
    to upstream's (minus React-isms). Keep foldcn's config/view factory shape
-   (ADR-011) — only the emitted classes and attributes change.
+   ([ADR-011](adr/011-styled-view-factories.md)) — only the emitted classes and attributes change.
 3. Emit the same `data-slot` attributes as upstream on every part.
 4. Map state attributes per the table below.
 5. If upstream relies on an attribute foldkit cannot emit, add a rule to
@@ -102,7 +102,7 @@ pnpm --filter @foldcn/web build && pnpm --filter @foldcn/web test
 ```
 
 The vendored files must stay byte-identical to upstream — no headers, no
-formatting, no foldkit edits (ADR-015). `resolve-styles.mjs` reports tokens
+formatting, no foldkit edits ([ADR-015](adr/015-vendor-token-css-verbatim.md)). `resolve-styles.mjs` reports tokens
 referenced by components but defined nowhere; those are intentional no-op
 hooks upstream too.
 
