@@ -26,51 +26,98 @@ const LANGUAGE_OPTIONS = [
 ] as const
 
 export const fieldsetView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
-  fieldset<AppMessage>(
-    {
-      id: 'fieldset-contact',
-      legend: 'Contact details',
-      description: 'Used for shipping and billing.',
-      children: [
-        input<AppMessage>(
-          {
-            id: 'fieldset-name',
-            label: 'Name',
-            value: model.inputValue,
-            onInput: (value) => Message.UpdatedInputValue({ value }),
-            placeholder: 'Ada Lovelace',
-          },
-          h,
-        ),
-        h.div(
-          [h.Class(select.selectWrapperClass)],
-          [
-            select.selectLabel('Country', h),
-            h.submodel({
-              slotId: model.select.id,
-              model: model.select,
-              view: LanguageSelect.view,
-              viewInputs: select.styledViewInputs<
-                AppMessage,
-                { value: string; label: string },
-                string
-              >(
-                {
-                  options: LANGUAGE_OPTIONS.map(([value, label]) => ({ value, label })),
-                  maybeSelectedValue: model.maybeSelectValue,
-                  itemToValue: (item) => item.value,
-                  itemToLabel: (item) => item.label,
-                  label: 'Country',
-                },
-                h,
-              ),
-              toParentMessage: (message) => Message.GotSelectMessage({ message }),
-            }),
-          ],
-        ),
-      ],
-    },
-    h,
+  h.div(
+    [h.Class('flex w-full flex-col gap-8')],
+    [
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Basic']),
+          fieldset<AppMessage>(
+            {
+              id: 'fieldset-contact',
+              legend: 'Contact details',
+              description: 'Used for shipping and billing.',
+              children: [
+                input<AppMessage>(
+                  {
+                    id: 'fieldset-name',
+                    label: 'Name',
+                    value: model.inputValue,
+                    onInput: (value) => Message.UpdatedInputValue({ value }),
+                    placeholder: 'Ada Lovelace',
+                  },
+                  h,
+                ),
+                h.div(
+                  [h.Class(select.selectWrapperClass)],
+                  [
+                    select.selectLabel('Country', h),
+                    h.submodel({
+                      slotId: model.select.id,
+                      model: model.select,
+                      view: LanguageSelect.view,
+                      viewInputs: select.styledViewInputs<
+                        AppMessage,
+                        { value: string; label: string },
+                        string
+                      >(
+                        {
+                          options: LANGUAGE_OPTIONS.map(([value, label]) => ({ value, label })),
+                          maybeSelectedValue: model.maybeSelectValue,
+                          itemToValue: (item) => item.value,
+                          itemToLabel: (item) => item.label,
+                          label: 'Country',
+                        },
+                        h,
+                      ),
+                      toParentMessage: (message) => Message.GotSelectMessage({ message }),
+                    }),
+                  ],
+                ),
+              ],
+            },
+            h,
+          ),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Multiple Fields']),
+          fieldset<AppMessage>(
+            {
+              id: 'fieldset-profile',
+              legend: 'Profile',
+              description: 'Update your profile information.',
+              children: [
+                input<AppMessage>({ id: 'fieldset-email', label: 'Email', value: '', onInput: (value) => Message.UpdatedInputValue({ value }), placeholder: 'name@example.com' }, h),
+                input<AppMessage>({ id: 'fieldset-username', label: 'Username', value: '', onInput: (value) => Message.UpdatedInputValue({ value }), placeholder: 'johndoe' }, h),
+              ],
+            },
+            h,
+          ),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Disabled']),
+          fieldset<AppMessage>(
+            {
+              id: 'fieldset-disabled',
+              legend: 'Disabled Fieldset',
+              description: 'All fields inside are disabled.',
+              isDisabled: true,
+              children: [
+                input<AppMessage>({ id: 'fieldset-disabled-name', label: 'Name', value: '', placeholder: 'Disabled', isDisabled: true }, h),
+              ],
+            },
+            h,
+          ),
+        ],
+      ),
+    ],
   )
 
 const foldSelectOutMessage = M.type<FoldkitListbox.OutMessage<string>>().pipe(

@@ -23,13 +23,19 @@ const FRAMEWORKS = ['Next.js', 'SvelteKit', 'Nuxt.js', 'Remix', 'Astro'] as cons
 
 export const comboboxView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
-    [h.Class('w-full max-w-xs')],
+    [h.Class('flex w-full flex-col gap-8')],
     [
-      h.submodel({
-        slotId: model.combobox.id,
-        model: model.combobox,
-        view: CityCombobox.view,
-        viewInputs: combobox.viewInputs<City>({
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Single']),
+          h.div([h.Class('w-full max-w-xs')],
+    [
+            h.submodel({
+              slotId: model.combobox.id,
+              model: model.combobox,
+              view: CityCombobox.view,
+              viewInputs: combobox.viewInputs<City>({
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
           items: FRAMEWORKS as unknown as ReadonlyArray<City>,
           restingInputValue: Option.getOrElse(model.maybeComboboxValue, () => ''),
@@ -45,8 +51,18 @@ export const comboboxView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
             ),
           }),
         }),
-        toParentMessage: (message) => Message.GotComboboxMessage({ message }),
-      }),
+              toParentMessage: (message) => Message.GotComboboxMessage({ message }),
+            }),
+          ]),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Multi']),
+          h.div([h.Class('mx-auto w-full max-w-xs rounded-lg border p-4 text-sm')], [h.p([], ['Multi-select combobox with pills.'])]),
+        ],
+      ),
     ],
   )
 

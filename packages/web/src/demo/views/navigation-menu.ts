@@ -18,7 +18,6 @@ const Message = defineMessageUnion({
   GotNavigationMenuMessage: { message: NavMenu.Message },
 })
 
-// Mirrors apps/v4/examples/base/navigation-menu-demo.tsx (minimal)
 const COMPONENTS: ReadonlyArray<{ title: string; href: string; description: string }> = [
   {
     title: 'Alert Dialog',
@@ -55,18 +54,11 @@ const COMPONENTS: ReadonlyArray<{ title: string; href: string; description: stri
 const toParentMessage = (message: NavMenu.Message): AppMessage =>
   Message.GotNavigationMenuMessage({ message })
 
-// Single source of truth for item ids — both `NAV_ITEM_IDS` (passed to
-// `NavMenu.init`) and the `navDropdown` calls below reference these
-// constants instead of repeating string literals, so the model and the view
-// can't drift out of sync on a typo.
 const GETTING_STARTED_ID = 'getting-started'
 const COMPONENTS_ID = 'components'
 const WITH_ICON_ID = 'with-icon'
 const NAV_ITEM_IDS = [GETTING_STARTED_ID, COMPONENTS_ID, WITH_ICON_ID] as const
 
-/** One stateful dropdown item: `NavigationMenu.item` (the `<li>`, owned
- *  here, not by the registry) wrapping an `h.submodel` built from
- *  `NavMenu.dropdownViewInputs`. */
 const navDropdown = (
   id: string,
   trigger: string,
@@ -89,62 +81,73 @@ const navDropdown = (
   )
 
 export const navigationMenuView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
-  NavigationMenu(
-    {},
+  h.div(
+    [h.Class('flex w-full flex-col gap-8')],
     [
-      NavigationMenu.list(
-        {},
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
         [
-          navDropdown(
-            GETTING_STARTED_ID,
-            'Getting started',
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Basic']),
+          NavigationMenu(
+            {},
             [
-              h.ul(
-                [h.Class('grid w-96 gap-1')],
+              NavigationMenu.list(
+                {},
                 [
-                  navListItem(h, 'Introduction', '/docs', 'Re-usable components built with Tailwind CSS.'),
-                  navListItem(h, 'Installation', '/docs/installation', 'How to install dependencies and structure your app.'),
-                  navListItem(h, 'Typography', '/docs/primitives/typography', 'Styles for headings, paragraphs, lists...etc'),
+                  navDropdown(
+                    GETTING_STARTED_ID,
+                    'Getting started',
+                    [
+                      h.ul(
+                        [h.Class('grid w-96 gap-1')],
+                        [
+                          navListItem(h, 'Introduction', '/docs', 'Re-usable components built with Tailwind CSS.'),
+                          navListItem(h, 'Installation', '/docs/installation', 'How to install dependencies and structure your app.'),
+                          navListItem(h, 'Typography', '/docs/primitives/typography', 'Styles for headings, paragraphs, lists...etc'),
+                        ],
+                      ),
+                    ],
+                    model,
+                    h,
+                  ),
+                  navDropdown(
+                    COMPONENTS_ID,
+                    'Components',
+                    [
+                      h.ul(
+                        [h.Class('grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]')],
+                        COMPONENTS.map((c) => navListItem(h, c.title, c.href, c.description)),
+                      ),
+                    ],
+                    model,
+                    h,
+                  ),
+                  navDropdown(
+                    WITH_ICON_ID,
+                    'With Icon',
+                    [
+                      h.ul(
+                        [h.Class('grid w-[200px] gap-1')],
+                        [
+                          h.li([], [NavigationMenu.link({}, [icon(h, CircleAlert, 'size-4'), ' Backlog'], h)]),
+                          h.li([], [NavigationMenu.link({}, [icon(h, CircleDashed, 'size-4'), ' To Do'], h)]),
+                          h.li([], [NavigationMenu.link({}, [icon(h, CircleCheck, 'size-4'), ' Done'], h)]),
+                        ],
+                      ),
+                    ],
+                    model,
+                    h,
+                  ),
+                  NavigationMenu.item({}, [NavigationMenu.link({}, ['Docs'], h)], h),
                 ],
+                h,
               ),
             ],
-            model,
             h,
           ),
-          navDropdown(
-            COMPONENTS_ID,
-            'Components',
-            [
-              h.ul(
-                [h.Class('grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]')],
-                COMPONENTS.map((c) => navListItem(h, c.title, c.href, c.description)),
-              ),
-            ],
-            model,
-            h,
-          ),
-          navDropdown(
-            WITH_ICON_ID,
-            'With Icon',
-            [
-              h.ul(
-                [h.Class('grid w-[200px] gap-1')],
-                [
-                  h.li([], [NavigationMenu.link({}, [icon(h, CircleAlert, 'size-4'), ' Backlog'], h)]),
-                  h.li([], [NavigationMenu.link({}, [icon(h, CircleDashed, 'size-4'), ' To Do'], h)]),
-                  h.li([], [NavigationMenu.link({}, [icon(h, CircleCheck, 'size-4'), ' Done'], h)]),
-                ],
-              ),
-            ],
-            model,
-            h,
-          ),
-          NavigationMenu.item({}, [NavigationMenu.link({}, ['Docs'], h)], h),
         ],
-        h,
       ),
     ],
-    h,
   )
 
 const navListItem = (h: HtmlBuilder<AppMessage>, title: string, href: string, description: string): Html =>
@@ -172,8 +175,6 @@ const fields = { navigationMenu: NavMenu.Model }
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type
 
-// The demo doesn't react to which item opened or closed, so a single
-// no-op covers both `OutMessage` tags — no need to match on `_tag`.
 const foldNavigationMenu = Update.foldChild({
   update: NavMenu.update,
   read: (model: State) => Option.some(model.navigationMenu),
@@ -191,7 +192,4 @@ export const slice = defineSlice({
       foldNavigationMenu(model, payload.message),
   }),
   samples: [],
-  // Open/close/dismiss flows entirely through the embedded Popover
-  // submodels (click, outside click, Escape); the menu emits no parent
-  // commands, so there are no top-level samples.
 })

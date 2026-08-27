@@ -1,53 +1,88 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Breadcrumb } from '../../generated/registry/ui/breadcrumb'
-import { icon } from '../../generated/registry/lib/icons'
-import { MoreHorizontal } from 'lucide'
 
 import { defineSlice } from '../slice'
 import type { Model, Message } from '../assemble'
 
-export const breadcrumbView = (model: Model, h: HtmlBuilder<Message>): Html =>
-  Breadcrumb(
-    {},
+export const breadcrumbView = (_model: Model, h: HtmlBuilder<Message>): Html =>
+  h.div(
+    [h.Class('flex w-full flex-col gap-8')],
     [
-      Breadcrumb.list(
-        {},
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
         [
-          Breadcrumb.item({}, [Breadcrumb.link({}, ['Home'], h)], h),
-          Breadcrumb.separator({}, [], h),
-          Breadcrumb.item(
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Basic']),
+          Breadcrumb(
             {},
             [
-              h.div(
-                [h.Class('relative inline-flex')],
+              Breadcrumb.list(
+                {},
                 [
-                  h.button(
-                    [
-                      h.Class(
-                        'inline-flex size-7 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                      ),
-                      h.AriaLabel('Toggle menu'),
-                    ],
-                    [
-                      icon(h, MoreHorizontal, 'size-4'),
-                      h.span([h.Class('sr-only')], ['Toggle menu']),
-                    ],
-                  ),
+                  Breadcrumb.item({}, [Breadcrumb.link({}, ['Home'], h)], h),
+                  Breadcrumb.separator({}, [], h),
+                  Breadcrumb.item({}, [Breadcrumb.link({}, ['Components'], h)], h),
+                  Breadcrumb.separator({}, [], h),
+                  Breadcrumb.item({}, [Breadcrumb.page({}, ['Breadcrumb'], h)], h),
                 ],
+                h,
               ),
             ],
             h,
           ),
-          Breadcrumb.separator({}, [], h),
-          Breadcrumb.item({}, [Breadcrumb.link({}, ['Components'], h)], h),
-          Breadcrumb.separator({}, [], h),
-          Breadcrumb.item({}, [Breadcrumb.page({}, ['Breadcrumb'], h)], h),
         ],
-        h,
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Dropdown']),
+          Breadcrumb(
+            {},
+            [
+              Breadcrumb.list(
+                {},
+                [
+                  Breadcrumb.item({}, [Breadcrumb.link({}, ['Home'], h)], h),
+                  Breadcrumb.separator({}, [], h),
+                  Breadcrumb.ellipsis({}, [], h),
+                  Breadcrumb.separator({}, [], h),
+                  Breadcrumb.item({}, [Breadcrumb.link({}, ['Components'], h)], h),
+                  Breadcrumb.separator({}, [], h),
+                  Breadcrumb.item({}, [Breadcrumb.page({}, ['Breadcrumb'], h)], h),
+                ],
+                h,
+              ),
+            ],
+            h,
+          ),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Link']),
+          Breadcrumb(
+            {},
+            [
+              Breadcrumb.list(
+                {},
+                [
+                  Breadcrumb.item({}, [Breadcrumb.link({}, ['Home'], h)], h),
+                  Breadcrumb.separator({}, [], h),
+                  Breadcrumb.ellipsis({}, [], h),
+                  Breadcrumb.separator({}, [], h),
+                  Breadcrumb.item({}, [Breadcrumb.link({}, ['Components'], h)], h),
+                  Breadcrumb.separator({}, [], h),
+                  Breadcrumb.item({}, [Breadcrumb.page({}, ['Breadcrumb'], h)], h),
+                ],
+                h,
+              ),
+            ],
+            h,
+          ),
+        ],
       ),
     ],
-    h,
   )
 
 export const slice = defineSlice({

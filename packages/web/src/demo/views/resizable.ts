@@ -12,35 +12,96 @@ import type { Model, Message as AppMessage } from '../assemble'
 
 const Message = defineMessageUnion({
   GotResizableMessage: { message: resizable.Message },
+  GotResizableVerticalMessage: { message: resizable.Message },
 })
 
-// Two-pane horizontal split mirroring apps/v4/examples/base/resizable-demo.tsx
-// (upstream nests a vertical group in the second pane; foldcn's resizable is
-// fixed two panes, so we show One | Two).
 export const resizableView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
-    [h.Class('max-w-sm rounded-lg border')],
+    [h.Class('flex w-full flex-col gap-8')],
     [
-      h.submodel({
-        slotId: model.resizable.id,
-        model: model.resizable,
-        view: resizable.view,
-        viewInputs: {
-          firstPane: {
-            content: h.div(
-              [h.Class('flex h-[200px] items-center justify-center p-6')],
-              [h.span([h.Class('font-semibold')], ['One'])],
-            ),
-          },
-          secondPane: {
-            content: h.div(
-              [h.Class('flex h-[200px] items-center justify-center p-6')],
-              [h.span([h.Class('font-semibold')], ['Two'])],
-            ),
-          },
-        },
-        toParentMessage: (message) => Message.GotResizableMessage({ message }),
-      }),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Horizontal']),
+          h.div(
+            [h.Class('rounded-lg border')],
+            [
+              h.submodel({
+                slotId: model.resizable.id,
+                model: model.resizable,
+                view: resizable.view,
+                viewInputs: {
+                  firstPane: {
+                    content: h.div(
+                      [h.Class('flex h-[200px] items-center justify-center p-6')],
+                      [h.span([h.Class('font-semibold')], ['Sidebar'])],
+                    ),
+                  },
+                  secondPane: {
+                    content: h.div(
+                      [h.Class('flex h-[200px] items-center justify-center p-6')],
+                      [h.span([h.Class('font-semibold')], ['Content'])],
+                    ),
+                  },
+                },
+                toParentMessage: (message) => Message.GotResizableMessage({ message }),
+              }),
+            ],
+          ),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Vertical']),
+          h.div(
+            [h.Class('rounded-lg border')],
+            [
+              h.submodel({
+                slotId: model.resizableVertical.id,
+                model: model.resizableVertical,
+                view: resizable.view,
+                viewInputs: {
+                  direction: 'vertical',
+                  firstPane: {
+                    content: h.div(
+                      [h.Class('flex h-[100px] items-center justify-center p-6')],
+                      [h.span([h.Class('font-semibold')], ['Header'])],
+                    ),
+                  },
+                  secondPane: {
+                    content: h.div(
+                      [h.Class('flex h-[100px] items-center justify-center p-6')],
+                      [h.span([h.Class('font-semibold')], ['Content'])],
+                    ),
+                  },
+                },
+                toParentMessage: (message) => Message.GotResizableVerticalMessage({ message }),
+              }),
+            ],
+          ),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Handle']),
+          h.div(
+            [h.Class('rounded-lg border p-6 text-center text-sm text-muted-foreground')],
+            ['With Handle variant uses same split with a visible drag handle (controlled via range input).'],
+          ),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Nested']),
+          h.div(
+            [h.Class('rounded-lg border p-6 text-center text-sm text-muted-foreground')],
+            ['Nested: outer horizontal (One | Two+Three) with inner vertical (Two | Three). Foldcn supports fixed two panes.'],
+          ),
+        ],
+      ),
     ],
   )
 
@@ -64,20 +125,31 @@ const foldResizable = Update.foldChild({
   foldOutMessage: foldResizableOutMessage,
 })
 
-const fields = { resizable: resizable.Model }
+const foldResizableVertical = Update.foldChild({
+  update: resizable.update,
+  read: (model: State) => Option.some(model.resizableVertical),
+  write: (model, next) => evo(model, { resizableVertical: () => next }),
+  toParentMessage: (message) => Message.GotResizableVerticalMessage({ message }),
+  foldOutMessage: foldResizableOutMessage,
+})
+
+const fields = { resizable: resizable.Model, resizableVertical: resizable.Model }
 
 const stateSchema = S.Struct(fields)
 type State = typeof stateSchema.Type
 
 export const slice = defineSlice({
   fields,
-  init: { resizable: resizable.init({ id: 'resizable-demo', initialValue: 50 }) },
-  messages: [Message.GotResizableMessage],
+  init: {
+    resizable: resizable.init({ id: 'resizable-demo', initialValue: 50 }),
+    resizableVertical: resizable.init({ id: 'resizable-vertical', initialValue: 25 }),
+  },
+  messages: [Message.GotResizableMessage, Message.GotResizableVerticalMessage],
   handlers: (model: State) => ({
     GotResizableMessage: (payload: typeof Message.GotResizableMessage.Type): UpdateReturn =>
       foldResizable(model, payload.message),
+    GotResizableVerticalMessage: (payload: typeof Message.GotResizableVerticalMessage.Type): UpdateReturn =>
+      foldResizableVertical(model, payload.message),
   }),
-  samples: [
-    Message.GotResizableMessage({ message: resizable.Message.Resized({ value: 70 }) }),
-  ],
+  samples: [Message.GotResizableMessage({ message: resizable.Message.Resized({ value: 70 }) })],
 })

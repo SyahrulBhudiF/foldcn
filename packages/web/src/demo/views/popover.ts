@@ -15,7 +15,14 @@ const Message = defineMessageUnion({
 })
 
 export const popoverView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
-  h.submodel({
+  h.div(
+    [h.Class('flex w-full flex-col gap-8')],
+    [
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Basic']),
+          h.submodel({
     slotId: model.popover.id,
     model: model.popover,
     view: popover.view,
@@ -110,8 +117,19 @@ export const popoverView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
       },
       h,
     ),
-    toParentMessage: (message) => Message.GotPopoverMessage({ message }),
-  })
+            toParentMessage: (message) => Message.GotPopoverMessage({ message }),
+          }),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Sides']),
+          h.div([h.Class('flex flex-wrap gap-2 justify-center')], [h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Top']), h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Right']), h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Bottom']), h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Left'])]),
+        ],
+      ),
+    ],
+  )
 
 const foldNoOp =
   <Out>(): ((out: Out) => Update.Step<State, unknown>) =>

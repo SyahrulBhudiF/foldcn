@@ -19,14 +19,20 @@ const Message = defineMessageUnion({
 
 export const sheetView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
-    [h.Class('flex flex-col items-start gap-4')],
+    [h.Class('flex w-full flex-col gap-8')],
     [
-      button<AppMessage>({ variant: 'outline', onClick: Message.ClickedOpenDialog() }, 'Open', h),
-      h.submodel({
-        slotId: model.dialog.id,
-        model: model.dialog,
-        view: Sheet.view,
-        viewInputs: Sheet.styledViewInputs(
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Right']),
+          h.div(
+            [h.Class('flex flex-col items-start gap-4')],
+            [button<AppMessage>({ variant: 'outline', onClick: Message.ClickedOpenDialog() }, 'Open', h),
+              h.submodel({
+                slotId: model.dialog.id,
+                model: model.dialog,
+                view: Sheet.view,
+                viewInputs: Sheet.styledViewInputs(
           {
             side: 'right',
             content: ({ closeButton, title, description }, h) => [
@@ -111,8 +117,19 @@ export const sheetView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           },
           h,
         ),
-        toParentMessage: (message) => Message.GotDialogMessage({ message }),
-      }),
+                toParentMessage: (message) => Message.GotDialogMessage({ message }),
+              }),
+            ],
+          ),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Sides']),
+          h.div([h.Class('flex flex-wrap gap-2')], [button<AppMessage>({ variant: 'outline' }, 'Top', h), button<AppMessage>({ variant: 'outline' }, 'Right', h), button<AppMessage>({ variant: 'outline' }, 'Bottom', h), button<AppMessage>({ variant: 'outline' }, 'Left', h)]),
+        ],
+      ),
     ],
   )
 

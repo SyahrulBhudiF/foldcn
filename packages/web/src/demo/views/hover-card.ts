@@ -15,7 +15,14 @@ const Message = defineMessageUnion({
 })
 
 export const hoverCardView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
-  h.submodel({
+  h.div(
+    [h.Class('flex w-full flex-col gap-8')],
+    [
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Basic']),
+          h.submodel({
     slotId: model.hoverCard.popover.id,
     model: model.hoverCard,
     view: HoverCard.view,
@@ -39,8 +46,19 @@ export const hoverCardView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
       },
       h,
     ),
-    toParentMessage: (message) => Message.GotHoverCardMessage({ message }),
-  })
+            toParentMessage: (message) => Message.GotHoverCardMessage({ message }),
+          }),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Delay']),
+          h.div([h.Class('mx-auto w-full max-w-sm rounded-lg border p-4 text-sm')], [h.p([], ['Hover card with open/close delay.'])]),
+        ],
+      ),
+    ],
+  )
 
 const foldNoOp =
   <Out>(): ((out: Out) => Update.Step<State, unknown>) =>

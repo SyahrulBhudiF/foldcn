@@ -44,7 +44,15 @@ const GROUPS: ReadonlyArray<{
   },
 ]
 
-export const commandView = (model: Model, h: HtmlBuilder<AppMessage>): Html => {
+export const commandView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
+  h.div(
+    [h.Class('flex w-full flex-col gap-8')],
+    [
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Basic']),
+          (() => {
   const query = model.commandSearch.toLowerCase()
   const groups = GROUPS.map((group) => {
     const items = group.items.filter((item) => item.label.toLowerCase().includes(query))
@@ -72,22 +80,19 @@ export const commandView = (model: Model, h: HtmlBuilder<AppMessage>): Html => {
     )
   }).filter((group): group is Html => group !== null)
 
-  return Command(
-    { className: 'max-w-sm rounded-lg border' },
-    [
-      Command.input(
-        {
-          value: model.commandSearch,
-          onInput: (value) => Message.UpdatedCommandSearch({ value }),
-          placeholder: 'Type a command or search...',
-        },
-        h,
+            return Command({ className: 'max-w-sm rounded-lg border' }, [Command.input({ value: model.commandSearch, onInput: (value) => Message.UpdatedCommandSearch({ value }), placeholder: 'Type a command or search...', }, h), Command.list({}, [...groups, Command.empty({}, ['No results found.'], h)], h)], h)
+          })(),
+        ],
       ),
-      Command.list({}, [...groups, Command.empty({}, ['No results found.'], h)], h),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Icons']),
+          h.div([h.Class('mx-auto w-full max-w-sm rounded-lg border p-3 text-sm')], [h.p([], ['Command palette with icons and shortcuts.'])]),
+        ],
+      ),
     ],
-    h,
   )
-}
 
 const fields = { commandSearch: S.String }
 

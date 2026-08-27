@@ -22,51 +22,77 @@ export const Message = defineMessageUnion({
 
 export const toastView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
-    [h.Class('flex flex-col items-start gap-6')],
+    [h.Class('flex w-full flex-col gap-8')],
     [
       h.div(
-        [h.Class('flex flex-wrap gap-2')],
+        [h.Class('flex w-full flex-col gap-2')],
         [
-          hButton(h, 'Info', Message.ClickedShowInfoToast()),
-          hButton(h, 'Success', Message.ClickedShowSuccessToast()),
-          hButton(h, 'Warning', Message.ClickedShowWarningToast()),
-          hButton(h, 'Error', Message.ClickedShowErrorToast()),
-        ],
-      ),
-      h.div(
-        [h.Class('flex flex-wrap gap-2')],
-        [
-          h.button(
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Basic']),
+          h.div(
+            [h.Class('flex flex-col items-start gap-6')],
             [
-              h.Class('rounded-md border border-input bg-background px-4 py-2 text-sm font-medium'),
-              h.OnClick(Message.ClickedDismissAllToasts()),
+              h.div(
+                [h.Class('flex flex-wrap gap-2')],
+                [
+                  hButton(h, 'Info', Message.ClickedShowInfoToast()),
+                  hButton(h, 'Success', Message.ClickedShowSuccessToast()),
+                  hButton(h, 'Warning', Message.ClickedShowWarningToast()),
+                  hButton(h, 'Error', Message.ClickedShowErrorToast()),
+                ],
+              ),
+              h.div(
+                [h.Class('flex flex-wrap gap-2')],
+                [
+                  h.button(
+                    [
+                      h.Class('rounded-md border border-input bg-background px-4 py-2 text-sm font-medium'),
+                      h.OnClick(Message.ClickedDismissAllToasts()),
+                    ],
+                    ['Dismiss all'],
+                  ),
+                ],
+              ),
+              h.submodel({
+                slotId: model.toast.id,
+                model: model.toast,
+                view: Toast.view,
+                viewInputs: Toast.styledViewInputs(
+                  model.toast,
+                  {
+                    position: 'BottomRight',
+                    toContent: (entry, h) => [
+                      h.p([h.Class(ToastModule.toastTitleClass)], [entry.payload.title]),
+                      ...Option.match(entry.payload.description, {
+                        onNone: () => [],
+                        onSome: (description) => [
+                          h.p([h.Class(ToastModule.toastDescriptionClass)], [description]),
+                        ],
+                      }),
+                    ],
+                  },
+                  h,
+                ),
+                toParentMessage: (message) => Message.GotToastMessage({ message }),
+              }),
             ],
-            ['Dismiss all'],
           ),
         ],
       ),
-      h.submodel({
-        slotId: model.toast.id,
-        model: model.toast,
-        view: Toast.view,
-        viewInputs: Toast.styledViewInputs(
-          model.toast,
-          {
-            position: 'BottomRight',
-            toContent: (entry, h) => [
-              h.p([h.Class(ToastModule.toastTitleClass)], [entry.payload.title]),
-              ...Option.match(entry.payload.description, {
-                onNone: () => [],
-                onSome: (description) => [
-                  h.p([h.Class(ToastModule.toastDescriptionClass)], [description]),
-                ],
-              }),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Variants']),
+          h.div(
+            [h.Class('flex flex-wrap gap-2')],
+            [
+              h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Info']),
+              h.span([h.Class('rounded-lg border px-3 py-1 text-sm bg-green-50')], ['Success']),
+              h.span([h.Class('rounded-lg border px-3 py-1 text-sm bg-yellow-50')], ['Warning']),
+              h.span([h.Class('rounded-lg border px-3 py-1 text-sm bg-red-50')], ['Error']),
             ],
-          },
-          h,
-        ),
-        toParentMessage: (message) => Message.GotToastMessage({ message }),
-      }),
+          ),
+        ],
+      ),
     ],
   )
 

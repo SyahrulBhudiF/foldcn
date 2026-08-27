@@ -19,18 +19,25 @@ const Message = defineMessageUnion({
 
 export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
-    [h.Class('flex flex-col items-start gap-4')],
+    [h.Class('flex w-full flex-col gap-8')],
     [
-      button<AppMessage>(
-        { variant: 'outline', onClick: Message.ClickedOpenDialog() },
-        'Open Drawer',
-        h,
-      ),
-      h.submodel({
-        slotId: model.dialog.id,
-        model: model.dialog,
-        view: Drawer.view,
-        viewInputs: Drawer.styledViewInputs(
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Basic']),
+          h.div(
+            [h.Class('flex flex-col items-start gap-4')],
+            [
+              button<AppMessage>(
+                { variant: 'outline', onClick: Message.ClickedOpenDialog() },
+                'Open Drawer',
+                h,
+              ),
+              h.submodel({
+                slotId: model.dialog.id,
+                model: model.dialog,
+                view: Drawer.view,
+                viewInputs: Drawer.styledViewInputs(
           {
             isHandleVisible: true,
             content: ({ closeButton, title, description }, h) => [
@@ -143,8 +150,19 @@ export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           },
           h,
         ),
-        toParentMessage: (message) => Message.GotDialogMessage({ message }),
-      }),
+                toParentMessage: (message) => Message.GotDialogMessage({ message }),
+              }),
+            ],
+          ),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Handle']),
+          h.div([h.Class('mx-auto w-full max-w-sm rounded-lg border p-4 text-sm')], [h.p([], ['Drawer with visible handle for dragging.'])]),
+        ],
+      ),
     ],
   )
 

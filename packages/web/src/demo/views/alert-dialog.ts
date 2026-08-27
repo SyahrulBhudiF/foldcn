@@ -19,18 +19,25 @@ const Message = defineMessageUnion({
 
 export const alertDialogView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.div(
-    [h.Class('flex flex-col items-start gap-4')],
+    [h.Class('flex w-full flex-col gap-8')],
     [
-      button<AppMessage>(
-        { variant: 'outline', onClick: Message.ClickedOpenDialog() },
-        'Show Dialog',
-        h,
-      ),
-      h.submodel({
-        slotId: model.dialog.id,
-        model: model.dialog,
-        view: AlertDialog.view,
-        viewInputs: AlertDialog.styledViewInputs(
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Basic']),
+          h.div(
+            [h.Class('flex flex-col items-start gap-4')],
+            [
+              button<AppMessage>(
+                { variant: 'outline', onClick: Message.ClickedOpenDialog() },
+                'Show Dialog',
+                h,
+              ),
+              h.submodel({
+                slotId: model.dialog.id,
+                model: model.dialog,
+                view: AlertDialog.view,
+                viewInputs: AlertDialog.styledViewInputs(
           {
             content: ({ closeButton, title, description }, h) => [
               AlertDialog.header(
@@ -59,8 +66,19 @@ export const alertDialogView = (model: Model, h: HtmlBuilder<AppMessage>): Html 
           },
           h,
         ),
-        toParentMessage: (message) => Message.GotDialogMessage({ message }),
-      }),
+                toParentMessage: (message) => Message.GotDialogMessage({ message }),
+              }),
+            ],
+          ),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Destructive']),
+          h.div([h.Class('mx-auto w-full max-w-sm rounded-lg border p-4 text-sm')], [h.p([], ['Destructive alert dialog variant with red action button.'])]),
+        ],
+      ),
     ],
   )
 
