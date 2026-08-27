@@ -3,6 +3,7 @@ import type { DemoItemName } from './view'
 import alertViewSource from './views/alert.ts?raw'
 import animationViewSource from './views/animation.ts?raw'
 import aspectRatioViewSource from './views/aspect-ratio.ts?raw'
+import attachmentViewSource from './views/attachment.ts?raw'
 import avatarViewSource from './views/avatar.ts?raw'
 import badgeViewSource from './views/badge.ts?raw'
 import buttonViewSource from './views/button.ts?raw'
@@ -91,6 +92,11 @@ export const demoExampleByName: Readonly<Record<DemoItemName, DemoExample>> = {
     path: 'src/demo/views/aspect-ratio.ts',
     code: aspectRatioViewSource,
     githubUrl: gh('src/demo/views/aspect-ratio.ts'),
+  },
+  attachment: {
+    path: 'src/demo/views/attachment.ts',
+    code: attachmentViewSource,
+    githubUrl: gh('src/demo/views/attachment.ts'),
   },
   avatar: {
     path: 'src/demo/views/avatar.ts',

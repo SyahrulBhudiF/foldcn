@@ -12,6 +12,7 @@ import { slice as alertDialogSlice } from './views/alert-dialog'
 import { slice as alertSlice } from './views/alert'
 import { slice as animationSlice } from './views/animation'
 import { slice as aspectRatioSlice } from './views/aspect-ratio'
+import { slice as attachmentSlice } from './views/attachment'
 import { slice as avatarSlice } from './views/avatar'
 import { slice as badgeSlice } from './views/badge'
 import { slice as breadcrumbSlice } from './views/breadcrumb'
@@ -79,6 +80,7 @@ const ModelSchema = S.Struct({
   ...alertSlice.fields,
   ...animationSlice.fields,
   ...aspectRatioSlice.fields,
+  ...attachmentSlice.fields,
   ...avatarSlice.fields,
   ...badgeSlice.fields,
   ...breadcrumbSlice.fields,
@@ -147,6 +149,7 @@ const MessageSchema = S.Union([
   ...alertSlice.messages,
   ...animationSlice.messages,
   ...aspectRatioSlice.messages,
+  ...attachmentSlice.messages,
   ...avatarSlice.messages,
   ...badgeSlice.messages,
   ...breadcrumbSlice.messages,
@@ -217,6 +220,7 @@ export const init = (): [Model, []] => {
     ...alertSlice.init,
     ...animationSlice.init,
     ...aspectRatioSlice.init,
+    ...attachmentSlice.init,
     ...avatarSlice.init,
     ...badgeSlice.init,
     ...breadcrumbSlice.init,
