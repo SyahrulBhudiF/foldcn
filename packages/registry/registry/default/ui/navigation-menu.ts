@@ -4,6 +4,8 @@ import { Option, Schema as S } from 'effect'
 import * as Command from 'foldkit/command'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 import { defineMessageUnion } from 'foldkit/message'
+import { ChevronDown } from 'lucide'
+import { icon } from '@/lib/icons'
 
 type Child = Html | string
 
@@ -145,9 +147,24 @@ export const navigationMenuLinkClass = 'cn-navigation-menu-link'
 export const navigationMenuTriggerClass =
   'cn-navigation-menu-trigger group/navigation-menu-trigger group inline-flex h-9 w-max items-center justify-center outline-none disabled:pointer-events-none'
 
-export const navigationMenuContentClass = 'cn-navigation-menu-content'
+export const navigationMenuTriggerIconClass = 'cn-navigation-menu-trigger-icon'
 
-export const NAVIGATION_MENU_ANCHOR: AnchorConfig = { placement: 'bottom', gap: 8, padding: 8 }
+export const navigationMenuContentClass =
+  'cn-navigation-menu-content data-ending-style:data-activation-direction=left:translate-x-[50%] data-ending-style:data-activation-direction=right:translate-x-[-50%] data-starting-style:data-activation-direction=left:translate-x-[-50%] data-starting-style:data-activation-direction=right:translate-x-[50%] transition-[opacity,transform,translate] duration-[0.35s] data-ending-style:opacity-0 data-starting-style:opacity-0 **:data-[slot=navigation-menu-link]:focus:ring-0 **:data-[slot=navigation-menu-link]:focus:outline-none z-50 bg-popover text-popover-foreground shadow ring-1 ring-foreground/10 rounded-lg'
+
+export const navigationMenuViewportClass = 'cn-navigation-menu-viewport'
+
+export const navigationMenuPositionerClass = 'cn-navigation-menu-positioner'
+
+export const navigationMenuPopupClass = 'cn-navigation-menu-popup'
+
+export const navigationMenuIndicatorClass = 'cn-navigation-menu-indicator'
+
+export const navigationMenuIndicatorArrowClass = 'cn-navigation-menu-indicator-arrow'
+
+export const navigationMenuTriggerStyle = () => navigationMenuTriggerClass
+
+export const NAVIGATION_MENU_ANCHOR: AnchorConfig = { placement: 'bottom-start', gap: 8, padding: 8 }
 
 type StyleConfig = Readonly<{ className?: string }>
 
@@ -160,6 +177,7 @@ const navigationMenuContainer = <M>(
     [
       h.Class(cn(navigationMenuClass, config.className)),
       h.DataAttribute('slot', 'navigation-menu'),
+      h.DataAttribute('viewport', 'false'),
     ],
     children,
   )
@@ -184,8 +202,10 @@ const navigationMenuItem = <M>(
     children,
   )
 
+type LinkConfig = Readonly<{ className?: string; href?: string }>
+
 const navigationMenuLink = <M>(
-  config: StyleConfig,
+  config: LinkConfig,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
@@ -193,6 +213,7 @@ const navigationMenuLink = <M>(
     [
       h.Class(cn(navigationMenuLinkClass, config.className)),
       h.DataAttribute('slot', 'navigation-menu-link'),
+      ...(config.href !== undefined ? [h.Attribute('href', config.href)] : []),
     ],
     children,
   )
@@ -203,6 +224,7 @@ export type DropdownConfig = Readonly<{
   anchor?: AnchorConfig
   triggerClass?: string
   contentClass?: string
+  isDisabled?: boolean
 }>
 
 /** Builds a Popover `ViewInputs` for one nav-item's trigger + dropdown
@@ -211,6 +233,28 @@ export type DropdownConfig = Readonly<{
  *  `h.submodel` call in `NavigationMenu.item` yourself, the same way
  *  `Menubar.viewInputs`/`HoverCard.styledViewInputs` leave their wrapping
  *  markup to the caller instead of hiding it behind a bespoke signature. */
+const navigationMenuViewport = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.div(
+    [h.Class(cn(navigationMenuViewportClass, config.className)), h.DataAttribute('slot', 'navigation-menu-viewport')],
+    children,
+  )
+
+const navigationMenuIndicator = <M>(
+  config: StyleConfig,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.div(
+    [h.Class(cn(navigationMenuIndicatorClass, config.className)), h.DataAttribute('slot', 'navigation-menu-indicator')],
+    children.length > 0
+      ? children
+      : [h.div([h.Class(navigationMenuIndicatorArrowClass)])],
+  )
+
 export const dropdownViewInputs = <M>(
   config: DropdownConfig,
   content: ReadonlyArray<Child>,
@@ -219,6 +263,7 @@ export const dropdownViewInputs = <M>(
   const anchor = config.anchor ?? NAVIGATION_MENU_ANCHOR
   return {
     anchor,
+    ...(config.isDisabled !== undefined && { isDisabled: config.isDisabled }),
     toView: ({ button, panel, isVisible }) =>
       h.div(
         [h.Class('contents')],
@@ -229,7 +274,7 @@ export const dropdownViewInputs = <M>(
               h.Class(cn(navigationMenuTriggerClass, config.triggerClass)),
               h.DataAttribute('slot', 'navigation-menu-trigger'),
             ],
-            [config.trigger],
+            [config.trigger, icon(h, ChevronDown, navigationMenuTriggerIconClass)],
           ),
           ...(isVisible
             ? [
@@ -251,10 +296,13 @@ export const dropdownViewInputs = <M>(
 
 /** Composable navigation menu — `NavigationMenu` is the container, with
  *  sub-builders as properties: `NavigationMenu.list`, `NavigationMenu.item`,
- *  `NavigationMenu.link` (presentational). Build a stateful dropdown item
+ *  `NavigationMenu.link` (presentational), `NavigationMenu.viewport`,
+ *  `NavigationMenu.indicator`. Build a stateful dropdown item
  *  with `dropdownViewInputs` + `h.submodel` + `NavigationMenu.item`. */
 export const NavigationMenu = Object.assign(navigationMenuContainer, {
   list: navigationMenuList,
   item: navigationMenuItem,
   link: navigationMenuLink,
+  viewport: navigationMenuViewport,
+  indicator: navigationMenuIndicator,
 })

@@ -129,16 +129,47 @@ export const navigationMenuView = (model: Model, h: HtmlBuilder<AppMessage>): Ht
                       h.ul(
                         [h.Class('grid w-[200px] gap-1')],
                         [
-                          h.li([], [NavigationMenu.link({}, [icon(h, CircleAlert, 'size-4'), ' Backlog'], h)]),
-                          h.li([], [NavigationMenu.link({}, [icon(h, CircleDashed, 'size-4'), ' To Do'], h)]),
-                          h.li([], [NavigationMenu.link({}, [icon(h, CircleCheck, 'size-4'), ' Done'], h)]),
+                          h.li(
+                            [],
+                            [
+                              NavigationMenu.link(
+                                { href: '#', className: 'flex-row items-center gap-2' },
+                                [icon(h, CircleAlert, 'size-4'), ' Backlog'],
+                                h,
+                              ),
+                            ],
+                          ),
+                          h.li(
+                            [],
+                            [
+                              NavigationMenu.link(
+                                { href: '#', className: 'flex-row items-center gap-2' },
+                                [icon(h, CircleDashed, 'size-4'), ' To Do'],
+                                h,
+                              ),
+                            ],
+                          ),
+                          h.li(
+                            [],
+                            [
+                              NavigationMenu.link(
+                                { href: '#', className: 'flex-row items-center gap-2' },
+                                [icon(h, CircleCheck, 'size-4'), ' Done'],
+                                h,
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ],
                     model,
                     h,
                   ),
-                  NavigationMenu.item({}, [NavigationMenu.link({}, ['Docs'], h)], h),
+                  NavigationMenu.item(
+                    {},
+                    [NavigationMenu.link({ href: '/docs', className: NavMenu.navigationMenuTriggerStyle() }, ['Docs'], h)],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -155,7 +186,7 @@ const navListItem = (h: HtmlBuilder<AppMessage>, title: string, href: string, de
     [],
     [
       NavigationMenu.link(
-        {},
+        { href },
         [
           h.div(
             [h.Class('flex flex-col gap-1 text-sm')],

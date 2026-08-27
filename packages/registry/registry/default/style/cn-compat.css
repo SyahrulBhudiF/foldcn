@@ -99,6 +99,11 @@
   @apply aria-disabled:cursor-not-allowed aria-disabled:opacity-50 data-disabled:cursor-not-allowed data-disabled:opacity-50;
 }
 
+/* navigation-menu trigger: same native-:disabled delta (foldkit emits aria-disabled). */
+.cn-navigation-menu-trigger {
+  @apply aria-disabled:pointer-events-none aria-disabled:opacity-50 data-disabled:pointer-events-none data-disabled:opacity-50;
+}
+
 /* sheet: upstream keys enter/exit motion on data-starting-style/
  * data-ending-style, which foldkit cannot emit — mapped to its
  * data-enter/data-leave transition windows instead. */
