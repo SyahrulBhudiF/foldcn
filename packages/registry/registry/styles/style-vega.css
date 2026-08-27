@@ -257,7 +257,7 @@
     @apply px-(--card-spacing);
   }
 
-  .cn-card-content:has(> [data-slot='questionnaire-choices']) {
+  .cn-card-content:has(> [data-slot=questionnaire-choices]) {
     @apply flex flex-col gap-3;
   }
 

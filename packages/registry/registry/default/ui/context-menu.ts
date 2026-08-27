@@ -8,7 +8,7 @@
  */
 import { Menu as FoldkitMenu } from '@foldkit/ui'
 import type { AnchorConfig } from '@foldkit/ui/menu'
-import type { Html } from 'foldkit/html'
+import { childAttributes, inertHtml, type Html } from 'foldkit/html'
 
 import { cn } from '@/lib/utils'
 
@@ -31,7 +31,11 @@ export type OutMessage = typeof OutMessage.Type
 // foldcn gap vs upstream: opens on activation at a fixed anchor — foldkit has
 // no right-click/pointer-position anchoring primitive (wire a region trigger
 // yourself). Items highlight via data-active (upstream focus:) per the
-// derivation mapping.
+// derivation mapping. Flat item path uses correct tokens/slots; per-item
+// data-slot (context-menu-item etc) cannot be stamped — primitive has no
+// per-item attribute hook. Submenu/checkbox/radio/destructive/inset kinds
+// require primitive work. Pointer-anchoring is primitive ceiling — tokens/slots
+// only.
 
 export type Bundle<Item extends string = string> = FoldkitMenu.Bundle<Item>
 export type InitConfig = FoldkitMenu.InitConfig
@@ -39,27 +43,24 @@ export type ViewInputs<Item extends string = string> = FoldkitMenu.ViewInputs<It
 export type ItemConfig = FoldkitMenu.ItemConfig
 export type GroupHeading = FoldkitMenu.GroupHeading
 
-export const contextMenuTriggerClass =
-  'flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-hidden focus:outline-hidden'
+export const contextMenuTriggerClass = 'cn-context-menu-trigger select-none'
 
 export const contextMenuItemsClass =
-  'cn-context-menu-content cn-context-menu-content-logical z-50 min-w-36 overflow-hidden outline-hidden'
+  'cn-context-menu-content cn-context-menu-content-logical cn-menu-target cn-menu-translucent z-50 max-h-(--available-height) origin-(--transform-origin) overflow-x-hidden overflow-y-auto outline-none'
 
 export const contextMenuItemsAnimatedClass = contextMenuItemsClass
 
 export const contextMenuItemClass =
-  'cn-context-menu-item relative flex w-full cursor-default select-none outline-hidden data-active:bg-accent data-active:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50'
+  'cn-context-menu-item group/context-menu-item relative flex cursor-default items-center outline-hidden select-none data-active:bg-accent data-active:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0'
 
-export const contextMenuSeparatorClass = 'cn-context-menu-separator -mx-1 my-1 h-px'
+export const contextMenuSeparatorClass = 'cn-context-menu-separator'
 
-export const contextMenuHeadingClass =
-  'cn-context-menu-label px-2 py-1.5 text-xs font-medium text-muted-foreground'
+export const contextMenuHeadingClass = 'cn-context-menu-label'
 
-export const contextMenuShortcutClass =
-  'cn-context-menu-shortcut ml-auto text-xs tracking-widest text-muted-foreground'
+export const contextMenuShortcutClass = 'cn-context-menu-shortcut'
 
 export const contextMenuSubTriggerClass =
-  "flex w-full cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[open]:bg-accent data-[open]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+  'cn-context-menu-sub-trigger flex cursor-default items-center outline-hidden select-none [&_svg]:pointer-events-none [&_svg]:shrink-0'
 
 export const contextMenuBackdropClass = 'fixed inset-0 z-0'
 
@@ -117,16 +118,21 @@ export const viewInputs = <Item extends string>(
   ariaLabel: config.ariaLabel,
   ariaLabelledBy: config.ariaLabelledBy,
   buttonClassName: cn(contextMenuTriggerClass, config.triggerClass),
+  buttonAttributes: childAttributes([inertHtml.DataAttribute('slot', 'context-menu-trigger')]),
   itemsClassName: cn(
     config.isAnimated !== false ? contextMenuItemsAnimatedClass : contextMenuItemsClass,
     config.itemsClass,
   ),
+  itemsAttributes: childAttributes([inertHtml.DataAttribute('slot', 'context-menu-content')]),
   itemToConfig: (item, context) => {
     const { className, content } = config.itemToConfig(item, context)
     return { className: cn(contextMenuItemClass, config.itemClass, className), content }
   },
   separatorClassName: cn(contextMenuSeparatorClass, config.separatorClass),
+  separatorAttributes: childAttributes([inertHtml.DataAttribute('slot', 'context-menu-separator')]),
   groupClassName: config.groupClass,
+  groupAttributes: childAttributes([inertHtml.DataAttribute('slot', 'context-menu-group')]),
   backdropClassName: cn(contextMenuBackdropClass, config.backdropClass),
   className: cn(contextMenuWrapperClass, config.wrapperClass),
+  attributes: childAttributes([inertHtml.DataAttribute('slot', 'context-menu')]),
 })

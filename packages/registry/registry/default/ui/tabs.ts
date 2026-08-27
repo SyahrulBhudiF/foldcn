@@ -133,7 +133,7 @@ export const styledViewInputs = <M, Value extends string = string>(
           ...(isVertical ? [h.DataAttribute('vertical', '')] : [h.DataAttribute('horizontal', '')]),
           h.Class(
             cn(
-              'group/tabs flex',
+              'cn-tabs group/tabs flex',
               isVertical ? 'w-full gap-2' : 'flex-col',
               viewInputs.variant === 'line' ? '' : '',
             ),

@@ -930,6 +930,21 @@
           "type": "registry:ui"
         }
       ]
+    },
+    {
+      "name": "attachment",
+      "type": "registry:ui",
+      "title": "Attachment",
+      "description": "Styled attachment with media, title, description, actions, trigger and group. A pure layout primitive.",
+      "registryDependencies": [
+        "@foldcn/utils"
+      ],
+      "files": [
+        {
+          "path": "attachment.ts",
+          "type": "registry:ui"
+        }
+      ]
     }
   ]
 }

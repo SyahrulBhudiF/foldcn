@@ -45,7 +45,6 @@ export const buttonGroup = <M>(
       h.Class(cn(buttonGroupClass, buttonGroupOrientationClasses[orientation], config.className)),
       h.DataAttribute('slot', 'button-group'),
       h.DataAttribute('orientation', orientation),
-      h.DataAttribute(orientation, ''),
     ],
     children,
   )
@@ -69,7 +68,10 @@ export const buttonGroupText = <M>(
 // attribute set and class merge (separator base wins conflicts first) by hand.
 
 /** Divider between grouped controls — a vertical `Separator` by default,
- *  matching upstream `ButtonGroupSeparator`. */
+ *  matching upstream `ButtonGroupSeparator`. Upstream emits only
+ *  `data-orientation` + `data-slot`; the `data-horizontal` / `data-vertical`
+ *  selectors in the token are matched via the Separator's own
+ *  `data-horizontal` / `data-vertical` attributes (see separator.ts). */
 export const buttonGroupSeparator = <M>(config: StyleConfig, h: HtmlBuilder<M>): Html => {
   const orientation = config.orientation ?? 'vertical'
   return h.div(

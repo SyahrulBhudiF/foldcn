@@ -8,7 +8,7 @@
  */
 import { Menu as FoldkitMenu } from '@foldkit/ui'
 import type { AnchorConfig } from '@foldkit/ui/menu'
-import type { Html, HtmlBuilder } from 'foldkit/html'
+import { childAttributes, inertHtml, type Html, type HtmlBuilder } from 'foldkit/html'
 
 import { cn } from '@/lib/utils'
 
@@ -28,7 +28,11 @@ export type OutMessage = typeof OutMessage.Type
 
 // foldcn gaps vs upstream: each trigger is an independent Menu bundle — no
 // cross-menu arrow traversal or open-on-hover-of-next-trigger (needs a
-// menubar behavior primitive).
+// menubar behavior primitive). Menubar content/item/label/separator/shortcut
+// now use correct cn-menubar-* family (was cn-dropdown-menu-*). Flat item
+// path only; checkbox/radio/submenu/destructive/inset require primitive work.
+// Per-item data-slot (menubar-item etc) cannot be stamped — primitive has no
+// per-item attribute hook.
 
 export type Bundle<Item extends string = string> = FoldkitMenu.Bundle<Item>
 export type InitConfig = FoldkitMenu.InitConfig
@@ -36,26 +40,23 @@ export type ViewInputs<Item extends string = string> = FoldkitMenu.ViewInputs<It
 export type ItemConfig = FoldkitMenu.ItemConfig
 export type GroupHeading = FoldkitMenu.GroupHeading
 
-export const menubarClass =
-  'cn-menubar flex h-9 items-center gap-1 rounded-md border bg-background p-1 shadow-xs'
+export const menubarClass = 'cn-menubar flex items-center'
 
 /** Upstream menubar trigger token string. */
-export const menubarTriggerClass =
-  'cn-menubar-trigger flex items-center justify-center rounded-sm px-1.5 py-[2px] text-sm font-medium outline-hidden select-none transition-colors hover:bg-muted aria-expanded:bg-muted data-open:bg-muted'
+export const menubarTriggerClass = 'cn-menubar-trigger flex items-center outline-hidden select-none'
 
-export const menubarContentClass = 'cn-menubar-content z-50 min-w-36 overflow-hidden outline-hidden'
+export const menubarContentClass = 'cn-menubar-content cn-menubar-content-logical cn-menu-target cn-menu-translucent'
 
 export const menubarContentAnimatedClass = menubarContentClass
 
 export const menubarItemClass =
-  'cn-dropdown-menu-item group/menubar-item relative flex w-full cursor-default select-none outline-hidden data-active:bg-accent data-active:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50'
+  'cn-menubar-item group/menubar-item relative flex cursor-default items-center outline-hidden select-none data-active:bg-accent data-active:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0'
 
-export const menubarSeparatorClass = 'cn-dropdown-menu-separator -mx-1 my-1 h-px'
+export const menubarSeparatorClass = 'cn-menubar-separator -mx-1 my-1 h-px'
 
-export const menubarHeadingClass =
-  'cn-dropdown-menu-label px-2 py-1.5 text-xs font-medium text-muted-foreground'
+export const menubarHeadingClass = 'cn-menubar-label'
 
-export const menubarShortcutClass = 'ml-auto text-xs tracking-widest text-muted-foreground'
+export const menubarShortcutClass = 'cn-menubar-shortcut ml-auto'
 
 export const menubarBackdropClass = 'fixed inset-0 z-0'
 
@@ -99,19 +100,23 @@ export const viewInputs = <Item extends string>(
   ariaLabel: config.ariaLabel,
   ariaLabelledBy: config.ariaLabelledBy,
   buttonClassName: cn(menubarTriggerClass, config.triggerClass),
+  buttonAttributes: childAttributes([inertHtml.DataAttribute('slot', 'menubar-trigger')]),
   itemsClassName: cn(
     config.isAnimated !== false ? menubarContentAnimatedClass : menubarContentClass,
     config.itemsClass,
   ),
+  itemsAttributes: childAttributes([inertHtml.DataAttribute('slot', 'menubar-content')]),
   itemToConfig: (item, context) => {
     const { className, content } = config.itemToConfig(item, context)
     return { className: cn(menubarItemClass, config.itemClass, className), content }
   },
   separatorClassName: cn(menubarSeparatorClass, config.separatorClass),
+  separatorAttributes: childAttributes([inertHtml.DataAttribute('slot', 'menubar-separator')]),
   backdropClassName: cn(menubarBackdropClass, config.backdropClass),
   className: cn(menubarWrapperClass, config.wrapperClass),
+  attributes: childAttributes([inertHtml.DataAttribute('slot', 'menubar')]),
 })
 
 /** Wrap a single menubar trigger's menu in the bar container. */
 export const menubar = <M>(children: ReadonlyArray<Html>, h: HtmlBuilder<M>): Html =>
-  h.div([h.Class(cn(menubarClass))], children)
+  h.div([h.Class(cn(menubarClass)), h.DataAttribute('slot', 'menubar')], children)

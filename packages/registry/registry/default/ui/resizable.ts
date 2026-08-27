@@ -27,9 +27,9 @@ import { cn } from '@/lib/utils'
 export const resizableContainerClass =
   'cn-resizable-panel-group flex h-full w-full aria-[orientation=vertical]:flex-col'
 
-export const resizableContainerVerticalClass = resizableContainerClass
+export const resizableContainerVerticalClass = 'cn-resizable-panel-group flex h-full w-full aria-[orientation=vertical]:flex-col'
 
-export const resizablePanelClass = 'overflow-auto'
+export const resizablePanelClass = ''
 
 /** Upstream Separator string (aria-[orientation] variants key on the emitted
  *  aria-orientation attr). */
@@ -150,13 +150,9 @@ export const view = defineView<Model, Message, ViewInputs>((model, viewInputs, h
   )
   return h.div(
     [
-      h.Class(
-        cn(
-          isHorizontal ? resizableContainerClass : resizableContainerVerticalClass,
-          viewInputs.className,
-        ),
-      ),
-      h.DataAttribute('slot', 'resizable'),
+      h.Class(cn(resizableContainerClass, viewInputs.className)),
+      h.DataAttribute('slot', 'resizable-panel-group'),
+      h.AriaOrientation(isHorizontal ? 'horizontal' : 'vertical'),
     ],
     [
       h.div(

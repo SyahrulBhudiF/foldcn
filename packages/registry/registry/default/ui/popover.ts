@@ -54,11 +54,11 @@ export const popoverBackdropClass = 'fixed inset-0 z-0'
 
 export const popoverWrapperClass = 'relative inline-block'
 
-export const popoverHeaderClass = 'flex flex-col gap-1 text-sm'
+export const popoverHeaderClass = 'cn-popover-header'
 
-export const popoverTitleClass = 'font-medium'
+export const popoverTitleClass = 'cn-popover-title'
 
-export const popoverDescriptionClass = 'text-sm text-muted-foreground'
+export const popoverDescriptionClass = 'cn-popover-description'
 
 // Use inside `styledViewInputs` content arrays:
 //

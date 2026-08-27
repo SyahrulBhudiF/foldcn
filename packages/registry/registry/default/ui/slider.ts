@@ -9,9 +9,9 @@ import { cn } from '@/lib/utils'
 
 /**
  * foldcn gap vs upstream: single value / single thumb only (upstream is
- * multi-thumb); vertical layout is configured but the styled view renders
- * horizontal.
- *
+ * multi-thumb; foldcn renders one thumb). Vertical orientation is now wired
+ * through `orientation` on `styledViewInputs` (tokens already contain
+ * `data-vertical` selectors); omit it for horizontal (default).
  */
 
 // Re-export the @foldkit/ui Slider submodel surface.
@@ -62,6 +62,7 @@ export const sliderHeaderClass = 'flex items-center justify-between'
 
 export type StyledViewInputs = Readonly<{
   value: number
+  orientation?: 'horizontal' | 'vertical'
   label?: string
   formatValue?: (value: number) => string
   ariaLabel?: string
@@ -94,6 +95,7 @@ export const styledViewInputs = <M>(
   name: viewInputs.name,
   getTrackRoot: viewInputs.getTrackRoot,
   toView: (attributes): Html => {
+    const orientation = viewInputs.orientation ?? 'horizontal'
     const maybeHeader: Html =
       viewInputs.label === undefined
         ? h.empty
@@ -126,6 +128,8 @@ export const styledViewInputs = <M>(
           [
             ...attributes.root,
             h.DataAttribute('slot', 'slider'),
+            h.DataAttribute('orientation', orientation),
+            h.DataAttribute(orientation, ''),
             h.Class(cn(sliderRootClass, viewInputs.rootClass)),
           ],
           [
@@ -133,16 +137,16 @@ export const styledViewInputs = <M>(
               [
                 ...attributes.track,
                 h.DataAttribute('slot', 'slider-track'),
-                h.DataAttribute('orientation', 'horizontal'),
-                h.DataAttribute('horizontal', ''),
+                h.DataAttribute('orientation', orientation),
+                h.DataAttribute(orientation, ''),
                 h.Class(cn(sliderTrackClass, viewInputs.trackClass)),
               ],
               [
                 h.div([
                   ...attributes.filledTrack,
                   h.DataAttribute('slot', 'slider-range'),
-                  h.DataAttribute('orientation', 'horizontal'),
-                  h.DataAttribute('horizontal', ''),
+                  h.DataAttribute('orientation', orientation),
+                  h.DataAttribute(orientation, ''),
                   h.Class(cn(sliderFilledTrackClass, viewInputs.filledTrackClass)),
                 ]),
               ],

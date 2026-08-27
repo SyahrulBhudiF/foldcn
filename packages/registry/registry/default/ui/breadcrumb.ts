@@ -17,11 +17,11 @@ export const breadcrumbListClass = 'cn-breadcrumb-list flex flex-wrap items-cent
 
 export const breadcrumbItemClass = 'cn-breadcrumb-item inline-flex items-center'
 
-export const breadcrumbLinkClass = 'cn-breadcrumb-link transition-colors hover:text-foreground'
+export const breadcrumbLinkClass = 'cn-breadcrumb-link'
 
-export const breadcrumbPageClass = 'cn-breadcrumb-page font-normal text-foreground'
+export const breadcrumbPageClass = 'cn-breadcrumb-page'
 
-export const breadcrumbSeparatorClass = 'cn-breadcrumb-separator [&>svg]:size-3.5 shrink-0'
+export const breadcrumbSeparatorClass = 'cn-breadcrumb-separator'
 
 export const breadcrumbEllipsisClass = 'cn-breadcrumb-ellipsis flex items-center justify-center'
 
@@ -77,9 +77,9 @@ const breadcrumbPage = <M>(
 ): Html =>
   h.span(
     [
-      ...((config.isCurrent ?? false)
-        ? [h.Role('link'), h.AriaDisabled(true), h.AriaCurrent('page')]
-        : []),
+      h.Role('link'),
+      h.AriaDisabled(true),
+      h.AriaCurrent('page'),
       h.Class(cn(breadcrumbPageClass, config.className)),
       h.DataAttribute('slot', 'breadcrumb-page'),
     ],
@@ -99,7 +99,9 @@ const breadcrumbEllipsis = <M>(
       h.Class(cn(breadcrumbEllipsisClass, config.className)),
       h.DataAttribute('slot', 'breadcrumb-ellipsis'),
     ],
-    children.length === 0 ? [icon(h, MoreHorizontal)] : children,
+    children.length === 0
+      ? [icon(h, MoreHorizontal, 'cn-rtl-flip'), h.span([h.Class('sr-only')], ['More'])]
+      : children,
   )
 
 const breadcrumbSeparator = <M>(
@@ -114,7 +116,7 @@ const breadcrumbSeparator = <M>(
       h.Class(cn(breadcrumbSeparatorClass, config.className)),
       h.DataAttribute('slot', 'breadcrumb-separator'),
     ],
-    children.length === 0 ? [icon(h, ChevronRight)] : children,
+    children.length === 0 ? [icon(h, ChevronRight, 'cn-rtl-flip')] : children,
   )
 
 /** Composable breadcrumb — `Breadcrumb` is the container, with sub-builders

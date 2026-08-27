@@ -49,9 +49,12 @@
   }
 }
 
-/* button: native :disabled never matches under foldkit. */
+/* button: native :disabled never matches under foldkit, and the upstream
+ * cva base inlines group/button + flex/layout utilities outside the cn-button
+ * token — add them here so authored sources can stay cn-* only (see
+ * AGENTS.md: "Do not inline resolved Tailwind"). */
 .cn-button {
-  @apply aria-disabled:pointer-events-none aria-disabled:opacity-50 data-disabled:pointer-events-none data-disabled:opacity-50;
+  @apply group/button inline-flex shrink-0 items-center justify-center whitespace-nowrap transition-all outline-none select-none [&_svg]:pointer-events-none [&_svg]:shrink-0 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-disabled:pointer-events-none data-disabled:opacity-50;
 }
 
 /* checkbox: component string styles native :disabled; foldkit emits
@@ -71,6 +74,31 @@
   @apply aria-disabled:pointer-events-none aria-disabled:opacity-50 data-disabled:pointer-events-none data-disabled:opacity-50;
 }
 
+/* input: native :disabled never matches under foldkit. */
+.cn-input {
+  @apply aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50 data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50 aria-disabled:bg-input/50 data-disabled:bg-input/50 dark:aria-disabled:bg-input/80 dark:data-disabled:bg-input/80;
+}
+
+/* textarea: same native-:disabled delta as input. */
+.cn-textarea {
+  @apply aria-disabled:cursor-not-allowed aria-disabled:opacity-50 data-disabled:cursor-not-allowed data-disabled:opacity-50 aria-disabled:bg-input/50 data-disabled:bg-input/50 dark:aria-disabled:bg-input/80 dark:data-disabled:bg-input/80;
+}
+
+/* native-select: select element disabled twins. */
+.cn-native-select {
+  @apply aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed data-disabled:pointer-events-none data-disabled:cursor-not-allowed;
+}
+
+/* native-select wrapper: has-[select:disabled] twins for foldkit's aria-disabled/data-disabled on the select. */
+.cn-native-select-wrapper {
+  @apply has-[select[aria-disabled=true]]:opacity-50 has-[select[data-disabled]]:opacity-50;
+}
+
+/* select trigger: same native-:disabled delta. */
+.cn-select-trigger {
+  @apply aria-disabled:cursor-not-allowed aria-disabled:opacity-50 data-disabled:cursor-not-allowed data-disabled:opacity-50;
+}
+
 /* sheet: upstream keys enter/exit motion on data-starting-style/
  * data-ending-style, which foldkit cannot emit — mapped to its
  * data-enter/data-leave transition windows instead. */
@@ -80,4 +108,32 @@
 
 .cn-sheet-content {
   @apply data-enter:opacity-0 data-leave:opacity-0 data-[side=bottom]:data-enter:translate-y-[2.5rem] data-[side=bottom]:data-leave:translate-y-[2.5rem] data-[side=left]:data-enter:translate-x-[-2.5rem] data-[side=left]:data-leave:translate-x-[-2.5rem] data-[side=right]:data-enter:translate-x-[2.5rem] data-[side=right]:data-leave:translate-x-[2.5rem] data-[side=top]:data-enter:translate-y-[-2.5rem] data-[side=top]:data-leave:translate-y-[-2.5rem];
+}
+
+/* menu sub-trigger: upstream keys on data-popup-open, foldkit emits data-open.
+ * Authored string keeps data-popup-open for upstream parity; style token
+ * already handles data-open, so add data-popup-open twin here for Base UI
+ * parity and data-open twin for foldkit (both present after merge). */
+.cn-dropdown-menu-sub-trigger {
+  @apply data-open:bg-accent data-open:text-accent-foreground data-[popup-open]:bg-accent data-[popup-open]:text-accent-foreground;
+}
+
+.cn-menubar-sub-trigger {
+  @apply data-open:bg-accent data-open:text-accent-foreground data-[popup-open]:bg-accent data-[popup-open]:text-accent-foreground;
+}
+
+/* input-otp: upstream leaves input/caret as no-op hooks (input-otp library
+ * handles positioning). foldcn renders its own absolute overlay input, so
+ * provide the overlay geometry here to keep authored strings bare
+ * (cn-input-otp-input / cn-input-otp-caret) while preserving behavior. */
+.cn-input-otp {
+  @apply relative;
+}
+
+.cn-input-otp-input {
+  @apply absolute inset-0 z-10 h-full w-full bg-transparent text-transparent caret-transparent outline-none;
+}
+
+.cn-input-otp-caret {
+  @apply pointer-events-none absolute inset-0 flex items-center justify-center;
 }

@@ -3,9 +3,14 @@
  * verify-parity.mjs — inventory + token + attribute parity checks for foldcn vs upstream.
  *
  * Usage:
- *   node .agents/skills/verify-parity/scripts/verify-parity.mjs              # full check
+ *   node .agents/skills/verify-parity/scripts/verify-parity.mjs              # full check (inventory + tokens + attributes + behavior)
  *   node .agents/skills/verify-parity/scripts/verify-parity.mjs --inventory  # inventory only
  *   node .agents/skills/verify-parity/scripts/verify-parity.mjs --tokens     # token leak check
+ *   node .agents/skills/verify-parity/scripts/verify-parity.mjs --visual     # + visual (agent-browser snapshot + screenshot per state)
+ *
+ * Visual requires agent-browser (npm i -g agent-browser && agent-browser install) + preview servers.
+ * See references/visual-parity.md and .agents/skills/agent-browser/SKILL.md → agent-browser skills get core.
+ * Upstream without checkout is discovered via web_search + agent-browser read (see references/upstream-source.md).
  *
  * Exit non-zero on failure. Prints a ParityReport-shaped summary.
  */
@@ -22,6 +27,7 @@ const AUDIT_PATH = join(REPO_DIR, 'docs/shadcn-base-parity-audit.md')
 const args = process.argv.slice(2)
 const onlyInventory = args.includes('--inventory')
 const onlyTokens = args.includes('--tokens')
+const wantVisual = args.includes('--visual') || args.includes('--images')
 
 function loadLocalInventory() {
   const data = JSON.parse(readFileSync(REGISTRY_JSON, 'utf8'))
@@ -219,6 +225,41 @@ async function main() {
     // Check resolve-styles warnings would require running it — suggest it
     console.log('  Run `node packages/registry/scripts/resolve-styles.mjs` to see unmapped token warnings')
     console.log('  Run `pnpm --filter @foldcn/registry build` to assert no leaked literals')
+  }
+
+  // Visual parity — delegates to verify-visual-parity.mjs (state matrix + agent-browser snapshot/screenshot per state)
+  // Opt-in: only when --visual or --images is passed. Default CI run stays fast (inventory + tokens).
+  // Use --visual for state coverage + image diffs when preview servers + agent-browser are available.
+  // See references/visual-parity.md and .agents/skills/agent-browser/SKILL.md → agent-browser skills get core.
+  if (wantVisual) {
+    const visualArgs = ['--states', '--images']
+    if (args.includes('--all-styles')) visualArgs.push('--all-styles')
+    const comp = args.find(a => a.startsWith('--component='))
+    if (comp) visualArgs.push(comp)
+    const foldcnUrlArg = args.find(a => a.startsWith('--foldcn-url'))
+    if (foldcnUrlArg) visualArgs.push(foldcnUrlArg)
+    const shadcnUrlArg = args.find(a => a.startsWith('--shadcn-url'))
+    if (shadcnUrlArg) visualArgs.push(shadcnUrlArg)
+    console.log('\n-- Visual parity (states + images) --')
+    try {
+      const { spawnSync } = await import('node:child_process')
+      const visualScript = join(SKILL_DIR, 'scripts/verify-visual-parity.mjs')
+      const res = spawnSync(process.execPath, [visualScript, ...visualArgs], { stdio: 'inherit' })
+      if (res.status !== 0) {
+        console.log('  Visual parity: FAIL (see above — VISUAL_MAJOR or capture failure)')
+        ok = false
+      } else {
+        console.log('  Visual parity: PASS')
+      }
+    } catch (e) {
+      console.log(`  Visual parity: skipped — ${e.message}`)
+    }
+    console.log('  See references/visual-parity.md for capture protocol and thresholds.')
+    console.log('  Evidence (when captured): .tmp/visual-parity/<component>/<state>/')
+  } else if (!onlyInventory && !onlyTokens) {
+    console.log('\n-- Visual parity --')
+    console.log('  (skipped — run with --visual for state matrix + image diffs)')
+    console.log('  Quick state check: node .agents/skills/verify-parity/scripts/verify-visual-parity.mjs --states')
   }
 
   // Audit freshness check

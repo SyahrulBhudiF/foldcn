@@ -32,13 +32,24 @@ Compare vendored CSS drift:
 node packages/registry/scripts/sync-styles.mjs --check
 ```
 
-### 2. Live docs (no checkout)
+### 2. Live docs (no checkout) — fetch + web_search + agent-browser
 
 ```bash
 node .agents/skills/verify-parity/scripts/fetch-upstream.mjs
 ```
 
 This fetches `https://ui.shadcn.com/docs/components` and enumerates component pages. It writes `.tmp/upstream.json` with `{ name, url }` list for the inventory step. Use when the checkout is unavailable.
+
+When the harness needs rendered upstream pages for visual parity (not just the list), use `web_search` + `agent-browser read`:
+
+```bash
+# discover the component page via web_search (Exa) — or browse directly:
+agent-browser open https://ui.shadcn.com/docs/components/button
+agent-browser snapshot -i --json   # verify rendered structure
+agent-browser read https://ui.shadcn.com/docs/components/button  # markdown-friendly fetch for docs text
+```
+
+`web_search` with `{ queries: ["site:ui.shadcn.com/docs/components button", ...] }` is the inventory fallback when neither checkout nor `.tmp/upstream.json` exists — `verify-visual-parity.mjs --states` will note `upstream: web_search`. For pixel comparisons, `agent-browser screenshot` against `https://ui.shadcn.com/docs/components/<name>` is the live reference render; prefer a local `apps/v4` dev server (`SHADCN_URL=http://localhost:3000`) for determinism when available.
 
 ### 3. Existing audit
 

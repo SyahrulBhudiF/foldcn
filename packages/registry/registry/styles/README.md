@@ -5,7 +5,7 @@ The `style-*.css` files in this directory are **verbatim copies** of
 `apps/v4/registry/styles/style-*.css` — the `cn-*` utility-token layers that
 style the shadcn v4 BASE registry components foldcn derives from.
 
-foldcn components emit those `cn-*` token classes verbatim ([ADR-014](../../../docs/adr/014-derive-from-base-via-tokens.md)); each
+foldcn components emit those `cn-*` token classes verbatim (ADR-014); each
 style defines what the tokens resolve to. `style-nova.css` is foldcn's default
 style; the others are vendored so alternative styles can be adopted later
 without another sourcing step. The files are consumed at build time by
@@ -16,7 +16,7 @@ without another sourcing step. The files are consumed at build time by
 
 ## Syncing
 
-Vendored from upstream commit `25be24c` on 2026-08-22.
+Vendored from upstream commit `25be24c` on 2026-08-27.
 
 ```bash
 # refresh from a local checkout (default: ~/Development/repos/shadcn-ui/ui)

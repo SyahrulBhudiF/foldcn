@@ -41,7 +41,7 @@
 import { Effect, Option, Schema as S, pipe } from 'effect'
 import * as Command from 'foldkit/command'
 import { Toast as FoldkitToast } from '@foldkit/ui'
-import type { Html, HtmlBuilder } from 'foldkit/html'
+import type { Attribute, ChildAttribute, Html, HtmlBuilder } from 'foldkit/html'
 import { defineMessageUnion } from 'foldkit/message'
 import * as Render from 'foldkit/render'
 import { evo } from 'foldkit/struct'
@@ -90,13 +90,13 @@ export const toastVariantClass = (variant: Variant): string =>
  *  exactly like the reference root class. Entries beyond `LIMIT` render with
  *  `data-limited` and are fully hidden until a slot frees up. */
 export const toastEntryClass =
-  'pointer-events-auto absolute right-0 bottom-0 w-80 origin-bottom rounded-lg border bg-popover text-popover-foreground shadow-lg [transform:translateZ(0)] [contain:layout] [backface-visibility:hidden] outline-none select-none after:absolute after:top-full after:left-0 after:h-[calc(0.75rem+1px)] after:w-full after:content-[""] [transition:transform_350ms_cubic-bezier(0.22,1,0.36,1),opacity_350ms] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[limited]:pointer-events-none data-[limited]:opacity-0'
+  'cn-toast pointer-events-auto absolute right-0 bottom-0 w-80 origin-bottom rounded-lg border bg-popover text-popover-foreground shadow-lg [transform:translateZ(0)] [contain:layout] [backface-visibility:hidden] outline-none select-none after:absolute after:top-full after:left-0 after:h-[calc(0.75rem+1px)] after:w-full after:content-[""] [transition:transform_350ms_cubic-bezier(0.22,1,0.36,1),opacity_350ms] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[limited]:pointer-events-none data-[limited]:opacity-0'
 
 /** Content row — the reference `ToastContent`: full card height, clipped,
  *  fading out while hidden behind the frontmost layer (`data-behind`) and
  *  back in when the stack expands (`data-expanded`). */
 export const toastContentClass =
-  'flex h-full w-full items-center gap-3 overflow-hidden p-4 transition-opacity duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] data-[behind]:opacity-0 data-[expanded]:opacity-100'
+  'flex h-full w-full items-center gap-3 overflow-hidden p-4 transition-opacity duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] data-[behind]:opacity-0 data-[expanded]:opacity-100'
 
 export const toastTitleClass = 'text-sm font-medium'
 
@@ -104,6 +104,28 @@ export const toastDescriptionClass = 'text-sm text-muted-foreground'
 
 export const toastDismissButtonClass =
   "shrink-0 cursor-pointer rounded-md p-1 text-muted-foreground opacity-70 transition-opacity hover:text-foreground hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0 after:absolute after:-inset-2 after:content-['']"
+
+export const toastActionClass = 'shrink-0'
+
+/** Action button for a toast (e.g. Undo). Mirrors upstream `ToastAction`
+ *  which renders a `Button` with `variant="outline" size="sm"`.
+ *  Render it inside `toContent` and wire `handlers.dismiss` or your own
+ *  action via `attributes`. */
+export const toastAction = <M>(
+  attributes: ReadonlyArray<Attribute<M> | ChildAttribute>,
+  config: Readonly<{ className?: string }>,
+  children: ReadonlyArray<Child>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.button(
+    [
+      ...attributes,
+      h.DataAttribute('slot', 'toast-action'),
+      h.Class(cn('cn-button cn-button-variant-outline cn-button-size-sm', toastActionClass, config.className)),
+      h.Type('button'),
+    ],
+    children,
+  )
 
 const variantIconNode = (variant: Variant) => {
   switch (variant) {

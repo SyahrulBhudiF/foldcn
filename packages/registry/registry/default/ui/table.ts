@@ -48,20 +48,30 @@ const tableHeader = <M>(
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.thead([h.Class(cn(tableHeaderClass)), h.DataAttribute('slot', 'table-header')], children)
+  h.thead(
+    [h.Class(cn(tableHeaderClass, config.className)), h.DataAttribute('slot', 'table-header')],
+    children,
+  )
 
 const tableBody = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
-): Html => h.tbody([h.Class(cn(tableBodyClass)), h.DataAttribute('slot', 'table-body')], children)
+): Html =>
+  h.tbody(
+    [h.Class(cn(tableBodyClass, config.className)), h.DataAttribute('slot', 'table-body')],
+    children,
+  )
 
 const tableFooter = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.tfoot([h.Class(cn(tableFooterClass)), h.DataAttribute('slot', 'table-footer')], children)
+  h.tfoot(
+    [h.Class(cn(tableFooterClass, config.className)), h.DataAttribute('slot', 'table-footer')],
+    children,
+  )
 
 const tableRow = <M>(
   config: StyleConfig,

@@ -159,6 +159,8 @@ export type StyledViewInputs<M> = Readonly<{
   className?: string
   backdropClass?: string
   panelClass?: string
+  /** Extra attributes merged onto the panel (e.g. data-mobile for sidebar). */
+  panelAttributes?: ReadonlyArray<Attribute<M> | ChildAttribute>
 }>
 
 /** Build styled `Dialog.ViewInputs` for a sheet. Defaults to a right-side panel. */
@@ -170,7 +172,11 @@ export const styledViewInputs = <M>(
   return {
     toView: ({ dialog, backdrop, panel, closeButton, title, description, isVisible }) =>
       h.dialog(
-        [...dialog, h.Class(cn('bg-transparent p-0 open:block', viewInputs.className))],
+        [
+          ...dialog,
+          h.DataAttribute('slot', 'sheet'),
+          h.Class(cn('bg-transparent p-0 open:block', viewInputs.className)),
+        ],
         isVisible
           ? [
               h.div([
@@ -184,6 +190,7 @@ export const styledViewInputs = <M>(
                   h.DataAttribute('slot', 'sheet-content'),
                   h.DataAttribute('side', side),
                   h.Class(cn(sheetPanelClass[side], sheetMotionClass, viewInputs.panelClass)),
+                  ...(viewInputs.panelAttributes ?? []),
                 ],
                 viewInputs.content({ closeButton, title, description }, h),
               ),

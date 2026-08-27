@@ -10,22 +10,23 @@ import { cn } from '@/lib/utils'
 // library. The slots are purely presentational: each shows one character of
 // `value`, and the active (next-to-fill) slot shows a blinking caret.
 
-export const inputOtpClass = 'cn-input-otp relative flex items-center has-disabled:opacity-50'
+export const inputOtpClass = 'cn-input-otp flex items-center has-disabled:opacity-50'
 
 /** Wrapper grouping the joined slots; keys the group's invalid ring off the
  *  input's aria-invalid. */
 export const inputOtpGroupClass = 'cn-input-otp-group flex items-center'
 
-export const inputOtpInputClass =
-  'cn-input-otp-input absolute inset-0 z-10 h-full w-full bg-transparent text-transparent caret-transparent outline-none disabled:cursor-not-allowed'
+export const inputOtpInputClass = 'cn-input-otp-input disabled:cursor-not-allowed'
 
 export const inputOtpSlotClass =
-  'cn-input-otp-slot relative flex size-8 items-center justify-center text-sm tabular-nums transition-all outline-none data-[active=true]:z-10'
+  'cn-input-otp-slot relative flex items-center justify-center data-[active=true]:z-10'
 
 export const inputOtpCaretClass =
-  'pointer-events-none absolute inset-0 flex items-center justify-center'
+  'cn-input-otp-caret pointer-events-none absolute inset-0 flex items-center justify-center'
 
-export const inputOtpCaretLineClass = 'h-4 w-px animate-caret-blink duration-1000 bg-foreground'
+export const inputOtpCaretLineClass = 'cn-input-otp-caret-line'
+
+export const inputOtpSeparatorClass = 'cn-input-otp-separator flex items-center'
 
 export type InputOtpConfig<M> = Readonly<{
   length: number
@@ -37,7 +38,26 @@ export type InputOtpConfig<M> = Readonly<{
   className?: string
 }>
 
-/** A row of single-character OTP slots backed by one combined string `value`. */
+/** Visual separator between OTP groups (e.g. between groups of 3). Upstream
+ *  renders a `Minus` icon; foldcn uses a text fallback to avoid extra icon
+ *  deps. Carries `data-slot="input-otp-separator"` and `role="separator"` to
+ *  match upstream. */
+export const inputOtpSeparator = <M>(
+  config: Readonly<{ className?: string }>,
+  h: HtmlBuilder<M>,
+): Html =>
+  h.div(
+    [
+      h.DataAttribute('slot', 'input-otp-separator'),
+      h.Role('separator'),
+      h.Class(cn(inputOtpSeparatorClass, config.className)),
+    ],
+    ['−'],
+  )
+
+/** A row of single-character OTP slots backed by one combined string `value`.
+ *  Digit-only filtering is intentional (mirrors upstream numeric OTP):
+ *  non-digits are stripped on display and on input. */
 export const inputOtp = <M>(config: InputOtpConfig<M>, h: HtmlBuilder<M>): Html => {
   const digits = config.value.replace(/\D/g, '').slice(0, config.length).split('')
   const isComplete = digits.length >= config.length

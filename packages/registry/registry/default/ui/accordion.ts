@@ -32,11 +32,11 @@ export const accordionWrapperClass = 'cn-accordion flex w-full flex-col'
 export const accordionItemClass = 'cn-accordion-item'
 
 export const accordionTriggerClass =
-  'cn-accordion-trigger group/accordion-trigger relative flex w-full flex-1 items-start justify-between border border-transparent transition-all outline-none aria-disabled:pointer-events-none aria-disabled:opacity-50'
+  'cn-accordion-trigger group/accordion-trigger relative flex flex-1 items-start justify-between border border-transparent transition-all outline-none aria-disabled:pointer-events-none aria-disabled:opacity-50'
 
-export const accordionContentClass = 'cn-accordion-content overflow-hidden text-sm'
+export const accordionContentClass = 'cn-accordion-content overflow-hidden'
 
-export const accordionAnimatedContentClass = 'overflow-hidden pb-4 text-sm text-muted-foreground'
+export const accordionAnimatedContentClass = 'cn-accordion-content overflow-hidden'
 
 export const accordionContentInnerClass =
   'cn-accordion-content-inner h-(--accordion-panel-height) data-ending-style:h-0 data-starting-style:h-0 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4'
@@ -185,15 +185,23 @@ const accordionItem = (
           h.DataAttribute('slot', 'accordion-item'),
         ],
         [
-          h.button(
+          h.div(
+            [h.Class('flex'), h.DataAttribute('slot', 'accordion-header')],
             [
-              ...button,
-              h.Class(cn(accordionTriggerClass, config.triggerClass)),
-              h.DataAttribute('slot', 'accordion-trigger'),
-            ],
-            [
-              h.span([], [config.title]),
-              h.span([h.Class(accordionChevronClass)], [icon(h, ChevronDown)]),
+              h.button(
+                [
+                  ...button,
+                  h.Class(cn(accordionTriggerClass, config.triggerClass)),
+                  h.DataAttribute('slot', 'accordion-trigger'),
+                ],
+                [
+                  h.span([], [config.title]),
+                  h.span(
+                    [h.Class(accordionChevronClass), h.DataAttribute('slot', 'accordion-trigger-icon')],
+                    [icon(h, ChevronDown)],
+                  ),
+                ],
+              ),
             ],
           ),
           config.isAnimated === true

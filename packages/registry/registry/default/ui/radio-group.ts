@@ -40,12 +40,11 @@ export type RenderInfo<Value extends string = string> = FoldkitRadioGroup.Render
 /** Upstream group component string. Horizontal orientation appends a
  *  responsive row extension (foldcn API exposes orientation; upstream leaves
  *  layout to the consumer). */
-export const radioGroupClass = 'cn-radio-group grid gap-2'
+export const radioGroupClass = 'cn-radio-group w-full'
 
-export const radioGroupVerticalClass = 'cn-radio-group grid gap-2 w-full'
+export const radioGroupVerticalClass = 'cn-radio-group w-full'
 
-export const radioGroupHorizontalClass =
-  'cn-radio-group grid gap-2 w-full sm:flex-row sm:items-center'
+export const radioGroupHorizontalClass = 'cn-radio-group w-full sm:flex-row sm:items-center'
 
 /** Upstream item component string. The disabled: variants are inert under
  *  foldkit (aria-/data- twins are inlined at style resolution). */

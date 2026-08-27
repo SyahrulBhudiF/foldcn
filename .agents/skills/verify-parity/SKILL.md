@@ -14,12 +14,14 @@ ParityReport = {
   inventory: { foldcnOnly, upstreamOnly, paired },
   tokenFidelity: { leakedTokens, unmappedTokens, driftedClasses },
   attributes: { missingSlots, wrongStateAttr },
-  behavior: { functionalGaps }
+  behavior: { functionalGaps },
+  visual: { stateMatrix, imageDiffs, styleCoverage }
 }
 Verdict = MATCHES | MINOR | MAJOR | MISSING | FOLDCN_ONLY
+VisualVerdict = VISUAL_MATCH | VISUAL_MINOR | VISUAL_MAJOR  // per state
 ```
 
-Encode findings as this shape, not scattered conditionals. See [checklist](references/parity-checklist.md).
+Encode findings as this shape, not scattered conditionals. See [checklist](references/parity-checklist.md) and [visual parity](references/visual-parity.md).
 
 ## Workflow
 
@@ -77,7 +79,28 @@ Checks:
 
 **Completion:** gap list is current, no fixed gap regressed.
 
-### 6. Report
+### 6. Visual parity (images + states)
+
+**Do:** Compare rendered output per visual state against upstream, not just resolved class strings. See [visual parity](references/visual-parity.md) for the full state matrix and harness.
+
+```bash
+# snapshot + screenshot diff via agent-browser (no Playwright):
+agent-browser --help  # ensure 0.35+ installed — see .agents/skills/agent-browser/SKILL.md
+node .agents/skills/verify-parity/scripts/verify-visual-parity.mjs --states --images
+# or run the unified harness (inventory + tokens + attributes + behavior + visual):
+node .agents/skills/verify-parity/scripts/verify-parity.mjs --visual
+```
+
+Checks:
+- **State matrix:** every paired component exercised in every applicable state — `idle`, `hover`, `focus-visible`, `active/pressed`, `disabled`, `open`/`closed` (overlays, accordions), `checked`/`selected`/`on` (toggles, checkboxes, tabs), `invalid`, plus component-specific states (e.g. `indeterminate` for progress, `empty` for command). States sourced from upstream `style-nova.css` selectors, `bases/base/ui` props, and (when no checkout) `web_search` against `https://ui.shadcn.com/docs/components` + `agent-browser read` of component pages. The [checklist](references/parity-checklist.md) §6 enumerates the matrix; any state that cannot be reached is `verified-unreachable` with prerequisite (auth, OS, external) and route attempted.
+- **Images per state (agent-browser):** capture screenshots of foldcn (via `packages/web` demo or `styles/default` resolved fixtures) and upstream (local `apps/v4` dev server or `https://ui.shadcn.com` reference renders — sourced via `web_search` / `agent-browser read` when no checkout) at identical viewport (`1280×800`, `deviceScaleFactor 1`), theme (`light` + `dark` via `agent-browser set media`), and density. Core loop per state: `agent-browser open <url>` → `agent-browser snapshot -i -s '[data-slot="<name>"]'` → `agent-browser hover|focus|click <ref>` for the target state → `agent-browser screenshot "[data-slot=\"<name>\"]" <out.png>` (element crop, not full page, to avoid chrome drift). Diff with pixel comparison (`pixelmatch` where available, otherwise existence/size check) — CSS computed-style fallback when `agent-browser` is absent.
+- **Thresholds:** ≤1% pixel diff = `VISUAL_MATCH`, 1–5% = `VISUAL_MINOR` (token-level drift), >5% or missing state = `VISUAL_MAJOR`. Token drift that is invisible at rendered pixels still counts as drift in §3, but visual verdict reflects what the user sees.
+- **Multi-style coverage:** at minimum `default` (nova) against upstream `nova`; when `--all-styles` is set, repeat for `vega`, `maia`, `lyra`, `mira`, `luma`, `sera`, `rhea` and report per-style visual verdicts. Vendored `style-*.css` must stay byte-identical (ADR-015) so cross-style drift is token-level, not structural.
+- **Evidence:** screenshots and diff images are written to `.tmp/visual-parity/<component>/<state>/` (gitignored) and the report references them by path. The harness never edits product code — a missing or wrong visual is doc drift (fix the map) or a product regression (file it, don't paper over it).
+
+**Completion:** every paired component has a visual verdict per applicable state with image evidence or an explicit `verified-unreachable` reason; no state is skipped silently.
+
+### 7. Report
 
 **Do:** Emit `ParityReport` with verdicts per component (MATCHES/MINOR/MAJOR) matching `docs/shadcn-base-parity-audit.md` Scorecard. Update that file's Status blockquote if fixes landed. Do not edit `packages/registry/registry/styles/style-*.css` (vendored, byte-identical per ADR-015).
 
@@ -86,10 +109,14 @@ Checks:
 ## Quick verify (CI)
 
 ```bash
-node .agents/skills/verify-parity/scripts/verify-parity.mjs
+node .agents/skills/verify-parity/scripts/verify-parity.mjs          # inventory + tokens + attributes + behavior
+node .agents/skills/verify-parity/scripts/verify-parity.mjs --visual # + visual/state image diffs (needs agent-browser + preview servers)
+node .agents/skills/verify-parity/scripts/verify-visual-parity.mjs --states  # state matrix only (no browser)
 ```
 
-Exits non-zero on leaked `cn-*`, inventory drift, or stale audit.
+Exits non-zero on leaked `cn-*`, inventory drift, stale audit, or (with `--visual`) visual `VISUAL_MAJOR`.
+
+Visual image diffs are opt-in for CI — they require `agent-browser` (`npm i -g agent-browser && agent-browser install`) and running preview servers. The `--states` / `--images` flags control which visual sub-steps run. Without `agent-browser` the harness falls back to a CSS state-coverage check and warns that image evidence is missing. Upstream docs are resolved via `web_search` + `agent-browser read https://ui.shadcn.com/docs/components/<name>` when no local `SHADCN_UI_DIR` checkout is present.
 
 ## References
 
@@ -97,3 +124,5 @@ Exits non-zero on leaked `cn-*`, inventory drift, or stale audit.
 - `docs/shadcn-base-parity-audit.md` — last full audit, scorecard, and gap list.
 - `docs/feature-map.md` — pipeline, style system, and breakage notes.
 - `packages/registry/scripts/sync-styles.mjs --check` — vendored CSS drift check.
+- `references/visual-parity.md` — state matrix, capture protocol, diff thresholds, harness modes.
+- `references/parity-checklist.md` §6 — visual checklist (states × themes × styles).

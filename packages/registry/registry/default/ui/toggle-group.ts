@@ -162,7 +162,10 @@ export const view = defineView<Model, Message, ViewInputs>((model, viewInputs, h
           ...(item.ariaLabel === undefined ? [] : [h.AriaLabel(item.ariaLabel)]),
           ...(viewInputs.isDisabled === true ? [h.Disabled(true)] : []),
           h.OnClick(Message.ToggledItem({ value: item.value })),
-          h.DataAttribute('slot', 'toggle'),
+          h.DataAttribute('slot', 'toggle-group-item'),
+          h.DataAttribute('variant', viewInputs.variant ?? 'default'),
+          h.DataAttribute('size', viewInputs.size ?? 'default'),
+          h.DataAttribute('spacing', String(spacing)),
           h.DataAttribute('state', model.value.includes(item.value) ? 'on' : 'off'),
           h.AriaPressed(model.value.includes(item.value) ? 'true' : 'false'),
           h.Class(

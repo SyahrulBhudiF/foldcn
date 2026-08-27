@@ -11,9 +11,11 @@ import { Search } from 'lucide'
 type Child = Html | string
 
 // foldcn gaps vs upstream: no cmdk behavior layer (filtering, arrow-key
-// selection and Enter-to-select are consumer-owned) and no Dialog wrapper;
-// the [cmdk-*] descendant selectors in the group token are inert here — use
-// Command.groupHeading for the heading styles.
+// selection and Enter-to-select are consumer-owned) and no Dialog wrapper
+// (CommandDialog missing export is OK — document gap); the [cmdk-*] descendant
+// selectors in the group token are inert here — use Command.group for heading
+// styles. Input wrapper now uses cn-command-input-wrapper/group tokens per
+// upstream; item/group/separator are bare cn-* tokens (layout in style-nova.css).
 
 export const commandClass = 'cn-command flex size-full flex-col overflow-hidden'
 
@@ -22,20 +24,18 @@ export const commandInputClass =
 
 export const commandListClass = 'cn-command-list overflow-x-hidden overflow-y-auto'
 
-export const commandEmptyClass = 'cn-command-empty py-6 text-center text-sm'
+export const commandEmptyClass = 'cn-command-empty'
 
-export const commandGroupClass = 'cn-command-group overflow-hidden p-1 text-foreground'
+export const commandGroupClass = 'cn-command-group'
 
-export const commandGroupHeadingClass =
-  'cn-dropdown-menu-label px-2 py-1.5 text-xs font-medium text-muted-foreground'
+export const commandGroupHeadingClass = 'cn-command-group'
 
 export const commandItemClass =
-  'cn-command-item group/command-item relative flex cursor-default select-none items-center gap-2 px-2 py-1.5 text-sm outline-hidden data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-[selected=true]:bg-muted data-[selected=true]:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0'
+  'cn-command-item group/command-item data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0'
 
-export const commandSeparatorClass = 'cn-command-separator -mx-1 h-px bg-border'
+export const commandSeparatorClass = 'cn-command-separator'
 
-export const commandShortcutClass =
-  'cn-command-shortcut ml-auto text-xs tracking-widest text-muted-foreground'
+export const commandShortcutClass = 'cn-command-shortcut'
 
 export type CommandInputConfig<M> = Readonly<{
   value?: string
@@ -56,22 +56,19 @@ const commandContainer = <M>(
 
 const commandInput = <M>(config: CommandInputConfig<M>, h: HtmlBuilder<M>): Html =>
   h.div(
+    [h.Class(cn('cn-command-input-wrapper')), h.DataAttribute('slot', 'command-input-wrapper')],
     [
-      h.Class('flex items-center border-b px-2.5'),
-      h.DataAttribute('slot', 'command-input-wrapper'),
-    ],
-    [
-      icon(h, Search, 'size-4 shrink-0 opacity-50'),
-      h.input([
-        h.Type('text'),
-        ...(config.value === undefined ? [] : [h.Value(config.value)]),
-        ...(config.isDisabled === true ? [h.Disabled(true)] : []),
-        ...(config.placeholder === undefined ? [] : [h.Placeholder(config.placeholder)]),
-        ...(config.onInput === undefined ? [] : [h.OnInput(config.onInput)]),
-        h.Class(
-          cn(commandInputClass, 'border-0 shadow-none focus-visible:ring-0', config.className),
-        ),
-        h.DataAttribute('slot', 'command-input'),
+      h.div([h.Class(cn('cn-command-input-group'))], [
+        icon(h, Search, 'cn-command-input-icon size-4 shrink-0 opacity-50'),
+        h.input([
+          h.Type('text'),
+          ...(config.value === undefined ? [] : [h.Value(config.value)]),
+          ...(config.isDisabled === true ? [h.Disabled(true)] : []),
+          ...(config.placeholder === undefined ? [] : [h.Placeholder(config.placeholder)]),
+          ...(config.onInput === undefined ? [] : [h.OnInput(config.onInput)]),
+          h.Class(cn(commandInputClass, config.className)),
+          h.DataAttribute('slot', 'command-input'),
+        ]),
       ]),
     ],
   )

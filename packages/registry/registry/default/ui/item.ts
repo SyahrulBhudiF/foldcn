@@ -87,8 +87,11 @@ const itemSeparator = <M>(config: ItemSeparatorConfig, h: HtmlBuilder<M>): Html 
   h.div(
     [
       h.Class(cn(itemSeparatorClass, config.className)),
+      h.Role('separator'),
+      h.AriaOrientation(config.orientation ?? 'horizontal'),
       h.DataAttribute('slot', 'item-separator'),
       h.DataAttribute('orientation', config.orientation ?? 'horizontal'),
+      h.DataAttribute(config.orientation ?? 'horizontal', ''),
     ],
     [],
   )
@@ -154,7 +157,7 @@ const itemDescription = <M>(
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.div(
+  h.p(
     [
       h.Class(cn(itemDescriptionClass, config.className)),
       h.DataAttribute('slot', 'item-description'),

@@ -44,21 +44,40 @@ export type ItemConfig = FoldkitListbox.ItemConfig
 export const selectSizeKeys = ['default', 'sm'] as const
 export type SelectSize = (typeof selectSizeKeys)[number]
 
-// foldkit deltas: items highlight via data-active (upstream focus:) per the
-// derivation mapping; the panel emits data-side from the anchor placement.
-
-/** Upstream SelectTrigger token string + w-full (foldcn renders a full-width
- *  trigger inside its label wrapper). */
+/** Upstream SelectTrigger string. */
 export const selectTriggerClass =
-  'cn-select-trigger flex h-8 w-full items-center justify-between gap-1.5 whitespace-nowrap outline-none disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 data-[size=sm]:h-7 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4 [&_svg:not([class*="text-"])]:text-muted-foreground'
+  'cn-select-trigger flex w-fit items-center justify-between whitespace-nowrap outline-none disabled:cursor-not-allowed disabled:opacity-50 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center [&_svg]:pointer-events-none [&_svg]:shrink-0'
 
-export const selectItemsClass =
-  'cn-select-content z-50 max-h-96 min-w-36 overflow-x-hidden overflow-y-auto p-1 outline-none'
+export const selectTriggerIconClass = 'cn-select-trigger-icon pointer-events-none'
+
+export const selectValueClass = 'cn-select-value'
+
+/** Upstream SelectContent popup string. */
+export const selectContentClass =
+  'cn-select-content cn-select-content-logical cn-menu-target cn-menu-translucent relative isolate z-50 max-h-(--available-height) w-(--anchor-width) origin-(--transform-origin) overflow-x-hidden overflow-y-auto data-[align-trigger=true]:animate-none'
+
+/** Backwards compat alias: prefer `selectContentClass`. */
+export const selectItemsClass = selectContentClass
+
+export const selectGroupClass = 'cn-select-group'
+
+export const selectLabelClass = 'cn-select-label'
 
 export const selectItemClass =
-  'cn-select-item relative flex w-full cursor-default items-center select-none outline-none data-active:bg-accent data-active:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-selected:font-medium'
+  'cn-select-item relative flex w-full cursor-default items-center outline-hidden select-none data-active:bg-accent data-active:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0'
 
-export const selectLabelClass = 'cn-select-label px-1.5 py-1 text-xs text-muted-foreground'
+export const selectItemTextClass = 'cn-select-item-text shrink-0 whitespace-nowrap'
+
+export const selectItemIndicatorClass = 'cn-select-item-indicator'
+
+export const selectItemIndicatorIconClass = 'cn-select-item-indicator-icon pointer-events-none'
+
+export const selectSeparatorClass = 'cn-select-separator pointer-events-none'
+
+export const selectScrollUpClass = 'cn-select-scroll-up-button top-0 w-full'
+
+export const selectScrollDownClass = 'cn-select-scroll-down-button bottom-0 w-full'
+
 export const selectDescriptionClass = 'text-sm text-muted-foreground'
 export const selectWrapperClass = 'flex w-full flex-col gap-1.5'
 export const selectBackdropClass = 'fixed inset-0 z-0'
@@ -101,23 +120,27 @@ export const styledViewInputs = <M, Item, Value extends string = string>(
     const found = config.options.find((item) => itemToValue(item) === value)
     return found === undefined ? Option.none<Item>() : Option.some(found)
   })
+  const label = config.label
+  const hasLabel = label.trim().length > 0
   return {
     items: config.options,
     maybeSelectedValue: config.maybeSelectedValue,
     itemToValue,
     itemToSearchText: (item) => config.itemToLabel(item),
+    itemGroupKey: hasLabel ? () => label : undefined,
+    groupToHeading: hasLabel
+      ? () => ({
+          content: label,
+          className: selectLabelClass,
+        })
+      : undefined,
     buttonContent: h.span(
       [h.Class('flex w-full items-center justify-between gap-2')],
       [
         h.span(
           [
             h.DataAttribute('slot', 'select-value'),
-            h.Class(
-              cn(
-                'min-w-0 flex-1 truncate text-left',
-                Option.isNone(maybeFound) && 'text-muted-foreground',
-              ),
-            ),
+            h.Class(cn(selectValueClass, Option.isNone(maybeFound) && 'text-muted-foreground')),
           ],
           [
             Option.match(maybeFound, {
@@ -134,18 +157,28 @@ export const styledViewInputs = <M, Item, Value extends string = string>(
       h.DataAttribute('size', config.size ?? 'default'),
     ]),
     buttonClassName: cn(selectTriggerClass, config.triggerClass),
-    itemsAttributes: childAttributes([h.DataAttribute('slot', 'select-content')]),
-    itemsClassName: cn(selectItemsClass, config.itemsClass),
+    itemsAttributes: childAttributes([
+      h.DataAttribute('slot', 'select-content'),
+      h.DataAttribute('align-trigger', 'true'),
+    ]),
+    itemsClassName: cn(selectContentClass, config.itemsClass),
+    groupAttributes: childAttributes([h.DataAttribute('slot', 'select-group')]),
+    groupClassName: selectGroupClass,
+    separatorAttributes: childAttributes([h.DataAttribute('slot', 'select-separator')]),
+    separatorClassName: selectSeparatorClass,
     itemToConfig: (item, context) => ({
       className: cn(selectItemClass, config.itemClass),
       content: h.span(
         [h.Class('flex w-full items-center')],
         [
-          h.span([h.Class('flex-1')], [config.itemToLabel(item)]),
+          h.span(
+            [h.DataAttribute('slot', 'select-item-text'), h.Class(selectItemTextClass)],
+            [config.itemToLabel(item)],
+          ),
           context.isSelected
             ? h.span(
-                [h.Class('absolute right-2 flex size-4 items-center justify-center')],
-                [icon(h, Check)],
+                [h.DataAttribute('slot', 'select-item-indicator'), h.Class(selectItemIndicatorClass)],
+                [icon(h, Check, selectItemIndicatorIconClass)],
               )
             : h.empty,
         ],
@@ -174,4 +207,4 @@ export const selectDescription = <M>(
 ): Html => h.span([h.Class(cn(selectDescriptionClass, className))], [description])
 
 export const selectChevron = <M>(h: HtmlBuilder<M>): Html =>
-  h.span([h.Class('shrink-0 text-muted-foreground')], [icon(h, ChevronDown, 'size-4')])
+  icon(h, ChevronDown, selectTriggerIconClass)

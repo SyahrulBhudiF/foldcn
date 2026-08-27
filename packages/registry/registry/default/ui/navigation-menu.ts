@@ -72,8 +72,7 @@ export const getPopover = (model: Model, id: string): FoldkitPopover.Model => {
   if (popover === undefined) {
     const knownIds = Object.keys(model.popovers)
     throw new Error(
-      `NavigationMenu: unknown item id "${id}" — add it to the array passed to NavigationMenu.init. ` +
-        `Known ids: ${knownIds.length > 0 ? knownIds.join(', ') : '(none — init was called with an empty array)'}.`,
+      `NavigationMenu: unknown item id "${id}" — add it to the array passed to NavigationMenu.init. Known ids: ${knownIds.length > 0 ? knownIds.join(', ') : '(none — init was called with an empty array)'}.`,
     )
   }
   return popover
@@ -135,29 +134,18 @@ export const navigationMenuClass =
   'cn-navigation-menu group/navigation-menu relative flex max-w-max flex-1 items-center justify-center'
 
 export const navigationMenuListClass =
-  'cn-navigation-menu-list flex flex-1 list-none items-center justify-center'
+  'cn-navigation-menu-list group flex flex-1 list-none items-center justify-center'
 
-export const navigationMenuItemClass = 'cn-navigation-menu-item'
+export const navigationMenuItemClass = 'cn-navigation-menu-item relative'
 
 /** Upstream link token string; data-active is foldkit's attr name. */
 export const navigationMenuLinkClass = 'cn-navigation-menu-link'
 
 /** Upstream trigger component + token strings. */
 export const navigationMenuTriggerClass =
-  'cn-navigation-menu-trigger group/navigation-menu-trigger inline-flex h-9 w-max items-center justify-center outline-none disabled:pointer-events-none'
+  'cn-navigation-menu-trigger group/navigation-menu-trigger group inline-flex h-9 w-max items-center justify-center outline-none disabled:pointer-events-none'
 
-/** Self-contained card look (background, border, shadow) and enter/leave
- *  animation — not gated behind an upstream `data-viewport` ancestor flag,
- *  since that requires the panel to render as a direct DOM descendant of
- *  the `nav`, which the embedding Popover's `h.submodel` boundary doesn't
- *  guarantee. Mirrors `popoverContentClass` (same `data-enter`/`data-leave`
- *  attributes, the same names Popover's view actually emits). Positioning
- *  comes from the Popover's Floating UI anchor, not from position utilities
- *  here. Switching between items closes the old popover and opens the new
- *  one in the same update, so their leave/enter animations run at once —
- *  a crossfade between dropdowns, not a hard cut. */
-export const navigationMenuContentClass =
-  'z-50 rounded-lg bg-popover p-1 text-popover-foreground shadow-md ring-1 ring-foreground/10 data-enter:animate-in data-leave:animate-out data-leave:fade-out-0 data-enter:fade-in-0 data-leave:zoom-out-95 data-enter:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 duration-100 origin-(--transform-origin) outline-hidden'
+export const navigationMenuContentClass = 'cn-navigation-menu-content'
 
 export const NAVIGATION_MENU_ANCHOR: AnchorConfig = { placement: 'bottom', gap: 8, padding: 8 }
 

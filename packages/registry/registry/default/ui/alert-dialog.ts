@@ -60,10 +60,12 @@ export const alertDialogFooterClass =
   'cn-alert-dialog-footer flex flex-col-reverse gap-2 group-data-[size=sm]/alert-dialog-content:grid group-data-[size=sm]/alert-dialog-content:grid-cols-2 sm:flex-row sm:justify-end'
 
 /** Upstream renders Cancel via `<Button variant="outline" size="default">`. */
-export const alertDialogCancelClass = 'cn-button cn-button-variant-outline cn-button-size-default'
+export const alertDialogCancelClass =
+  'cn-button cn-button-variant-outline cn-button-size-default cn-alert-dialog-cancel'
 
 /** Upstream renders Action via `<Button>` (default variant). */
-export const alertDialogActionClass = 'cn-button cn-button-variant-default cn-button-size-default'
+export const alertDialogActionClass =
+  'cn-button cn-button-variant-default cn-button-size-default cn-alert-dialog-action'
 
 /** foldcn extra (upstream alert-dialog has no close X): ghost icon button,
  *  kept for backward compatibility with the closeButton helper. */
@@ -219,7 +221,11 @@ export const styledViewInputs = <M>(
 ): FoldkitDialog.ViewInputs => ({
   toView: ({ dialog, backdrop, panel, closeButton, title, description, isVisible }) =>
     h.dialog(
-      [...dialog, h.Class(cn(alertDialogClass, viewInputs.className))],
+      [
+        ...dialog,
+        h.DataAttribute('slot', 'alert-dialog'),
+        h.Class(cn(alertDialogClass, viewInputs.className)),
+      ],
       isVisible
         ? [
             h.div([

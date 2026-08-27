@@ -154,7 +154,9 @@ type StyleConfig = Readonly<{ className?: string }>
 
 type AddonConfig = StyleConfig & Readonly<{ align?: InputGroupAddonAlign }>
 
-/** Add-on (text or icon) for either side of the group. */
+/** Add-on (text or icon) for either side of the group. Clicking the addon
+ *  focuses the contained input (unless the click target is a button), matching
+ *  upstream InputGroupAddon's onClick delegation. */
 export const inputGroupAddon = <M>(
   config: AddonConfig,
   children: ReadonlyArray<Child>,
@@ -167,25 +169,24 @@ export const inputGroupAddon = <M>(
       h.DataAttribute('slot', 'input-group-addon'),
       h.DataAttribute('align', align),
       h.Class(cn(inputGroupAddonClass, inputGroupAddonAlignClasses[align], config.className)),
+      h.Attribute(
+        'onclick',
+        "if(!event.target.closest('button'))this.parentElement?.querySelector('input')?.focus()",
+      ),
     ],
     children,
   )
 }
 
 /** Alias kept for backward compatibility — an inline-start text addon.
- *  Upstream renders a `span`. */
+ *  Upstream renders a `span` with NO data-slot (foldcn previously added
+ *  an extra slot; removed to match upstream). */
 export const inputGroupText = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
 ): Html =>
-  h.span(
-    [
-      h.Class(cn(inputGroupTextClass, config.className)),
-      h.DataAttribute('slot', 'input-group-text'),
-    ],
-    children,
-  )
+  h.span([h.Class(cn(inputGroupTextClass, config.className))], children)
 
 /** Segmented container — pass addons / controls as children. */
 export const inputGroup = <M>(

@@ -5,7 +5,7 @@
 import { Combobox as FoldkitCombobox } from '@foldkit/ui'
 import type { AnchorConfig } from '@foldkit/ui/combobox'
 import type { Option } from 'effect/Option'
-import type { Html, HtmlBuilder } from 'foldkit/html'
+import { childAttributes, inertHtml, type Html, type HtmlBuilder } from 'foldkit/html'
 
 import { icon } from '@/lib/icons'
 import { Check, ChevronDown } from 'lucide'
@@ -38,7 +38,9 @@ export type GroupHeading = FoldkitCombobox.GroupHeading
 // foldkit deltas: items highlight via data-active (upstream
 // data-highlighted:) per the derivation mapping. Gaps vs upstream: no chips
 // UI for multi-select, no clear button, no Empty row; filtering is
-// parent-owned.
+// parent-owned. Content now uses cn-combobox-content family (was bare); item
+// stripped of data-selected:font-medium etc — selection indicator is via
+// check icon. Chips/clear/empty data-slots not supported — documented gap.
 
 /** foldcn renders a bare input (upstream wraps one in an InputGroup inside
  *  the popup for chips mode); keep the input token string. */
@@ -48,17 +50,17 @@ export const comboboxInputClass =
 export const comboboxButtonClass =
   'absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground transition-colors hover:text-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4'
 
-export const comboboxItemsClass = 'cn-combobox-content z-50 min-w-56 overflow-hidden outline-hidden'
+export const comboboxItemsClass =
+  'cn-combobox-content cn-combobox-content-logical cn-menu-target cn-menu-translucent group/combobox-content relative max-h-(--available-height) w-(--anchor-width) max-w-(--available-width) min-w-[calc(var(--anchor-width)+--spacing(7))] origin-(--transform-origin) data-[chips=true]:min-w-(--anchor-width)'
 
 export const comboboxItemsAnimatedClass = comboboxItemsClass
 
 export const comboboxItemClass =
-  'cn-combobox-item relative flex w-full cursor-default select-none outline-hidden data-active:bg-accent data-active:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-selected:font-medium data-readonly:pointer-events-none'
+  'cn-combobox-item relative flex w-full cursor-default items-center outline-hidden select-none data-active:bg-accent data-active:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0'
 
-export const comboboxGroupHeadingClass =
-  'cn-dropdown-menu-label px-2 py-1.5 text-xs font-medium text-muted-foreground'
+export const comboboxGroupHeadingClass = 'cn-combobox-label'
 
-export const comboboxSeparatorClass = 'cn-dropdown-menu-separator -mx-1 my-1 h-px'
+export const comboboxSeparatorClass = 'cn-combobox-separator'
 
 export const comboboxItemsScrollClass = 'no-scrollbar max-h-72 scroll-py-1 overflow-y-auto p-1'
 
@@ -142,17 +144,23 @@ const common = <Item extends string>(config: CommonConfig<Item>) => ({
     config.isAnimated !== false ? comboboxItemsAnimatedClass : comboboxItemsClass,
     config.itemsClass,
   ),
+  itemsAttributes: childAttributes([inertHtml.DataAttribute('slot', 'combobox-content')]),
   itemsScrollClassName: config.itemsScrollClass ?? comboboxItemsScrollClass,
   itemToConfig: (item: Item, context: Parameters<CommonConfig<Item>['itemToConfig']>[1]) => {
     const { className, content } = config.itemToConfig(item, context)
     return { className: cn(comboboxItemClass, config.itemClass, className), content }
   },
   groupClassName: cn(comboboxGroupHeadingClass, config.groupClass),
+  groupAttributes: childAttributes([inertHtml.DataAttribute('slot', 'combobox-group')]),
   separatorClassName: cn(comboboxSeparatorClass, config.separatorClass),
+  separatorAttributes: childAttributes([inertHtml.DataAttribute('slot', 'combobox-separator')]),
   buttonClassName: comboboxButtonClass,
+  buttonAttributes: childAttributes([inertHtml.DataAttribute('slot', 'combobox-trigger')]),
   inputWrapperClassName: cn(comboboxInputWrapperClass, config.inputWrapperClass),
+  inputWrapperAttributes: childAttributes([inertHtml.DataAttribute('slot', 'combobox-input-wrapper')]),
   backdropClassName: cn(comboboxBackdropClass, config.backdropClass),
   className: cn(comboboxWrapperClass, config.wrapperClass),
+  attributes: childAttributes([inertHtml.DataAttribute('slot', 'combobox')]),
 })
 
 export type SingleViewInputsConfig<Item extends string> = CommonConfig<Item> &

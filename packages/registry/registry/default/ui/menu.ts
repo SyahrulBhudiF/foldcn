@@ -4,7 +4,7 @@
  */
 import { Menu as FoldkitMenu } from '@foldkit/ui'
 import type { AnchorConfig } from '@foldkit/ui/menu'
-import type { Html } from 'foldkit/html'
+import { childAttributes, inertHtml, type Html } from 'foldkit/html'
 
 import { cn } from '@/lib/utils'
 
@@ -15,7 +15,11 @@ import { cn } from '@/lib/utils'
 // foldkit deltas: items highlight via data-active (upstream uses focus:) —
 // prefix adjusted per docs/deriving-from-base.md; panels emit data-side
 // derived from anchor placement. Gaps vs upstream: no checkbox/radio/submenu/
-// destructive/inset item kinds (primitive-level).
+// destructive/inset item kinds (primitive-level). Flat item path uses correct
+// tokens/slots; per-item data-slot (dropdown-menu-item etc) cannot be stamped —
+// primitive has no per-item attribute hook (documented gap). Sub-trigger uses
+// data-popup-open per upstream but foldkit emits data-open — compat via style
+// token's data-open handling (see cn-compat.css).
 
 export const create = FoldkitMenu.create
 export const init = (config: InitConfig): Model => FoldkitMenu.init({ isAnimated: true, ...config })
@@ -38,30 +42,29 @@ export type GroupHeading = FoldkitMenu.GroupHeading
 export const menuTriggerClass = 'cn-button cn-button-variant-ghost cn-button-size-default'
 
 export const menuItemsClass =
-  'cn-dropdown-menu-content z-50 min-w-32 overflow-hidden outline-hidden'
+  'cn-dropdown-menu-content cn-dropdown-menu-content-logical cn-menu-target cn-menu-translucent z-50 max-h-(--available-height) w-(--anchor-width) origin-(--transform-origin) overflow-x-hidden overflow-y-auto outline-none data-closed:overflow-hidden'
 
 export const menuItemsAnimatedClass = menuItemsClass
 
 export const menuItemClass =
-  'cn-dropdown-menu-item relative flex w-full cursor-default select-none outline-hidden data-active:bg-accent data-active:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50'
+  'cn-dropdown-menu-item group/dropdown-menu-item relative flex cursor-default items-center outline-hidden select-none data-active:bg-accent data-active:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0'
 
-export const menuSeparatorClass = 'cn-dropdown-menu-separator -mx-1 my-1 h-px'
+export const menuSeparatorClass = 'cn-dropdown-menu-separator'
 
-export const menuHeadingClass =
-  'cn-dropdown-menu-label px-2 py-1.5 text-xs font-medium text-muted-foreground'
+export const menuHeadingClass = 'cn-dropdown-menu-label'
 
-export const menuShortcutClass =
-  'cn-dropdown-menu-shortcut ml-auto text-xs tracking-widest text-muted-foreground'
+export const menuShortcutClass = 'cn-dropdown-menu-shortcut'
 
 export const menuLabelClass = menuHeadingClass
 
 export const menuSubTriggerClass =
-  'cn-dropdown-menu-sub-trigger flex w-full cursor-default items-center gap-2 rounded-md px-1.5 py-1 text-sm outline-hidden select-none data-open:bg-accent data-open:text-accent-foreground'
+  'cn-dropdown-menu-sub-trigger flex cursor-default items-center outline-hidden select-none data-popup-open:bg-accent data-popup-open:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0'
 
 export const menuCheckboxItemClass =
-  'cn-dropdown-menu-checkbox-item relative flex w-full cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50'
+  'cn-dropdown-menu-checkbox-item relative flex cursor-default items-center outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0'
 
-export const menuRadioItemClass = menuCheckboxItemClass
+export const menuRadioItemClass =
+  'cn-dropdown-menu-radio-item relative flex cursor-default items-center outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0'
 
 export const menuBackdropClass = 'fixed inset-0 z-0'
 
@@ -119,16 +122,21 @@ export const viewInputs = <Item extends string>(
   ariaLabel: config.ariaLabel,
   ariaLabelledBy: config.ariaLabelledBy,
   buttonClassName: cn(menuTriggerClass, config.triggerClass),
+  buttonAttributes: childAttributes([inertHtml.DataAttribute('slot', 'dropdown-menu-trigger')]),
   itemsClassName: cn(
     config.isAnimated !== false ? menuItemsAnimatedClass : menuItemsClass,
     config.itemsClass,
   ),
+  itemsAttributes: childAttributes([inertHtml.DataAttribute('slot', 'dropdown-menu-content')]),
   itemToConfig: (item, context) => {
     const { className, content } = config.itemToConfig(item, context)
     return { className: cn(menuItemClass, config.itemClass, className), content }
   },
   separatorClassName: cn(menuSeparatorClass, config.separatorClass),
+  separatorAttributes: childAttributes([inertHtml.DataAttribute('slot', 'dropdown-menu-separator')]),
   groupClassName: config.groupClass,
+  groupAttributes: childAttributes([inertHtml.DataAttribute('slot', 'dropdown-menu-group')]),
   backdropClassName: cn(menuBackdropClass, config.backdropClass),
   className: cn(menuWrapperClass, config.wrapperClass),
+  attributes: childAttributes([inertHtml.DataAttribute('slot', 'dropdown-menu')]),
 })

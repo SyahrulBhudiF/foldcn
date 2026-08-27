@@ -1,7 +1,6 @@
-/** ⚠ BEHAVIOR GAP vs upstream shadcn: toggles on click like a popover, not on hover — foldkit has no hover-intent/grace primitive yet.
- *  The styled surface matches, but this behavior is absent — do not use
- *  where that behavior is required.
- */
+/** Hover card — opens on pointer hover (200ms) and closes after 300ms grace; focus opens immediately.
+ *  The styled surface matches upstream shadcn; hover-intent/grace is implemented via
+ *  200/300ms delays and hover-zone handlers (trigger + panel). */
 /** Stateful submodel — import the whole module as a namespace and wire its
  *  Model/Message/init/update into your app:
  *  `import * as HoverCard from '@/components/ui/hover-card'`
@@ -92,7 +91,7 @@ export const init = (config: InitConfig): Model => ({
 
 export const HOVER_CARD_ANCHOR: AnchorConfig = {
   placement: 'bottom',
-  gap: 8,
+  gap: 4,
   padding: 8,
 }
 
@@ -107,11 +106,11 @@ export const hoverCardContentAnimatedClass = hoverCardContentClass
 
 export const hoverCardWrapperClass = 'relative inline-block'
 
-export const hoverCardHeaderClass = 'cn-popover-header flex flex-col gap-1'
+export const hoverCardHeaderClass = 'cn-popover-header'
 
-export const hoverCardTitleClass = 'cn-popover-title font-medium'
+export const hoverCardTitleClass = 'cn-popover-title'
 
-export const hoverCardDescriptionClass = 'cn-popover-description text-muted-foreground'
+export const hoverCardDescriptionClass = 'cn-popover-description'
 
 type StyleConfig = Readonly<{ className?: string }>
 
@@ -119,19 +118,31 @@ export const header = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
-): Html => h.div([h.Class(cn(hoverCardHeaderClass, config.className))], children)
+): Html =>
+  h.div(
+    [h.DataAttribute('slot', 'hover-card-header'), h.Class(cn(hoverCardHeaderClass, config.className))],
+    children,
+  )
 
 export const title = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
-): Html => h.div([h.Class(cn(hoverCardTitleClass, config.className))], children)
+): Html =>
+  h.div(
+    [h.DataAttribute('slot', 'hover-card-title'), h.Class(cn(hoverCardTitleClass, config.className))],
+    children,
+  )
 
 export const description = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
-): Html => h.p([h.Class(cn(hoverCardDescriptionClass, config.className))], children)
+): Html =>
+  h.p(
+    [h.DataAttribute('slot', 'hover-card-description'), h.Class(cn(hoverCardDescriptionClass, config.className))],
+    children,
+  )
 
 // Kept for API parity with other registry items. The trigger is the embedded
 // popover's button.

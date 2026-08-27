@@ -255,14 +255,14 @@ export const sidebarRailClass =
   'cn-sidebar-rail absolute inset-y-0 z-20 hidden w-4 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:start-1/2 after:w-[2px] sm:flex ltr:-translate-x-1/2 rtl:-translate-x-1/2 in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize [[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full hover:group-data-[collapsible=offcanvas]:bg-sidebar [[data-side=left][data-collapsible=offcanvas]_&]:-right-2 [[data-side=right][data-collapsible=offcanvas]_&]:-left-2'
 
 /** Upstream SidebarHeader string. */
-export const sidebarHeaderClass = 'cn-sidebar-header flex flex-col gap-2 p-2'
+export const sidebarHeaderClass = 'cn-sidebar-header flex flex-col'
 
 /** Upstream SidebarContent string. */
 export const sidebarContentClass =
   'cn-sidebar-content flex min-h-0 flex-1 flex-col overflow-auto group-data-[collapsible=icon]:overflow-hidden'
 
 /** Upstream SidebarFooter string. */
-export const sidebarFooterClass = 'cn-sidebar-footer flex flex-col gap-2 p-2'
+export const sidebarFooterClass = 'cn-sidebar-footer flex flex-col'
 
 /** Upstream SidebarGroup string. */
 export const sidebarGroupClass = 'cn-sidebar-group relative flex w-full min-w-0 flex-col'
@@ -384,7 +384,7 @@ export const view = defineView<Model, Message, ProviderViewInputs>((model, viewI
     return h.div(
       [
         h.Class(cn(sidebarProviderClass, viewInputs.className)),
-        h.DataAttribute('slot', 'sidebar-provider'),
+        h.DataAttribute('slot', 'sidebar-wrapper'),
         h.Style({ '--sidebar-width': SIDEBAR_WIDTH, '--sidebar-width-icon': SIDEBAR_WIDTH_ICON }),
       ],
       [
@@ -408,27 +408,52 @@ export const view = defineView<Model, Message, ProviderViewInputs>((model, viewI
   // inputs value then fails to check against a phantom `undefined` target).
   if (model.isMobile) {
     const mobileSheetView: SubmodelView<Sheet.Model, Sheet.Message, Sheet.ViewInputs> = Sheet.view
-    const mobileSheetInputs: Sheet.ViewInputs = Sheet.styledViewInputs(
-      {
-        side,
-        panelClass: sidebarMobilePanelClass,
-        content: ({ title, description }, sheetH) => [
-          h.div(
-            [h.Class('sr-only flex flex-col')],
-            [
-              Sheet.title({ attributes: title }, ['Sidebar'], sheetH),
-              Sheet.description({ attributes: description }, ['Displays the mobile sidebar.'], sheetH),
-            ],
-          ),
-          h.div([h.Class('flex h-full w-full flex-col')], viewInputs.content(slots)),
-        ],
-      },
-      h,
-    )
+    // Custom ViewInputs that adds upstream's data-mobile / data-slot / data-sidebar
+    // to the Sheet panel (Sheet.styledViewInputs would emit data-slot="sheet-content").
+    const mobileSheetInputs: Sheet.ViewInputs = {
+      toView: ({ dialog, backdrop, panel, closeButton, title, description, isVisible }) =>
+        h.dialog(
+          [
+            ...dialog,
+            h.DataAttribute('slot', 'sheet'),
+            h.Class(cn('bg-transparent p-0 open:block')),
+          ],
+          isVisible
+            ? [
+                h.div([
+                  ...backdrop,
+                  h.DataAttribute('slot', 'sheet-overlay'),
+                  h.Class(cn(Sheet.sheetBackdropClass)),
+                ]),
+                h.div(
+                  [
+                    ...panel,
+                    h.DataAttribute('slot', 'sidebar'),
+                    h.DataAttribute('sidebar', 'sidebar'),
+                    h.DataAttribute('mobile', 'true'),
+                    h.DataAttribute('side', side),
+                    h.Style({ '--sidebar-width': SIDEBAR_WIDTH_MOBILE } as unknown as Record<string, string>),
+                    h.Class(cn(Sheet.sheetPanelClass[side], Sheet.sheetMotionClass, sidebarMobilePanelClass)),
+                  ],
+                  [
+                    h.div(
+                      [h.Class('sr-only flex flex-col')],
+                      [
+                        Sheet.title({ attributes: title }, ['Sidebar'], h),
+                        Sheet.description({ attributes: description }, ['Displays the mobile sidebar.'], h),
+                      ],
+                    ),
+                    h.div([h.Class('flex h-full w-full flex-col')], viewInputs.content(slots)),
+                  ],
+                ),
+              ]
+            : [],
+        ),
+    }
     return h.div(
       [
         h.Class(cn(sidebarProviderClass, viewInputs.className)),
-        h.DataAttribute('slot', 'sidebar-provider'),
+        h.DataAttribute('slot', 'sidebar-wrapper'),
         h.Style({ '--sidebar-width': SIDEBAR_WIDTH, '--sidebar-width-icon': SIDEBAR_WIDTH_ICON }),
       ],
       [
@@ -447,7 +472,7 @@ export const view = defineView<Model, Message, ProviderViewInputs>((model, viewI
   return h.div(
     [
       h.Class(cn(sidebarProviderClass, viewInputs.className)),
-      h.DataAttribute('slot', 'sidebar-provider'),
+      h.DataAttribute('slot', 'sidebar-wrapper'),
       h.Style({ '--sidebar-width': SIDEBAR_WIDTH, '--sidebar-width-icon': SIDEBAR_WIDTH_ICON }),
     ],
     [
@@ -508,7 +533,7 @@ export const header = <M>(
 ): Html =>
   h.div(
     [
-      h.Class(sidebarHeaderClass),
+      h.Class(cn(sidebarHeaderClass, config.className)),
       h.DataAttribute('slot', 'sidebar-header'),
       h.DataAttribute('sidebar', 'header'),
     ],
@@ -522,7 +547,7 @@ export const content = <M>(
 ): Html =>
   h.div(
     [
-      h.Class(sidebarContentClass),
+      h.Class(cn(sidebarContentClass, config.className)),
       h.DataAttribute('slot', 'sidebar-content'),
       h.DataAttribute('sidebar', 'content'),
     ],
@@ -536,7 +561,7 @@ export const footer = <M>(
 ): Html =>
   h.div(
     [
-      h.Class(sidebarFooterClass),
+      h.Class(cn(sidebarFooterClass, config.className)),
       h.DataAttribute('slot', 'sidebar-footer'),
       h.DataAttribute('sidebar', 'footer'),
     ],
