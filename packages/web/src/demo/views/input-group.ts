@@ -9,11 +9,7 @@ import {
   inputGroupTextarea,
 } from '../../generated/registry/ui/input-group'
 import { Kbd } from '../../generated/registry/ui/kbd'
-import {
-  field,
-  fieldGroup,
-  fieldLabel,
-} from '../../generated/registry/ui/fieldset'
+import { field, fieldGroup, fieldLabel } from '../../generated/registry/ui/fieldset'
 import { button } from '../../generated/registry/ui/button'
 import { icon } from '../../generated/registry/lib/icons'
 import { Search, Info, Star, Mail, ExternalLink, Mic, Radio } from 'lucide'

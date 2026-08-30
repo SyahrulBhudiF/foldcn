@@ -411,7 +411,15 @@ export const view = defineView<Model, Message, ProviderViewInputs>((model, viewI
     // Custom ViewInputs that adds upstream's data-mobile / data-slot / data-sidebar
     // to the Sheet panel (Sheet.styledViewInputs would emit data-slot="sheet-content").
     const mobileSheetInputs: Sheet.ViewInputs = {
-      toView: ({ dialog, backdrop, panel, closeButton: _closeButton, title, description, isVisible }) =>
+      toView: ({
+        dialog,
+        backdrop,
+        panel,
+        closeButton: _closeButton,
+        title,
+        description,
+        isVisible,
+      }) =>
         h.dialog(
           [
             ...dialog,
