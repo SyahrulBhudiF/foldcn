@@ -19,6 +19,6 @@
     "hooks": "@/hooks"
   },
   "registries": {
-    "@foldcn": "https://foldcn.dev/r/{name}.json"
+    "@foldcn": "https://foldcn.elianiva.com/r/{name}.json"
   }
 }
