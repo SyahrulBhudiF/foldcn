@@ -142,3 +142,8 @@
 .cn-input-otp-caret {
   @apply pointer-events-none absolute inset-0 flex items-center justify-center;
 }
+
+/* input-group: nova/vega omit cn-input-group-button-size-sm; lyra/mira define it. */
+.cn-input-group-button-size-sm {
+  @apply gap-1;
+}

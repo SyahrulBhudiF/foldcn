@@ -85,6 +85,44 @@ const OPT_IN_STYLES = ['nova', 'vega', 'maia', 'lyra', 'mira', 'luma', 'sera', '
 )
 const STYLES = [DEFAULT_STYLE, ...OPT_IN_STYLES]
 
+/** Upstream registry hook classes with no @apply rule in any vendored style CSS.
+ *  Authored sources keep them for shadcn CLI parity; resolve strips them with
+ *  no visual change because layout utilities live inline beside the token. */
+const KNOWN_REGISTRY_HOOKS = new Set([
+  'cn-accordion',
+  'cn-accordion-trigger-icon',
+  'cn-alert-dialog-cancel',
+  'cn-alert-dialog-action',
+  'cn-alert-dialog-footer',
+  'cn-attachment-action',
+  'cn-attachment-media-variant-icon',
+  'cn-avatar-group',
+  'cn-breadcrumb',
+  'cn-button-group-orientation-horizontal',
+  'cn-button-group-orientation-vertical',
+  'cn-calendar-caption',
+  'cn-calendar-day-button',
+  'cn-card-action',
+  'cn-context-menu-trigger',
+  'cn-dialog-footer',
+  'cn-drawer-content-base',
+  'cn-field-orientation-horizontal',
+  'cn-field-orientation-responsive',
+  'cn-field-orientation-vertical',
+  'cn-input-group-addon-align-inline-end',
+  'cn-input-group-addon-align-inline-start',
+  'cn-marker-variant-default',
+  'cn-menu-target',
+  'cn-navigation-menu-item',
+  'cn-progress-root',
+  'cn-resizable-handle',
+  'cn-resizable-panel-group',
+  'cn-select-item-indicator-icon',
+  'cn-sidebar-trigger',
+  'cn-tabs-list-variant-default',
+  'cn-tabs-list-variant-line',
+])
+
 // Directories copied verbatim into each style tree. They contain no `cn-*`
 // references today; the assertion below keeps that guarantee honest.
 const VERBATIM_DIRS = ['lib', 'blocks']
@@ -239,7 +277,7 @@ function transformSourceFile(sourceFile, styleMap, unmappedTokens) {
     let merged = value
     if (tokens.length > 0) {
       for (const token of tokens) {
-        if (!(token in styleMap)) unmappedTokens.add(token)
+        if (!(token in styleMap) && !KNOWN_REGISTRY_HOOKS.has(token)) unmappedTokens.add(token)
       }
 
       const resolution = tokens
