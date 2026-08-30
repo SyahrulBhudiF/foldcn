@@ -130,7 +130,7 @@ export const styledViewInputs = <M, Item, Value extends string = string>(
     itemGroupKey: hasLabel ? () => label : undefined,
     groupToHeading: hasLabel
       ? () => ({
-          content: label,
+          content: h.text(label),
           className: selectLabelClass,
         })
       : undefined,
