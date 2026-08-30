@@ -15,9 +15,17 @@ You need a Foldkit project with Tailwind CSS v4.
 
 > Your Tailwind entry file (e.g. `src/index.css`) must already contain `@import "tailwindcss";` before you install the base style. Without it the CLI crashes with a cryptic `proxyOf` error.
 
-Three steps:
+Four steps from an existing Foldkit project. If you are starting from scratch, run [shadcn init](https://ui.shadcn.com/docs/installation) first, then continue below.
 
-**1. Register the namespace**
+**1. Initialize shadcn (new projects only)**
+
+```bash
+npx shadcn@latest init
+```
+
+Configure aliases (components, utils, ui, lib, hooks) when prompted. Skip this if `components.json` already exists.
+
+**2. Register the namespace**
 
 ```bash
 npx shadcn@latest registry add @foldcn=https://foldcn.elianiva.com/r/{name}.json
@@ -40,7 +48,7 @@ Or add it manually to `components.json`:
 }
 ```
 
-**2. Install the base style**
+**3. Install the base style**
 
 ```bash
 npx shadcn@latest add @foldcn/foldcn
@@ -48,7 +56,7 @@ npx shadcn@latest add @foldcn/foldcn
 
 This writes the theme variables (all shadcn tokens — `background`, `foreground`, `primary`, etc. as CSS variables in `:root` / `.dark` with Tailwind v4 `@theme inline` mappings) into your CSS and installs the core dependencies: `foldkit`, `effect`, `@foldkit/ui`, `clsx`, `tailwind-merge`, `lucide`, `tw-animate-css`.
 
-**3. Add components as you need them**
+**4. Add components as you need them**
 
 ```bash
 npx shadcn@latest add @foldcn/button @foldcn/input @foldcn/dialog
@@ -57,7 +65,13 @@ npx shadcn@latest add @foldcn/button @foldcn/input @foldcn/dialog
 
 ## Differences vs shadcn/ui
 
-A few components are intentionally diverged. Usually because the underlying `@foldkit/ui` primitive doesn't have that behavior yet. You can see them all on the website. I try to make it as compatible as possible including presets, but it's still a work in progress.
+A few components are intentionally diverged. Usually because the underlying `@foldkit/ui` primitive doesn't have that behavior yet. You can see them all on the website — diverged items show an amber parity badge and a "Differences vs shadcn/ui" callout on their doc page.
+
+## Not yet in foldcn
+
+These shadcn/ui base components are not ported yet. Track progress in [GitHub Issues](https://github.com/elianiva/foldcn/issues):
+
+- bubble, carousel, chart, message, message-scroller, pagination, questionnaire, scroll-area, sonner
 
 ## LLM-friendly
 
