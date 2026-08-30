@@ -367,7 +367,6 @@ const makePlacementFor = (
  */
 export const make = <A, I>(payloadSchema: S.Codec<A, I>) => {
   const Bound = FoldkitToast.make(payloadSchema)
-  type BoundModel = typeof Bound.Model.Type
   type BoundMessage = typeof Bound.Message.Type
   type BoundOutMessage = typeof Bound.OutMessage.Type
   type Entry = typeof Bound.Entry.Type

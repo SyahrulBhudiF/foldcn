@@ -31,10 +31,10 @@ const REGISTRY_JSON = join(REPO_DIR, 'packages/registry/registry/default/ui/regi
 const UI_DIR = join(REPO_DIR, 'packages/registry/registry/default/ui')
 const STYLES_DIR = join(REPO_DIR, 'packages/registry/styles')
 const DEFAULT_STYLE_CSS = join(REPO_DIR, 'packages/registry/registry/styles/style-nova.css')
-const COMPAT_CSS = join(REPO_DIR, 'packages/registry/registry/default/style/cn-compat.css')
+const _COMPAT_CSS = join(REPO_DIR, 'packages/registry/registry/default/style/cn-compat.css')
 
 const args = process.argv.slice(2)
-const wantStates =
+const _wantStates =
   args.includes('--states') ||
   args.includes('--images') ||
   args.length === 0 ||
@@ -296,14 +296,14 @@ function applicableStates(name) {
   return states.filter((s) => (seen.has(s.id) ? false : (seen.add(s.id), true)))
 }
 
-function cssForStyle(styleName) {
+function _cssForStyle(styleName) {
   if (styleName === 'default') return readFileSync(DEFAULT_STYLE_CSS, 'utf8')
   const p = join(STYLES_DIR, `style-${styleName}.css`)
   if (existsSync(p)) return readFileSync(p, 'utf8')
   return readFileSync(DEFAULT_STYLE_CSS, 'utf8')
 }
 
-function resolvedUiExists(styleName) {
+function _resolvedUiExists(styleName) {
   const dir = join(REPO_DIR, `packages/registry/styles/${styleName}/ui`)
   return existsSync(dir)
 }
@@ -518,7 +518,7 @@ async function tryCaptureImages(names) {
     })
     return res
   }
-  const abJson = (args) => {
+  const _abJson = (args) => {
     const res = ab([...args, '--json'])
     try {
       return JSON.parse(res.stdout)
@@ -579,7 +579,7 @@ async function tryCaptureImages(names) {
             let snapText = snapRes.stdout || ''
             let firstRef = null
             try {
-              const parsed = JSON.parse(snapText)
+              void JSON.parse(snapText)
               // snapshot --json shape varies; try to find first ref
               const m = snapText.match(/"ref"\s*:\s*"(e\d+)"/)
               if (m) firstRef = m[1]

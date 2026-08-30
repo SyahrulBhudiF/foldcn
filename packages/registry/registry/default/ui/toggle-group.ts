@@ -4,7 +4,6 @@
  */
 import { Function, Option, Schema as S } from 'effect'
 import type { Command } from 'foldkit/command'
-import type { Html } from 'foldkit/html'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Reflect } from 'foldkit/submodel'
 import { defineView } from 'foldkit/submodel'

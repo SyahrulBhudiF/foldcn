@@ -5,7 +5,7 @@ import { evo } from 'foldkit/struct'
 import * as Tabs from '@foldkit/ui/tabs'
 
 import * as Demo from './demo'
-import { readStoredStyle, setActiveStyle, type RegistryStyle } from './active-style'
+import { readStoredStyle, setActiveStyle } from './active-style'
 import { parseRoute } from './route'
 import { Message } from './message'
 import type { Message as AppMessage } from './message'

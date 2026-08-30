@@ -181,7 +181,7 @@ const makeFold = (
 ) =>
   Update.foldChild({
     update: collapsible.update,
-    read: (model: State) => read(model) as Option.Option<collapsible.Model>,
+    read: (model: State): Option.Option<collapsible.Model> => read(model),
     write,
     toParentMessage: toParent,
     foldOutMessage: foldOut,

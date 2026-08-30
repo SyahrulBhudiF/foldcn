@@ -479,7 +479,7 @@ const makeFold = (
 ) =>
   Update.foldChild({
     update: AvatarModule.update,
-    read: (model: State) => read(model) as Option.Option<AvatarModule.Model>,
+    read: (model: State): Option.Option<AvatarModule.Model> => read(model),
     write,
     toParentMessage: toParent,
   })

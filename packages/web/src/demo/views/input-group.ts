@@ -11,7 +11,6 @@ import {
 import { Kbd } from '../../generated/registry/ui/kbd'
 import {
   field,
-  fieldDescription,
   fieldGroup,
   fieldLabel,
 } from '../../generated/registry/ui/fieldset'

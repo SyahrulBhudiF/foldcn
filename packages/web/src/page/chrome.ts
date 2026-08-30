@@ -14,7 +14,7 @@ import { ArrowRight, Computer, Moon, Sun } from 'lucide'
 
 import { Message } from '../message'
 import type { Message as AppMessage } from '../message'
-import type { Model, PackageManager, ThemePreference } from '../model'
+import type { Model, PackageManager } from '../model'
 
 import { categoryGroups, componentCount } from '../catalog'
 import { gapsByItem } from '../catalog/gaps'

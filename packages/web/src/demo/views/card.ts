@@ -3,7 +3,6 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 import { button } from '../../generated/registry/ui/button'
 import { Card } from '../../generated/registry/ui/card'
 import { inputClass } from '../../generated/registry/ui/input'
-import { badge } from '../../generated/registry/ui/badge'
 import { icon } from '../../generated/registry/lib/icons'
 import { Plus, Captions } from 'lucide'
 

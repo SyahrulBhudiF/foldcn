@@ -7,9 +7,6 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import * as accordion from '../../generated/registry/ui/accordion'
 import { Card } from '../../generated/registry/ui/card'
-import { button } from '../../generated/registry/ui/button'
-import { icon } from '../../generated/registry/lib/icons'
-import { ArrowUpRight } from 'lucide'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'
@@ -250,7 +247,7 @@ const makeFold = (
 ) =>
   Update.foldChild({
     update: accordion.update,
-    read: (model: State) => read(model) as Option.Option<accordion.Model>,
+    read: (model: State): Option.Option<accordion.Model> => read(model),
     write,
     toParentMessage: toParent,
     foldOutMessage: foldOut,

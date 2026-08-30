@@ -278,7 +278,7 @@ export const inputView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                       },
                       h,
                     ),
-                    toParentMessage: (message) => Message.UpdatedInputValue({ value: '' }),
+                    toParentMessage: (_message) => Message.UpdatedInputValue({ value: '' }),
                   }),
                 ],
               ),

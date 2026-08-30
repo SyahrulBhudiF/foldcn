@@ -1,5 +1,5 @@
 import { Select as FoldkitSelect } from '@foldkit/ui'
-import type { Attribute, Html, HtmlBuilder } from 'foldkit/html'
+import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { icon } from '@/lib/icons'
 import { ChevronDown } from 'lucide'
