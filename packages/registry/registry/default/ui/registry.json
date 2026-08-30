@@ -689,7 +689,7 @@
       "name": "hover-card",
       "type": "registry:ui",
       "title": "Hover Card",
-      "description": "Card-styled floating panel built on the @foldkit/ui Popover submodel. \u26a0 Toggles on click like a popover, not on hover \u2014 foldkit has no hover-intent primitive yet.",
+      "description": "Card-styled floating panel with hover-intent open/close delays (200ms open, 300ms grace). Built on the @foldkit/ui Popover submodel with a hand-rolled hover state machine — not a shared foldkit/ui hover primitive.",
       "registryDependencies": [
         "@foldcn/utils"
       ],
