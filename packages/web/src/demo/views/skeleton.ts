@@ -44,7 +44,11 @@ export const skeletonView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                 ],
                 h,
               ),
-              Card.content<Message>({}, [skeleton<Message>({ className: 'aspect-square w-full' }, [], h)], h),
+              Card.content<Message>(
+                {},
+                [skeleton<Message>({ className: 'aspect-square w-full' }, [], h)],
+                h,
+              ),
             ],
             h,
           ),

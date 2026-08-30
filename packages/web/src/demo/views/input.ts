@@ -11,7 +11,11 @@ import {
   fieldLabel,
 } from '../../generated/registry/ui/fieldset'
 import { button } from '../../generated/registry/ui/button'
-import { nativeSelectClass, nativeSelectWrapperClass, nativeSelectIconClass } from '../../generated/registry/ui/native-select'
+import {
+  nativeSelectClass,
+  nativeSelectWrapperClass,
+  nativeSelectIconClass,
+} from '../../generated/registry/ui/native-select'
 import { icon } from '../../generated/registry/lib/icons'
 import { ChevronDown } from 'lucide'
 import * as select from '../../generated/registry/ui/select'
@@ -41,13 +45,7 @@ export const inputView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Basic']),
           h.div(
             [h.Class('w-full max-w-sm')],
-            [
-              h.input([
-                h.Type('email'),
-                h.Placeholder('Email'),
-                h.Class(inputClass),
-              ]),
-            ],
+            [h.input([h.Type('email'), h.Placeholder('Email'), h.Class(inputClass)])],
           ),
         ],
       ),
@@ -109,7 +107,11 @@ export const inputView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                     h.Placeholder('Enter your username'),
                     h.Class(inputClass),
                   ]),
-                  fieldDescription<AppMessage>({}, ['Choose a unique username for your account.'], h),
+                  fieldDescription<AppMessage>(
+                    {},
+                    ['Choose a unique username for your account.'],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -149,14 +151,95 @@ export const inputView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           h.div(
             [h.Class('flex w-full max-w-sm flex-col gap-6')],
             [
-              field<AppMessage>({}, [fieldLabel<AppMessage>({ for: 'input-demo-password' }, ['Password'], h), h.input([h.Id('input-demo-password'), h.Type('password'), h.Placeholder('Password'), h.Class(inputClass)])], h),
-              field<AppMessage>({}, [fieldLabel<AppMessage>({ for: 'input-demo-tel' }, ['Phone'], h), h.input([h.Id('input-demo-tel'), h.Type('tel'), h.Placeholder('+1 (555) 123-4567'), h.Class(inputClass)])], h),
-              field<AppMessage>({}, [fieldLabel<AppMessage>({ for: 'input-demo-url' }, ['URL'], h), h.input([h.Id('input-demo-url'), h.Type('url'), h.Placeholder('https://example.com'), h.Class(inputClass)])], h),
-              field<AppMessage>({}, [fieldLabel<AppMessage>({ for: 'input-demo-search' }, ['Search'], h), h.input([h.Id('input-demo-search'), h.Type('search'), h.Placeholder('Search'), h.Class(inputClass)])], h),
-              field<AppMessage>({}, [fieldLabel<AppMessage>({ for: 'input-demo-number' }, ['Number'], h), h.input([h.Id('input-demo-number'), h.Type('number'), h.Placeholder('123'), h.Class(inputClass)])], h),
-              field<AppMessage>({}, [fieldLabel<AppMessage>({ for: 'input-demo-date' }, ['Date'], h), h.input([h.Id('input-demo-date'), h.Type('date'), h.Class(inputClass)])], h),
-              field<AppMessage>({}, [fieldLabel<AppMessage>({ for: 'input-demo-time' }, ['Time'], h), h.input([h.Id('input-demo-time'), h.Type('time'), h.Class(inputClass)])], h),
-              field<AppMessage>({}, [fieldLabel<AppMessage>({ for: 'input-demo-file' }, ['File'], h), h.input([h.Id('input-demo-file'), h.Type('file'), h.Class(inputClass)])], h),
+              field<AppMessage>(
+                {},
+                [
+                  fieldLabel<AppMessage>({ for: 'input-demo-password' }, ['Password'], h),
+                  h.input([
+                    h.Id('input-demo-password'),
+                    h.Type('password'),
+                    h.Placeholder('Password'),
+                    h.Class(inputClass),
+                  ]),
+                ],
+                h,
+              ),
+              field<AppMessage>(
+                {},
+                [
+                  fieldLabel<AppMessage>({ for: 'input-demo-tel' }, ['Phone'], h),
+                  h.input([
+                    h.Id('input-demo-tel'),
+                    h.Type('tel'),
+                    h.Placeholder('+1 (555) 123-4567'),
+                    h.Class(inputClass),
+                  ]),
+                ],
+                h,
+              ),
+              field<AppMessage>(
+                {},
+                [
+                  fieldLabel<AppMessage>({ for: 'input-demo-url' }, ['URL'], h),
+                  h.input([
+                    h.Id('input-demo-url'),
+                    h.Type('url'),
+                    h.Placeholder('https://example.com'),
+                    h.Class(inputClass),
+                  ]),
+                ],
+                h,
+              ),
+              field<AppMessage>(
+                {},
+                [
+                  fieldLabel<AppMessage>({ for: 'input-demo-search' }, ['Search'], h),
+                  h.input([
+                    h.Id('input-demo-search'),
+                    h.Type('search'),
+                    h.Placeholder('Search'),
+                    h.Class(inputClass),
+                  ]),
+                ],
+                h,
+              ),
+              field<AppMessage>(
+                {},
+                [
+                  fieldLabel<AppMessage>({ for: 'input-demo-number' }, ['Number'], h),
+                  h.input([
+                    h.Id('input-demo-number'),
+                    h.Type('number'),
+                    h.Placeholder('123'),
+                    h.Class(inputClass),
+                  ]),
+                ],
+                h,
+              ),
+              field<AppMessage>(
+                {},
+                [
+                  fieldLabel<AppMessage>({ for: 'input-demo-date' }, ['Date'], h),
+                  h.input([h.Id('input-demo-date'), h.Type('date'), h.Class(inputClass)]),
+                ],
+                h,
+              ),
+              field<AppMessage>(
+                {},
+                [
+                  fieldLabel<AppMessage>({ for: 'input-demo-time' }, ['Time'], h),
+                  h.input([h.Id('input-demo-time'), h.Type('time'), h.Class(inputClass)]),
+                ],
+                h,
+              ),
+              field<AppMessage>(
+                {},
+                [
+                  fieldLabel<AppMessage>({ for: 'input-demo-file' }, ['File'], h),
+                  h.input([h.Id('input-demo-file'), h.Type('file'), h.Class(inputClass)]),
+                ],
+                h,
+              ),
             ],
           ),
         ],
@@ -168,7 +251,11 @@ export const inputView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           h.div(
             [h.Class('flex w-full max-w-sm gap-2')],
             [
-              h.input([h.Type('text'), h.Placeholder('Enter amount'), h.Class(`${inputClass} flex-1`)]),
+              h.input([
+                h.Type('text'),
+                h.Placeholder('Enter amount'),
+                h.Class(`${inputClass} flex-1`),
+              ]),
               h.div(
                 [h.Class('w-32')],
                 [
@@ -176,7 +263,11 @@ export const inputView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                     slotId: model.select.id,
                     model: model.select,
                     view: LanguageSelect.view,
-                    viewInputs: select.styledViewInputs<AppMessage, { value: string; label: string }, string>(
+                    viewInputs: select.styledViewInputs<
+                      AppMessage,
+                      { value: string; label: string },
+                      string
+                    >(
                       {
                         options: CURRENCY_OPTIONS,
                         maybeSelectedValue: Option.some('usd'),
@@ -202,7 +293,11 @@ export const inputView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           h.div(
             [h.Class('flex w-full max-w-sm gap-2')],
             [
-              h.input([h.Type('search'), h.Placeholder('Search...'), h.Class(`${inputClass} flex-1`)]),
+              h.input([
+                h.Type('search'),
+                h.Placeholder('Search...'),
+                h.Class(`${inputClass} flex-1`),
+              ]),
               button<AppMessage>({}, 'Search', h),
             ],
           ),
@@ -211,11 +306,18 @@ export const inputView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
       h.div(
         [h.Class('flex w-full flex-col gap-2')],
         [
-          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Native Select']),
+          h.div(
+            [h.Class('px-1 text-xs font-medium text-muted-foreground')],
+            ['With Native Select'],
+          ),
           h.div(
             [h.Class('flex w-full max-w-sm gap-2')],
             [
-              h.input([h.Type('tel'), h.Placeholder('(555) 123-4567'), h.Class(`${inputClass} flex-1`)]),
+              h.input([
+                h.Type('tel'),
+                h.Placeholder('(555) 123-4567'),
+                h.Class(`${inputClass} flex-1`),
+              ]),
               h.div(
                 [h.Class(`${nativeSelectWrapperClass} w-24`)],
                 [
@@ -227,7 +329,10 @@ export const inputView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                       h.option([h.Value('+46')], ['+46']),
                     ],
                   ),
-                  h.span([h.Class(nativeSelectIconClass), h.AriaHidden(true)], [icon(h, ChevronDown, 'size-4')]),
+                  h.span(
+                    [h.Class(nativeSelectIconClass), h.AriaHidden(true)],
+                    [icon(h, ChevronDown, 'size-4')],
+                  ),
                 ],
               ),
             ],
@@ -247,20 +352,53 @@ export const inputView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                   fieldGroup<AppMessage>(
                     {},
                     [
-                      field<AppMessage>({}, [fieldLabel<AppMessage>({ for: 'form-name' }, ['Name'], h), h.input([h.Id('form-name'), h.Type('text'), h.Placeholder('John Doe'), h.Class(inputClass)])], h),
+                      field<AppMessage>(
+                        {},
+                        [
+                          fieldLabel<AppMessage>({ for: 'form-name' }, ['Name'], h),
+                          h.input([
+                            h.Id('form-name'),
+                            h.Type('text'),
+                            h.Placeholder('John Doe'),
+                            h.Class(inputClass),
+                          ]),
+                        ],
+                        h,
+                      ),
                       field<AppMessage>(
                         {},
                         [
                           fieldLabel<AppMessage>({ for: 'form-email' }, ['Email'], h),
-                          h.input([h.Id('form-email'), h.Type('email'), h.Placeholder('john@example.com'), h.Class(inputClass)]),
-                          fieldDescription<AppMessage>({}, ["We'll never share your email with anyone."], h),
+                          h.input([
+                            h.Id('form-email'),
+                            h.Type('email'),
+                            h.Placeholder('john@example.com'),
+                            h.Class(inputClass),
+                          ]),
+                          fieldDescription<AppMessage>(
+                            {},
+                            ["We'll never share your email with anyone."],
+                            h,
+                          ),
                         ],
                         h,
                       ),
                       h.div(
                         [h.Class('grid grid-cols-2 gap-4')],
                         [
-                          field<AppMessage>({}, [fieldLabel<AppMessage>({ for: 'form-phone' }, ['Phone'], h), h.input([h.Id('form-phone'), h.Type('tel'), h.Placeholder('+1 (555) 123-4567'), h.Class(inputClass)])], h),
+                          field<AppMessage>(
+                            {},
+                            [
+                              fieldLabel<AppMessage>({ for: 'form-phone' }, ['Phone'], h),
+                              h.input([
+                                h.Id('form-phone'),
+                                h.Type('tel'),
+                                h.Placeholder('+1 (555) 123-4567'),
+                                h.Class(inputClass),
+                              ]),
+                            ],
+                            h,
+                          ),
                           field<AppMessage>(
                             {},
                             [
@@ -276,7 +414,10 @@ export const inputView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                                       h.option([h.Value('ca')], ['Canada']),
                                     ],
                                   ),
-                                  h.span([h.Class(nativeSelectIconClass), h.AriaHidden(true)], [icon(h, ChevronDown, 'size-4')]),
+                                  h.span(
+                                    [h.Class(nativeSelectIconClass), h.AriaHidden(true)],
+                                    [icon(h, ChevronDown, 'size-4')],
+                                  ),
                                 ],
                               ),
                             ],
@@ -284,7 +425,19 @@ export const inputView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                           ),
                         ],
                       ),
-                      field<AppMessage>({}, [fieldLabel<AppMessage>({ for: 'form-address' }, ['Address'], h), h.input([h.Id('form-address'), h.Type('text'), h.Placeholder('123 Main St'), h.Class(inputClass)])], h),
+                      field<AppMessage>(
+                        {},
+                        [
+                          fieldLabel<AppMessage>({ for: 'form-address' }, ['Address'], h),
+                          h.input([
+                            h.Id('form-address'),
+                            h.Type('text'),
+                            h.Placeholder('123 Main St'),
+                            h.Class(inputClass),
+                          ]),
+                        ],
+                        h,
+                      ),
                       field<AppMessage>(
                         { orientation: 'horizontal' },
                         [

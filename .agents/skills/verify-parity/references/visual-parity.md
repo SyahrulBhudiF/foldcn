@@ -6,19 +6,19 @@ Static token comparison can be byte-identical while pixels diverge (different at
 
 States are derived from upstream `registry/styles/style-nova.css` selectors and `apps/v4/registry/bases/base/ui/*.tsx` props. The checklist's §6a table is the inventory — this doc is the capture/diff contract.
 
-| State bucket | Upstream cue | Foldcn mapping | Notes |
-|--------------|--------------|----------------|-------|
-| `idle` | base `cn-*` | same | always applicable |
-| `hover` | `hover:`, `group-hover:`, `data-hover` | same (`cn-compat.css` may twin) | `agent-browser hover <ref>` (ref from `snapshot -s`); CSS has `hover:` utility |
-| `focus-visible` | `focus-visible:`, `focus:`, `data-focus` | same | `locator.focus()` + `:focus-visible` |
-| `active` / `pressed` | `active:`, `data-active`, `aria-pressed` | `data-active` (foldkit) — authored class uses correct prefix per deriving-from-base.md | press-hold snapshot |
-| `disabled` | `disabled:`, `aria-disabled:`, `data-disabled:` | `aria-disabled:` + `data-disabled:` twins (native `disabled:` never matches foldkit) | `isDisabled:true` fixture |
-| `open` / `closed` | `data-open:`, `data-closed:`, `data-state=open` | `data-enter:`/`data-leave:` transition windows + `data-open` persistent (rewrite in `resolve-styles.mjs` ENTER_UTILITIES/EXIT_UTILITIES) | capture both mid-transition and at-rest |
-| `checked` / `selected` / `on` | `data-checked`, `data-selected`, `aria-checked`, `data-state=checked` | `data-checked`/`data-selected`/`data-active` — class prefix mapped in source | toggle control |
-| `invalid` | `aria-invalid:`, `data-invalid` | same | `aria-invalid=true` |
-| `indeterminate` | `value===undefined` | progress empty track (gap #2) | progress without value |
-| `empty` / `loading` | conditional render | same | command empty, skeleton |
-| `orientation` / `side` | `data-orientation`, `data-side`, `data-placement` | `data-side` derived from `data-placement` | both axes where applicable |
+| State bucket                  | Upstream cue                                                          | Foldcn mapping                                                                                                                           | Notes                                                                          |
+| ----------------------------- | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `idle`                        | base `cn-*`                                                           | same                                                                                                                                     | always applicable                                                              |
+| `hover`                       | `hover:`, `group-hover:`, `data-hover`                                | same (`cn-compat.css` may twin)                                                                                                          | `agent-browser hover <ref>` (ref from `snapshot -s`); CSS has `hover:` utility |
+| `focus-visible`               | `focus-visible:`, `focus:`, `data-focus`                              | same                                                                                                                                     | `locator.focus()` + `:focus-visible`                                           |
+| `active` / `pressed`          | `active:`, `data-active`, `aria-pressed`                              | `data-active` (foldkit) — authored class uses correct prefix per deriving-from-base.md                                                   | press-hold snapshot                                                            |
+| `disabled`                    | `disabled:`, `aria-disabled:`, `data-disabled:`                       | `aria-disabled:` + `data-disabled:` twins (native `disabled:` never matches foldkit)                                                     | `isDisabled:true` fixture                                                      |
+| `open` / `closed`             | `data-open:`, `data-closed:`, `data-state=open`                       | `data-enter:`/`data-leave:` transition windows + `data-open` persistent (rewrite in `resolve-styles.mjs` ENTER_UTILITIES/EXIT_UTILITIES) | capture both mid-transition and at-rest                                        |
+| `checked` / `selected` / `on` | `data-checked`, `data-selected`, `aria-checked`, `data-state=checked` | `data-checked`/`data-selected`/`data-active` — class prefix mapped in source                                                             | toggle control                                                                 |
+| `invalid`                     | `aria-invalid:`, `data-invalid`                                       | same                                                                                                                                     | `aria-invalid=true`                                                            |
+| `indeterminate`               | `value===undefined`                                                   | progress empty track (gap #2)                                                                                                            | progress without value                                                         |
+| `empty` / `loading`           | conditional render                                                    | same                                                                                                                                     | command empty, skeleton                                                        |
+| `orientation` / `side`        | `data-orientation`, `data-side`, `data-placement`                     | `data-side` derived from `data-placement`                                                                                                | both axes where applicable                                                     |
 
 Component-specific states (e.g. `calendar` drill levels, `tabs` orientation `horizontal`/`vertical`, `sidebar` `offcanvas`/`icon`/`none × left`/`right`) extend the matrix — add rows where upstream props or style selectors imply a distinct visual.
 
@@ -69,6 +69,7 @@ agent-browser --session "$SESSION" close  # after all components
 ```
 
 Key patterns from `agent-browser skills get core` the harness relies on:
+
 - `snapshot -i` vs `snapshot -i --json` — human vs machine diff (JSON includes roles, names, `ref`, and `attributes` for state-attr comparison).
 - `snapshot -s "<selector>"` — scope to the component root so refs are stable per state.
 - Refs (`e1`, `e2`, …) are fresh per snapshot — re-snapshot after any `hover`/`click`/`open` that mutates the page.
@@ -111,12 +112,12 @@ Gitignored. The `ParityReport.visual` section references these paths. Don't comm
 
 ## Harness modes
 
-| Invocation | What it does | Requires |
-|------------|--------------|----------|
-| `node scripts/verify-visual-parity.mjs --states` | Enumerate state matrix, check CSS coverage in resolved output, no browser | nothing (reads `registry.json`, `style-nova.css`, `bases/base/ui` — or `web_search` for upstream list when no checkout) |
-| `node scripts/verify-visual-parity.mjs --images` | `--states` + `agent-browser` snapshot + screenshot + attr+pixel diff | `agent-browser` (`npm i -g agent-browser && agent-browser install`), running foldcn + upstream servers (or `--foldcn-url` / `--shadcn-url`) |
-| `node scripts/verify-visual-parity.mjs --all-styles --images` | Repeat per style (`nova`…`rhea`) | same + all style builds (`resolve-styles.mjs` already emits them) |
-| `node scripts/verify-parity.mjs --visual` | Unified run: inventory + tokens + attributes + behavior + visual (delegates to `verify-visual-parity.mjs`) | same as `--images` when `agent-browser` available; otherwise CSS fallback + warning |
+| Invocation                                                    | What it does                                                                                               | Requires                                                                                                                                    |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `node scripts/verify-visual-parity.mjs --states`              | Enumerate state matrix, check CSS coverage in resolved output, no browser                                  | nothing (reads `registry.json`, `style-nova.css`, `bases/base/ui` — or `web_search` for upstream list when no checkout)                     |
+| `node scripts/verify-visual-parity.mjs --images`              | `--states` + `agent-browser` snapshot + screenshot + attr+pixel diff                                       | `agent-browser` (`npm i -g agent-browser && agent-browser install`), running foldcn + upstream servers (or `--foldcn-url` / `--shadcn-url`) |
+| `node scripts/verify-visual-parity.mjs --all-styles --images` | Repeat per style (`nova`…`rhea`)                                                                           | same + all style builds (`resolve-styles.mjs` already emits them)                                                                           |
+| `node scripts/verify-parity.mjs --visual`                     | Unified run: inventory + tokens + attributes + behavior + visual (delegates to `verify-visual-parity.mjs`) | same as `--images` when `agent-browser` available; otherwise CSS fallback + warning                                                         |
 
 Flags:
 

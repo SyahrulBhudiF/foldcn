@@ -37,92 +37,96 @@ export const dialogView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 model: model.dialog,
                 view: Dialog.view,
                 viewInputs: Dialog.styledViewInputs(
-          {
-            content: ({ closeButton, title, description }, h) => [
-              Dialog.header(
-                {},
-                [
-                  Dialog.title({ attributes: title }, ['Edit profile'], h),
-                  Dialog.description(
-                    { attributes: description },
-                    ['Make changes to your profile here. Click save when you are done.'],
-                    h,
-                  ),
-                ],
-                h,
-              ),
-              h.div(
-                [h.Class('grid gap-4 py-4')],
-                [
-                  h.div(
-                    [h.Class('grid gap-3')],
-                    [
-                      h.label(
+                  {
+                    content: ({ closeButton, title, description }, h) => [
+                      Dialog.header(
+                        {},
                         [
-                          h.Class('flex items-center gap-2 text-sm leading-none font-medium'),
-                          h.For('dialog-name-1'),
+                          Dialog.title({ attributes: title }, ['Edit profile'], h),
+                          Dialog.description(
+                            { attributes: description },
+                            ['Make changes to your profile here. Click save when you are done.'],
+                            h,
+                          ),
                         ],
-                        ['Name'],
+                        h,
                       ),
-                      h.input([
-                        h.Class(
-                          'flex h-8 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50',
-                        ),
-                        h.Id('dialog-name-1'),
-                        h.Attribute('name', 'name'),
-                        h.Attribute('defaultValue', 'Pedro Duarte'),
-                      ]),
-                    ],
-                  ),
-                  h.div(
-                    [h.Class('grid gap-3')],
-                    [
-                      h.label(
+                      h.div(
+                        [h.Class('grid gap-4 py-4')],
                         [
-                          h.Class('flex items-center gap-2 text-sm leading-none font-medium'),
-                          h.For('dialog-username-1'),
+                          h.div(
+                            [h.Class('grid gap-3')],
+                            [
+                              h.label(
+                                [
+                                  h.Class(
+                                    'flex items-center gap-2 text-sm leading-none font-medium',
+                                  ),
+                                  h.For('dialog-name-1'),
+                                ],
+                                ['Name'],
+                              ),
+                              h.input([
+                                h.Class(
+                                  'flex h-8 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50',
+                                ),
+                                h.Id('dialog-name-1'),
+                                h.Attribute('name', 'name'),
+                                h.Attribute('defaultValue', 'Pedro Duarte'),
+                              ]),
+                            ],
+                          ),
+                          h.div(
+                            [h.Class('grid gap-3')],
+                            [
+                              h.label(
+                                [
+                                  h.Class(
+                                    'flex items-center gap-2 text-sm leading-none font-medium',
+                                  ),
+                                  h.For('dialog-username-1'),
+                                ],
+                                ['Username'],
+                              ),
+                              h.input([
+                                h.Class(
+                                  'flex h-8 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50',
+                                ),
+                                h.Id('dialog-username-1'),
+                                h.Attribute('name', 'username'),
+                                h.Attribute('defaultValue', '@peduarte'),
+                              ]),
+                            ],
+                          ),
                         ],
-                        ['Username'],
                       ),
-                      h.input([
-                        h.Class(
-                          'flex h-8 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50',
-                        ),
-                        h.Id('dialog-username-1'),
-                        h.Attribute('name', 'username'),
-                        h.Attribute('defaultValue', '@peduarte'),
-                      ]),
-                    ],
-                  ),
-                ],
-              ),
-              Dialog.footer(
-                {},
-                [
-                  h.button(
-                    [
-                      ...closeButton,
-                      h.Class(
-                        'inline-flex h-8 items-center justify-center rounded-lg border border-input bg-background px-3 text-sm font-medium hover:bg-accent hover:text-accent-foreground',
-                      ),
-                    ],
-                    ['Cancel'],
-                  ),
-                  h.button(
-                    [
-                      h.Class(
-                        'inline-flex h-8 items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground hover:bg-primary/90',
+                      Dialog.footer(
+                        {},
+                        [
+                          h.button(
+                            [
+                              ...closeButton,
+                              h.Class(
+                                'inline-flex h-8 items-center justify-center rounded-lg border border-input bg-background px-3 text-sm font-medium hover:bg-accent hover:text-accent-foreground',
+                              ),
+                            ],
+                            ['Cancel'],
+                          ),
+                          h.button(
+                            [
+                              h.Class(
+                                'inline-flex h-8 items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground hover:bg-primary/90',
+                              ),
+                            ],
+                            ['Save changes'],
+                          ),
+                        ],
+                        h,
                       ),
                     ],
-                    ['Save changes'],
-                  ),
-                ],
-                h,
-              ),
-            ],
-          },
-          h,
-        ),
+                  },
+                  h,
+                ),
                 toParentMessage: (message) => Message.GotDialogMessage({ message }),
               }),
             ],
@@ -143,7 +147,14 @@ export const dialogView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
         [h.Class('flex w-full flex-col gap-2')],
         [
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Sizes']),
-          h.div([h.Class('flex flex-wrap gap-2')], [button<AppMessage>({ variant: 'outline' }, 'Small', h), button<AppMessage>({ variant: 'outline' }, 'Default', h), button<AppMessage>({ variant: 'outline' }, 'Large', h)]),
+          h.div(
+            [h.Class('flex flex-wrap gap-2')],
+            [
+              button<AppMessage>({ variant: 'outline' }, 'Small', h),
+              button<AppMessage>({ variant: 'outline' }, 'Default', h),
+              button<AppMessage>({ variant: 'outline' }, 'Large', h),
+            ],
+          ),
         ],
       ),
     ],

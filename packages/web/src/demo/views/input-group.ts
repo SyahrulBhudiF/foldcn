@@ -9,7 +9,12 @@ import {
   inputGroupTextarea,
 } from '../../generated/registry/ui/input-group'
 import { Kbd } from '../../generated/registry/ui/kbd'
-import { field, fieldDescription, fieldGroup, fieldLabel } from '../../generated/registry/ui/fieldset'
+import {
+  field,
+  fieldDescription,
+  fieldGroup,
+  fieldLabel,
+} from '../../generated/registry/ui/fieldset'
 import { button } from '../../generated/registry/ui/button'
 import { icon } from '../../generated/registry/lib/icons'
 import { Search, Info, Star, Mail, ExternalLink, Mic, Radio } from 'lucide'
@@ -30,7 +35,11 @@ export const inputGroupView = (_model: Model, h: HtmlBuilder<Message>): Html =>
             [
               inputGroup(
                 { className: 'max-w-sm' },
-                [inputGroupInput({ id: 'input-group-basic', placeholder: 'Search…' }, h), inputGroupAddon({}, [icon(h, Search, 'size-4')], h), inputGroupAddon({ align: 'inline-end' }, ['12 results'], h)],
+                [
+                  inputGroupInput({ id: 'input-group-basic', placeholder: 'Search…' }, h),
+                  inputGroupAddon({}, [icon(h, Search, 'size-4')], h),
+                  inputGroupAddon({ align: 'inline-end' }, ['12 results'], h),
+                ],
                 h,
               ),
             ],
@@ -44,8 +53,36 @@ export const inputGroupView = (_model: Model, h: HtmlBuilder<Message>): Html =>
           fieldGroup<Message>(
             {},
             [
-              field<Message>({}, [fieldLabel<Message>({ for: 'input-icon-left' }, ['Addon (inline-start)'], h), inputGroup({}, [inputGroupInput({ id: 'input-icon-left', placeholder: '' }, h), inputGroupAddon({}, [icon(h, Search, 'size-4 text-muted-foreground')], h)], h)], h),
-              field<Message>({}, [fieldLabel<Message>({ for: 'input-icon-right' }, ['Addon (inline-end)'], h), inputGroup({}, [inputGroupInput({ id: 'input-icon-right', placeholder: '' }, h), inputGroupAddon({ align: 'inline-end' }, [icon(h, Info, 'size-4')], h)], h)], h),
+              field<Message>(
+                {},
+                [
+                  fieldLabel<Message>({ for: 'input-icon-left' }, ['Addon (inline-start)'], h),
+                  inputGroup(
+                    {},
+                    [
+                      inputGroupInput({ id: 'input-icon-left', placeholder: '' }, h),
+                      inputGroupAddon({}, [icon(h, Search, 'size-4 text-muted-foreground')], h),
+                    ],
+                    h,
+                  ),
+                ],
+                h,
+              ),
+              field<Message>(
+                {},
+                [
+                  fieldLabel<Message>({ for: 'input-icon-right' }, ['Addon (inline-end)'], h),
+                  inputGroup(
+                    {},
+                    [
+                      inputGroupInput({ id: 'input-icon-right', placeholder: '' }, h),
+                      inputGroupAddon({ align: 'inline-end' }, [icon(h, Info, 'size-4')], h),
+                    ],
+                    h,
+                  ),
+                ],
+                h,
+              ),
               field<Message>(
                 {},
                 [
@@ -55,7 +92,11 @@ export const inputGroupView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     [
                       inputGroupInput({ id: 'input-icon-both', placeholder: '' }, h),
                       inputGroupAddon({}, [icon(h, Mic, 'size-4 text-muted-foreground')], h),
-                      inputGroupAddon({ align: 'inline-end' }, [icon(h, Radio, 'size-4 animate-pulse text-red-500')], h),
+                      inputGroupAddon(
+                        { align: 'inline-end' },
+                        [icon(h, Radio, 'size-4 animate-pulse text-red-500')],
+                        h,
+                      ),
                     ],
                     h,
                   ),
@@ -74,9 +115,65 @@ export const inputGroupView = (_model: Model, h: HtmlBuilder<Message>): Html =>
           fieldGroup<Message>(
             {},
             [
-              field<Message>({}, [fieldLabel<Message>({ for: 'input-button-default' }, ['Button (default)'], h), inputGroup({}, [inputGroupInput({ id: 'input-button-default', placeholder: '' }, h), inputGroupAddon({}, [inputGroupButton<Message>({}, 'Default', h)], h)], h)], h),
-              field<Message>({}, [fieldLabel<Message>({ for: 'input-button-outline' }, ['Button (outline)'], h), inputGroup({}, [inputGroupInput({ id: 'input-button-outline', placeholder: '' }, h), inputGroupAddon({}, [inputGroupButton<Message>({ variant: 'outline' }, 'Outline', h)], h)], h)], h),
-              field<Message>({}, [fieldLabel<Message>({ for: 'input-button-icon' }, ['Button (icon)'], h), inputGroup({}, [inputGroupInput({ id: 'input-button-icon', placeholder: '' }, h), inputGroupAddon({ align: 'inline-end' }, [inputGroupButton<Message>({ size: 'icon-xs' }, icon(h, Star, 'size-4'), h)], h)], h)], h),
+              field<Message>(
+                {},
+                [
+                  fieldLabel<Message>({ for: 'input-button-default' }, ['Button (default)'], h),
+                  inputGroup(
+                    {},
+                    [
+                      inputGroupInput({ id: 'input-button-default', placeholder: '' }, h),
+                      inputGroupAddon({}, [inputGroupButton<Message>({}, 'Default', h)], h),
+                    ],
+                    h,
+                  ),
+                ],
+                h,
+              ),
+              field<Message>(
+                {},
+                [
+                  fieldLabel<Message>({ for: 'input-button-outline' }, ['Button (outline)'], h),
+                  inputGroup(
+                    {},
+                    [
+                      inputGroupInput({ id: 'input-button-outline', placeholder: '' }, h),
+                      inputGroupAddon(
+                        {},
+                        [inputGroupButton<Message>({ variant: 'outline' }, 'Outline', h)],
+                        h,
+                      ),
+                    ],
+                    h,
+                  ),
+                ],
+                h,
+              ),
+              field<Message>(
+                {},
+                [
+                  fieldLabel<Message>({ for: 'input-button-icon' }, ['Button (icon)'], h),
+                  inputGroup(
+                    {},
+                    [
+                      inputGroupInput({ id: 'input-button-icon', placeholder: '' }, h),
+                      inputGroupAddon(
+                        { align: 'inline-end' },
+                        [
+                          inputGroupButton<Message>(
+                            { size: 'icon-xs' },
+                            icon(h, Star, 'size-4'),
+                            h,
+                          ),
+                        ],
+                        h,
+                      ),
+                    ],
+                    h,
+                  ),
+                ],
+                h,
+              ),
             ],
             h,
           ),
@@ -89,11 +186,36 @@ export const inputGroupView = (_model: Model, h: HtmlBuilder<Message>): Html =>
           fieldGroup<Message>(
             {},
             [
-              field<Message>({}, [fieldLabel<Message>({ for: 'input-kbd' }, ['Input Group with Kbd'], h), inputGroup({}, [inputGroupInput({ id: 'input-kbd', placeholder: '' }, h), inputGroupAddon({}, [Kbd<Message>({}, ['⌘K'], h)], h)], h), inputGroup({}, [inputGroupInput({ id: 'input-kbd-2', placeholder: '' }, h), inputGroupAddon({ align: 'inline-end' }, [Kbd<Message>({}, ['⌘K'], h)], h)], h)], h),
+              field<Message>(
+                {},
+                [
+                  fieldLabel<Message>({ for: 'input-kbd' }, ['Input Group with Kbd'], h),
+                  inputGroup(
+                    {},
+                    [
+                      inputGroupInput({ id: 'input-kbd', placeholder: '' }, h),
+                      inputGroupAddon({}, [Kbd<Message>({}, ['⌘K'], h)], h),
+                    ],
+                    h,
+                  ),
+                  inputGroup(
+                    {},
+                    [
+                      inputGroupInput({ id: 'input-kbd-2', placeholder: '' }, h),
+                      inputGroupAddon({ align: 'inline-end' }, [Kbd<Message>({}, ['⌘K'], h)], h),
+                    ],
+                    h,
+                  ),
+                ],
+                h,
+              ),
               inputGroup(
                 {},
                 [
-                  inputGroupInput({ id: 'input-search-apps', placeholder: 'Search for Apps...' }, h),
+                  inputGroupInput(
+                    { id: 'input-search-apps', placeholder: 'Search for Apps...' },
+                    h,
+                  ),
                   inputGroupAddon({ align: 'inline-end' }, ['Ask AI'], h),
                   inputGroupAddon({ align: 'inline-end' }, [Kbd<Message>({}, ['Tab'], h)], h),
                 ],
@@ -102,7 +224,10 @@ export const inputGroupView = (_model: Model, h: HtmlBuilder<Message>): Html =>
               inputGroup(
                 {},
                 [
-                  inputGroupInput({ id: 'input-search-docs', placeholder: 'Search documentation...' }, h),
+                  inputGroupInput(
+                    { id: 'input-search-docs', placeholder: 'Search documentation...' },
+                    h,
+                  ),
                   inputGroupAddon({}, [icon(h, Search, 'size-4')], h),
                   inputGroupAddon({ align: 'inline-end' }, ['12 results'], h),
                 ],
@@ -121,7 +246,10 @@ export const inputGroupView = (_model: Model, h: HtmlBuilder<Message>): Html =>
             [h.Class('w-full max-w-md rounded-xl border bg-card p-6')],
             [
               h.div([h.Class('mb-4 font-semibold')], ['Card with Input Group']),
-              h.div([h.Class('mb-4 text-sm text-muted-foreground')], ['This is a card with an input group.']),
+              h.div(
+                [h.Class('mb-4 text-sm text-muted-foreground')],
+                ['This is a card with an input group.'],
+              ),
               fieldGroup<Message>(
                 {},
                 [
@@ -129,7 +257,17 @@ export const inputGroupView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     {},
                     [
                       fieldLabel<Message>({ for: 'email-input' }, ['Email Address'], h),
-                      inputGroup({}, [inputGroupInput({ id: 'email-input', placeholder: 'you@example.com', type: 'email' }, h), inputGroupAddon({ align: 'inline-end' }, [icon(h, Mail, 'size-4')], h)], h),
+                      inputGroup(
+                        {},
+                        [
+                          inputGroupInput(
+                            { id: 'email-input', placeholder: 'you@example.com', type: 'email' },
+                            h,
+                          ),
+                          inputGroupAddon({ align: 'inline-end' }, [icon(h, Mail, 'size-4')], h),
+                        ],
+                        h,
+                      ),
                     ],
                     h,
                   ),
@@ -142,7 +280,11 @@ export const inputGroupView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                         [
                           inputGroupAddon({}, [inputGroupText({}, ['https://'], h)], h),
                           inputGroupInput({ id: 'website-input', placeholder: 'example.com' }, h),
-                          inputGroupAddon({ align: 'inline-end' }, [icon(h, ExternalLink, 'size-4')], h),
+                          inputGroupAddon(
+                            { align: 'inline-end' },
+                            [icon(h, ExternalLink, 'size-4')],
+                            h,
+                          ),
                         ],
                         h,
                       ),
@@ -154,7 +296,10 @@ export const inputGroupView = (_model: Model, h: HtmlBuilder<Message>): Html =>
               ),
               h.div(
                 [h.Class('mt-4 flex justify-end gap-2')],
-                [button<Message>({ variant: 'outline' }, 'Cancel', h), button<Message>({}, 'Submit', h)],
+                [
+                  button<Message>({ variant: 'outline' }, 'Cancel', h),
+                  button<Message>({}, 'Submit', h),
+                ],
               ),
             ],
           ),
@@ -174,8 +319,18 @@ export const inputGroupView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                   inputGroup(
                     {},
                     [
-                      inputGroupTextarea({ id: 'prompt-31', placeholder: 'Ask, Search or Chat...' }, h),
-                      inputGroupAddon({ align: 'block-start' }, [inputGroupText({}, ['Ask, Search or Chat...'], h), icon(h, Info, 'size-4 ml-auto text-muted-foreground')], h),
+                      inputGroupTextarea(
+                        { id: 'prompt-31', placeholder: 'Ask, Search or Chat...' },
+                        h,
+                      ),
+                      inputGroupAddon(
+                        { align: 'block-start' },
+                        [
+                          inputGroupText({}, ['Ask, Search or Chat...'], h),
+                          icon(h, Info, 'size-4 ml-auto text-muted-foreground'),
+                        ],
+                        h,
+                      ),
                     ],
                     h,
                   ),
@@ -189,8 +344,26 @@ export const inputGroupView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                   inputGroup(
                     {},
                     [
-                      inputGroupTextarea({ id: 'textarea-block-end', placeholder: 'Enter your text here...' }, h),
-                      inputGroupAddon({ align: 'block-end' }, [inputGroupText({}, ['0/280 characters'], h), inputGroupButton<Message>({ size: 'icon-xs', className: 'ml-auto rounded-full', variant: 'default' }, icon(h, Star, 'size-4'), h)], h),
+                      inputGroupTextarea(
+                        { id: 'textarea-block-end', placeholder: 'Enter your text here...' },
+                        h,
+                      ),
+                      inputGroupAddon(
+                        { align: 'block-end' },
+                        [
+                          inputGroupText({}, ['0/280 characters'], h),
+                          inputGroupButton<Message>(
+                            {
+                              size: 'icon-xs',
+                              className: 'ml-auto rounded-full',
+                              variant: 'default',
+                            },
+                            icon(h, Star, 'size-4'),
+                            h,
+                          ),
+                        ],
+                        h,
+                      ),
                     ],
                     h,
                   ),

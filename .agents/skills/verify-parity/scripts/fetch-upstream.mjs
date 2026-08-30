@@ -46,7 +46,11 @@ async function main() {
   }
 
   mkdirSync(dirname(OUT_PATH), { recursive: true })
-  writeFileSync(OUT_PATH, JSON.stringify({ source: DOCS_URL, fetchedAt: new Date().toISOString(), names }, null, 2) + '\n')
+  writeFileSync(
+    OUT_PATH,
+    JSON.stringify({ source: DOCS_URL, fetchedAt: new Date().toISOString(), names }, null, 2) +
+      '\n',
+  )
   console.log(`wrote ${names.length} names to ${OUT_PATH}`)
   console.log(names.join(', '))
 }

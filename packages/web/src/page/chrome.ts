@@ -245,10 +245,7 @@ export const sidebarView = (model: Model, h: HtmlBuilder<AppMessage>): Html => {
           h.div(
             [h.Class('mt-6 rounded-lg border border-border bg-muted/20 px-3 py-3')],
             [
-              h.p(
-                [h.Class('text-xs font-medium text-foreground')],
-                ['Missing something?'],
-              ),
+              h.p([h.Class('text-xs font-medium text-foreground')], ['Missing something?']),
               h.p(
                 [h.Class('mt-1 text-xs leading-relaxed text-muted-foreground')],
                 ['Request a component'],

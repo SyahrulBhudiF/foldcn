@@ -33,7 +33,8 @@ export type AttachmentMediaVariant = (typeof attachmentMediaVariantKeys)[number]
 
 export const attachmentMediaVariants: Record<AttachmentMediaVariant, string> = {
   icon: 'cn-attachment-media-variant-icon',
-  image: 'cn-attachment-media-variant-image *:[img]:aspect-square *:[img]:w-full *:[img]:object-cover',
+  image:
+    'cn-attachment-media-variant-image *:[img]:aspect-square *:[img]:w-full *:[img]:object-cover',
 }
 
 export const attachmentMediaClass =
@@ -49,7 +50,8 @@ export const attachmentDescriptionClass =
 
 export const attachmentActionsClass = 'cn-attachment-actions flex shrink-0 items-center'
 
-export const attachmentActionClass = 'cn-button cn-button-variant-ghost cn-button-size-icon-xs cn-attachment-action'
+export const attachmentActionClass =
+  'cn-button cn-button-variant-ghost cn-button-size-icon-xs cn-attachment-action'
 
 export const attachmentTriggerClass = 'cn-attachment-trigger absolute inset-0 z-10 outline-none'
 
@@ -85,7 +87,10 @@ const attachmentGroup = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.Class(cn(attachmentGroupClass, config.className)), h.DataAttribute('slot', 'attachment-group')],
+    [
+      h.Class(cn(attachmentGroupClass, config.className)),
+      h.DataAttribute('slot', 'attachment-group'),
+    ],
     children,
   )
 
@@ -120,7 +125,11 @@ const attachmentMedia = <M>(
   h.div(
     [
       h.Class(
-        cn(attachmentMediaClass, attachmentMediaVariants[config.variant ?? 'icon'], config.className),
+        cn(
+          attachmentMediaClass,
+          attachmentMediaVariants[config.variant ?? 'icon'],
+          config.className,
+        ),
       ),
       h.DataAttribute('slot', 'attachment-media'),
       h.DataAttribute('variant', config.variant ?? 'icon'),
@@ -134,7 +143,10 @@ const attachmentContent = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.Class(cn(attachmentContentClass, config.className)), h.DataAttribute('slot', 'attachment-content')],
+    [
+      h.Class(cn(attachmentContentClass, config.className)),
+      h.DataAttribute('slot', 'attachment-content'),
+    ],
     children,
   )
 
@@ -144,7 +156,10 @@ const attachmentTitle = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.span(
-    [h.Class(cn(attachmentTitleClass, config.className)), h.DataAttribute('slot', 'attachment-title')],
+    [
+      h.Class(cn(attachmentTitleClass, config.className)),
+      h.DataAttribute('slot', 'attachment-title'),
+    ],
     children,
   )
 
@@ -167,7 +182,10 @@ const attachmentActions = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.Class(cn(attachmentActionsClass, config.className)), h.DataAttribute('slot', 'attachment-actions')],
+    [
+      h.Class(cn(attachmentActionsClass, config.className)),
+      h.DataAttribute('slot', 'attachment-actions'),
+    ],
     children,
   )
 

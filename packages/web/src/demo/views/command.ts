@@ -53,34 +53,51 @@ export const commandView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
         [
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Basic']),
           (() => {
-  const query = model.commandSearch.toLowerCase()
-  const groups = GROUPS.map((group) => {
-    const items = group.items.filter((item) => item.label.toLowerCase().includes(query))
-    if (items.length === 0) return null
-    return Command.group(
-      {},
-      [
-        h.div(
-          [h.Class(commandGroupHeadingClass), h.DataAttribute('slot', 'command-group-heading')],
-          [group.heading],
-        ),
-        ...items.map((item) =>
-          Command.item(
-            { isDisabled: item.disabled },
-            [
-              icon(h, item.icon, 'size-4'),
-              h.span([], [item.label]),
-              ...(item.shortcut ? [Command.shortcut({}, [item.shortcut], h)] : []),
-            ],
-            h,
-          ),
-        ),
-      ],
-      h,
-    )
-  }).filter((group): group is Html => group !== null)
+            const query = model.commandSearch.toLowerCase()
+            const groups = GROUPS.map((group) => {
+              const items = group.items.filter((item) => item.label.toLowerCase().includes(query))
+              if (items.length === 0) return null
+              return Command.group(
+                {},
+                [
+                  h.div(
+                    [
+                      h.Class(commandGroupHeadingClass),
+                      h.DataAttribute('slot', 'command-group-heading'),
+                    ],
+                    [group.heading],
+                  ),
+                  ...items.map((item) =>
+                    Command.item(
+                      { isDisabled: item.disabled },
+                      [
+                        icon(h, item.icon, 'size-4'),
+                        h.span([], [item.label]),
+                        ...(item.shortcut ? [Command.shortcut({}, [item.shortcut], h)] : []),
+                      ],
+                      h,
+                    ),
+                  ),
+                ],
+                h,
+              )
+            }).filter((group): group is Html => group !== null)
 
-            return Command({ className: 'max-w-sm rounded-lg border' }, [Command.input({ value: model.commandSearch, onInput: (value) => Message.UpdatedCommandSearch({ value }), placeholder: 'Type a command or search...', }, h), Command.list({}, [...groups, Command.empty({}, ['No results found.'], h)], h)], h)
+            return Command(
+              { className: 'max-w-sm rounded-lg border' },
+              [
+                Command.input(
+                  {
+                    value: model.commandSearch,
+                    onInput: (value) => Message.UpdatedCommandSearch({ value }),
+                    placeholder: 'Type a command or search...',
+                  },
+                  h,
+                ),
+                Command.list({}, [...groups, Command.empty({}, ['No results found.'], h)], h),
+              ],
+              h,
+            )
           })(),
         ],
       ),
@@ -88,7 +105,10 @@ export const commandView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
         [h.Class('flex w-full flex-col gap-2')],
         [
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Icons']),
-          h.div([h.Class('mx-auto w-full max-w-sm rounded-lg border p-3 text-sm')], [h.p([], ['Command palette with icons and shortcuts.'])]),
+          h.div(
+            [h.Class('mx-auto w-full max-w-sm rounded-lg border p-3 text-sm')],
+            [h.p([], ['Command palette with icons and shortcuts.'])],
+          ),
         ],
       ),
     ],

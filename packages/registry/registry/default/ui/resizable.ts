@@ -27,7 +27,8 @@ import { cn } from '@/lib/utils'
 export const resizableContainerClass =
   'cn-resizable-panel-group flex h-full w-full aria-[orientation=vertical]:flex-col'
 
-export const resizableContainerVerticalClass = 'cn-resizable-panel-group flex h-full w-full aria-[orientation=vertical]:flex-col'
+export const resizableContainerVerticalClass =
+  'cn-resizable-panel-group flex h-full w-full aria-[orientation=vertical]:flex-col'
 
 export const resizablePanelClass = ''
 
@@ -95,7 +96,11 @@ export const update = (model: Model, message: Message): UpdateReturn => {
   switch (message._tag) {
     case 'Resized': {
       const value = clamp(message.value)
-      return [evo(model, { value: () => value }), [], Option.some(OutMessage.ChangedValue({ value }))]
+      return [
+        evo(model, { value: () => value }),
+        [],
+        Option.some(OutMessage.ChangedValue({ value })),
+      ]
     }
   }
 }

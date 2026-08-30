@@ -88,7 +88,9 @@ export const resizableView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Handle']),
           h.div(
             [h.Class('rounded-lg border p-6 text-center text-sm text-muted-foreground')],
-            ['With Handle variant uses same split with a visible drag handle (controlled via range input).'],
+            [
+              'With Handle variant uses same split with a visible drag handle (controlled via range input).',
+            ],
           ),
         ],
       ),
@@ -98,7 +100,9 @@ export const resizableView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Nested']),
           h.div(
             [h.Class('rounded-lg border p-6 text-center text-sm text-muted-foreground')],
-            ['Nested: outer horizontal (One | Two+Three) with inner vertical (Two | Three). Foldcn supports fixed two panes.'],
+            [
+              'Nested: outer horizontal (One | Two+Three) with inner vertical (Two | Three). Foldcn supports fixed two panes.',
+            ],
           ),
         ],
       ),
@@ -148,8 +152,9 @@ export const slice = defineSlice({
   handlers: (model: State) => ({
     GotResizableMessage: (payload: typeof Message.GotResizableMessage.Type): UpdateReturn =>
       foldResizable(model, payload.message),
-    GotResizableVerticalMessage: (payload: typeof Message.GotResizableVerticalMessage.Type): UpdateReturn =>
-      foldResizableVertical(model, payload.message),
+    GotResizableVerticalMessage: (
+      payload: typeof Message.GotResizableVerticalMessage.Type,
+    ): UpdateReturn => foldResizableVertical(model, payload.message),
   }),
   samples: [Message.GotResizableMessage({ message: resizable.Message.Resized({ value: 70 }) })],
 })

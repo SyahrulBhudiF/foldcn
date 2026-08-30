@@ -9,8 +9,7 @@ export const incompatibilityIssueUrl = (
 ): string => {
   const title = `[Bug]: ${itemName} - `
   const shadcnUrl = shadcnUrlFor(itemName)
-  const gapsSection =
-    gaps.length > 0 ? gaps.map((g) => `- ${g}`).join('\n') : null
+  const gapsSection = gaps.length > 0 ? gaps.map((g) => `- ${g}`).join('\n') : null
   const additional = [
     `Component: ${itemName}`,
     `Parity: ${parityStatus}`,

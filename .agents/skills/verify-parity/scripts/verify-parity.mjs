@@ -45,7 +45,10 @@ function loadUpstreamInventory() {
   for (const dir of candidates) {
     if (existsSync(dir)) {
       const files = readdirSync(dir)
-        .filter((f) => (f.endsWith('.tsx') || f.endsWith('.ts')) && !f.startsWith('_') && !f.startsWith('.'))
+        .filter(
+          (f) =>
+            (f.endsWith('.tsx') || f.endsWith('.ts')) && !f.startsWith('_') && !f.startsWith('.'),
+        )
         .map((f) => f.replace(/\.(tsx|ts)$/, ''))
         .sort()
       return { source: dir, names: files, commit: tryCommit(dirname(dirname(dirname(dir)))) }
@@ -64,7 +67,9 @@ function loadUpstreamInventory() {
 function tryCommit(repoDir) {
   try {
     const { execFileSync } = awaitImport('node:child_process')
-    return execFileSync('git', ['-C', repoDir, 'rev-parse', '--short=7', 'HEAD'], { encoding: 'utf8' }).trim()
+    return execFileSync('git', ['-C', repoDir, 'rev-parse', '--short=7', 'HEAD'], {
+      encoding: 'utf8',
+    }).trim()
   } catch {
     return null
   }
@@ -73,7 +78,16 @@ function tryCommit(repoDir) {
 function awaitImport(spec) {
   // sync import helper for tryCommit — avoid top-level await for Node 20 compat
   // eslint-disable-next-line no-eval
-  return eval(`import.meta.resolve ? null : null`), (() => { try { return eval("require")(spec) } catch { return null } })()
+  return (
+    eval(`import.meta.resolve ? null : null`),
+    (() => {
+      try {
+        return eval('require')(spec)
+      } catch {
+        return null
+      }
+    })()
+  )
 }
 
 function classifyInventory(localNames, upstreamNames) {
@@ -126,7 +140,8 @@ function checkLeakedTokens() {
 
 async function checkBuiltArtifacts() {
   const distDir = join(REPO_DIR, 'packages/registry/dist/r')
-  if (!existsSync(distDir)) return { skipped: 'no dist/r — run pnpm --filter @foldcn/registry build first' }
+  if (!existsSync(distDir))
+    return { skipped: 'no dist/r — run pnpm --filter @foldcn/registry build first' }
   const files = readdirSync(distDir).filter((f) => f.endsWith('.json') && f !== 'registry.json')
   const leaked = []
   let hasTsMorph = false
@@ -174,7 +189,9 @@ async function main() {
   console.log('== verify-parity ==\n')
   console.log(`Local registry: ${local.count} items (${REGISTRY_JSON})`)
   if (upstream) {
-    console.log(`Upstream: ${upstream.names.length} items (source: ${upstream.source}${upstream.commit ? ` @ ${upstream.commit}` : ''})`)
+    console.log(
+      `Upstream: ${upstream.names.length} items (source: ${upstream.source}${upstream.commit ? ` @ ${upstream.commit}` : ''})`,
+    )
   } else {
     console.log('Upstream: not found (set $SHADCN_UI_DIR or run fetch-upstream.mjs)')
   }
@@ -186,11 +203,23 @@ async function main() {
       console.log('  Run: node .agents/skills/verify-parity/scripts/fetch-upstream.mjs')
     } else {
       console.log(`  Paired: ${inventory.paired.length} — ${inventory.paired.join(', ')}`)
-      console.log(`  foldcn-only: ${inventory.foldcnOnly.length} — ${inventory.foldcnOnly.join(', ') || '(none)'}`)
-      console.log(`  upstream-only: ${inventory.upstreamOnly.length} — ${inventory.upstreamOnly.join(', ') || '(none)'}`)
+      console.log(
+        `  foldcn-only: ${inventory.foldcnOnly.length} — ${inventory.foldcnOnly.join(', ') || '(none)'}`,
+      )
+      console.log(
+        `  upstream-only: ${inventory.upstreamOnly.length} — ${inventory.upstreamOnly.join(', ') || '(none)'}`,
+      )
 
       // Known expected sets from audit — warn if they drift
-      const expectedFoldcnOnly = ['animation', 'date-picker', 'drag-and-drop', 'file-drop', 'listbox', 'nav', 'virtual-list']
+      const expectedFoldcnOnly = [
+        'animation',
+        'date-picker',
+        'drag-and-drop',
+        'file-drop',
+        'listbox',
+        'nav',
+        'virtual-list',
+      ]
       const missingFoldcnOnly = expectedFoldcnOnly.filter((n) => !inventory.foldcnOnly.includes(n))
       const extraFoldcnOnly = inventory.foldcnOnly.filter((n) => !expectedFoldcnOnly.includes(n))
       if (missingFoldcnOnly.length > 0) {
@@ -208,7 +237,9 @@ async function main() {
     const built = await checkBuiltArtifacts()
 
     if (authoredTokens.length > 0) {
-      console.log(`  Authored cn-* tokens present in ${authoredTokens.length} files (expected — authored sources use cn-*)`)
+      console.log(
+        `  Authored cn-* tokens present in ${authoredTokens.length} files (expected — authored sources use cn-*)`,
+      )
       // Not a failure — authored sources should have cn-*
     }
 
@@ -223,7 +254,9 @@ async function main() {
     }
 
     // Check resolve-styles warnings would require running it — suggest it
-    console.log('  Run `node packages/registry/scripts/resolve-styles.mjs` to see unmapped token warnings')
+    console.log(
+      '  Run `node packages/registry/scripts/resolve-styles.mjs` to see unmapped token warnings',
+    )
     console.log('  Run `pnpm --filter @foldcn/registry build` to assert no leaked literals')
   }
 
@@ -234,11 +267,11 @@ async function main() {
   if (wantVisual) {
     const visualArgs = ['--states', '--images']
     if (args.includes('--all-styles')) visualArgs.push('--all-styles')
-    const comp = args.find(a => a.startsWith('--component='))
+    const comp = args.find((a) => a.startsWith('--component='))
     if (comp) visualArgs.push(comp)
-    const foldcnUrlArg = args.find(a => a.startsWith('--foldcn-url'))
+    const foldcnUrlArg = args.find((a) => a.startsWith('--foldcn-url'))
     if (foldcnUrlArg) visualArgs.push(foldcnUrlArg)
-    const shadcnUrlArg = args.find(a => a.startsWith('--shadcn-url'))
+    const shadcnUrlArg = args.find((a) => a.startsWith('--shadcn-url'))
     if (shadcnUrlArg) visualArgs.push(shadcnUrlArg)
     console.log('\n-- Visual parity (states + images) --')
     try {
@@ -259,7 +292,9 @@ async function main() {
   } else if (!onlyInventory && !onlyTokens) {
     console.log('\n-- Visual parity --')
     console.log('  (skipped — run with --visual for state matrix + image diffs)')
-    console.log('  Quick state check: node .agents/skills/verify-parity/scripts/verify-visual-parity.mjs --states')
+    console.log(
+      '  Quick state check: node .agents/skills/verify-parity/scripts/verify-visual-parity.mjs --states',
+    )
   }
 
   // Audit freshness check

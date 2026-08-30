@@ -8,7 +8,13 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 import { RadioGroup as FoldkitRadioGroup } from '@foldkit/ui'
 
 import * as radioGroup from '../../generated/registry/ui/radio-group'
-import { field, fieldDescription, fieldLabel, fieldLegend, fieldSet } from '../../generated/registry/ui/fieldset'
+import {
+  field,
+  fieldDescription,
+  fieldLabel,
+  fieldLegend,
+  fieldSet,
+} from '../../generated/registry/ui/fieldset'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'
@@ -58,9 +64,17 @@ export const radioGroupView = (model: Model, h: HtmlBuilder<AppMessage>): Html =
               field<AppMessage>(
                 {},
                 [
-                  fieldLabel<AppMessage>({ for: 'plus-plan' }, ['Plus — For individuals and small teams'], h),
+                  fieldLabel<AppMessage>(
+                    { for: 'plus-plan' },
+                    ['Plus — For individuals and small teams'],
+                    h,
+                  ),
                   fieldLabel<AppMessage>({ for: 'pro-plan' }, ['Pro — For growing businesses'], h),
-                  fieldLabel<AppMessage>({ for: 'enterprise-plan' }, ['Enterprise — For large teams'], h),
+                  fieldLabel<AppMessage>(
+                    { for: 'enterprise-plan' },
+                    ['Enterprise — For large teams'],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -80,9 +94,40 @@ export const radioGroupView = (model: Model, h: HtmlBuilder<AppMessage>): Html =
               h.div(
                 [h.Class('flex flex-col gap-2 text-sm')],
                 [
-                  h.div([h.Class('flex items-center gap-2')], [h.input([h.Type('radio'), h.Attribute('name', 'battery-demo'), h.Class('size-4')]), h.span([], ['Default'])]),
-                  h.div([h.Class('flex items-center gap-2')], [h.input([h.Type('radio'), h.Attribute('name', 'battery-demo'), h.Class('size-4'), h.Attribute('checked', '')]), h.span([], ['Comfortable'])]),
-                  h.div([h.Class('flex items-center gap-2')], [h.input([h.Type('radio'), h.Attribute('name', 'battery-demo'), h.Class('size-4')]), h.span([], ['Compact'])]),
+                  h.div(
+                    [h.Class('flex items-center gap-2')],
+                    [
+                      h.input([
+                        h.Type('radio'),
+                        h.Attribute('name', 'battery-demo'),
+                        h.Class('size-4'),
+                      ]),
+                      h.span([], ['Default']),
+                    ],
+                  ),
+                  h.div(
+                    [h.Class('flex items-center gap-2')],
+                    [
+                      h.input([
+                        h.Type('radio'),
+                        h.Attribute('name', 'battery-demo'),
+                        h.Class('size-4'),
+                        h.Attribute('checked', ''),
+                      ]),
+                      h.span([], ['Comfortable']),
+                    ],
+                  ),
+                  h.div(
+                    [h.Class('flex items-center gap-2')],
+                    [
+                      h.input([
+                        h.Type('radio'),
+                        h.Attribute('name', 'battery-demo'),
+                        h.Class('size-4'),
+                      ]),
+                      h.span([], ['Compact']),
+                    ],
+                  ),
                 ],
               ),
             ],
@@ -119,7 +164,11 @@ export const radioGroupView = (model: Model, h: HtmlBuilder<AppMessage>): Html =
             {},
             [
               fieldLegend<AppMessage>({}, ['Notification Preferences'], h),
-              fieldDescription<AppMessage>({}, ['Choose how you want to receive notifications.'], h),
+              fieldDescription<AppMessage>(
+                {},
+                ['Choose how you want to receive notifications.'],
+                h,
+              ),
               field<AppMessage>(
                 { orientation: 'horizontal', isInvalid: true },
                 [fieldLabel<AppMessage>({ for: 'invalid-email' }, ['Email only'], h)],

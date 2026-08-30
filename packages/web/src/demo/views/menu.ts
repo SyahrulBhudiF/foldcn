@@ -28,28 +28,28 @@ export const menuView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
         [
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Basic']),
           h.submodel({
-    slotId: model.menu.id,
-    model: model.menu,
-    view: DemoMenu.view,
-    viewInputs: menu.viewInputs<string>({
-      items: [
-        'Profile',
-        'Billing',
-        'Settings',
-        'Team',
-        'Invite users',
-        'New Team',
-        'GitHub',
-        'Support',
-        'API',
-        'Log out',
-      ],
-      buttonContent: h.span([], ['Open']),
-      itemToConfig: (item, { isActive }) => ({
-        className: isActive ? 'font-medium' : '',
-        content: h.span([], [item]),
-      }),
-    }),
+            slotId: model.menu.id,
+            model: model.menu,
+            view: DemoMenu.view,
+            viewInputs: menu.viewInputs<string>({
+              items: [
+                'Profile',
+                'Billing',
+                'Settings',
+                'Team',
+                'Invite users',
+                'New Team',
+                'GitHub',
+                'Support',
+                'API',
+                'Log out',
+              ],
+              buttonContent: h.span([], ['Open']),
+              itemToConfig: (item, { isActive }) => ({
+                className: isActive ? 'font-medium' : '',
+                content: h.span([], [item]),
+              }),
+            }),
             toParentMessage: (message) => Message.GotMenuMessage({ message }),
           }),
         ],
@@ -58,14 +58,24 @@ export const menuView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
         [h.Class('flex w-full flex-col gap-2')],
         [
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Icons']),
-          h.div([h.Class('flex gap-2')], [h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Profile']), h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Billing']), h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Settings'])]),
+          h.div(
+            [h.Class('flex gap-2')],
+            [
+              h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Profile']),
+              h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Billing']),
+              h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Settings']),
+            ],
+          ),
         ],
       ),
       h.div(
         [h.Class('flex w-full flex-col gap-2')],
         [
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Complex']),
-          h.div([h.Class('mx-auto w-full max-w-sm rounded-lg border p-4 text-sm')], [h.p([], ['Complex menu with groups, checkboxes, submenu and destructive items.'])]),
+          h.div(
+            [h.Class('mx-auto w-full max-w-sm rounded-lg border p-4 text-sm')],
+            [h.p([], ['Complex menu with groups, checkboxes, submenu and destructive items.'])],
+          ),
         ],
       ),
     ],

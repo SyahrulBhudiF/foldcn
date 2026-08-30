@@ -4,7 +4,14 @@ import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { checkbox } from '../../generated/registry/ui/checkbox'
-import { field, fieldContent, fieldDescription, fieldGroup, fieldLabel, fieldTitle } from '../../generated/registry/ui/fieldset'
+import {
+  field,
+  fieldContent,
+  fieldDescription,
+  fieldGroup,
+  fieldLabel,
+  fieldTitle,
+} from '../../generated/registry/ui/fieldset'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'
@@ -127,7 +134,8 @@ export const checkboxView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                               id: 'toggle-2',
                               label: '',
                               isChecked: model.isCheckboxNotificationsChecked,
-                              onToggle: (isChecked) => Message.ToggledCheckboxNotifications({ isChecked }),
+                              onToggle: (isChecked) =>
+                                Message.ToggledCheckboxNotifications({ isChecked }),
                             },
                             h,
                           ),
@@ -169,7 +177,12 @@ export const checkboxView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 { orientation: 'horizontal' },
                 [
                   checkbox<AppMessage>(
-                    { id: 'finder-pref-hard', label: 'Hard disks', isChecked: false, onToggle: () => Message.ToggledCheckbox({ isChecked: false }) },
+                    {
+                      id: 'finder-pref-hard',
+                      label: 'Hard disks',
+                      isChecked: false,
+                      onToggle: () => Message.ToggledCheckbox({ isChecked: false }),
+                    },
                     h,
                   ),
                 ],
@@ -179,7 +192,12 @@ export const checkboxView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 { orientation: 'horizontal' },
                 [
                   checkbox<AppMessage>(
-                    { id: 'finder-pref-external', label: 'External disks', isChecked: false, onToggle: () => Message.ToggledCheckbox({ isChecked: false }) },
+                    {
+                      id: 'finder-pref-external',
+                      label: 'External disks',
+                      isChecked: false,
+                      onToggle: () => Message.ToggledCheckbox({ isChecked: false }),
+                    },
                     h,
                   ),
                 ],
@@ -189,7 +207,12 @@ export const checkboxView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 { orientation: 'horizontal' },
                 [
                   checkbox<AppMessage>(
-                    { id: 'finder-pref-cds', label: 'CDs, DVDs, and iPods', isChecked: false, onToggle: () => Message.ToggledCheckbox({ isChecked: false }) },
+                    {
+                      id: 'finder-pref-cds',
+                      label: 'CDs, DVDs, and iPods',
+                      isChecked: false,
+                      onToggle: () => Message.ToggledCheckbox({ isChecked: false }),
+                    },
                     h,
                   ),
                 ],
@@ -199,7 +222,12 @@ export const checkboxView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 { orientation: 'horizontal' },
                 [
                   checkbox<AppMessage>(
-                    { id: 'finder-pref-servers', label: 'Connected servers', isChecked: false, onToggle: () => Message.ToggledCheckbox({ isChecked: false }) },
+                    {
+                      id: 'finder-pref-servers',
+                      label: 'Connected servers',
+                      isChecked: false,
+                      onToggle: () => Message.ToggledCheckbox({ isChecked: false }),
+                    },
                     h,
                   ),
                 ],

@@ -135,7 +135,10 @@ export const homeView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
               h.li(
                 [h.Class('mt-4')],
                 [
-                  h.div([h.Class('font-semibold text-foreground')], ['Initialize shadcn (new projects only)']),
+                  h.div(
+                    [h.Class('font-semibold text-foreground')],
+                    ['Initialize shadcn (new projects only)'],
+                  ),
                   h.p(
                     [h.Class('mt-2 text-sm leading-relaxed')],
                     [
@@ -172,14 +175,19 @@ export const homeView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                   ),
                   h.p(
                     [h.Class('mt-2 text-sm leading-relaxed')],
-                    ['Configure aliases (components, utils, ui, lib, hooks) when prompted. Skip this if components.json already exists.'],
+                    [
+                      'Configure aliases (components, utils, ui, lib, hooks) when prompted. Skip this if components.json already exists.',
+                    ],
                   ),
                 ],
               ),
               h.li(
                 [h.Class('mt-4')],
                 [
-                  h.div([h.Class('font-semibold text-foreground')], ['Register the @foldcn namespace']),
+                  h.div(
+                    [h.Class('font-semibold text-foreground')],
+                    ['Register the @foldcn namespace'],
+                  ),
                   h.p(
                     [h.Class('mt-2 text-sm leading-relaxed')],
                     ['So the CLI knows where to fetch foldcn items from:'],
@@ -206,8 +214,11 @@ export const homeView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                   h.p(
                     [h.Class('mt-2 text-sm leading-relaxed')],
                     [
-                      'Or add ', 
-                      h.code([h.Class('font-mono text-[0.9em]')], ['"@foldcn": "https://foldcn.elianiva.com/r/{name}.json"']),
+                      'Or add ',
+                      h.code(
+                        [h.Class('font-mono text-[0.9em]')],
+                        ['"@foldcn": "https://foldcn.elianiva.com/r/{name}.json"'],
+                      ),
                       ' under ',
                       h.code([h.Class('font-mono text-[0.9em]')], ['registries']),
                       ' in ',
@@ -238,7 +249,9 @@ export const homeView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                       path: 'Terminal',
                       code: 'npx shadcn@latest add @foldcn/foldcn',
                       lang: 'shell',
-                      onCopy: Message.ClickedCopy({ value: 'npx shadcn@latest add @foldcn/foldcn' }),
+                      onCopy: Message.ClickedCopy({
+                        value: 'npx shadcn@latest add @foldcn/foldcn',
+                      }),
                       isCopied: Option.exists(
                         model.maybeCopiedValue,
                         (v) => v === 'npx shadcn@latest add @foldcn/foldcn',
@@ -252,7 +265,10 @@ export const homeView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
               h.li(
                 [h.Class('mt-4')],
                 [
-                  h.div([h.Class('font-semibold text-foreground')], ['Add components as you need them']),
+                  h.div(
+                    [h.Class('font-semibold text-foreground')],
+                    ['Add components as you need them'],
+                  ),
                   registryCodeBlock<Message>(
                     {
                       path: 'Terminal',
@@ -271,7 +287,9 @@ export const homeView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                   ),
                   h.p(
                     [h.Class('mt-2 text-sm leading-relaxed')],
-                    ['pnpm dlx / bunx work too — pick your runner. Each component is copy-paste source you own.'],
+                    [
+                      'pnpm dlx / bunx work too — pick your runner. Each component is copy-paste source you own.',
+                    ],
                   ),
                 ],
               ),
@@ -312,7 +330,10 @@ export const homeView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
               ' per component, or send ',
               h.code([h.Class('font-mono text-[0.9em]')], ['Accept: text/markdown']),
               '. Try ',
-              h.code([h.Class('font-mono text-[0.9em]')], ['curl -H "Accept: text/markdown" https://foldcn.elianiva.com/docs/button']),
+              h.code(
+                [h.Class('font-mono text-[0.9em]')],
+                ['curl -H "Accept: text/markdown" https://foldcn.elianiva.com/docs/button'],
+              ),
               '.',
             ],
           ),

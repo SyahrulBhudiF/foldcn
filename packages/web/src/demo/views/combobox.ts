@@ -29,38 +29,43 @@ export const comboboxView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
         [h.Class('flex w-full flex-col gap-2')],
         [
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Single']),
-          h.div([h.Class('w-full max-w-xs')],
-    [
-            h.submodel({
-              slotId: model.combobox.id,
-              model: model.combobox,
-              view: CityCombobox.view,
-              viewInputs: combobox.viewInputs<City>({
-          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          items: FRAMEWORKS as unknown as ReadonlyArray<City>,
-          restingInputValue: Option.getOrElse(model.maybeComboboxValue, () => ''),
-          maybeSelectedValue: model.maybeComboboxValue,
-          itemToValue: (item) => item,
-          itemToDisplayText: (item) => item,
-          inputPlaceholder: 'Select framework...',
-          itemToConfig: (item, { isSelected, isActive }) => ({
-            className: isActive ? 'font-medium' : '',
-            content: h.span(
-              [h.Class('flex w-full items-center justify-between gap-2')],
-              [h.span([], [item]), ...(isSelected ? [h.span([], ['✓'])] : [])],
-            ),
-          }),
-        }),
-              toParentMessage: (message) => Message.GotComboboxMessage({ message }),
-            }),
-          ]),
+          h.div(
+            [h.Class('w-full max-w-xs')],
+            [
+              h.submodel({
+                slotId: model.combobox.id,
+                model: model.combobox,
+                view: CityCombobox.view,
+                viewInputs: combobox.viewInputs<City>({
+                  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+                  items: FRAMEWORKS as unknown as ReadonlyArray<City>,
+                  restingInputValue: Option.getOrElse(model.maybeComboboxValue, () => ''),
+                  maybeSelectedValue: model.maybeComboboxValue,
+                  itemToValue: (item) => item,
+                  itemToDisplayText: (item) => item,
+                  inputPlaceholder: 'Select framework...',
+                  itemToConfig: (item, { isSelected, isActive }) => ({
+                    className: isActive ? 'font-medium' : '',
+                    content: h.span(
+                      [h.Class('flex w-full items-center justify-between gap-2')],
+                      [h.span([], [item]), ...(isSelected ? [h.span([], ['✓'])] : [])],
+                    ),
+                  }),
+                }),
+                toParentMessage: (message) => Message.GotComboboxMessage({ message }),
+              }),
+            ],
+          ),
         ],
       ),
       h.div(
         [h.Class('flex w-full flex-col gap-2')],
         [
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Multi']),
-          h.div([h.Class('mx-auto w-full max-w-xs rounded-lg border p-4 text-sm')], [h.p([], ['Multi-select combobox with pills.'])]),
+          h.div(
+            [h.Class('mx-auto w-full max-w-xs rounded-lg border p-4 text-sm')],
+            [h.p([], ['Multi-select combobox with pills.'])],
+          ),
         ],
       ),
     ],

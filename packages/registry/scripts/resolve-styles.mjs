@@ -294,7 +294,7 @@ function transformSourceFile(sourceFile, styleMap, unmappedTokens) {
     //   - `[cmdk-*]` descendant selectors (no cmdk behavior layer)
     //   - `data-[selected=true]:…` (foldkit emits data-selected as EMPTY attr)
     //   - `data-[disabled=true]` → `data-[disabled]` (same empty-attr rule as
-  //     the style-map foldkitCompat pass above)
+    //     the style-map foldkitCompat pass above)
     const cleaned = stripInertUtilities(merged)
     if (cleaned !== value) node.setLiteralValue(cleaned)
   })

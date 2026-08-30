@@ -119,7 +119,11 @@ export const update = (model: Model, message: Message): UpdateReturn => {
   switch (message._tag) {
     case 'ToggledItem': {
       const value = nextAccordionOpen(model.value, message.index, message.isOpen, model.type)
-      return [evo(model, { value: () => [...value] }), [], Option.some(OutMessage.ChangedValue({ value }))]
+      return [
+        evo(model, { value: () => [...value] }),
+        [],
+        Option.some(OutMessage.ChangedValue({ value })),
+      ]
     }
   }
 }
@@ -171,60 +175,66 @@ const accordionItem = (
   },
   h: HtmlBuilder<Message>,
 ): Html =>
-  FoldkitDisclosure.view({
-    id: config.id,
-    isOpen: config.isOpen,
-    onToggle: config.onToggle,
-    isDisabled: config.isDisabled,
-    ariaLabel: config.ariaLabel,
-    ariaLabelledBy: config.ariaLabelledBy,
-    toView: ({ button, panel, animatePanel }) =>
-      h.div(
-        [
-          h.Class(cn(accordionItemClass, config.wrapperClass)),
-          h.DataAttribute('slot', 'accordion-item'),
-        ],
-        [
-          h.div(
-            [h.Class('flex'), h.DataAttribute('slot', 'accordion-header')],
-            [
-              h.button(
-                [
-                  ...button,
-                  h.Class(cn(accordionTriggerClass, config.triggerClass)),
-                  h.DataAttribute('slot', 'accordion-trigger'),
-                ],
-                [
-                  h.span([], [config.title]),
-                  h.span(
-                    [h.Class(accordionChevronClass), h.DataAttribute('slot', 'accordion-trigger-icon')],
-                    [icon(h, ChevronDown)],
-                  ),
-                ],
-              ),
-            ],
-          ),
-          config.isAnimated === true
-            ? animatePanel(
-                h.div(
+  FoldkitDisclosure.view(
+    {
+      id: config.id,
+      isOpen: config.isOpen,
+      onToggle: config.onToggle,
+      isDisabled: config.isDisabled,
+      ariaLabel: config.ariaLabel,
+      ariaLabelledBy: config.ariaLabelledBy,
+      toView: ({ button, panel, animatePanel }) =>
+        h.div(
+          [
+            h.Class(cn(accordionItemClass, config.wrapperClass)),
+            h.DataAttribute('slot', 'accordion-item'),
+          ],
+          [
+            h.div(
+              [h.Class('flex'), h.DataAttribute('slot', 'accordion-header')],
+              [
+                h.button(
                   [
-                    ...panel,
-                    h.Class(cn(accordionAnimatedContentClass, config.contentClass)),
-                    h.DataAttribute('slot', 'accordion-content'),
+                    ...button,
+                    h.Class(cn(accordionTriggerClass, config.triggerClass)),
+                    h.DataAttribute('slot', 'accordion-trigger'),
                   ],
-                  [h.div([h.Class(accordionContentInnerClass)], [config.content])],
+                  [
+                    h.span([], [config.title]),
+                    h.span(
+                      [
+                        h.Class(accordionChevronClass),
+                        h.DataAttribute('slot', 'accordion-trigger-icon'),
+                      ],
+                      [icon(h, ChevronDown)],
+                    ),
+                  ],
                 ),
-              )
-            : config.isOpen
-              ? h.div(
-                  [
-                    ...panel,
-                    h.Class(cn(accordionContentClass, config.contentClass)),
-                    h.DataAttribute('slot', 'accordion-content'),
-                  ],
-                  [h.div([h.Class(accordionContentInnerClass)], [config.content])],
+              ],
+            ),
+            config.isAnimated === true
+              ? animatePanel(
+                  h.div(
+                    [
+                      ...panel,
+                      h.Class(cn(accordionAnimatedContentClass, config.contentClass)),
+                      h.DataAttribute('slot', 'accordion-content'),
+                    ],
+                    [h.div([h.Class(accordionContentInnerClass)], [config.content])],
+                  ),
                 )
-              : h.empty,
-        ],
-      ),
-  }, h)
+              : config.isOpen
+                ? h.div(
+                    [
+                      ...panel,
+                      h.Class(cn(accordionContentClass, config.contentClass)),
+                      h.DataAttribute('slot', 'accordion-content'),
+                    ],
+                    [h.div([h.Class(accordionContentInnerClass)], [config.content])],
+                  )
+                : h.empty,
+          ],
+        ),
+    },
+    h,
+  )

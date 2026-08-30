@@ -28,6 +28,7 @@ Encode findings as this shape, not scattered conditionals. See [checklist](refer
 ### 1. Source upstream
 
 **Do:**
+
 - Prefer local checkout at `$SHADCN_UI_DIR` or `~/Development/repos/shadcn-ui/ui` → `apps/v4/registry/bases/base/ui` + `apps/v4/registry/styles`.
 - Fallback: fetch `https://ui.shadcn.com/docs/components` and component pages, or run `scripts/fetch-upstream.mjs`.
 - Record commit SHA if using checkout. See [upstream source](references/upstream-source.md).
@@ -37,6 +38,7 @@ Encode findings as this shape, not scattered conditionals. See [checklist](refer
 ### 2. Inventory
 
 **Do:**
+
 ```bash
 node .agents/skills/verify-parity/scripts/verify-parity.mjs --inventory
 # or without checkout:
@@ -50,12 +52,14 @@ Compare `packages/registry/registry/default/ui/registry.json` (60 items) against
 ### 3. Token fidelity
 
 **Do:**
+
 ```bash
 node packages/registry/scripts/resolve-styles.mjs
 pnpm --filter @foldcn/registry run build
 ```
 
 Checks:
+
 - No `cn-*` literal survives in resolved output (build asserts this).
 - Every `cn-*` in authored `registry/default/ui/*.ts` exists in the style map (`cn-compat.css` + vendored `style-nova.css`). Unmapped tokens are intentional no-ops per `docs/deriving-from-base.md` Known no-op hooks — verify warning list matches that doc.
 - Resolved classes equal upstream `bases/base/ui` token resolution (byte-identical class strings before resolution, per `docs/deriving-from-base.md`).
@@ -65,6 +69,7 @@ Checks:
 ### 4. Attributes and state
 
 **Do:** For each paired component, diff:
+
 - `data-slot` coverage (every part stamped, per upstream).
 - State attributes per `docs/deriving-from-base.md` mapping table: `data-enter`/`data-leave` vs `data-open`/`data-closed`, `data-side` vs `data-placement`, `aria-disabled`/`data-disabled` twins, `data-active` vs `data-highlighted`.
 - See [checklist](references/parity-checklist.md) for exact selectors to grep.
@@ -74,6 +79,7 @@ Checks:
 ### 5. Behavioral gaps
 
 **Do:** Check `docs/shadcn-base-parity-audit.md` Functional gaps (#1–#12) against current code:
+
 - #1 button disabled twins, #2 progress indeterminate, #3 switch hidden input, #4 input-otp onComplete, #5 hover-card hover vs click, #6 context-menu pointer anchoring, #7 menubar traversal, #8 command filtering, #9 toast swipe/stack, #10 sidebar persistence, #11 avatar fallback, #12 inert classes.
 - Mark each FIXED or OPEN with file:line evidence.
 
@@ -92,6 +98,7 @@ node .agents/skills/verify-parity/scripts/verify-parity.mjs --visual
 ```
 
 Checks:
+
 - **State matrix:** every paired component exercised in every applicable state — `idle`, `hover`, `focus-visible`, `active/pressed`, `disabled`, `open`/`closed` (overlays, accordions), `checked`/`selected`/`on` (toggles, checkboxes, tabs), `invalid`, plus component-specific states (e.g. `indeterminate` for progress, `empty` for command). States sourced from upstream `style-nova.css` selectors, `bases/base/ui` props, and (when no checkout) `web_search` against `https://ui.shadcn.com/docs/components` + `agent-browser read` of component pages. The [checklist](references/parity-checklist.md) §6 enumerates the matrix; any state that cannot be reached is `verified-unreachable` with prerequisite (auth, OS, external) and route attempted.
 - **Images per state (agent-browser):** capture screenshots of foldcn (via `packages/web` demo or `styles/default` resolved fixtures) and upstream (local `apps/v4` dev server or `https://ui.shadcn.com` reference renders — sourced via `web_search` / `agent-browser read` when no checkout) at identical viewport (`1280×800`, `deviceScaleFactor 1`), theme (`light` + `dark` via `agent-browser set media`), and density. Core loop per state: `agent-browser open <url>` → `agent-browser snapshot -i -s '[data-slot="<name>"]'` → `agent-browser hover|focus|click <ref>` for the target state → `agent-browser screenshot "[data-slot=\"<name>\"]" <out.png>` (element crop, not full page, to avoid chrome drift). Diff with pixel comparison (`pixelmatch` where available, otherwise existence/size check) — CSS computed-style fallback when `agent-browser` is absent.
 - **Thresholds:** ≤1% pixel diff = `VISUAL_MATCH`, 1–5% = `VISUAL_MINOR` (token-level drift), >5% or missing state = `VISUAL_MAJOR`. Token drift that is invisible at rendered pixels still counts as drift in §3, but visual verdict reflects what the user sees.

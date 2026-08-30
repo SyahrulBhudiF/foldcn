@@ -432,15 +432,28 @@ export const view = defineView<Model, Message, ProviderViewInputs>((model, viewI
                     h.DataAttribute('sidebar', 'sidebar'),
                     h.DataAttribute('mobile', 'true'),
                     h.DataAttribute('side', side),
-                    h.Style({ '--sidebar-width': SIDEBAR_WIDTH_MOBILE } as unknown as Record<string, string>),
-                    h.Class(cn(Sheet.sheetPanelClass[side], Sheet.sheetMotionClass, sidebarMobilePanelClass)),
+                    h.Style({ '--sidebar-width': SIDEBAR_WIDTH_MOBILE } as unknown as Record<
+                      string,
+                      string
+                    >),
+                    h.Class(
+                      cn(
+                        Sheet.sheetPanelClass[side],
+                        Sheet.sheetMotionClass,
+                        sidebarMobilePanelClass,
+                      ),
+                    ),
                   ],
                   [
                     h.div(
                       [h.Class('sr-only flex flex-col')],
                       [
                         Sheet.title({ attributes: title }, ['Sidebar'], h),
-                        Sheet.description({ attributes: description }, ['Displays the mobile sidebar.'], h),
+                        Sheet.description(
+                          { attributes: description },
+                          ['Displays the mobile sidebar.'],
+                          h,
+                        ),
                       ],
                     ),
                     h.div([h.Class('flex h-full w-full flex-col')], viewInputs.content(slots)),

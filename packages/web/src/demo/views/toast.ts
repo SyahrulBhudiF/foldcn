@@ -45,7 +45,9 @@ export const toastView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 [
                   h.button(
                     [
-                      h.Class('rounded-md border border-input bg-background px-4 py-2 text-sm font-medium'),
+                      h.Class(
+                        'rounded-md border border-input bg-background px-4 py-2 text-sm font-medium',
+                      ),
                       h.OnClick(Message.ClickedDismissAllToasts()),
                     ],
                     ['Dismiss all'],

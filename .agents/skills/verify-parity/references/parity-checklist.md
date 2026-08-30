@@ -23,13 +23,13 @@ Check every paired component against these dimensions. Use Verdict values from t
 
 Grep each component for:
 
-| Check | Upstream emits | foldcn should emit | How to verify |
-|-------|---------------|-------------------|---------------|
-| data-slot | `data-slot="button"` etc. | same | `grep -n "data-slot" packages/registry/registry/default/ui/<name>.ts` vs upstream |
-| enter/leave | `data-open:` + `data-closed:` anim | `data-enter:` + `data-leave:` | `resolve-styles.mjs` rewrites ENTER_UTILITIES/EXIT_UTILITIES — verify no raw `data-open:animate-in` in authored source |
-| side | `data-side="bottom"` | `data-side` derived from `data-placement` | view emits `data-side` attr |
-| disabled | native `disabled` | `aria-disabled` + `data-disabled` twins in `cn-compat.css` | check `cn-compat.css` has twins for the component's token |
-| highlighted | `data-highlighted` | `data-active` | class string uses correct prefix |
+| Check       | Upstream emits                     | foldcn should emit                                         | How to verify                                                                                                          |
+| ----------- | ---------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| data-slot   | `data-slot="button"` etc.          | same                                                       | `grep -n "data-slot" packages/registry/registry/default/ui/<name>.ts` vs upstream                                      |
+| enter/leave | `data-open:` + `data-closed:` anim | `data-enter:` + `data-leave:`                              | `resolve-styles.mjs` rewrites ENTER_UTILITIES/EXIT_UTILITIES — verify no raw `data-open:animate-in` in authored source |
+| side        | `data-side="bottom"`               | `data-side` derived from `data-placement`                  | view emits `data-side` attr                                                                                            |
+| disabled    | native `disabled`                  | `aria-disabled` + `data-disabled` twins in `cn-compat.css` | check `cn-compat.css` has twins for the component's token                                                              |
+| highlighted | `data-highlighted`                 | `data-active`                                              | class string uses correct prefix                                                                                       |
 
 ## 4. Behavior
 
@@ -63,31 +63,33 @@ Compare rendered pixels per state, not just class strings. See [visual parity](v
 ### 6a. State matrix — enumerate before capturing
 
 Run:
+
 ```bash
 node .agents/skills/verify-parity/scripts/verify-visual-parity.mjs --states
 ```
 
 This parses upstream `style-nova.css` selectors and `bases/base/ui/*.tsx` props to emit the applicable state set per component, then checks foldcn's resolved output and demo coverage:
 
-| State | Upstream selector cue | foldcn equivalent | How to verify (agent-browser) |
-|-------|----------------------|-------------------|-------------------------------|
-| `idle` (default) | no pseudo / base `cn-*` | same | `agent-browser open <url>` → `agent-browser snapshot -s '[data-slot="<name>"]'` → `agent-browser screenshot "[data-slot=\"<name>\"]" idle.png` |
-| `hover` | `hover:` / `group-hover:` / `data-hover` | same (or `hover:` via `cn-compat.css` twin) | `snapshot -s` to get ref → `agent-browser hover <ref>` → `screenshot` ; also `agent-browser get styles <ref>` should show `hover:` utility |
-| `focus-visible` | `focus-visible:` / `focus:` / `data-focus` | same | `snapshot` → `agent-browser focus <ref>` → `screenshot`; `snapshot -i` should list `:focus-visible` ring |
-| `active` / `pressed` | `active:` / `data-active` / `aria-pressed` | `data-active` (foldkit) vs `data-highlighted`/`data-active` upstream — verify mapping in `resolve-styles.mjs` | `agent-browser click <ref>` (hold) or `agent-browser eval "el.setAttribute('data-active','')"` → `screenshot` |
-| `disabled` | `disabled:` / `aria-disabled:` / `data-disabled:` | `aria-disabled:` + `data-disabled:` twins (native never matches — see deriving-from-base.md) | render fixture with `isDisabled:true` → `snapshot` shows `aria-disabled="true"` → `screenshot` |
-| `open` / `closed` | `data-open:` / `data-closed:` / `data-state=open` | `data-enter:`/`data-leave:` transition windows + `data-open` persistent (rewritten in `resolve-styles.mjs`) | `snapshot` → `agent-browser click <trigger-ref>` → `wait --text` / `snapshot` shows `data-enter` → `screenshot` during `data-enter` + at rest `data-open` |
-| `checked` / `selected` / `on` | `data-checked` / `data-selected` / `aria-checked` / `data-state=checked` | foldkit uses `data-checked`/`data-selected`/`data-active` — class prefix mapped in authored source | `click <ref>` to toggle → `snapshot` shows `data-checked`/`data-selected` → `screenshot` each |
-| `invalid` | `aria-invalid:` / `data-invalid` | same (`aria-invalid` twin) | fixture `aria-invalid=true` → `snapshot` → `screenshot` |
-| `indeterminate` | `value===undefined` / `data-indeterminate` | progress track empty (see gap #2) | `progress` with no value → `screenshot` |
-| `empty` / `loading` | conditional render | same | command empty state, skeleton/spinner → `screenshot` |
-| `orientation` / `side` | `data-orientation` / `data-side` / `data-placement` | `data-side` derived from `data-placement` + `data-orientation` pass-through | `snapshot -s` horizontal vs vertical variant → `screenshot` each |
+| State                         | Upstream selector cue                                                    | foldcn equivalent                                                                                             | How to verify (agent-browser)                                                                                                                             |
+| ----------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `idle` (default)              | no pseudo / base `cn-*`                                                  | same                                                                                                          | `agent-browser open <url>` → `agent-browser snapshot -s '[data-slot="<name>"]'` → `agent-browser screenshot "[data-slot=\"<name>\"]" idle.png`            |
+| `hover`                       | `hover:` / `group-hover:` / `data-hover`                                 | same (or `hover:` via `cn-compat.css` twin)                                                                   | `snapshot -s` to get ref → `agent-browser hover <ref>` → `screenshot` ; also `agent-browser get styles <ref>` should show `hover:` utility                |
+| `focus-visible`               | `focus-visible:` / `focus:` / `data-focus`                               | same                                                                                                          | `snapshot` → `agent-browser focus <ref>` → `screenshot`; `snapshot -i` should list `:focus-visible` ring                                                  |
+| `active` / `pressed`          | `active:` / `data-active` / `aria-pressed`                               | `data-active` (foldkit) vs `data-highlighted`/`data-active` upstream — verify mapping in `resolve-styles.mjs` | `agent-browser click <ref>` (hold) or `agent-browser eval "el.setAttribute('data-active','')"` → `screenshot`                                             |
+| `disabled`                    | `disabled:` / `aria-disabled:` / `data-disabled:`                        | `aria-disabled:` + `data-disabled:` twins (native never matches — see deriving-from-base.md)                  | render fixture with `isDisabled:true` → `snapshot` shows `aria-disabled="true"` → `screenshot`                                                            |
+| `open` / `closed`             | `data-open:` / `data-closed:` / `data-state=open`                        | `data-enter:`/`data-leave:` transition windows + `data-open` persistent (rewritten in `resolve-styles.mjs`)   | `snapshot` → `agent-browser click <trigger-ref>` → `wait --text` / `snapshot` shows `data-enter` → `screenshot` during `data-enter` + at rest `data-open` |
+| `checked` / `selected` / `on` | `data-checked` / `data-selected` / `aria-checked` / `data-state=checked` | foldkit uses `data-checked`/`data-selected`/`data-active` — class prefix mapped in authored source            | `click <ref>` to toggle → `snapshot` shows `data-checked`/`data-selected` → `screenshot` each                                                             |
+| `invalid`                     | `aria-invalid:` / `data-invalid`                                         | same (`aria-invalid` twin)                                                                                    | fixture `aria-invalid=true` → `snapshot` → `screenshot`                                                                                                   |
+| `indeterminate`               | `value===undefined` / `data-indeterminate`                               | progress track empty (see gap #2)                                                                             | `progress` with no value → `screenshot`                                                                                                                   |
+| `empty` / `loading`           | conditional render                                                       | same                                                                                                          | command empty state, skeleton/spinner → `screenshot`                                                                                                      |
+| `orientation` / `side`        | `data-orientation` / `data-side` / `data-placement`                      | `data-side` derived from `data-placement` + `data-orientation` pass-through                                   | `snapshot -s` horizontal vs vertical variant → `screenshot` each                                                                                          |
 
 Mark any state the component legitimately doesn't have as `N/A`. Mark a state that requires unavailable prerequisite (auth, entitlement, OS, external) as `verified-unreachable` with the concrete prerequisite and route attempted — if the map omits that prerequisite, that's drift.
 
 ### 6b. Capture protocol — images per state
 
 Run:
+
 ```bash
 node .agents/skills/verify-parity/scripts/verify-visual-parity.mjs --images
 # or with running servers:
@@ -95,6 +97,7 @@ FOLDCN_URL=http://localhost:5173 SHADCN_URL=http://localhost:3000 node .agents/s
 ```
 
 For each paired component × applicable state × theme (`light`, `dark`) × style (`default` minimum, `--all-styles` for all 9):
+
 - Render foldcn via `packages/web` item page (`/#Item/<name>`) or resolved fixture page, and upstream via local `apps/v4` dev server or `https://ui.shadcn.com/docs/components/<name>` reference (when no checkout, upstream pages are discovered via `web_search` for `site:ui.shadcn.com/docs/components <name>` and fetched via `agent-browser read` / `fetch-upstream.mjs` — see `references/upstream-source.md`).
 - Fixed viewport via `agent-browser set viewport 1280 800`, color scheme via `agent-browser set media light|dark`, reduced motion via `agent-browser set media <scheme> reduced-motion` for idle snapshots (allow motion for `data-enter`/`data-leave`). Same font loading.
 - Capture element screenshot of `[data-slot="<name>"]` root (or component container) — not full page — at `png` with `agent-browser screenshot "[data-slot=\"<name>\"]" <out.png>` (element crop avoids chrome drift). Drive state first via scoped snapshot + ref interaction:

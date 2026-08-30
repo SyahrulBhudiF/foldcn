@@ -67,11 +67,7 @@ export type ButtonConfig<M> = Readonly<{
 }>
 
 /** Styled button built on the @foldkit/ui Button helper. */
-export const button = <M>(
-  config: ButtonConfig<M>,
-  label: Html | string,
-  h: HtmlBuilder<M>,
-): Html =>
+export const button = <M>(config: ButtonConfig<M>, label: Html | string, h: HtmlBuilder<M>): Html =>
   FoldkitButton.view<M>(
     {
       onClick: config.onClick,

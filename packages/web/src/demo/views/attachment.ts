@@ -41,7 +41,11 @@ const fileIcon = (h: HtmlBuilder<Message>, variant: string) => {
 }
 
 const removeAction = (h: HtmlBuilder<Message>, label: string) =>
-  Attachment.action<Message>({ attributes: [h.Attribute('aria-label', label)] }, icon(h, X, 'size-3.5'), h)
+  Attachment.action<Message>(
+    { attributes: [h.Attribute('aria-label', label)] },
+    icon(h, X, 'size-3.5'),
+    h,
+  )
 
 export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
@@ -50,7 +54,10 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
       h.div(
         [h.Class('flex w-full flex-col gap-2')],
         [
-          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Files — Horizontal']),
+          h.div(
+            [h.Class('px-1 text-xs font-medium text-muted-foreground')],
+            ['Files — Horizontal'],
+          ),
           h.div(
             [h.Class('flex flex-col gap-3')],
             [
@@ -66,7 +73,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove sales-dashboard.pdf')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove sales-dashboard.pdf')],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -82,7 +93,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove customer-import.csv')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove customer-import.csv')],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -98,7 +113,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove message-renderer.tsx')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove message-renderer.tsx')],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -125,7 +144,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove sales-dashboard.pdf')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove sales-dashboard.pdf')],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -141,7 +164,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove customer-import.csv')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove customer-import.csv')],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -157,7 +184,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove message-renderer.tsx')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove message-renderer.tsx')],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -189,7 +220,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove quarterly-review.key')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove quarterly-review.key')],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -236,7 +271,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
               Attachment<Message>(
                 { size: 'sm', className: 'w-48' },
                 [
-                  Attachment.content<Message>({}, [Attachment.title<Message>({}, ['shadcn/ui'], h)], h),
+                  Attachment.content<Message>(
+                    {},
+                    [Attachment.title<Message>({}, ['shadcn/ui'], h)],
+                    h,
+                  ),
                   h.a(
                     [
                       h.Class(attachmentTriggerClass),
@@ -326,7 +365,10 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
       h.div(
         [h.Class('flex w-full flex-col gap-3')],
         [
-          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['States — Horizontal']),
+          h.div(
+            [h.Class('px-1 text-xs font-medium text-muted-foreground')],
+            ['States — Horizontal'],
+          ),
           h.div(
             [h.Class('flex flex-col gap-2')],
             [
@@ -374,7 +416,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove market-research.pdf')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove market-research.pdf')],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -417,7 +463,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove uploaded-report.pdf')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove uploaded-report.pdf')],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -476,7 +526,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove market-research.pdf')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove market-research.pdf')],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -519,7 +573,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove uploaded-report.pdf')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove uploaded-report.pdf')],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -531,7 +589,10 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
       h.div(
         [h.Class('flex w-full flex-col gap-3')],
         [
-          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Images — Horizontal']),
+          h.div(
+            [h.Class('px-1 text-xs font-medium text-muted-foreground')],
+            ['Images — Horizontal'],
+          ),
           h.div(
             [h.Class('flex flex-col gap-2')],
             [
@@ -598,7 +659,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove desk-reference.jpg')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove desk-reference.jpg')],
+                    h,
+                  ),
                   h.a(
                     [
                       h.Class(attachmentTriggerClass),
@@ -638,7 +703,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove office-reference.jpg')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove office-reference.jpg')],
+                    h,
+                  ),
                   h.a(
                     [
                       h.Class(attachmentTriggerClass),
@@ -729,7 +798,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove desk-reference.jpg')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove desk-reference.jpg')],
+                    h,
+                  ),
                   h.a(
                     [
                       h.Class(attachmentTriggerClass),
@@ -769,7 +842,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove office-reference.jpg')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove office-reference.jpg')],
+                    h,
+                  ),
                   h.a(
                     [
                       h.Class(attachmentTriggerClass),
@@ -794,7 +871,10 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
       h.div(
         [h.Class('flex w-full flex-col gap-2')],
         [
-          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Image States — Horizontal']),
+          h.div(
+            [h.Class('px-1 text-xs font-medium text-muted-foreground')],
+            ['Image States — Horizontal'],
+          ),
           h.div(
             [h.Class('flex flex-col gap-2')],
             [
@@ -821,7 +901,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove office-reference.jpg')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove office-reference.jpg')],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -875,7 +959,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove desk-reference.jpg')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove desk-reference.jpg')],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -951,7 +1039,10 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
       h.div(
         [h.Class('flex w-full flex-col gap-2')],
         [
-          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Image States — Vertical']),
+          h.div(
+            [h.Class('px-1 text-xs font-medium text-muted-foreground')],
+            ['Image States — Vertical'],
+          ),
           Attachment.group<Message>(
             { className: 'w-full' },
             [
@@ -978,7 +1069,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove office-reference.jpg')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove office-reference.jpg')],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -1032,7 +1127,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove desk-reference.jpg')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove desk-reference.jpg')],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -1065,7 +1164,7 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                       Attachment.action<Message>(
                         { attributes: [h.Attribute('aria-label', 'Retry office-reference.jpg')] },
                         icon(h, RefreshCw, 'size-3.5'),
-                        h
+                        h,
                       ),
                       removeAction(h, 'Remove office-reference.jpg'),
                     ],
@@ -1173,7 +1272,11 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                     ],
                     h,
                   ),
-                  Attachment.actions<Message>({}, [removeAction(h, 'Remove briefing-notes.pdf')], h),
+                  Attachment.actions<Message>(
+                    {},
+                    [removeAction(h, 'Remove briefing-notes.pdf')],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -1415,7 +1518,10 @@ export const attachmentView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                 ],
                 h,
               ),
-              Attachment.trigger<Message>({ attributes: [h.Attribute('aria-label', 'Preview research-summary.pdf')] }, h),
+              Attachment.trigger<Message>(
+                { attributes: [h.Attribute('aria-label', 'Preview research-summary.pdf')] },
+                h,
+              ),
             ],
             h,
           ),

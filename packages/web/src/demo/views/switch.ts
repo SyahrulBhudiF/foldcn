@@ -4,7 +4,13 @@ import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { switch_ } from '../../generated/registry/ui/switch'
-import { field, fieldContent, fieldDescription, fieldLabel, fieldTitle } from '../../generated/registry/ui/fieldset'
+import {
+  field,
+  fieldContent,
+  fieldDescription,
+  fieldLabel,
+  fieldTitle,
+} from '../../generated/registry/ui/fieldset'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'

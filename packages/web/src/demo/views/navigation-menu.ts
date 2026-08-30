@@ -74,7 +74,8 @@ const navDropdown = (
         model: NavMenu.getPopover(model.navigationMenu, id),
         view: NavMenu.view,
         viewInputs: NavMenu.dropdownViewInputs({ id, trigger }, content, h),
-        toParentMessage: (message) => toParentMessage(NavMenu.Message.GotItemMessage({ id, message })),
+        toParentMessage: (message) =>
+          toParentMessage(NavMenu.Message.GotItemMessage({ id, message })),
       }),
     ],
     h,
@@ -101,9 +102,24 @@ export const navigationMenuView = (model: Model, h: HtmlBuilder<AppMessage>): Ht
                       h.ul(
                         [h.Class('grid w-96 gap-1')],
                         [
-                          navListItem(h, 'Introduction', '/docs', 'Re-usable components built with Tailwind CSS.'),
-                          navListItem(h, 'Installation', '/docs/installation', 'How to install dependencies and structure your app.'),
-                          navListItem(h, 'Typography', '/docs/primitives/typography', 'Styles for headings, paragraphs, lists...etc'),
+                          navListItem(
+                            h,
+                            'Introduction',
+                            '/docs',
+                            'Re-usable components built with Tailwind CSS.',
+                          ),
+                          navListItem(
+                            h,
+                            'Installation',
+                            '/docs/installation',
+                            'How to install dependencies and structure your app.',
+                          ),
+                          navListItem(
+                            h,
+                            'Typography',
+                            '/docs/primitives/typography',
+                            'Styles for headings, paragraphs, lists...etc',
+                          ),
                         ],
                       ),
                     ],
@@ -167,7 +183,13 @@ export const navigationMenuView = (model: Model, h: HtmlBuilder<AppMessage>): Ht
                   ),
                   NavigationMenu.item(
                     {},
-                    [NavigationMenu.link({ href: '/docs', className: NavMenu.navigationMenuTriggerStyle() }, ['Docs'], h)],
+                    [
+                      NavigationMenu.link(
+                        { href: '/docs', className: NavMenu.navigationMenuTriggerStyle() },
+                        ['Docs'],
+                        h,
+                      ),
+                    ],
                     h,
                   ),
                 ],
@@ -181,7 +203,12 @@ export const navigationMenuView = (model: Model, h: HtmlBuilder<AppMessage>): Ht
     ],
   )
 
-const navListItem = (h: HtmlBuilder<AppMessage>, title: string, href: string, description: string): Html =>
+const navListItem = (
+  h: HtmlBuilder<AppMessage>,
+  title: string,
+  href: string,
+  description: string,
+): Html =>
   h.li(
     [],
     [
@@ -219,8 +246,9 @@ export const slice = defineSlice({
   init: { navigationMenu: NavMenu.init(NAV_ITEM_IDS) },
   messages: [Message.GotNavigationMenuMessage],
   handlers: (model: State) => ({
-    GotNavigationMenuMessage: (payload: typeof Message.GotNavigationMenuMessage.Type): UpdateReturn =>
-      foldNavigationMenu(model, payload.message),
+    GotNavigationMenuMessage: (
+      payload: typeof Message.GotNavigationMenuMessage.Type,
+    ): UpdateReturn => foldNavigationMenu(model, payload.message),
   }),
   samples: [],
 })

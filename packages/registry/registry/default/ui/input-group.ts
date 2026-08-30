@@ -100,10 +100,7 @@ export type InputGroupInputConfig<M> = Readonly<{
 
 /** The connected input for use inside `inputGroup`. Emits
  *  data-slot="input-group-control" so the group frame reacts to it. */
-export const inputGroupInput = <M>(
-  config: InputGroupInputConfig<M>,
-  h: HtmlBuilder<M>,
-): Html =>
+export const inputGroupInput = <M>(config: InputGroupInputConfig<M>, h: HtmlBuilder<M>): Html =>
   h.input([
     h.Id(config.id),
     ...(config.onInput === undefined ? [] : [h.OnInput(config.onInput)]),
@@ -140,10 +137,7 @@ export const inputGroupButton = <M>(
       ...buttonConfig,
       variant: config.variant ?? 'ghost',
       className: cn(inputGroupButtonClass, inputGroupButtonSizeClasses[size], config.className),
-      attributes: [
-        h.DataAttribute('size', size),
-        ...(config.attributes ?? []),
-      ],
+      attributes: [h.DataAttribute('size', size), ...(config.attributes ?? [])],
     },
     label,
     h,
@@ -185,8 +179,7 @@ export const inputGroupText = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
-): Html =>
-  h.span([h.Class(cn(inputGroupTextClass, config.className))], children)
+): Html => h.span([h.Class(cn(inputGroupTextClass, config.className))], children)
 
 /** Segmented container — pass addons / controls as children. */
 export const inputGroup = <M>(

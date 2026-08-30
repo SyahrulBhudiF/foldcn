@@ -38,118 +38,118 @@ export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 model: model.dialog,
                 view: Drawer.view,
                 viewInputs: Drawer.styledViewInputs(
-          {
-            isHandleVisible: true,
-            content: ({ closeButton, title, description }, h) => [
-              Drawer.header(
-                {},
-                [
-                  Drawer.title({ attributes: title }, ['Pick a delivery time'], h),
-                  Drawer.description(
-                    { attributes: description },
-                    ['We’ll prepare your order as soon as possible.'],
-                    h,
-                  ),
-                ],
-                h,
-              ),
-              h.div(
-                [h.Class('flex-1 overflow-y-auto p-4')],
-                [
-                  h.div(
-                    [h.Class('grid gap-2')],
-                    [
-                      h.label(
+                  {
+                    isHandleVisible: true,
+                    content: ({ closeButton, title, description }, h) => [
+                      Drawer.header(
+                        {},
                         [
-                          h.Class(
-                            'flex items-center gap-3 rounded-lg border p-3 text-sm has-[input:checked]:border-primary has-[input:checked]:bg-accent',
+                          Drawer.title({ attributes: title }, ['Pick a delivery time'], h),
+                          Drawer.description(
+                            { attributes: description },
+                            ['We’ll prepare your order as soon as possible.'],
+                            h,
                           ),
-                          h.For('drawer-delivery-asap'),
                         ],
+                        h,
+                      ),
+                      h.div(
+                        [h.Class('flex-1 overflow-y-auto p-4')],
                         [
                           h.div(
-                            [h.Class('flex flex-1 flex-col gap-0.5')],
+                            [h.Class('grid gap-2')],
                             [
-                              h.span(
-                                [h.Class('flex items-center gap-2 font-medium')],
+                              h.label(
                                 [
-                                  'Standard delivery',
-                                  h.span(
+                                  h.Class(
+                                    'flex items-center gap-3 rounded-lg border p-3 text-sm has-[input:checked]:border-primary has-[input:checked]:bg-accent',
+                                  ),
+                                  h.For('drawer-delivery-asap'),
+                                ],
+                                [
+                                  h.div(
+                                    [h.Class('flex flex-1 flex-col gap-0.5')],
                                     [
-                                      h.Class(
-                                        'inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground',
+                                      h.span(
+                                        [h.Class('flex items-center gap-2 font-medium')],
+                                        [
+                                          'Standard delivery',
+                                          h.span(
+                                            [
+                                              h.Class(
+                                                'inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground',
+                                              ),
+                                            ],
+                                            ['Fastest'],
+                                          ),
+                                        ],
+                                      ),
+                                      h.span(
+                                        [h.Class('text-xs text-muted-foreground')],
+                                        ['25–35 min · Driver assigned now'],
                                       ),
                                     ],
-                                    ['Fastest'],
                                   ),
+                                  h.input([
+                                    h.Attribute('type', 'radio'),
+                                    h.Attribute('name', 'delivery-time'),
+                                    h.Id('drawer-delivery-asap'),
+                                    h.Attribute('value', 'asap'),
+                                    h.Attribute('checked', ''),
+                                    h.Class('size-4'),
+                                  ]),
                                 ],
                               ),
-                              h.span(
-                                [h.Class('text-xs text-muted-foreground')],
-                                ['25–35 min · Driver assigned now'],
+                              h.label(
+                                [
+                                  h.Class(
+                                    'flex items-center gap-3 rounded-lg border p-3 text-sm has-[input:checked]:border-primary has-[input:checked]:bg-accent',
+                                  ),
+                                  h.For('drawer-delivery-5-00'),
+                                ],
+                                [
+                                  h.div(
+                                    [h.Class('flex flex-1 flex-col gap-0.5')],
+                                    [
+                                      h.span([h.Class('font-medium')], ['5:00 PM – 5:15 PM']),
+                                      h.span(
+                                        [h.Class('text-xs text-muted-foreground')],
+                                        ['Prep starts at 4:45 PM'],
+                                      ),
+                                    ],
+                                  ),
+                                  h.input([
+                                    h.Attribute('type', 'radio'),
+                                    h.Attribute('name', 'delivery-time'),
+                                    h.Id('drawer-delivery-5-00'),
+                                    h.Attribute('value', '5-00'),
+                                    h.Class('size-4'),
+                                  ]),
+                                ],
                               ),
                             ],
                           ),
-                          h.input([
-                            h.Attribute('type', 'radio'),
-                            h.Attribute('name', 'delivery-time'),
-                            h.Id('drawer-delivery-asap'),
-                            h.Attribute('value', 'asap'),
-                            h.Attribute('checked', ''),
-                            h.Class('size-4'),
-                          ]),
                         ],
                       ),
-                      h.label(
+                      Drawer.footer(
+                        {},
                         [
-                          h.Class(
-                            'flex items-center gap-3 rounded-lg border p-3 text-sm has-[input:checked]:border-primary has-[input:checked]:bg-accent',
-                          ),
-                          h.For('drawer-delivery-5-00'),
-                        ],
-                        [
-                          h.div(
-                            [h.Class('flex flex-1 flex-col gap-0.5')],
+                          h.button(
                             [
-                              h.span([h.Class('font-medium')], ['5:00 PM – 5:15 PM']),
-                              h.span(
-                                [h.Class('text-xs text-muted-foreground')],
-                                ['Prep starts at 4:45 PM'],
+                              h.Class(
+                                'inline-flex h-[34px] w-full items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground hover:bg-primary/90',
                               ),
                             ],
+                            ['Confirm Delivery Time'],
                           ),
-                          h.input([
-                            h.Attribute('type', 'radio'),
-                            h.Attribute('name', 'delivery-time'),
-                            h.Id('drawer-delivery-5-00'),
-                            h.Attribute('value', '5-00'),
-                            h.Class('size-4'),
-                          ]),
+                          Drawer.closeButton({ attributes: closeButton }, ['Cancel'], h),
                         ],
+                        h,
                       ),
                     ],
-                  ),
-                ],
-              ),
-              Drawer.footer(
-                {},
-                [
-                  h.button(
-                    [
-                      h.Class(
-                        'inline-flex h-[34px] w-full items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground hover:bg-primary/90',
-                      ),
-                    ],
-                    ['Confirm Delivery Time'],
-                  ),
-                  Drawer.closeButton({ attributes: closeButton }, ['Cancel'], h),
-                ],
-                h,
-              ),
-            ],
-          },
-          h,
-        ),
+                  },
+                  h,
+                ),
                 toParentMessage: (message) => Message.GotDialogMessage({ message }),
               }),
             ],
@@ -160,7 +160,10 @@ export const drawerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
         [h.Class('flex w-full flex-col gap-2')],
         [
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Handle']),
-          h.div([h.Class('mx-auto w-full max-w-sm rounded-lg border p-4 text-sm')], [h.p([], ['Drawer with visible handle for dragging.'])]),
+          h.div(
+            [h.Class('mx-auto w-full max-w-sm rounded-lg border p-4 text-sm')],
+            [h.p([], ['Drawer with visible handle for dragging.'])],
+          ),
         ],
       ),
     ],

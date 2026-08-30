@@ -37,11 +37,7 @@ const gapsCallout = (name: string, h: HtmlBuilder<AppMessage>): Html => {
     [
       icon(h, TriangleAlert),
       Alert.title<AppMessage>({}, ['Differences vs shadcn/ui'], h),
-      Alert.description<AppMessage>(
-        {},
-        [h.ul([h.Class('list-disc space-y-1 pl-4')], gaps)],
-        h,
-      ),
+      Alert.description<AppMessage>({}, [h.ul([h.Class('list-disc space-y-1 pl-4')], gaps)], h),
     ],
     h,
   )
@@ -124,11 +120,7 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<AppMessage>)
                 const upstream =
                   item.category === 'Components' ? shadcnUrlFor(item.name) : undefined
                 const gaps = gapsByItem[item.name] ?? []
-                const reportUrl = incompatibilityIssueUrl(
-                  item.name,
-                  gaps,
-                  parityStatus(item.name),
-                )
+                const reportUrl = incompatibilityIssueUrl(item.name, gaps, parityStatus(item.name))
                 const headerActions = h.div(
                   [h.Class('flex items-center overflow-hidden rounded-md border border-border')],
                   [
@@ -205,7 +197,10 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<AppMessage>)
                         { className: 'mt-10 overflow-hidden font-sans py-0 gap-0' },
                         [
                           Card.header<AppMessage>(
-                            { className: 'flex flex-wrap items-center justify-between gap-3 border-b py-2.5' },
+                            {
+                              className:
+                                'flex flex-wrap items-center justify-between gap-3 border-b py-2.5',
+                            },
                             [
                               h.span(
                                 [h.Class('text-xs font-medium text-muted-foreground')],
@@ -238,9 +233,7 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<AppMessage>)
                                                 : 'bg-background text-muted-foreground border-input hover:bg-accent hover:text-accent-foreground',
                                             ),
                                           ),
-                                          h.OnClick(
-                                            Message.SelectedRegistryStyle({ style }),
-                                          ),
+                                          h.OnClick(Message.SelectedRegistryStyle({ style })),
                                         ],
                                         [styleLabel(style)],
                                       ),

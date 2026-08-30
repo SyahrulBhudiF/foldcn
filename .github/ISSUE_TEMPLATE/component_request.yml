@@ -1,7 +1,7 @@
 name: Component request
 description: Request a new component or a variant of an existing one
-title: "[Request]: "
-labels: ["enhancement"]
+title: '[Request]: '
+labels: ['enhancement']
 body:
   - type: markdown
     attributes:
@@ -14,7 +14,7 @@ body:
     attributes:
       label: Component name
       description: Which component are you requesting? (e.g. sonner, chart, carousel)
-      placeholder: "chart"
+      placeholder: 'chart'
     validations:
       required: true
 
@@ -23,7 +23,7 @@ body:
     attributes:
       label: Upstream reference
       description: Link to the shadcn/ui docs or other reference for the component
-      placeholder: "https://ui.shadcn.com/docs/components/chart"
+      placeholder: 'https://ui.shadcn.com/docs/components/chart'
     validations:
       required: false
 
@@ -32,7 +32,7 @@ body:
     attributes:
       label: Use case / motivation
       description: What are you trying to build? Why is this component needed?
-      placeholder: "I need a chart component for a dashboard…"
+      placeholder: 'I need a chart component for a dashboard…'
     validations:
       required: true
 

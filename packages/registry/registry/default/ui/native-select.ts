@@ -128,8 +128,7 @@ export const nativeSelect = <M>(config: NativeSelectConfig<M>, h: HtmlBuilder<M>
     h,
   )
 
-export const nativeSelectChevron = <M>(h: HtmlBuilder<M>): Html =>
-  icon(h, ChevronDown, 'size-4')
+export const nativeSelectChevron = <M>(h: HtmlBuilder<M>): Html => icon(h, ChevronDown, 'size-4')
 
 /** Helper to render an `<option>` with correct data-slot and Canvas colors. */
 export const nativeSelectOption = <M>(

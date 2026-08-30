@@ -164,7 +164,11 @@ export const navigationMenuIndicatorArrowClass = 'cn-navigation-menu-indicator-a
 
 export const navigationMenuTriggerStyle = () => navigationMenuTriggerClass
 
-export const NAVIGATION_MENU_ANCHOR: AnchorConfig = { placement: 'bottom-start', gap: 8, padding: 8 }
+export const NAVIGATION_MENU_ANCHOR: AnchorConfig = {
+  placement: 'bottom-start',
+  gap: 8,
+  padding: 8,
+}
 
 type StyleConfig = Readonly<{ className?: string }>
 
@@ -239,7 +243,10 @@ const navigationMenuViewport = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.Class(cn(navigationMenuViewportClass, config.className)), h.DataAttribute('slot', 'navigation-menu-viewport')],
+    [
+      h.Class(cn(navigationMenuViewportClass, config.className)),
+      h.DataAttribute('slot', 'navigation-menu-viewport'),
+    ],
     children,
   )
 
@@ -249,10 +256,11 @@ const navigationMenuIndicator = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.Class(cn(navigationMenuIndicatorClass, config.className)), h.DataAttribute('slot', 'navigation-menu-indicator')],
-    children.length > 0
-      ? children
-      : [h.div([h.Class(navigationMenuIndicatorArrowClass)])],
+    [
+      h.Class(cn(navigationMenuIndicatorClass, config.className)),
+      h.DataAttribute('slot', 'navigation-menu-indicator'),
+    ],
+    children.length > 0 ? children : [h.div([h.Class(navigationMenuIndicatorArrowClass)])],
   )
 
 export const dropdownViewInputs = <M>(

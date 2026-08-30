@@ -8,7 +8,12 @@ import { Slider as FoldkitSlider } from '@foldkit/ui'
 
 import * as Slider from '../../generated/registry/ui/slider'
 import { field, fieldDescription, fieldLabel } from '../../generated/registry/ui/fieldset'
-import { sliderFilledTrackClass, sliderRootClass, sliderThumbClass, sliderTrackClass } from '../../generated/registry/ui/slider'
+import {
+  sliderFilledTrackClass,
+  sliderRootClass,
+  sliderThumbClass,
+  sliderTrackClass,
+} from '../../generated/registry/ui/slider'
 
 import { defineSlice, type UpdateReturn } from '../slice'
 import type { Model, Message as AppMessage } from '../assemble'
@@ -65,7 +70,11 @@ export const sliderView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                       ]),
                     ],
                   ),
-                  h.div([h.Class(sliderThumbClass), h.DataAttribute('slot', 'slider-thumb'), h.Style({ left: '50%' })]),
+                  h.div([
+                    h.Class(sliderThumbClass),
+                    h.DataAttribute('slot', 'slider-thumb'),
+                    h.Style({ left: '50%' }),
+                  ]),
                 ],
               ),
             ],
@@ -80,10 +89,20 @@ export const sliderView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
             [h.Class('flex items-center gap-6')],
             [
               h.div(
-                [h.Class(`${sliderRootClass} h-40`), h.DataAttribute('slot', 'slider'), h.DataAttribute('orientation', 'vertical'), h.DataAttribute('vertical', '')],
+                [
+                  h.Class(`${sliderRootClass} h-40`),
+                  h.DataAttribute('slot', 'slider'),
+                  h.DataAttribute('orientation', 'vertical'),
+                  h.DataAttribute('vertical', ''),
+                ],
                 [
                   h.div(
-                    [h.Class(sliderTrackClass), h.DataAttribute('slot', 'slider-track'), h.DataAttribute('orientation', 'vertical'), h.DataAttribute('vertical', '')],
+                    [
+                      h.Class(sliderTrackClass),
+                      h.DataAttribute('slot', 'slider-track'),
+                      h.DataAttribute('orientation', 'vertical'),
+                      h.DataAttribute('vertical', ''),
+                    ],
                     [
                       h.div([
                         h.Class(sliderFilledTrackClass),
@@ -98,10 +117,20 @@ export const sliderView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 ],
               ),
               h.div(
-                [h.Class(`${sliderRootClass} h-40`), h.DataAttribute('slot', 'slider'), h.DataAttribute('orientation', 'vertical'), h.DataAttribute('vertical', '')],
+                [
+                  h.Class(`${sliderRootClass} h-40`),
+                  h.DataAttribute('slot', 'slider'),
+                  h.DataAttribute('orientation', 'vertical'),
+                  h.DataAttribute('vertical', ''),
+                ],
                 [
                   h.div(
-                    [h.Class(sliderTrackClass), h.DataAttribute('slot', 'slider-track'), h.DataAttribute('orientation', 'vertical'), h.DataAttribute('vertical', '')],
+                    [
+                      h.Class(sliderTrackClass),
+                      h.DataAttribute('slot', 'slider-track'),
+                      h.DataAttribute('orientation', 'vertical'),
+                      h.DataAttribute('vertical', ''),
+                    ],
                     [
                       h.div([
                         h.Class(sliderFilledTrackClass),
@@ -132,16 +161,31 @@ export const sliderView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                   fieldLabel<AppMessage>({ for: 'slider-demo-temperature' }, ['Temperature'], h),
                   h.div(
                     [h.Class('flex items-center justify-between gap-2')],
-                    [h.span([h.Class('text-sm text-muted-foreground')], [`${String(model.sliderValue)}%`])],
+                    [
+                      h.span(
+                        [h.Class('text-sm text-muted-foreground')],
+                        [`${String(model.sliderValue)}%`],
+                      ),
+                    ],
                   ),
                   h.div(
                     [h.Class(sliderRootClass), h.DataAttribute('slot', 'slider')],
                     [
                       h.div(
                         [h.Class(sliderTrackClass), h.DataAttribute('slot', 'slider-track')],
-                        [h.div([h.Class(sliderFilledTrackClass), h.DataAttribute('slot', 'slider-range'), h.Style({ width: `${String(model.sliderValue)}%` })])],
+                        [
+                          h.div([
+                            h.Class(sliderFilledTrackClass),
+                            h.DataAttribute('slot', 'slider-range'),
+                            h.Style({ width: `${String(model.sliderValue)}%` }),
+                          ]),
+                        ],
                       ),
-                      h.div([h.Class(sliderThumbClass), h.DataAttribute('slot', 'slider-thumb'), h.Style({ left: `${String(model.sliderValue)}%` })]),
+                      h.div([
+                        h.Class(sliderThumbClass),
+                        h.DataAttribute('slot', 'slider-thumb'),
+                        h.Style({ left: `${String(model.sliderValue)}%` }),
+                      ]),
                     ],
                   ),
                   fieldDescription<AppMessage>({}, ['Adjust the slider to change the value.'], h),
@@ -160,11 +204,21 @@ export const sliderView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
             [h.Class('flex w-full max-w-xs opacity-60')],
             [
               h.div(
-                [h.Class(sliderRootClass), h.DataAttribute('slot', 'slider'), h.DataAttribute('disabled', '')],
+                [
+                  h.Class(sliderRootClass),
+                  h.DataAttribute('slot', 'slider'),
+                  h.DataAttribute('disabled', ''),
+                ],
                 [
                   h.div(
                     [h.Class(sliderTrackClass), h.DataAttribute('slot', 'slider-track')],
-                    [h.div([h.Class(sliderFilledTrackClass), h.DataAttribute('slot', 'slider-range'), h.Style({ width: '50%' })])],
+                    [
+                      h.div([
+                        h.Class(sliderFilledTrackClass),
+                        h.DataAttribute('slot', 'slider-range'),
+                        h.Style({ width: '50%' }),
+                      ]),
+                    ],
                   ),
                   h.div([h.Class(sliderThumbClass), h.DataAttribute('slot', 'slider-thumb')]),
                 ],

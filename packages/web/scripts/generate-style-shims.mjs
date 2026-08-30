@@ -87,7 +87,8 @@ const generate = () => {
     // src/generated/registry/<rel> → src/: the item's own file name counts as
     // a segment too, hence +1 over its directory depth.
     const depth = '../'.repeat(relPath.split('/').length + 1)
-    const moduleSpecifier = (style) => `@foldcn/registry/styles/${style}/${relPath.replace(/\.ts$/, '')}`
+    const moduleSpecifier = (style) =>
+      `@foldcn/registry/styles/${style}/${relPath.replace(/\.ts$/, '')}`
     const importSpecifiers = STYLES.map(
       (style) => `import * as _${style.replace(/-/g, '_')} from '${moduleSpecifier(style)}'`,
     )
@@ -131,7 +132,9 @@ const generate = () => {
       }
     }
     if (pureTypes.length > 0) {
-      lines.push(`export type {\n  ${pureTypes.join(',\n  ')},\n} from '${moduleSpecifier('default')}'`)
+      lines.push(
+        `export type {\n  ${pureTypes.join(',\n  ')},\n} from '${moduleSpecifier('default')}'`,
+      )
     }
     lines.push(...aliasedTypes)
 

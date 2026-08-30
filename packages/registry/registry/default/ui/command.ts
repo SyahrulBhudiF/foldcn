@@ -58,18 +58,21 @@ const commandInput = <M>(config: CommandInputConfig<M>, h: HtmlBuilder<M>): Html
   h.div(
     [h.Class(cn('cn-command-input-wrapper')), h.DataAttribute('slot', 'command-input-wrapper')],
     [
-      h.div([h.Class(cn('cn-command-input-group'))], [
-        icon(h, Search, 'cn-command-input-icon size-4 shrink-0 opacity-50'),
-        h.input([
-          h.Type('text'),
-          ...(config.value === undefined ? [] : [h.Value(config.value)]),
-          ...(config.isDisabled === true ? [h.Disabled(true)] : []),
-          ...(config.placeholder === undefined ? [] : [h.Placeholder(config.placeholder)]),
-          ...(config.onInput === undefined ? [] : [h.OnInput(config.onInput)]),
-          h.Class(cn(commandInputClass, config.className)),
-          h.DataAttribute('slot', 'command-input'),
-        ]),
-      ]),
+      h.div(
+        [h.Class(cn('cn-command-input-group'))],
+        [
+          icon(h, Search, 'cn-command-input-icon size-4 shrink-0 opacity-50'),
+          h.input([
+            h.Type('text'),
+            ...(config.value === undefined ? [] : [h.Value(config.value)]),
+            ...(config.isDisabled === true ? [h.Disabled(true)] : []),
+            ...(config.placeholder === undefined ? [] : [h.Placeholder(config.placeholder)]),
+            ...(config.onInput === undefined ? [] : [h.OnInput(config.onInput)]),
+            h.Class(cn(commandInputClass, config.className)),
+            h.DataAttribute('slot', 'command-input'),
+          ]),
+        ],
+      ),
     ],
   )
 

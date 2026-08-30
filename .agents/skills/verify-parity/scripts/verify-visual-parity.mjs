@@ -34,7 +34,19 @@ const DEFAULT_STYLE_CSS = join(REPO_DIR, 'packages/registry/registry/styles/styl
 const COMPAT_CSS = join(REPO_DIR, 'packages/registry/registry/default/style/cn-compat.css')
 
 const args = process.argv.slice(2)
-const wantStates = args.includes('--states') || args.includes('--images') || args.length === 0 || args.some(a => a.startsWith('--component') || a.startsWith('--theme') || a.startsWith('--foldcn-url') || a.startsWith('--shadcn-url') || a.startsWith('--out') || a === '--all-styles')
+const wantStates =
+  args.includes('--states') ||
+  args.includes('--images') ||
+  args.length === 0 ||
+  args.some(
+    (a) =>
+      a.startsWith('--component') ||
+      a.startsWith('--theme') ||
+      a.startsWith('--foldcn-url') ||
+      a.startsWith('--shadcn-url') ||
+      a.startsWith('--out') ||
+      a === '--all-styles',
+  )
 const wantImages = args.includes('--images')
 const allStyles = args.includes('--all-styles')
 
@@ -42,7 +54,7 @@ function argVal(flag, fallback) {
   const idx = args.indexOf(flag)
   if (idx !== -1 && args[idx + 1] && !args[idx + 1].startsWith('--')) return args[idx + 1]
   // also support --flag=value
-  const pref = args.find(a => a.startsWith(`${flag}=`))
+  const pref = args.find((a) => a.startsWith(`${flag}=`))
   if (pref) return pref.slice(flag.length + 1)
   return fallback
 }
@@ -53,7 +65,9 @@ const themeArg = argVal('--theme', 'both')
 const componentFilter = argVal('--component', null)
 const outRoot = resolve(REPO_DIR, argVal('--out', '.tmp/visual-parity'))
 
-const STYLES = allStyles ? ['default', 'nova', 'vega', 'maia', 'lyra', 'mira', 'luma', 'sera', 'rhea'] : ['default']
+const STYLES = allStyles
+  ? ['default', 'nova', 'vega', 'maia', 'lyra', 'mira', 'luma', 'sera', 'rhea']
+  : ['default']
 const THEMES = themeArg === 'both' ? ['light', 'dark'] : [themeArg]
 
 // ---------------------------------------------------------------------------
@@ -61,7 +75,7 @@ const THEMES = themeArg === 'both' ? ['light', 'dark'] : [themeArg]
 // ---------------------------------------------------------------------------
 function loadLocalNames() {
   const data = JSON.parse(readFileSync(REGISTRY_JSON, 'utf8'))
-  return data.items.map(i => i.name).sort()
+  return data.items.map((i) => i.name).sort()
 }
 function loadUpstreamNames() {
   const candidates = [
@@ -71,13 +85,16 @@ function loadUpstreamNames() {
   ].filter(Boolean)
   for (const dir of candidates) {
     if (existsSync(dir)) {
-      return readdirSync(dir).filter(f => (f.endsWith('.tsx')||f.endsWith('.ts')) && !f.startsWith('_')).map(f=>f.replace(/\.(tsx|ts)$/,'')).sort()
+      return readdirSync(dir)
+        .filter((f) => (f.endsWith('.tsx') || f.endsWith('.ts')) && !f.startsWith('_'))
+        .map((f) => f.replace(/\.(tsx|ts)$/, ''))
+        .sort()
     }
   }
   const cached = join(REPO_DIR, '.tmp/upstream.json')
   if (existsSync(cached)) {
     const data = JSON.parse(readFileSync(cached, 'utf8'))
-    return (data.names ?? data.map(x=>x.name??x)).sort()
+    return (data.names ?? data.map((x) => x.name ?? x)).sort()
   }
   return null
 }
@@ -87,7 +104,7 @@ function pairedNames() {
   if (!upstream) return local // fallback: treat all local as paired for state enumeration
   const renameMap = { menu: 'dropdown-menu', fieldset: 'field' }
   const upstreamSet = new Set(upstream)
-  return local.filter(n => upstreamSet.has(renameMap[n] ?? n) || upstreamSet.has(n)).sort()
+  return local.filter((n) => upstreamSet.has(renameMap[n] ?? n) || upstreamSet.has(n)).sort()
 }
 
 // ---------------------------------------------------------------------------
@@ -115,13 +132,21 @@ const STATE_DEFS = [
  * Each entry adds states beyond the generic buckets.
  */
 const COMPONENT_EXTRA_STATES = {
-  progress: [{ id: 'indeterminate', label: 'indeterminate (no value)', cues: ['value===undefined'] }],
+  progress: [
+    { id: 'indeterminate', label: 'indeterminate (no value)', cues: ['value===undefined'] },
+  ],
   command: [{ id: 'empty', label: 'empty', cues: ['empty'] }],
   calendar: [
     { id: 'today', label: 'today', cues: ['today'] },
     { id: 'range', label: 'range selection', cues: ['range'] },
   ],
-  tabs: [{ id: 'orientation-vertical', label: 'orientation vertical', cues: ['data-orientation=vertical'] }],
+  tabs: [
+    {
+      id: 'orientation-vertical',
+      label: 'orientation vertical',
+      cues: ['data-orientation=vertical'],
+    },
+  ],
   sidebar: [
     { id: 'offcanvas', label: 'offcanvas', cues: ['offcanvas'] },
     { id: 'icon', label: 'icon collapsed', cues: ['icon'] },
@@ -134,43 +159,141 @@ const COMPONENT_EXTRA_STATES = {
 
 // Heuristic: which generic states apply to which component family
 function isOverlay(name) {
-  return ['dialog','alert-dialog','sheet','drawer','popover','tooltip','hover-card','menu','context-menu','menubar','select','combobox'].includes(name)
+  return [
+    'dialog',
+    'alert-dialog',
+    'sheet',
+    'drawer',
+    'popover',
+    'tooltip',
+    'hover-card',
+    'menu',
+    'context-menu',
+    'menubar',
+    'select',
+    'combobox',
+  ].includes(name)
 }
 function isCheckable(name) {
-  return ['checkbox','switch','radio-group','toggle','toggle-group','tabs'].includes(name)
+  return ['checkbox', 'switch', 'radio-group', 'toggle', 'toggle-group', 'tabs'].includes(name)
 }
 function isSelectable(name) {
-  return ['tabs','toggle-group','select','combobox','command','listbox'].includes(name)
+  return ['tabs', 'toggle-group', 'select', 'combobox', 'command', 'listbox'].includes(name)
 }
 
 function isInteractive(name) {
   // presentational / layout components have no hover/focus semantics
-  return !['separator','skeleton','spinner','kbd','aspect-ratio','direction','marker','card','table','alert','empty','item'].includes(name)
+  return ![
+    'separator',
+    'skeleton',
+    'spinner',
+    'kbd',
+    'aspect-ratio',
+    'direction',
+    'marker',
+    'card',
+    'table',
+    'alert',
+    'empty',
+    'item',
+  ].includes(name)
 }
 function applicableStates(name) {
   const states = []
   for (const def of STATE_DEFS) {
-    if (def.id === 'idle') { states.push(def); continue }
-    if (def.id === 'hover' && isInteractive(name)) { states.push(def); continue }
-    if (def.id === 'focus-visible' && isInteractive(name)) { states.push(def); continue }
-    if (def.id === 'active' && (isCheckable(name) || ['button','toggle','tabs','menu','menubar'].includes(name))) { states.push(def); continue }
-    if (def.id === 'active' && name === 'button') { states.push(def); continue }
-    if (def.id === 'disabled' && !['separator','skeleton','spinner','kbd','aspect-ratio','direction','marker','card','table','breadcrumb','empty','item','alert'].includes(name)) { states.push(def); continue }
-    if (def.id === 'open' && isOverlay(name)) { states.push(def); continue }
-    if (def.id === 'closed' && isOverlay(name)) { states.push(def); continue }
-    if (def.id === 'checked' && ['checkbox','switch','radio-group','toggle','toggle-group'].includes(name)) { states.push(def); continue }
-    if (def.id === 'selected' && isSelectable(name)) { states.push(def); continue }
-    if (def.id === 'invalid' && ['input','textarea','select','checkbox','switch','input-otp','input-group','fieldset','combobox'].includes(name)) { states.push(def); continue }
+    if (def.id === 'idle') {
+      states.push(def)
+      continue
+    }
+    if (def.id === 'hover' && isInteractive(name)) {
+      states.push(def)
+      continue
+    }
+    if (def.id === 'focus-visible' && isInteractive(name)) {
+      states.push(def)
+      continue
+    }
+    if (
+      def.id === 'active' &&
+      (isCheckable(name) || ['button', 'toggle', 'tabs', 'menu', 'menubar'].includes(name))
+    ) {
+      states.push(def)
+      continue
+    }
+    if (def.id === 'active' && name === 'button') {
+      states.push(def)
+      continue
+    }
+    if (
+      def.id === 'disabled' &&
+      ![
+        'separator',
+        'skeleton',
+        'spinner',
+        'kbd',
+        'aspect-ratio',
+        'direction',
+        'marker',
+        'card',
+        'table',
+        'breadcrumb',
+        'empty',
+        'item',
+        'alert',
+      ].includes(name)
+    ) {
+      states.push(def)
+      continue
+    }
+    if (def.id === 'open' && isOverlay(name)) {
+      states.push(def)
+      continue
+    }
+    if (def.id === 'closed' && isOverlay(name)) {
+      states.push(def)
+      continue
+    }
+    if (
+      def.id === 'checked' &&
+      ['checkbox', 'switch', 'radio-group', 'toggle', 'toggle-group'].includes(name)
+    ) {
+      states.push(def)
+      continue
+    }
+    if (def.id === 'selected' && isSelectable(name)) {
+      states.push(def)
+      continue
+    }
+    if (
+      def.id === 'invalid' &&
+      [
+        'input',
+        'textarea',
+        'select',
+        'checkbox',
+        'switch',
+        'input-otp',
+        'input-group',
+        'fieldset',
+        'combobox',
+      ].includes(name)
+    ) {
+      states.push(def)
+      continue
+    }
     // fallback: include hover/focus/disabled for most interactive components
-    if (def.id === 'disabled' && ['button','input','textarea','select','checkbox','switch'].includes(name)) {
-      if (!states.find(s=>s.id==='disabled')) states.push(def)
+    if (
+      def.id === 'disabled' &&
+      ['button', 'input', 'textarea', 'select', 'checkbox', 'switch'].includes(name)
+    ) {
+      if (!states.find((s) => s.id === 'disabled')) states.push(def)
     }
   }
   const extra = COMPONENT_EXTRA_STATES[name] ?? []
-  for (const e of extra) if (!states.find(s=>s.id===e.id)) states.push(e)
+  for (const e of extra) if (!states.find((s) => s.id === e.id)) states.push(e)
   // dedupe by id
   const seen = new Set()
-  return states.filter(s => (seen.has(s.id) ? false : (seen.add(s.id), true)))
+  return states.filter((s) => (seen.has(s.id) ? false : (seen.add(s.id), true)))
 }
 
 function cssForStyle(styleName) {
@@ -239,31 +362,47 @@ function printStateMatrix(names) {
     const states = applicableStates(name)
     totalStates += states.length * THEMES.length * STYLES.length
     const { hasResolved, cues } = checkCssCoverage(name, STYLES[0])
-    const cueSummary = Object.entries(cues).filter(([,v])=>v).map(([k])=>k).join(', ') || '(no state cues in resolved output)'
+    const cueSummary =
+      Object.entries(cues)
+        .filter(([, v]) => v)
+        .map(([k]) => k)
+        .join(', ') || '(no state cues in resolved output)'
     // warn when an applicable state has no cue in resolved CSS — likely missing visual hook
     const missingCues = []
     for (const s of states) {
       const req = STATE_CUE_REQUIREMENTS[s.id]
       if (!req) continue
-      const hasAny = req.some(cue => cues[cue])
+      const hasAny = req.some((cue) => cues[cue])
       if (!hasAny) missingCues.push(`${s.id} (missing ${req.join('/')})`)
     }
     if (missingCues.length > 0) warnedStates += missingCues.length
-    rows.push({ name, states: states.map(s=>s.id).join(', '), cueSummary, hasResolved, missingCues })
+    rows.push({
+      name,
+      states: states.map((s) => s.id).join(', '),
+      cueSummary,
+      hasResolved,
+      missingCues,
+    })
   }
 
   for (const r of rows) {
     console.log(`  ${r.name}: [${r.states}]`)
-    console.log(`    cues: ${r.cueSummary} ${r.hasResolved ? '' : '(no resolved output — run resolve-styles.mjs)'}`)
+    console.log(
+      `    cues: ${r.cueSummary} ${r.hasResolved ? '' : '(no resolved output — run resolve-styles.mjs)'}`,
+    )
     if (r.missingCues.length > 0) {
       console.log(`    WARN: states without CSS hook — ${r.missingCues.join(', ')}`)
     }
   }
   if (warnedStates > 0) {
-    console.log(`\n  Note: ${warnedStates} state(s) lack expected CSS hooks in resolved output — they may be visually identical across states or rely on attribute hooks that haven't been ported. Review references/visual-parity.md.`)
+    console.log(
+      `\n  Note: ${warnedStates} state(s) lack expected CSS hooks in resolved output — they may be visually identical across states or rely on attribute hooks that haven't been ported. Review references/visual-parity.md.`,
+    )
   }
 
-  console.log(`\nTotal captures if --images: ${totalStates} screenshots (components × states × themes × styles) + upstream twins + diffs`)
+  console.log(
+    `\nTotal captures if --images: ${totalStates} screenshots (components × states × themes × styles) + upstream twins + diffs`,
+  )
   console.log(`Pairwise diffs: ${totalStates} (one per capture)`)
 
   // detailed per-state table when single component
@@ -300,13 +439,19 @@ async function tryCaptureImages(names) {
     try {
       const r = spawnSync('agent-browser', ['--version'], { encoding: 'utf8', timeout: 5000 })
       return r.status === 0
-    } catch { return false }
+    } catch {
+      return false
+    }
   })()
   if (!hasAgentBrowser) {
     console.log('\n-- Images --')
-    console.log('  skipped — agent-browser not found (npm i -g agent-browser && agent-browser install)')
+    console.log(
+      '  skipped — agent-browser not found (npm i -g agent-browser && agent-browser install)',
+    )
     console.log('  See .agents/skills/agent-browser/SKILL.md → agent-browser skills get core')
-    console.log('  CSS state coverage above is the fallback; install agent-browser and run with --images for snapshot + pixel evidence.')
+    console.log(
+      '  CSS state coverage above is the fallback; install agent-browser and run with --images for snapshot + pixel evidence.',
+    )
     return { skipped: 'no agent-browser' }
   }
 
@@ -315,7 +460,9 @@ async function tryCaptureImages(names) {
     pixelmatch = (await import('pixelmatch')).default ?? (await import('pixelmatch'))
     PNG = (await import('pngjs')).PNG
   } catch {
-    console.log('\nNote: pixelmatch/pngjs not installed — diffs will be existence + snapshot-attr only. Install with: npm i -D pixelmatch pngjs')
+    console.log(
+      '\nNote: pixelmatch/pngjs not installed — diffs will be existence + snapshot-attr only. Install with: npm i -D pixelmatch pngjs',
+    )
     pixelmatch = null
     PNG = null
   }
@@ -325,11 +472,15 @@ async function tryCaptureImages(names) {
   try {
     const res = await fetch(foldcnUrl, { method: 'HEAD', signal: AbortSignal.timeout(3000) })
     foldcnReachable = res.ok
-  } catch { foldcnReachable = false }
+  } catch {
+    foldcnReachable = false
+  }
   if (!foldcnReachable) {
     console.log(`\n-- Images --`)
     console.log(`  skipped — foldcn preview not reachable at ${foldcnUrl}`)
-    console.log(`  Start it: pnpm --filter @foldcn/web dev  or  pnpm --filter @foldcn/web build && pnpm --filter @foldcn/web preview`)
+    console.log(
+      `  Start it: pnpm --filter @foldcn/web dev  or  pnpm --filter @foldcn/web build && pnpm --filter @foldcn/web preview`,
+    )
     return { skipped: 'foldcn unreachable' }
   }
 
@@ -337,38 +488,61 @@ async function tryCaptureImages(names) {
   try {
     const res = await fetch(shadcnUrl, { method: 'HEAD', signal: AbortSignal.timeout(3000) })
     shadcnReachable = res.ok
-  } catch { shadcnReachable = false }
+  } catch {
+    shadcnReachable = false
+  }
   if (!shadcnReachable) {
     console.log(`\n-- Images --`)
-    console.log(`  warning — upstream not reachable at ${shadcnUrl} (diffs will be foldcn-only; web_search + agent-browser read https://ui.shadcn.com/docs/components/<name> is the fallback)`)
+    console.log(
+      `  warning — upstream not reachable at ${shadcnUrl} (diffs will be foldcn-only; web_search + agent-browser read https://ui.shadcn.com/docs/components/<name> is the fallback)`,
+    )
   }
 
   console.log(`\n-- Images — capturing via agent-browser (snapshot + screenshot) --`)
   console.log(`  foldcn: ${foldcnUrl}`)
-  console.log(`  upstream: ${shadcnUrl} ${shadcnReachable ? '(reachable)' : '(unreachable — foldcn-only captures)'}`)
+  console.log(
+    `  upstream: ${shadcnUrl} ${shadcnReachable ? '(reachable)' : '(unreachable — foldcn-only captures)'}`,
+  )
   console.log(`  out: ${outRoot}`)
-  console.log(`  session: verify-parity (agent-browser --session verify-parity) — see agent-browser skills get core for core loop`)
+  console.log(
+    `  session: verify-parity (agent-browser --session verify-parity) — see agent-browser skills get core for core loop`,
+  )
 
   // helper to run agent-browser with session
   const SESSION = 'verify-parity'
   const ab = (args, opts = {}) => {
-    const res = spawnSync('agent-browser', ['--session', SESSION, ...args], { encoding: 'utf8', timeout: 30000, ...opts })
+    const res = spawnSync('agent-browser', ['--session', SESSION, ...args], {
+      encoding: 'utf8',
+      timeout: 30000,
+      ...opts,
+    })
     return res
   }
   const abJson = (args) => {
     const res = ab([...args, '--json'])
-    try { return JSON.parse(res.stdout) } catch { return res.stdout }
+    try {
+      return JSON.parse(res.stdout)
+    } catch {
+      return res.stdout
+    }
   }
 
   // Derive session id for isolation (best effort) — not fatal if it fails
-  try { spawnSync('agent-browser', ['session', 'id', '--scope', 'worktree', '--prefix', 'verify-parity'], { encoding: 'utf8', timeout: 5000 }) } catch {}
+  try {
+    spawnSync(
+      'agent-browser',
+      ['session', 'id', '--scope', 'worktree', '--prefix', 'verify-parity'],
+      { encoding: 'utf8', timeout: 5000 },
+    )
+  } catch {}
 
   let hasMajor = false
   const results = []
 
   // Small helpers
   const elementSelector = (name) => `[data-slot="${name}"], [data-slot="${name}-root"]`
-  const upstreamComponentName = (name) => name === 'menu' ? 'dropdown-menu' : name === 'fieldset' ? 'field' : name
+  const upstreamComponentName = (name) =>
+    name === 'menu' ? 'dropdown-menu' : name === 'fieldset' ? 'field' : name
 
   for (const theme of THEMES) {
     const mediaArgs = theme === 'dark' ? ['dark'] : ['light']
@@ -392,7 +566,10 @@ async function tryCaptureImages(names) {
             ab(['open', url])
             ab(['set', 'viewport', '1280', '800'])
             // set style via localStorage before re-navigating (active-style.ts reads it at boot)
-            ab(['eval', `try{localStorage.setItem('foldcn-style','${style === 'default' ? 'default' : style}')}catch(e){}`])
+            ab([
+              'eval',
+              `try{localStorage.setItem('foldcn-style','${style === 'default' ? 'default' : style}')}catch(e){}`,
+            ])
             ab(['set', 'media', ...mediaArgs, 'reduced-motion'])
             // re-open after style set to pick it up, or just reload
             ab(['open', url])
@@ -425,7 +602,9 @@ async function tryCaptureImages(names) {
               if (state.id === 'open' || state.id === 'expanded') {
                 // click trigger if present, otherwise click the element itself
                 const triggerSnap = ab(['snapshot', '-i'])
-                const trigRef = (triggerSnap.stdout || '').match(/\[role="button"\][^\n]*ref=(e\d+)/)
+                const trigRef = (triggerSnap.stdout || '').match(
+                  /\[role="button"\][^\n]*ref=(e\d+)/,
+                )
                 if (trigRef) ab(['click', trigRef[1]])
                 else ab(['click', firstRef])
                 ab(['wait', '500'])
@@ -446,10 +625,14 @@ async function tryCaptureImages(names) {
             const afterSnap = ab(['snapshot', '-s', elementSelector(name), '-i', '--json'])
             if (afterSnap.stdout) {
               const afterPath = join(dir, `${theme}-${style}-after.json`)
-              try { writeFileSync(afterPath, afterSnap.stdout) } catch {}
+              try {
+                writeFileSync(afterPath, afterSnap.stdout)
+              } catch {}
             }
           } catch (e) {
-            console.log(`  WARN ${name}/${state.id}/${theme}-${style}: foldcn capture failed — ${String(e.message || e).slice(0,120)}`)
+            console.log(
+              `  WARN ${name}/${state.id}/${theme}-${style}: foldcn capture failed — ${String(e.message || e).slice(0, 120)}`,
+            )
           }
 
           // -------- upstream capture --------
@@ -483,10 +666,16 @@ async function tryCaptureImages(names) {
                 }
                 if (state.id === 'active') ab(['click', upRef])
               }
-              const upSs = ab(['screenshot', elementSelector(name).split(',')[0].trim(), upstreamPath])
+              const upSs = ab([
+                'screenshot',
+                elementSelector(name).split(',')[0].trim(),
+                upstreamPath,
+              ])
               if (upSs.status !== 0) ab(['screenshot', upstreamPath])
             } catch (e) {
-              console.log(`  WARN ${name}/${state.id}/${theme}-${style}: upstream capture failed — ${String(e.message || e).slice(0,120)}`)
+              console.log(
+                `  WARN ${name}/${state.id}/${theme}-${style}: upstream capture failed — ${String(e.message || e).slice(0, 120)}`,
+              )
             }
           }
 
@@ -517,9 +706,18 @@ async function tryCaptureImages(names) {
               const w = Math.max(a.width, b.width)
               const h = Math.max(a.height, b.height)
               if (a.width !== b.width || a.height !== b.height) {
-                console.log(`  ${name}/${state.id}/${theme}-${style}: VISUAL_MAJOR — size mismatch foldcn ${a.width}×${a.height} vs upstream ${b.width}×${b.height}`)
+                console.log(
+                  `  ${name}/${state.id}/${theme}-${style}: VISUAL_MAJOR — size mismatch foldcn ${a.width}×${a.height} vs upstream ${b.width}×${b.height}`,
+                )
                 hasMajor = true
-                results.push({ name, state: state.id, theme, style, verdict: 'VISUAL_MAJOR', reason: 'size mismatch' })
+                results.push({
+                  name,
+                  state: state.id,
+                  theme,
+                  style,
+                  verdict: 'VISUAL_MAJOR',
+                  reason: 'size mismatch',
+                })
               } else {
                 const diff = new PNG({ width: w, height: h })
                 const mismatched = pixelmatch(a.data, b.data, diff.data, w, h, { threshold: 0.1 })
@@ -531,19 +729,34 @@ async function tryCaptureImages(names) {
                 if (verdict === 'VISUAL_MAJOR') hasMajor = true
                 writeFileSync(diffPath, PNG.sync.write(diff))
                 const attrNote = snapAttrMajor ? ' (snapshot attr mismatch)' : ''
-                console.log(`  ${name}/${state.id}/${theme}-${style}: ${verdict} — ${pct.toFixed(2)}% diff (${mismatched} px)${attrNote}`)
+                console.log(
+                  `  ${name}/${state.id}/${theme}-${style}: ${verdict} — ${pct.toFixed(2)}% diff (${mismatched} px)${attrNote}`,
+                )
                 results.push({ name, state: state.id, theme, style, verdict, pct, snapAttrMajor })
               }
             } catch (e) {
-              console.log(`  ${name}/${state.id}/${theme}-${style}: diff failed — ${String(e.message || e).slice(0,120)}`)
+              console.log(
+                `  ${name}/${state.id}/${theme}-${style}: diff failed — ${String(e.message || e).slice(0, 120)}`,
+              )
             }
           } else if (existsSync(foldcnPath) && existsSync(upstreamPath)) {
             const verdict = snapAttrMajor ? 'VISUAL_MAJOR' : 'UNKNOWN'
             if (verdict === 'VISUAL_MAJOR') hasMajor = true
-            console.log(`  ${name}/${state.id}/${theme}-${style}: captured (no pixelmatch — install pixelmatch/pngjs for pixel diff; snapshot attr ${snapAttrMajor ? 'MAJOR' : 'ok'})`)
-            results.push({ name, state: state.id, theme, style, verdict, reason: snapAttrMajor ? 'snapshot attr mismatch' : 'no pixelmatch' })
+            console.log(
+              `  ${name}/${state.id}/${theme}-${style}: captured (no pixelmatch — install pixelmatch/pngjs for pixel diff; snapshot attr ${snapAttrMajor ? 'MAJOR' : 'ok'})`,
+            )
+            results.push({
+              name,
+              state: state.id,
+              theme,
+              style,
+              verdict,
+              reason: snapAttrMajor ? 'snapshot attr mismatch' : 'no pixelmatch',
+            })
           } else if (existsSync(foldcnPath)) {
-            console.log(`  ${name}/${state.id}/${theme}-${style}: foldcn-only (upstream missing — try web_search for https://ui.shadcn.com/docs/components/${upstreamComponentName(name)} or agent-browser read)`)
+            console.log(
+              `  ${name}/${state.id}/${theme}-${style}: foldcn-only (upstream missing — try web_search for https://ui.shadcn.com/docs/components/${upstreamComponentName(name)} or agent-browser read)`,
+            )
             results.push({ name, state: state.id, theme, style, verdict: 'FOLDCN_ONLY' })
           }
         }
@@ -551,10 +764,15 @@ async function tryCaptureImages(names) {
     }
   }
   // cleanup session
-  try { spawnSync('agent-browser', ['--session', SESSION, 'close'], { encoding: 'utf8', timeout: 5000 }) } catch {}
+  try {
+    spawnSync('agent-browser', ['--session', SESSION, 'close'], { encoding: 'utf8', timeout: 5000 })
+  } catch {}
 
   // summary
-  const byVerdict = results.reduce((acc, r) => { acc[r.verdict] = (acc[r.verdict]||0)+1; return acc }, {})
+  const byVerdict = results.reduce((acc, r) => {
+    acc[r.verdict] = (acc[r.verdict] || 0) + 1
+    return acc
+  }, {})
   console.log(`\n-- Visual summary (agent-browser) --`)
   console.log(`  ${JSON.stringify(byVerdict)}`)
   if (hasMajor) console.log('  FAIL — one or more VISUAL_MAJOR diffs (snapshot attr or >5% pixels)')
@@ -567,7 +785,7 @@ async function tryCaptureImages(names) {
 // Main
 // ---------------------------------------------------------------------------
 async function main() {
-  const names = pairedNames().filter(n => !componentFilter || n === componentFilter)
+  const names = pairedNames().filter((n) => !componentFilter || n === componentFilter)
   if (names.length === 0) {
     console.log(`No components match filter: ${componentFilter}`)
     process.exit(1)
@@ -579,22 +797,37 @@ async function main() {
   if (wantImages) {
     const res = await tryCaptureImages(names)
     if (res.skipped) {
-      console.log(`\nPASS (states) — images: skipped (${res.skipped}) — CSS coverage is the evidence.`)
-      console.log('  Install: npm i -g agent-browser && agent-browser install && agent-browser skills get core')
+      console.log(
+        `\nPASS (states) — images: skipped (${res.skipped}) — CSS coverage is the evidence.`,
+      )
+      console.log(
+        '  Install: npm i -g agent-browser && agent-browser install && agent-browser skills get core',
+      )
       visualOk = true
     } else if (res.hasMajor) {
       visualOk = false
     }
   } else {
-    console.log(`\nTip: run with --images for screenshot + snapshot diffs (needs agent-browser + preview servers).`)
+    console.log(
+      `\nTip: run with --images for screenshot + snapshot diffs (needs agent-browser + preview servers).`,
+    )
     console.log('  npm i -g agent-browser && agent-browser install')
-    console.log('  agent-browser skills get core  # snapshot core loop: open → snapshot -i -s → hover/focus/click → screenshot')
+    console.log(
+      '  agent-browser skills get core  # snapshot core loop: open → snapshot -i -s → hover/focus/click → screenshot',
+    )
     console.log('  node .agents/skills/verify-parity/scripts/verify-visual-parity.mjs --images')
-    console.log('  upstream without checkout: web_search site:ui.shadcn.com/docs/components + agent-browser read')
+    console.log(
+      '  upstream without checkout: web_search site:ui.shadcn.com/docs/components + agent-browser read',
+    )
   }
 
-  console.log(`\nDone — state matrix: ${names.length} components, ~${totalStates} captures if --images --all-styles.`)
+  console.log(
+    `\nDone — state matrix: ${names.length} components, ~${totalStates} captures if --images --all-styles.`,
+  )
   process.exit(visualOk ? 0 : 1)
 }
 
-main().catch(e => { console.error(e); process.exit(1) })
+main().catch((e) => {
+  console.error(e)
+  process.exit(1)
+})

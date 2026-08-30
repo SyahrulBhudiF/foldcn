@@ -5,11 +5,7 @@ import { aspectRatio } from '../../generated/registry/ui/aspect-ratio'
 import { defineSlice } from '../slice'
 import type { Message, Model } from '../assemble'
 
-const ratioSection = (
-  h: HtmlBuilder<Message>,
-  title: string,
-  ratio: number,
-): Html =>
+const ratioSection = (h: HtmlBuilder<Message>, title: string, ratio: number): Html =>
   h.div(
     [h.Class('flex w-full flex-col gap-2')],
     [

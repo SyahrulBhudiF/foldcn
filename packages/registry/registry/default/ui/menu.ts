@@ -133,7 +133,9 @@ export const viewInputs = <Item extends string>(
     return { className: cn(menuItemClass, config.itemClass, className), content }
   },
   separatorClassName: cn(menuSeparatorClass, config.separatorClass),
-  separatorAttributes: childAttributes([inertHtml.DataAttribute('slot', 'dropdown-menu-separator')]),
+  separatorAttributes: childAttributes([
+    inertHtml.DataAttribute('slot', 'dropdown-menu-separator'),
+  ]),
   groupClassName: config.groupClass,
   groupAttributes: childAttributes([inertHtml.DataAttribute('slot', 'dropdown-menu-group')]),
   backdropClassName: cn(menuBackdropClass, config.backdropClass),

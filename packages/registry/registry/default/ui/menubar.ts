@@ -45,7 +45,8 @@ export const menubarClass = 'cn-menubar flex items-center'
 /** Upstream menubar trigger token string. */
 export const menubarTriggerClass = 'cn-menubar-trigger flex items-center outline-hidden select-none'
 
-export const menubarContentClass = 'cn-menubar-content cn-menubar-content-logical cn-menu-target cn-menu-translucent'
+export const menubarContentClass =
+  'cn-menubar-content cn-menubar-content-logical cn-menu-target cn-menu-translucent'
 
 export const menubarContentAnimatedClass = menubarContentClass
 

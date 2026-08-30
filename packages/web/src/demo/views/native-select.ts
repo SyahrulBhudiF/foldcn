@@ -28,7 +28,11 @@ const staticNative = (
   opts?: { disabled?: boolean; invalid?: boolean; size?: 'sm' | 'default' },
 ): Html =>
   h.div(
-    [h.Class(nativeSelectWrapperClass), h.DataAttribute('slot', 'native-select-wrapper'), h.DataAttribute('size', opts?.size ?? 'default')],
+    [
+      h.Class(nativeSelectWrapperClass),
+      h.DataAttribute('slot', 'native-select-wrapper'),
+      h.DataAttribute('size', opts?.size ?? 'default'),
+    ],
     [
       h.select(
         [
@@ -40,7 +44,14 @@ const staticNative = (
         ],
         [h.option([], [placeholder])],
       ),
-      h.span([h.DataAttribute('slot', 'native-select-icon'), h.Class(nativeSelectIconClass), h.AriaHidden(true)], [icon(h, ChevronDown, 'size-4')]),
+      h.span(
+        [
+          h.DataAttribute('slot', 'native-select-icon'),
+          h.Class(nativeSelectIconClass),
+          h.AriaHidden(true),
+        ],
+        [icon(h, ChevronDown, 'size-4')],
+      ),
     ],
   )
 
@@ -74,10 +85,7 @@ export const nativeSelectView = (model: Model, h: HtmlBuilder<AppMessage>): Html
         [h.Class('flex w-full flex-col gap-2')],
         [
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Groups']),
-          h.div(
-            [h.Class('w-full max-w-48')],
-            [staticNative(h, 'Select a food')],
-          ),
+          h.div([h.Class('w-full max-w-48')], [staticNative(h, 'Select a food')]),
         ],
       ),
       h.div(
@@ -86,7 +94,10 @@ export const nativeSelectView = (model: Model, h: HtmlBuilder<AppMessage>): Html
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Sizes']),
           h.div(
             [h.Class('flex flex-col gap-4 w-full max-w-48')],
-            [staticNative(h, 'Select a fruit', { size: 'sm' }), staticNative(h, 'Select a fruit', { size: 'default' })],
+            [
+              staticNative(h, 'Select a fruit', { size: 'sm' }),
+              staticNative(h, 'Select a fruit', { size: 'default' }),
+            ],
           ),
         ],
       ),
@@ -105,7 +116,11 @@ export const nativeSelectView = (model: Model, h: HtmlBuilder<AppMessage>): Html
                     [h.Class(nativeSelectWrapperClass)],
                     [
                       h.select(
-                        [h.Id('native-select-country'), h.Class(nativeSelectClass), h.DataAttribute('slot', 'native-select')],
+                        [
+                          h.Id('native-select-country'),
+                          h.Class(nativeSelectClass),
+                          h.DataAttribute('slot', 'native-select'),
+                        ],
                         [
                           h.option([h.Value('')], ['Select a country']),
                           h.option([h.Value('us')], ['United States']),
@@ -114,7 +129,10 @@ export const nativeSelectView = (model: Model, h: HtmlBuilder<AppMessage>): Html
                           h.option([h.Value('au')], ['Australia']),
                         ],
                       ),
-                      h.span([h.Class(nativeSelectIconClass), h.AriaHidden(true)], [icon(h, ChevronDown, 'size-4')]),
+                      h.span(
+                        [h.Class(nativeSelectIconClass), h.AriaHidden(true)],
+                        [icon(h, ChevronDown, 'size-4')],
+                      ),
                     ],
                   ),
                   fieldDescription<AppMessage>({}, ['Select your country of residence.'], h),

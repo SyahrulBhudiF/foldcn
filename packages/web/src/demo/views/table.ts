@@ -8,9 +8,19 @@ import { defineSlice } from '../slice'
 import type { Message, Model } from '../assemble'
 
 const invoices = [
-  { invoice: 'INV001', paymentStatus: 'Paid', totalAmount: '$250.00', paymentMethod: 'Credit Card' },
+  {
+    invoice: 'INV001',
+    paymentStatus: 'Paid',
+    totalAmount: '$250.00',
+    paymentMethod: 'Credit Card',
+  },
   { invoice: 'INV002', paymentStatus: 'Pending', totalAmount: '$150.00', paymentMethod: 'PayPal' },
-  { invoice: 'INV003', paymentStatus: 'Unpaid', totalAmount: '$350.00', paymentMethod: 'Bank Transfer' },
+  {
+    invoice: 'INV003',
+    paymentStatus: 'Unpaid',
+    totalAmount: '$350.00',
+    paymentMethod: 'Bank Transfer',
+  },
 ]
 
 const people = [
@@ -106,7 +116,10 @@ const tableWithFooter = (h: HtmlBuilder<Message>): Html =>
           Table.row(
             {},
             [
-              h.td([h.Class('cn-table-cell'), h.DataAttribute('slot', 'table-cell'), h.Colspan(3)], ['Total']),
+              h.td(
+                [h.Class('cn-table-cell'), h.DataAttribute('slot', 'table-cell'), h.Colspan(3)],
+                ['Total'],
+              ),
               Table.cell({ className: 'text-right' }, ['$2,500.00'], h),
             ],
             h,
@@ -182,8 +195,30 @@ const tableWithBadges = (h: HtmlBuilder<Message>): Html =>
             {},
             [
               Table.cell({ className: 'font-medium' }, ['Design homepage'], h),
-              Table.cell({}, [h.span([h.Class(badge('Completed', 'bg-green-500/10 text-green-700 dark:text-green-400'))], ['Completed'])], h),
-              Table.cell({ className: 'text-right' }, [h.span([h.Class(badge('High', 'bg-blue-500/10 text-blue-700 dark:text-blue-400'))], ['High'])], h),
+              Table.cell(
+                {},
+                [
+                  h.span(
+                    [
+                      h.Class(
+                        badge('Completed', 'bg-green-500/10 text-green-700 dark:text-green-400'),
+                      ),
+                    ],
+                    ['Completed'],
+                  ),
+                ],
+                h,
+              ),
+              Table.cell(
+                { className: 'text-right' },
+                [
+                  h.span(
+                    [h.Class(badge('High', 'bg-blue-500/10 text-blue-700 dark:text-blue-400'))],
+                    ['High'],
+                  ),
+                ],
+                h,
+              ),
             ],
             h,
           ),
@@ -191,8 +226,33 @@ const tableWithBadges = (h: HtmlBuilder<Message>): Html =>
             {},
             [
               Table.cell({ className: 'font-medium' }, ['Implement API'], h),
-              Table.cell({}, [h.span([h.Class(badge('In Progress', 'bg-yellow-500/10 text-yellow-700 dark:text-yellow-400'))], ['In Progress'])], h),
-              Table.cell({ className: 'text-right' }, [h.span([h.Class(badge('Medium', 'bg-gray-500/10 text-gray-700 dark:text-gray-400'))], ['Medium'])], h),
+              Table.cell(
+                {},
+                [
+                  h.span(
+                    [
+                      h.Class(
+                        badge(
+                          'In Progress',
+                          'bg-yellow-500/10 text-yellow-700 dark:text-yellow-400',
+                        ),
+                      ),
+                    ],
+                    ['In Progress'],
+                  ),
+                ],
+                h,
+              ),
+              Table.cell(
+                { className: 'text-right' },
+                [
+                  h.span(
+                    [h.Class(badge('Medium', 'bg-gray-500/10 text-gray-700 dark:text-gray-400'))],
+                    ['Medium'],
+                  ),
+                ],
+                h,
+              ),
             ],
             h,
           ),
@@ -200,8 +260,26 @@ const tableWithBadges = (h: HtmlBuilder<Message>): Html =>
             {},
             [
               Table.cell({ className: 'font-medium' }, ['Write tests'], h),
-              Table.cell({}, [h.span([h.Class(badge('Pending', 'bg-gray-500/10 text-gray-700 dark:text-gray-400'))], ['Pending'])], h),
-              Table.cell({ className: 'text-right' }, [h.span([h.Class(badge('Low', 'bg-gray-500/10 text-gray-700 dark:text-gray-400'))], ['Low'])], h),
+              Table.cell(
+                {},
+                [
+                  h.span(
+                    [h.Class(badge('Pending', 'bg-gray-500/10 text-gray-700 dark:text-gray-400'))],
+                    ['Pending'],
+                  ),
+                ],
+                h,
+              ),
+              Table.cell(
+                { className: 'text-right' },
+                [
+                  h.span(
+                    [h.Class(badge('Low', 'bg-gray-500/10 text-gray-700 dark:text-gray-400'))],
+                    ['Low'],
+                  ),
+                ],
+                h,
+              ),
             ],
             h,
           ),
@@ -219,7 +297,15 @@ const tableWithActions = (h: HtmlBuilder<Message>): Html =>
       Table.header(
         {},
         [
-          Table.row({}, [Table.head({}, ['Product'], h), Table.head({}, ['Price'], h), Table.head({ className: 'text-right' }, ['Actions'], h)], h),
+          Table.row(
+            {},
+            [
+              Table.head({}, ['Product'], h),
+              Table.head({}, ['Price'], h),
+              Table.head({ className: 'text-right' }, ['Actions'], h),
+            ],
+            h,
+          ),
         ],
         h,
       ),
@@ -239,7 +325,12 @@ const tableWithActions = (h: HtmlBuilder<Message>): Html =>
                 { className: 'text-right' },
                 [
                   h.button(
-                    [h.Class('inline-flex size-8 items-center justify-center rounded-md hover:bg-accent'), h.AriaLabel('Open menu')],
+                    [
+                      h.Class(
+                        'inline-flex size-8 items-center justify-center rounded-md hover:bg-accent',
+                      ),
+                      h.AriaLabel('Open menu'),
+                    ],
                     [icon(h, MoreHorizontal, 'size-4')],
                   ),
                 ],
@@ -268,7 +359,15 @@ const tableWithSelect = (h: HtmlBuilder<Message>): Html =>
       Table.header(
         {},
         [
-          Table.row({}, [Table.head({}, ['Task'], h), Table.head({}, ['Assignee'], h), Table.head({}, ['Status'], h)], h),
+          Table.row(
+            {},
+            [
+              Table.head({}, ['Task'], h),
+              Table.head({}, ['Assignee'], h),
+              Table.head({}, ['Status'], h),
+            ],
+            h,
+          ),
         ],
         h,
       ),
@@ -283,7 +382,11 @@ const tableWithSelect = (h: HtmlBuilder<Message>): Html =>
                 {},
                 [
                   h.select(
-                    [h.Class('flex h-8 w-40 rounded-md border border-input bg-transparent px-2 text-sm')],
+                    [
+                      h.Class(
+                        'flex h-8 w-40 rounded-md border border-input bg-transparent px-2 text-sm',
+                      ),
+                    ],
                     [h.option([h.Value(item.assignee)], [item.assignee])],
                   ),
                 ],
@@ -307,7 +410,15 @@ const tableWithInput = (h: HtmlBuilder<Message>): Html =>
       Table.header(
         {},
         [
-          Table.row({}, [Table.head({}, ['Product'], h), Table.head({}, ['Quantity'], h), Table.head({}, ['Price'], h)], h),
+          Table.row(
+            {},
+            [
+              Table.head({}, ['Product'], h),
+              Table.head({}, ['Quantity'], h),
+              Table.head({}, ['Price'], h),
+            ],
+            h,
+          ),
         ],
         h,
       ),
@@ -327,7 +438,9 @@ const tableWithInput = (h: HtmlBuilder<Message>): Html =>
                 [
                   h.input([
                     h.Type('number'),
-                    h.Class('flex h-8 w-20 rounded-md border border-input bg-transparent px-2 text-sm'),
+                    h.Class(
+                      'flex h-8 w-20 rounded-md border border-input bg-transparent px-2 text-sm',
+                    ),
                     h.Attribute('value', qty),
                     h.Attribute('min', '0'),
                   ]),
@@ -349,13 +462,55 @@ export const tableView = (_model: Model, h: HtmlBuilder<Message>): Html =>
   h.div(
     [h.Class('flex w-full flex-col gap-8')],
     [
-      h.div([h.Class('flex w-full flex-col gap-2')], [h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Basic']), tableBasic(h)]),
-      h.div([h.Class('flex w-full flex-col gap-2')], [h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Footer']), tableWithFooter(h)]),
-      h.div([h.Class('flex w-full flex-col gap-2')], [h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Simple']), tableSimple(h)]),
-      h.div([h.Class('flex w-full flex-col gap-2')], [h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Badges']), tableWithBadges(h)]),
-      h.div([h.Class('flex w-full flex-col gap-2')], [h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Actions']), tableWithActions(h)]),
-      h.div([h.Class('flex w-full flex-col gap-2')], [h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Select']), tableWithSelect(h)]),
-      h.div([h.Class('flex w-full flex-col gap-2')], [h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Input']), tableWithInput(h)]),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Basic']),
+          tableBasic(h),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Footer']),
+          tableWithFooter(h),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Simple']),
+          tableSimple(h),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Badges']),
+          tableWithBadges(h),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Actions']),
+          tableWithActions(h),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Select']),
+          tableWithSelect(h),
+        ],
+      ),
+      h.div(
+        [h.Class('flex w-full flex-col gap-2')],
+        [
+          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Input']),
+          tableWithInput(h),
+        ],
+      ),
     ],
   )
 

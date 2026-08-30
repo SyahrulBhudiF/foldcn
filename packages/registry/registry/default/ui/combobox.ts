@@ -157,7 +157,9 @@ const common = <Item extends string>(config: CommonConfig<Item>) => ({
   buttonClassName: comboboxButtonClass,
   buttonAttributes: childAttributes([inertHtml.DataAttribute('slot', 'combobox-trigger')]),
   inputWrapperClassName: cn(comboboxInputWrapperClass, config.inputWrapperClass),
-  inputWrapperAttributes: childAttributes([inertHtml.DataAttribute('slot', 'combobox-input-wrapper')]),
+  inputWrapperAttributes: childAttributes([
+    inertHtml.DataAttribute('slot', 'combobox-input-wrapper'),
+  ]),
   backdropClassName: cn(comboboxBackdropClass, config.backdropClass),
   className: cn(comboboxWrapperClass, config.wrapperClass),
   attributes: childAttributes([inertHtml.DataAttribute('slot', 'combobox')]),

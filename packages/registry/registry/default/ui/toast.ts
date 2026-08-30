@@ -121,7 +121,13 @@ export const toastAction = <M>(
     [
       ...attributes,
       h.DataAttribute('slot', 'toast-action'),
-      h.Class(cn('cn-button cn-button-variant-outline cn-button-size-sm', toastActionClass, config.className)),
+      h.Class(
+        cn(
+          'cn-button cn-button-variant-outline cn-button-size-sm',
+          toastActionClass,
+          config.className,
+        ),
+      ),
       h.Type('button'),
     ],
     children,
@@ -397,14 +403,11 @@ export const make = <A, I>(payloadSchema: S.Codec<A, I>) => {
     execute: ({ containerId }) =>
       pipe(
         Render.afterPaint,
-        Effect.map(() =>
-          Message.GotHeights({ heights: measureHeights(containerId) }),
-        ),
+        Effect.map(() => Message.GotHeights({ heights: measureHeights(containerId) })),
       ),
   })
 
-  const toGotToastMessage = (message: BoundMessage): Message =>
-    Message.GotToastMessage({ message })
+  const toGotToastMessage = (message: BoundMessage): Message => Message.GotToastMessage({ message })
 
   const foldToast = Update.foldChild({
     update: Bound.update,
@@ -418,10 +421,7 @@ export const make = <A, I>(payloadSchema: S.Codec<A, I>) => {
   /** Merges newly measured heights. Heights of known entries are kept —
    *  measured cards render height-forced, so re-reading them would capture
    *  the forced value, not the natural one. Stale ids are pruned. */
-  const mergeHeights = (
-    model: Model,
-    measured: Readonly<Record<string, number>>,
-  ): Model => {
+  const mergeHeights = (model: Model, measured: Readonly<Record<string, number>>): Model => {
     const knownIds = new Set(model.toast.entries.map(({ id }) => id))
     const heights: Record<string, number> = {}
     for (const [id, height] of Object.entries(model.heights)) {
@@ -445,9 +445,7 @@ export const make = <A, I>(payloadSchema: S.Codec<A, I>) => {
       GotToastMessage: ({ message: toastMessage }) => {
         const [nextModel, commands, out] = foldToast(model, toastMessage)
         const measure =
-          toastMessage._tag === 'Added'
-            ? [MeasureHeights({ containerId: nextModel.toast.id })]
-            : []
+          toastMessage._tag === 'Added' ? [MeasureHeights({ containerId: nextModel.toast.id })] : []
         return [nextModel, [...commands, ...measure], out]
       },
     })

@@ -37,7 +37,11 @@ export const collapsibleView = (model: Model, h: HtmlBuilder<AppMessage>): Html 
           Card<AppMessage>(
             { className: 'mx-auto w-full max-w-sm gap-2' },
             [
-              Card.header<AppMessage>({}, [h.div([h.Class('text-sm font-medium')], ['Explorer'])], h),
+              Card.header<AppMessage>(
+                {},
+                [h.div([h.Class('text-sm font-medium')], ['Explorer'])],
+                h,
+              ),
               Card.content<AppMessage>(
                 {},
                 [
@@ -51,14 +55,23 @@ export const collapsibleView = (model: Model, h: HtmlBuilder<AppMessage>): Html 
                         viewInputs: {
                           title: h.span(
                             [h.Class('inline-flex items-center gap-1.5')],
-                            [icon(h, ChevronRight, 'size-3.5'), icon(h, Folder, 'size-4'), 'components'],
+                            [
+                              icon(h, ChevronRight, 'size-3.5'),
+                              icon(h, Folder, 'size-4'),
+                              'components',
+                            ],
                           ),
                           content: h.div(
                             [h.Class('ml-5 flex flex-col gap-1')],
-                            [fileLeaf('button.tsx', h), fileLeaf('card.tsx', h), fileLeaf('dialog.tsx', h)],
+                            [
+                              fileLeaf('button.tsx', h),
+                              fileLeaf('card.tsx', h),
+                              fileLeaf('dialog.tsx', h),
+                            ],
                           ),
                         },
-                        toParentMessage: (message) => Message.GotCollapsibleComponentsMessage({ message }),
+                        toParentMessage: (message) =>
+                          Message.GotCollapsibleComponentsMessage({ message }),
                       }),
                       h.submodel({
                         slotId: model.collapsibleLib.id,
@@ -112,9 +125,11 @@ export const collapsibleView = (model: Model, h: HtmlBuilder<AppMessage>): Html 
                     view: collapsible.view,
                     viewInputs: {
                       title: 'Order #4189 - Shipped',
-                      content: 'Shipping address: 100 Market St, San Francisco - Items: 2x Studio Headphones',
+                      content:
+                        'Shipping address: 100 Market St, San Francisco - Items: 2x Studio Headphones',
                     },
-                    toParentMessage: (message) => Message.GotCollapsibleSettingsMessage({ message }),
+                    toParentMessage: (message) =>
+                      Message.GotCollapsibleSettingsMessage({ message }),
                   }),
                 ],
                 h,
@@ -137,7 +152,8 @@ export const collapsibleView = (model: Model, h: HtmlBuilder<AppMessage>): Html 
                 view: collapsible.view,
                 viewInputs: {
                   title: 'Order #4189 - Shipped',
-                  content: 'Shipping address: 100 Market St, San Francisco - Items: 2x Studio Headphones',
+                  content:
+                    'Shipping address: 100 Market St, San Francisco - Items: 2x Studio Headphones',
                 },
                 toParentMessage: (message) => Message.GotCollapsibleMessage({ message }),
               }),
@@ -208,7 +224,11 @@ export const slice = defineSlice({
   fields,
   init: {
     collapsible: collapsible.init({ id: 'collapsible-demo', isAnimated: true }),
-    collapsibleComponents: collapsible.init({ id: 'collapsible-components', isAnimated: true, isOpen: true }),
+    collapsibleComponents: collapsible.init({
+      id: 'collapsible-components',
+      isAnimated: true,
+      isOpen: true,
+    }),
     collapsibleLib: collapsible.init({ id: 'collapsible-lib', isAnimated: true }),
     collapsibleSettings: collapsible.init({ id: 'collapsible-settings', isAnimated: true }),
   },
@@ -219,12 +239,16 @@ export const slice = defineSlice({
     Message.GotCollapsibleSettingsMessage,
   ],
   handlers: (model: State) => ({
-    GotCollapsibleMessage: (p: typeof Message.GotCollapsibleMessage.Type): UpdateReturn => folds.main(model, p.message),
-    GotCollapsibleComponentsMessage: (p: typeof Message.GotCollapsibleComponentsMessage.Type): UpdateReturn =>
-      folds.components(model, p.message),
-    GotCollapsibleLibMessage: (p: typeof Message.GotCollapsibleLibMessage.Type): UpdateReturn => folds.lib(model, p.message),
-    GotCollapsibleSettingsMessage: (p: typeof Message.GotCollapsibleSettingsMessage.Type): UpdateReturn =>
-      folds.settings(model, p.message),
+    GotCollapsibleMessage: (p: typeof Message.GotCollapsibleMessage.Type): UpdateReturn =>
+      folds.main(model, p.message),
+    GotCollapsibleComponentsMessage: (
+      p: typeof Message.GotCollapsibleComponentsMessage.Type,
+    ): UpdateReturn => folds.components(model, p.message),
+    GotCollapsibleLibMessage: (p: typeof Message.GotCollapsibleLibMessage.Type): UpdateReturn =>
+      folds.lib(model, p.message),
+    GotCollapsibleSettingsMessage: (
+      p: typeof Message.GotCollapsibleSettingsMessage.Type,
+    ): UpdateReturn => folds.settings(model, p.message),
   }),
   samples: [],
 })

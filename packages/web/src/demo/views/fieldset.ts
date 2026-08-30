@@ -84,15 +84,36 @@ export const fieldsetView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
       h.div(
         [h.Class('flex w-full flex-col gap-2')],
         [
-          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Multiple Fields']),
+          h.div(
+            [h.Class('px-1 text-xs font-medium text-muted-foreground')],
+            ['With Multiple Fields'],
+          ),
           fieldset<AppMessage>(
             {
               id: 'fieldset-profile',
               legend: 'Profile',
               description: 'Update your profile information.',
               children: [
-                input<AppMessage>({ id: 'fieldset-email', label: 'Email', value: '', onInput: (value) => Message.UpdatedInputValue({ value }), placeholder: 'name@example.com' }, h),
-                input<AppMessage>({ id: 'fieldset-username', label: 'Username', value: '', onInput: (value) => Message.UpdatedInputValue({ value }), placeholder: 'johndoe' }, h),
+                input<AppMessage>(
+                  {
+                    id: 'fieldset-email',
+                    label: 'Email',
+                    value: '',
+                    onInput: (value) => Message.UpdatedInputValue({ value }),
+                    placeholder: 'name@example.com',
+                  },
+                  h,
+                ),
+                input<AppMessage>(
+                  {
+                    id: 'fieldset-username',
+                    label: 'Username',
+                    value: '',
+                    onInput: (value) => Message.UpdatedInputValue({ value }),
+                    placeholder: 'johndoe',
+                  },
+                  h,
+                ),
               ],
             },
             h,
@@ -110,7 +131,16 @@ export const fieldsetView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
               description: 'All fields inside are disabled.',
               isDisabled: true,
               children: [
-                input<AppMessage>({ id: 'fieldset-disabled-name', label: 'Name', value: '', placeholder: 'Disabled', isDisabled: true }, h),
+                input<AppMessage>(
+                  {
+                    id: 'fieldset-disabled-name',
+                    label: 'Name',
+                    value: '',
+                    placeholder: 'Disabled',
+                    isDisabled: true,
+                  },
+                  h,
+                ),
               ],
             },
             h,

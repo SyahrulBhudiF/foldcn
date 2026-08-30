@@ -3,8 +3,19 @@ import { evo } from 'foldkit/struct'
 import { defineMessageUnion } from 'foldkit/message'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
-import { inputOtp, inputOtpGroupClass, inputOtpSlotClass, inputOtpSeparator, inputOtpClass } from '../../generated/registry/ui/input-otp'
-import { field, fieldDescription, fieldError, fieldLabel } from '../../generated/registry/ui/fieldset'
+import {
+  inputOtp,
+  inputOtpGroupClass,
+  inputOtpSlotClass,
+  inputOtpSeparator,
+  inputOtpClass,
+} from '../../generated/registry/ui/input-otp'
+import {
+  field,
+  fieldDescription,
+  fieldError,
+  fieldLabel,
+} from '../../generated/registry/ui/fieldset'
 import { button } from '../../generated/registry/ui/button'
 import { icon } from '../../generated/registry/lib/icons'
 import { RefreshCw } from 'lucide'
@@ -16,13 +27,22 @@ const Message = defineMessageUnion({
   UpdatedOtp: { value: S.String },
 })
 
-const otpSlots = (h: HtmlBuilder<AppMessage>, length: number, value: string, highlightInvalid = false): Html => {
+const otpSlots = (
+  h: HtmlBuilder<AppMessage>,
+  length: number,
+  value: string,
+  highlightInvalid = false,
+): Html => {
   const digits = value.replace(/\D/g, '').slice(0, length).split('')
   return h.div(
     [h.Class(inputOtpGroupClass), h.DataAttribute('slot', 'input-otp-group')],
     Array.from({ length }, (_, i) =>
       h.div(
-        [h.Class(inputOtpSlotClass), h.DataAttribute('slot', 'input-otp-slot'), ...(highlightInvalid ? [h.AriaInvalid(true)] : [])],
+        [
+          h.Class(inputOtpSlotClass),
+          h.DataAttribute('slot', 'input-otp-slot'),
+          ...(highlightInvalid ? [h.AriaInvalid(true)] : []),
+        ],
         [digits[i] ?? ''],
       ),
     ),
@@ -63,7 +83,10 @@ export const inputOtpView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
             {},
             [
               fieldLabel<AppMessage>({ for: 'with-separator' }, ['With Separator'], h),
-              inputOtp<AppMessage>({ length: 6, value: model.otp, onInput: (value) => Message.UpdatedOtp({ value }) }, h),
+              inputOtp<AppMessage>(
+                { length: 6, value: model.otp, onInput: (value) => Message.UpdatedOtp({ value }) },
+                h,
+              ),
             ],
             h,
           ),
@@ -123,11 +146,20 @@ export const inputOtpView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 [
                   h.div(
                     [h.Class('flex items-center gap-2')],
-                    [otpSlots(h, 2, '00', true), inputOtpSeparator({}, h), otpSlots(h, 2, '00', true), inputOtpSeparator({}, h), otpSlots(h, 2, '00', true)],
+                    [
+                      otpSlots(h, 2, '00', true),
+                      inputOtpSeparator({}, h),
+                      otpSlots(h, 2, '00', true),
+                      inputOtpSeparator({}, h),
+                      otpSlots(h, 2, '00', true),
+                    ],
                   ),
                 ],
               ),
-              fieldError<AppMessage>({ errors: [{ message: 'Invalid code. Please try again.' }] }, h),
+              fieldError<AppMessage>(
+                { errors: [{ message: 'Invalid code. Please try again.' }] },
+                h,
+              ),
             ],
             h,
           ),
@@ -154,7 +186,10 @@ export const inputOtpView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 [h.Class('mb-4 flex flex-col gap-1')],
                 [
                   h.div([h.Class('font-semibold')], ['Verify your login']),
-                  h.div([h.Class('text-sm text-muted-foreground')], ['Enter the verification code we sent to m@example.com.']),
+                  h.div(
+                    [h.Class('text-sm text-muted-foreground')],
+                    ['Enter the verification code we sent to m@example.com.'],
+                  ),
                 ],
               ),
               field<AppMessage>(
@@ -164,11 +199,26 @@ export const inputOtpView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                     [h.Class('flex items-center justify-between')],
                     [
                       fieldLabel<AppMessage>({ for: 'otp-verification' }, ['Verification code'], h),
-                      button<AppMessage>({ variant: 'outline', size: 'xs' }, h.span([], [icon(h, RefreshCw, 'size-3'), ' Resend Code']), h),
+                      button<AppMessage>(
+                        { variant: 'outline', size: 'xs' },
+                        h.span([], [icon(h, RefreshCw, 'size-3'), ' Resend Code']),
+                        h,
+                      ),
                     ],
                   ),
-                  inputOtp<AppMessage>({ length: 6, value: model.otp, onInput: (value) => Message.UpdatedOtp({ value }) }, h),
-                  fieldDescription<AppMessage>({}, ['I no longer have access to this email address.'], h),
+                  inputOtp<AppMessage>(
+                    {
+                      length: 6,
+                      value: model.otp,
+                      onInput: (value) => Message.UpdatedOtp({ value }),
+                    },
+                    h,
+                  ),
+                  fieldDescription<AppMessage>(
+                    {},
+                    ['I no longer have access to this email address.'],
+                    h,
+                  ),
                 ],
                 h,
               ),
@@ -176,7 +226,10 @@ export const inputOtpView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 [h.Class('mt-4 flex flex-col gap-2')],
                 [
                   button<AppMessage>({ type: 'submit' }, 'Verify', h),
-                  h.div([h.Class('text-sm text-muted-foreground text-center')], ['Having trouble signing in? Contact support']),
+                  h.div(
+                    [h.Class('text-sm text-muted-foreground text-center')],
+                    ['Having trouble signing in? Contact support'],
+                  ),
                 ],
               ),
             ],

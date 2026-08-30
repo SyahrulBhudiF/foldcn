@@ -23,17 +23,17 @@ export const tooltipView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
         [
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Basic']),
           h.submodel({
-    slotId: model.tooltip.id,
-    model: model.tooltip,
-    view: tooltip.view,
-    viewInputs: tooltip.styledViewInputs(
-      {
-        anchor: { placement: 'top', gap: 4, padding: 8 },
-        trigger: 'Hover',
-        content: 'Add to library',
-      },
-      h,
-    ),
+            slotId: model.tooltip.id,
+            model: model.tooltip,
+            view: tooltip.view,
+            viewInputs: tooltip.styledViewInputs(
+              {
+                anchor: { placement: 'top', gap: 4, padding: 8 },
+                trigger: 'Hover',
+                content: 'Add to library',
+              },
+              h,
+            ),
             toParentMessage: (message) => Message.GotTooltipMessage({ message }),
           }),
         ],
@@ -42,7 +42,15 @@ export const tooltipView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
         [h.Class('flex w-full flex-col gap-2')],
         [
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Sides']),
-          h.div([h.Class('flex flex-wrap gap-2 justify-center')], [h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Top']), h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Right']), h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Bottom']), h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Left'])]),
+          h.div(
+            [h.Class('flex flex-wrap gap-2 justify-center')],
+            [
+              h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Top']),
+              h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Right']),
+              h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Bottom']),
+              h.span([h.Class('rounded-lg border px-3 py-1 text-sm')], ['Left']),
+            ],
+          ),
         ],
       ),
     ],

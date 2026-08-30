@@ -120,7 +120,10 @@ export const header = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.DataAttribute('slot', 'hover-card-header'), h.Class(cn(hoverCardHeaderClass, config.className))],
+    [
+      h.DataAttribute('slot', 'hover-card-header'),
+      h.Class(cn(hoverCardHeaderClass, config.className)),
+    ],
     children,
   )
 
@@ -130,7 +133,10 @@ export const title = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.div(
-    [h.DataAttribute('slot', 'hover-card-title'), h.Class(cn(hoverCardTitleClass, config.className))],
+    [
+      h.DataAttribute('slot', 'hover-card-title'),
+      h.Class(cn(hoverCardTitleClass, config.className)),
+    ],
     children,
   )
 
@@ -140,7 +146,10 @@ export const description = <M>(
   h: HtmlBuilder<M>,
 ): Html =>
   h.p(
-    [h.DataAttribute('slot', 'hover-card-description'), h.Class(cn(hoverCardDescriptionClass, config.className))],
+    [
+      h.DataAttribute('slot', 'hover-card-description'),
+      h.Class(cn(hoverCardDescriptionClass, config.className)),
+    ],
     children,
   )
 

@@ -1,7 +1,11 @@
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Kbd } from '../../generated/registry/ui/kbd'
-import { inputGroup, inputGroupAddon, inputGroupInput } from '../../generated/registry/ui/input-group'
+import {
+  inputGroup,
+  inputGroupAddon,
+  inputGroupInput,
+} from '../../generated/registry/ui/input-group'
 import { button } from '../../generated/registry/ui/button'
 import { icon } from '../../generated/registry/lib/icons'
 import { Save, CircleDashed, ArrowLeft, ArrowRight } from 'lucide'
@@ -19,7 +23,11 @@ export const kbdView = (_model: Model, h: HtmlBuilder<Message>): Html =>
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Basic']),
           h.div(
             [h.Class('flex items-center gap-2')],
-            [Kbd<Message>({}, ['Ctrl'], h), Kbd<Message>({}, ['⌘K'], h), Kbd<Message>({}, ['Ctrl + B'], h)],
+            [
+              Kbd<Message>({}, ['Ctrl'], h),
+              Kbd<Message>({}, ['⌘K'], h),
+              Kbd<Message>({}, ['Ctrl + B'], h),
+            ],
           ),
         ],
       ),
@@ -27,21 +35,40 @@ export const kbdView = (_model: Model, h: HtmlBuilder<Message>): Html =>
         [h.Class('flex w-full flex-col gap-2')],
         [
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Modifier Keys']),
-          h.div([h.Class('flex items-center gap-2')], [Kbd<Message>({}, ['⌘'], h), Kbd<Message>({}, ['C'], h)]),
+          h.div(
+            [h.Class('flex items-center gap-2')],
+            [Kbd<Message>({}, ['⌘'], h), Kbd<Message>({}, ['C'], h)],
+          ),
         ],
       ),
       h.div(
         [h.Class('flex w-full flex-col gap-2')],
         [
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['KbdGroup']),
-          Kbd.group<Message>({}, [Kbd<Message>({}, ['Ctrl'], h), Kbd<Message>({}, ['Shift'], h), Kbd<Message>({}, ['P'], h)], h),
+          Kbd.group<Message>(
+            {},
+            [
+              Kbd<Message>({}, ['Ctrl'], h),
+              Kbd<Message>({}, ['Shift'], h),
+              Kbd<Message>({}, ['P'], h),
+            ],
+            h,
+          ),
         ],
       ),
       h.div(
         [h.Class('flex w-full flex-col gap-2')],
         [
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Arrow Keys']),
-          h.div([h.Class('flex items-center gap-2')], [Kbd<Message>({}, ['↑'], h), Kbd<Message>({}, ['↓'], h), Kbd<Message>({}, ['←'], h), Kbd<Message>({}, ['→'], h)]),
+          h.div(
+            [h.Class('flex items-center gap-2')],
+            [
+              Kbd<Message>({}, ['↑'], h),
+              Kbd<Message>({}, ['↓'], h),
+              Kbd<Message>({}, ['←'], h),
+              Kbd<Message>({}, ['→'], h),
+            ],
+          ),
         ],
       ),
       h.div(
@@ -62,7 +89,10 @@ export const kbdView = (_model: Model, h: HtmlBuilder<Message>): Html =>
       h.div(
         [h.Class('flex w-full flex-col gap-2')],
         [
-          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Icons and Text']),
+          h.div(
+            [h.Class('px-1 text-xs font-medium text-muted-foreground')],
+            ['With Icons and Text'],
+          ),
           Kbd.group<Message>(
             {},
             [
@@ -82,7 +112,10 @@ export const kbdView = (_model: Model, h: HtmlBuilder<Message>): Html =>
             [
               inputGroup(
                 {},
-                [inputGroupInput({ id: 'kbd-input-group', placeholder: '' }, h), inputGroupAddon({}, [Kbd<Message>({}, ['Space'], h)], h)],
+                [
+                  inputGroupInput({ id: 'kbd-input-group', placeholder: '' }, h),
+                  inputGroupAddon({}, [Kbd<Message>({}, ['Space'], h)], h),
+                ],
                 h,
               ),
             ],
@@ -113,7 +146,16 @@ export const kbdView = (_model: Model, h: HtmlBuilder<Message>): Html =>
         [h.Class('flex w-full flex-col gap-2')],
         [
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Grouped']),
-          Kbd.group<Message>({}, [Kbd<Message>({}, ['⌘'], h), Kbd<Message>({}, ['⇧'], h), Kbd<Message>({}, ['⌥'], h), Kbd<Message>({}, ['⌃'], h)], h),
+          Kbd.group<Message>(
+            {},
+            [
+              Kbd<Message>({}, ['⌘'], h),
+              Kbd<Message>({}, ['⇧'], h),
+              Kbd<Message>({}, ['⌥'], h),
+              Kbd<Message>({}, ['⌃'], h),
+            ],
+            h,
+          ),
         ],
       ),
     ],

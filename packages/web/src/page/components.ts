@@ -115,13 +115,12 @@ export const componentsIndexView = (model: Model, h: HtmlBuilder<Message>): Html
           h.div(
             [h.Class('mt-10 rounded-lg border border-border bg-muted/20 px-4 py-4')],
             [
-              h.h2(
-                [h.Class('text-base font-semibold text-foreground')],
-                ['Missing a component?'],
-              ),
+              h.h2([h.Class('text-base font-semibold text-foreground')], ['Missing a component?']),
               h.p(
                 [h.Class('mt-2 text-sm text-muted-foreground')],
-                ['Can\u0027t find what you need? Request a component and we\u0027ll consider adding it.'],
+                [
+                  'Can\u0027t find what you need? Request a component and we\u0027ll consider adding it.',
+                ],
               ),
               h.a(
                 [

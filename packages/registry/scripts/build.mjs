@@ -88,7 +88,9 @@ for (const style of OPT_IN_STYLES) {
     writeFileSync(outPath, `${JSON.stringify(item, null, 2)}\n`)
     styleItems.push(`styles/${style}/${file}`)
   }
-  console.log(`style catalog ${style}: ${itemFiles.length} items → styles/${style}/ (${styleSwapped} sources swapped)`)
+  console.log(
+    `style catalog ${style}: ${itemFiles.length} items → styles/${style}/ (${styleSwapped} sources swapped)`,
+  )
 }
 const allItemFiles = [...itemFiles, ...styleItems]
 
@@ -127,9 +129,7 @@ if (literalOffenders.length > 0) {
 //    the item list ahead of time.
 const identifierFor = (file) => `_${file.slice(0, -'.json'.length).replace(/[^a-zA-Z0-9]/g, '_')}`
 
-const importLines = allItemFiles.map(
-  (file) => `import ${identifierFor(file)} from './${file}'`,
-)
+const importLines = allItemFiles.map((file) => `import ${identifierFor(file)} from './${file}'`)
 const itemEntries = allItemFiles.map(
   (file) => `  ${JSON.stringify(file.slice(0, -'.json'.length))}: ${identifierFor(file)},`,
 )

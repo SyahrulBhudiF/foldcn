@@ -42,7 +42,13 @@ export const progressView = (_model: Model, h: HtmlBuilder<Message>): Html =>
           h.div(
             [h.Class('flex w-full flex-col gap-1')],
             [
-              h.div([h.Class('flex items-center justify-between')], [Progress.label<Message>({}, ['Upload progress'], h), Progress.value<Message>({}, ['56%'], h)]),
+              h.div(
+                [h.Class('flex items-center justify-between')],
+                [
+                  Progress.label<Message>({}, ['Upload progress'], h),
+                  Progress.value<Message>({}, ['56%'], h),
+                ],
+              ),
               Progress<Message>({ value: 56 }, h),
             ],
           ),
@@ -54,7 +60,13 @@ export const progressView = (_model: Model, h: HtmlBuilder<Message>): Html =>
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Controlled']),
           h.div(
             [h.Class('flex w-full flex-col gap-4')],
-            [Progress<Message>({ value: 50, className: 'w-full' }, h), h.div([h.Class('text-xs text-muted-foreground')], ['Use slider to control value (static demo at 50%)'])],
+            [
+              Progress<Message>({ value: 50, className: 'w-full' }, h),
+              h.div(
+                [h.Class('text-xs text-muted-foreground')],
+                ['Use slider to control value (static demo at 50%)'],
+              ),
+            ],
           ),
         ],
       ),
@@ -70,7 +82,11 @@ export const progressView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                 [
                   Item.media<Message>({}, [icon(h, File, 'size-5')], h),
                   Item.content<Message>({}, [Item.title<Message>({}, [file.name], h)], h),
-                  Item.content<Message>({}, [Progress<Message>({ value: file.progress, className: 'w-32' }, h)], h),
+                  Item.content<Message>(
+                    {},
+                    [Progress<Message>({ value: file.progress, className: 'w-32' }, h)],
+                    h,
+                  ),
                   h.span([h.Class('text-sm text-muted-foreground w-16 text-right')], [file.time]),
                 ],
                 h,

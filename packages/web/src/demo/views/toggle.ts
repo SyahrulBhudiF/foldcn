@@ -20,7 +20,12 @@ const Message = defineMessageUnion({
 const staticToggle = (
   h: HtmlBuilder<AppMessage>,
   label: Html | string,
-  opts?: { variant?: toggle.ToggleVariant; size?: toggle.ToggleSize; pressed?: boolean; disabled?: boolean },
+  opts?: {
+    variant?: toggle.ToggleVariant
+    size?: toggle.ToggleSize
+    pressed?: boolean
+    disabled?: boolean
+  },
 ): Html =>
   h.button(
     [
@@ -65,8 +70,12 @@ export const toggleView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           h.div(
             [h.Class('flex flex-wrap items-center gap-2')],
             [
-              staticToggle(h, h.span([], [icon(h, Italic, 'size-4'), ' Italic']), { variant: 'outline' }),
-              staticToggle(h, h.span([], [icon(h, Bold, 'size-4'), ' Bold']), { variant: 'outline' }),
+              staticToggle(h, h.span([], [icon(h, Italic, 'size-4'), ' Italic']), {
+                variant: 'outline',
+              }),
+              staticToggle(h, h.span([], [icon(h, Bold, 'size-4'), ' Bold']), {
+                variant: 'outline',
+              }),
             ],
           ),
         ],
@@ -94,15 +103,24 @@ export const toggleView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
             [
               h.div(
                 [h.Class('flex items-center gap-2')],
-                [button<AppMessage>({ size: 'sm', variant: 'outline' }, 'Button', h), staticToggle(h, 'Toggle', { variant: 'outline', size: 'sm' })],
+                [
+                  button<AppMessage>({ size: 'sm', variant: 'outline' }, 'Button', h),
+                  staticToggle(h, 'Toggle', { variant: 'outline', size: 'sm' }),
+                ],
               ),
               h.div(
                 [h.Class('flex items-center gap-2')],
-                [button<AppMessage>({ size: 'default', variant: 'outline' }, 'Button', h), staticToggle(h, 'Toggle', { variant: 'outline', size: 'default' })],
+                [
+                  button<AppMessage>({ size: 'default', variant: 'outline' }, 'Button', h),
+                  staticToggle(h, 'Toggle', { variant: 'outline', size: 'default' }),
+                ],
               ),
               h.div(
                 [h.Class('flex items-center gap-2')],
-                [button<AppMessage>({ size: 'lg', variant: 'outline' }, 'Button', h), staticToggle(h, 'Toggle', { variant: 'outline', size: 'lg' })],
+                [
+                  button<AppMessage>({ size: 'lg', variant: 'outline' }, 'Button', h),
+                  staticToggle(h, 'Toggle', { variant: 'outline', size: 'lg' }),
+                ],
               ),
             ],
           ),
@@ -114,7 +132,10 @@ export const toggleView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Disabled']),
           h.div(
             [h.Class('flex flex-wrap items-center gap-2')],
-            [staticToggle(h, 'Disabled', { disabled: true }), staticToggle(h, 'Disabled', { variant: 'outline', disabled: true })],
+            [
+              staticToggle(h, 'Disabled', { disabled: true }),
+              staticToggle(h, 'Disabled', { variant: 'outline', disabled: true }),
+            ],
           ),
         ],
       ),
@@ -125,8 +146,22 @@ export const toggleView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           h.div(
             [h.Class('flex flex-wrap items-center gap-2')],
             [
-              staticToggle(h, icon(h, Bookmark, 'size-4 group-data-[state=on]/toggle:fill-accent-foreground'), { pressed: true }),
-              staticToggle(h, h.span([], [icon(h, Bookmark, 'size-4 group-data-[state=on]/toggle:fill-accent-foreground'), ' Bookmark']), { variant: 'outline' }),
+              staticToggle(
+                h,
+                icon(h, Bookmark, 'size-4 group-data-[state=on]/toggle:fill-accent-foreground'),
+                { pressed: true },
+              ),
+              staticToggle(
+                h,
+                h.span(
+                  [],
+                  [
+                    icon(h, Bookmark, 'size-4 group-data-[state=on]/toggle:fill-accent-foreground'),
+                    ' Bookmark',
+                  ],
+                ),
+                { variant: 'outline' },
+              ),
             ],
           ),
         ],
@@ -149,7 +184,11 @@ export const toggleView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                   label: h.span(
                     [],
                     [
-                      icon(h, Bookmark, 'size-4 shrink-0 group-aria-pressed/toggle:fill-foreground'),
+                      icon(
+                        h,
+                        Bookmark,
+                        'size-4 shrink-0 group-aria-pressed/toggle:fill-foreground',
+                      ),
                       ' Bookmark',
                     ],
                   ),

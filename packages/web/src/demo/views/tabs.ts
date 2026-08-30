@@ -24,22 +24,26 @@ const Message = defineMessageUnion({
 const TAB_DETAILS: Record<DemoTab, { title: string; description: string; content: string }> = {
   Overview: {
     title: 'Overview',
-    description: 'View your key metrics and recent project activity. Track progress across all your active projects.',
+    description:
+      'View your key metrics and recent project activity. Track progress across all your active projects.',
     content: 'You have 12 active projects and 3 pending tasks.',
   },
   Analytics: {
     title: 'Analytics',
-    description: 'Track performance and user engagement metrics. Monitor trends and identify growth opportunities.',
+    description:
+      'Track performance and user engagement metrics. Monitor trends and identify growth opportunities.',
     content: 'Page views are up 25% compared to last month.',
   },
   Reports: {
     title: 'Reports',
-    description: 'Generate and download your detailed reports. Export data in multiple formats for analysis.',
+    description:
+      'Generate and download your detailed reports. Export data in multiple formats for analysis.',
     content: 'You have 5 reports ready and available to export.',
   },
   Settings: {
     title: 'Settings',
-    description: 'Manage your account preferences and options. Customize your experience to fit your needs.',
+    description:
+      'Manage your account preferences and options. Customize your experience to fit your needs.',
     content: 'Configure notifications, security, and themes.',
   },
 }
@@ -67,7 +71,9 @@ const staticTabs = (
             [
               h.Class(tabsTriggerClass),
               h.DataAttribute('slot', 'tabs-trigger'),
-              ...(idx === activeIndex ? [h.DataAttribute('data-selected', ''), h.Attribute('data-selected', '')] : []),
+              ...(idx === activeIndex
+                ? [h.DataAttribute('data-selected', ''), h.Attribute('data-selected', '')]
+                : []),
               ...(disabledIndex === idx ? [h.Disabled(true), h.AriaDisabled(true)] : []),
             ],
             [label],
@@ -81,8 +87,18 @@ const staticTabsWithIcons = (h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class(tabsListClass('default')), h.DataAttribute('slot', 'tabs-list')],
     [
-      h.button([h.Class(tabsTriggerClass), h.DataAttribute('slot', 'tabs-trigger'), h.Attribute('data-selected', '')], [icon(h, AppWindow, 'size-4'), ' Preview']),
-      h.button([h.Class(tabsTriggerClass), h.DataAttribute('slot', 'tabs-trigger')], [icon(h, Code, 'size-4'), ' Code']),
+      h.button(
+        [
+          h.Class(tabsTriggerClass),
+          h.DataAttribute('slot', 'tabs-trigger'),
+          h.Attribute('data-selected', ''),
+        ],
+        [icon(h, AppWindow, 'size-4'), ' Preview'],
+      ),
+      h.button(
+        [h.Class(tabsTriggerClass), h.DataAttribute('slot', 'tabs-trigger')],
+        [icon(h, Code, 'size-4'), ' Code'],
+      ),
     ],
   )
 
@@ -90,7 +106,10 @@ const staticIconOnly = (h: HtmlBuilder<AppMessage>): Html =>
   h.div(
     [h.Class(tabsListClass('default')), h.DataAttribute('slot', 'tabs-list')],
     [
-      h.button([h.Class(tabsTriggerClass), h.Attribute('data-selected', '')], [icon(h, Home, 'size-4')]),
+      h.button(
+        [h.Class(tabsTriggerClass), h.Attribute('data-selected', '')],
+        [icon(h, Home, 'size-4')],
+      ),
       h.button([h.Class(tabsTriggerClass)], [icon(h, Search, 'size-4')]),
       h.button([h.Class(tabsTriggerClass)], [icon(h, Settings, 'size-4')]),
     ],
@@ -153,8 +172,19 @@ export const tabsView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                   return Card<AppMessage>(
                     {},
                     [
-                      Card.header<AppMessage>({}, [Card.title<AppMessage>({}, [details.title], h2), Card.description<AppMessage>({}, [details.description], h2)], h2),
-                      Card.content<AppMessage>({}, [h2.p([h2.Class('text-sm text-muted-foreground')], [details.content])], h2),
+                      Card.header<AppMessage>(
+                        {},
+                        [
+                          Card.title<AppMessage>({}, [details.title], h2),
+                          Card.description<AppMessage>({}, [details.description], h2),
+                        ],
+                        h2,
+                      ),
+                      Card.content<AppMessage>(
+                        {},
+                        [h2.p([h2.Class('text-sm text-muted-foreground')], [details.content])],
+                        h2,
+                      ),
                     ],
                     h2,
                   )
@@ -174,9 +204,15 @@ export const tabsView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
             [h.Class('flex gap-4')],
             [
               h.div(
-                [h.Class(`${tabsListClass('default')} flex-col h-fit`), h.DataAttribute('slot', 'tabs-list')],
                 [
-                  h.button([h.Class(tabsTriggerClass), h.Attribute('data-selected', '')], ['Account']),
+                  h.Class(`${tabsListClass('default')} flex-col h-fit`),
+                  h.DataAttribute('slot', 'tabs-list'),
+                ],
+                [
+                  h.button(
+                    [h.Class(tabsTriggerClass), h.Attribute('data-selected', '')],
+                    ['Account'],
+                  ),
                   h.button([h.Class(tabsTriggerClass)], ['Password']),
                   h.button([h.Class(tabsTriggerClass)], ['Notifications']),
                 ],
@@ -192,7 +228,10 @@ export const tabsView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
       h.div(
         [h.Class('flex w-full flex-col gap-2')],
         [
-          h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['With Input and Button']),
+          h.div(
+            [h.Class('px-1 text-xs font-medium text-muted-foreground')],
+            ['With Input and Button'],
+          ),
           h.div(
             [h.Class('flex items-center gap-2')],
             [
@@ -200,8 +239,20 @@ export const tabsView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
               h.div(
                 [h.Class('ml-auto flex items-center gap-2')],
                 [
-                  h.input([h.Class('flex h-8 w-32 rounded-md border border-input bg-transparent px-2 text-sm'), h.Placeholder('Search...')]),
-                  h.button([h.Class('inline-flex h-8 items-center justify-center rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground')], ['Action']),
+                  h.input([
+                    h.Class(
+                      'flex h-8 w-32 rounded-md border border-input bg-transparent px-2 text-sm',
+                    ),
+                    h.Placeholder('Search...'),
+                  ]),
+                  h.button(
+                    [
+                      h.Class(
+                        'inline-flex h-8 items-center justify-center rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground',
+                      ),
+                    ],
+                    ['Action'],
+                  ),
                 ],
               ),
             ],

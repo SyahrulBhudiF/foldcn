@@ -177,7 +177,10 @@ export const styledViewInputs = <M, Item, Value extends string = string>(
           ),
           context.isSelected
             ? h.span(
-                [h.DataAttribute('slot', 'select-item-indicator'), h.Class(selectItemIndicatorClass)],
+                [
+                  h.DataAttribute('slot', 'select-item-indicator'),
+                  h.Class(selectItemIndicatorClass),
+                ],
                 [icon(h, Check, selectItemIndicatorIconClass)],
               )
             : h.empty,

@@ -115,7 +115,11 @@ export const update = (model: Model, message: Message): UpdateReturn => {
   switch (message._tag) {
     case 'ToggledItem': {
       const value = nextValue(model.value, message.value, model.type)
-      return [evo(model, { value: () => [...value] }), [], Option.some(OutMessage.ChangedValue({ value }))]
+      return [
+        evo(model, { value: () => [...value] }),
+        [],
+        Option.some(OutMessage.ChangedValue({ value })),
+      ]
     }
   }
 }
@@ -177,11 +181,7 @@ export const view = defineView<Model, Message, ViewInputs>((model, viewInputs, h
             ),
           ),
         ],
-        [
-          item.icon === undefined
-            ? item.label
-            : h.span([], [icon(h, item.icon), item.label]),
-        ],
+        [item.icon === undefined ? item.label : h.span([], [icon(h, item.icon), item.label])],
       ),
     ),
   )

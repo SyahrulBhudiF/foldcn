@@ -38,34 +38,34 @@ export const alertDialogView = (model: Model, h: HtmlBuilder<AppMessage>): Html 
                 model: model.dialog,
                 view: AlertDialog.view,
                 viewInputs: AlertDialog.styledViewInputs(
-          {
-            content: ({ closeButton, title, description }, h) => [
-              AlertDialog.header(
-                {},
-                [
-                  AlertDialog.title({ attributes: title }, ['Are you absolutely sure?'], h),
-                  AlertDialog.description(
-                    { attributes: description },
-                    [
-                      'This action cannot be undone. This will permanently delete your account from our servers.',
+                  {
+                    content: ({ closeButton, title, description }, h) => [
+                      AlertDialog.header(
+                        {},
+                        [
+                          AlertDialog.title({ attributes: title }, ['Are you absolutely sure?'], h),
+                          AlertDialog.description(
+                            { attributes: description },
+                            [
+                              'This action cannot be undone. This will permanently delete your account from our servers.',
+                            ],
+                            h,
+                          ),
+                        ],
+                        h,
+                      ),
+                      AlertDialog.footer(
+                        {},
+                        [
+                          AlertDialog.cancelButton({ attributes: closeButton }, ['Cancel'], h),
+                          AlertDialog.actionButton({ attributes: closeButton }, ['Continue'], h),
+                        ],
+                        h,
+                      ),
                     ],
-                    h,
-                  ),
-                ],
-                h,
-              ),
-              AlertDialog.footer(
-                {},
-                [
-                  AlertDialog.cancelButton({ attributes: closeButton }, ['Cancel'], h),
-                  AlertDialog.actionButton({ attributes: closeButton }, ['Continue'], h),
-                ],
-                h,
-              ),
-            ],
-          },
-          h,
-        ),
+                  },
+                  h,
+                ),
                 toParentMessage: (message) => Message.GotDialogMessage({ message }),
               }),
             ],
@@ -76,7 +76,10 @@ export const alertDialogView = (model: Model, h: HtmlBuilder<AppMessage>): Html 
         [h.Class('flex w-full flex-col gap-2')],
         [
           h.div([h.Class('px-1 text-xs font-medium text-muted-foreground')], ['Destructive']),
-          h.div([h.Class('mx-auto w-full max-w-sm rounded-lg border p-4 text-sm')], [h.p([], ['Destructive alert dialog variant with red action button.'])]),
+          h.div(
+            [h.Class('mx-auto w-full max-w-sm rounded-lg border p-4 text-sm')],
+            [h.p([], ['Destructive alert dialog variant with red action button.'])],
+          ),
         ],
       ),
     ],

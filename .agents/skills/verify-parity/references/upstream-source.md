@@ -23,11 +23,13 @@ SHADCN_UI_DIR=/path/to/ui node .agents/skills/verify-parity/scripts/verify-parit
 ```
 
 Record the commit:
+
 ```bash
 git -C $SHADCN_UI_DIR rev-parse --short=7 HEAD
 ```
 
 Compare vendored CSS drift:
+
 ```bash
 node packages/registry/scripts/sync-styles.mjs --check
 ```

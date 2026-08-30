@@ -94,7 +94,11 @@ export const update = (model: Model, message: Message): UpdateReturn => {
   switch (message._tag) {
     case 'Toggled': {
       const isOpen = !model.isOpen
-      return [evo(model, { isOpen: () => isOpen }), [], Option.some(OutMessage.ChangedOpen({ isOpen }))]
+      return [
+        evo(model, { isOpen: () => isOpen }),
+        [],
+        Option.some(OutMessage.ChangedOpen({ isOpen })),
+      ]
     }
   }
 }
@@ -123,80 +127,80 @@ export const view = defineView<Model, Message, ViewInputs>((model, viewInputs, h
       isDisabled: viewInputs.isDisabled,
       ariaLabel: viewInputs.ariaLabel,
       ariaLabelledBy: viewInputs.ariaLabelledBy,
-    toView: ({ button, panel, animatePanel }) =>
-      h.div(
-        [
-          h.Class(cn(collapsibleWrapperClass, viewInputs.wrapperClass)),
-          h.DataAttribute('slot', 'collapsible'),
-        ],
-        [
-          h.button(
-            [
-              ...button,
-              h.Class(cn(collapsibleTriggerClass, viewInputs.triggerClass)),
-              h.DataAttribute('slot', 'collapsible-trigger'),
-            ],
-            [
-              h.div(
-                [h.Class('flex w-full items-center justify-between gap-2')],
-                [
-                  h.span([], [viewInputs.title]),
-                  h.span(
-                    [h.Class('flex shrink-0 items-center gap-1')],
-                    [
-                      /* ChevronDown shown when collapsed; hidden while the trigger is expanded. */
-                      h.span(
-                        [
-                          h.Class(
-                            cn(
-                              collapsibleChevronClass,
-                              'group-aria-expanded/collapsible-trigger:hidden',
-                            ),
-                          ),
-                        ],
-                        [icon(h, ChevronDown)],
-                      ),
-                      /* ChevronUp shown when expanded; hidden while the trigger is collapsed. */
-                      h.span(
-                        [
-                          h.Class(
-                            cn(
-                              collapsibleChevronClass,
-                              'hidden group-aria-expanded/collapsible-trigger:inline',
-                            ),
-                          ),
-                        ],
-                        [icon(h, ChevronUp)],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-          model.isAnimated
-            ? animatePanel(
+      toView: ({ button, panel, animatePanel }) =>
+        h.div(
+          [
+            h.Class(cn(collapsibleWrapperClass, viewInputs.wrapperClass)),
+            h.DataAttribute('slot', 'collapsible'),
+          ],
+          [
+            h.button(
+              [
+                ...button,
+                h.Class(cn(collapsibleTriggerClass, viewInputs.triggerClass)),
+                h.DataAttribute('slot', 'collapsible-trigger'),
+              ],
+              [
                 h.div(
+                  [h.Class('flex w-full items-center justify-between gap-2')],
                   [
-                    ...panel,
-                    h.Class(cn(collapsibleAnimatedContentClass, viewInputs.contentClass)),
-                    h.DataAttribute('slot', 'collapsible-content'),
+                    h.span([], [viewInputs.title]),
+                    h.span(
+                      [h.Class('flex shrink-0 items-center gap-1')],
+                      [
+                        /* ChevronDown shown when collapsed; hidden while the trigger is expanded. */
+                        h.span(
+                          [
+                            h.Class(
+                              cn(
+                                collapsibleChevronClass,
+                                'group-aria-expanded/collapsible-trigger:hidden',
+                              ),
+                            ),
+                          ],
+                          [icon(h, ChevronDown)],
+                        ),
+                        /* ChevronUp shown when expanded; hidden while the trigger is collapsed. */
+                        h.span(
+                          [
+                            h.Class(
+                              cn(
+                                collapsibleChevronClass,
+                                'hidden group-aria-expanded/collapsible-trigger:inline',
+                              ),
+                            ),
+                          ],
+                          [icon(h, ChevronUp)],
+                        ),
+                      ],
+                    ),
                   ],
-                  [viewInputs.content],
                 ),
-              )
-            : model.isOpen
-              ? h.div(
-                  [
-                    ...panel,
-                    h.Class(cn(collapsibleContentClass, viewInputs.contentClass)),
-                    h.DataAttribute('slot', 'collapsible-content'),
-                  ],
-                  [viewInputs.content],
+              ],
+            ),
+            model.isAnimated
+              ? animatePanel(
+                  h.div(
+                    [
+                      ...panel,
+                      h.Class(cn(collapsibleAnimatedContentClass, viewInputs.contentClass)),
+                      h.DataAttribute('slot', 'collapsible-content'),
+                    ],
+                    [viewInputs.content],
+                  ),
                 )
-              : h.empty,
-        ],
-      ),
+              : model.isOpen
+                ? h.div(
+                    [
+                      ...panel,
+                      h.Class(cn(collapsibleContentClass, viewInputs.contentClass)),
+                      h.DataAttribute('slot', 'collapsible-content'),
+                    ],
+                    [viewInputs.content],
+                  )
+                : h.empty,
+          ],
+        ),
     },
     h,
   ),

@@ -6,9 +6,7 @@
       "type": "registry:ui",
       "title": "Button",
       "description": "Styled button with variants and sizes, built on the @foldkit/ui Button helper.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "button.ts",
@@ -21,9 +19,7 @@
       "type": "registry:ui",
       "title": "Input",
       "description": "Styled text input with label and description, built on the @foldkit/ui Input helper.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "input.ts",
@@ -36,9 +32,7 @@
       "type": "registry:ui",
       "title": "Textarea",
       "description": "Styled multi-line textarea with label and description, built on the @foldkit/ui Textarea helper.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "textarea.ts",
@@ -51,10 +45,7 @@
       "type": "registry:ui",
       "title": "Select",
       "description": "Styled custom dropdown select (single/multi) backed by the @foldkit/ui Listbox submodel \u2014 a real submodel you embed via h.submodel. For a plain native <select> helper, use native-select.",
-      "registryDependencies": [
-        "@foldcn/utils",
-        "@foldcn/icons"
-      ],
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [
         {
           "path": "select.ts",
@@ -67,10 +58,7 @@
       "type": "registry:ui",
       "title": "Native Select",
       "description": "Styled native <select> with label, chevron and description, built on the @foldkit/ui Select helper. Stateless; for a searchable dropdown submodel use select.",
-      "registryDependencies": [
-        "@foldcn/utils",
-        "@foldcn/icons"
-      ],
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [
         {
           "path": "native-select.ts",
@@ -83,9 +71,7 @@
       "type": "registry:ui",
       "title": "Card",
       "description": "Composable card primitives \u2014 Card, CardHeader, CardTitle, CardDescription, CardAction, CardContent, CardFooter. A pure layout primitive.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "cssVars": {
         "theme": {
           "font-heading": "var(--font-heading)"
@@ -103,10 +89,7 @@
       "type": "registry:ui",
       "title": "Checkbox",
       "description": "Styled checkbox with label, indeterminate state and description, built on the @foldkit/ui Checkbox helper.",
-      "registryDependencies": [
-        "@foldcn/utils",
-        "@foldcn/icons"
-      ],
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [
         {
           "path": "checkbox.ts",
@@ -119,9 +102,7 @@
       "type": "registry:ui",
       "title": "Switch",
       "description": "Styled switch toggle with label and description, built on the @foldkit/ui Switch helper.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "switch.ts",
@@ -134,9 +115,7 @@
       "type": "registry:ui",
       "title": "Fieldset",
       "description": "Styled fieldset with legend and description, built on the @foldkit/ui Fieldset helper.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "fieldset.ts",
@@ -149,9 +128,7 @@
       "type": "registry:ui",
       "title": "Nav",
       "description": "Styled navigation landmark with current-page marking, built on the @foldkit/ui Nav helper.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "nav.ts",
@@ -164,9 +141,7 @@
       "type": "registry:ui",
       "title": "Dialog",
       "description": "Composable modal dialog \u2014 Dialog.header, Dialog.title, Dialog.description, Dialog.footer, Dialog.closeButton. Built on the @foldkit/ui Dialog submodel.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "cssVars": {
         "theme": {
           "font-heading": "var(--font-heading)"
@@ -184,9 +159,7 @@
       "type": "registry:ui",
       "title": "Popover",
       "description": "Composable floating panel \u2014 Popover.header, Popover.title, Popover.description. Built on the @foldkit/ui Popover submodel.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "popover.ts",
@@ -199,9 +172,7 @@
       "type": "registry:ui",
       "title": "Tooltip",
       "description": "Styled tooltip with trigger and hover/focus reveal, built on the @foldkit/ui Tooltip submodel.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "tooltip.ts",
@@ -214,9 +185,7 @@
       "type": "registry:ui",
       "title": "Menu",
       "description": "Styled dropdown menu with keyboard navigation and typeahead, built on the @foldkit/ui Menu submodel.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "menu.ts",
@@ -229,9 +198,7 @@
       "type": "registry:ui",
       "title": "Listbox",
       "description": "Styled custom select with single and multi selection, built on the @foldkit/ui Listbox submodel.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "listbox.ts",
@@ -244,10 +211,7 @@
       "type": "registry:ui",
       "title": "Combobox",
       "description": "Styled autocomplete input with filtering, built on the @foldkit/ui Combobox submodel.",
-      "registryDependencies": [
-        "@foldcn/utils",
-        "@foldcn/icons"
-      ],
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [
         {
           "path": "combobox.ts",
@@ -260,9 +224,7 @@
       "type": "registry:ui",
       "title": "Tabs",
       "description": "Composable tabbed interface \u2014 Tabs.list, Tabs.trigger, Tabs.content. Built on the @foldkit/ui Tabs submodel.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "tabs.ts",
@@ -275,9 +237,7 @@
       "type": "registry:ui",
       "title": "Radio Group",
       "description": "Styled radio options with roving tabindex, built on the @foldkit/ui RadioGroup submodel.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "radio-group.ts",
@@ -290,9 +250,7 @@
       "type": "registry:ui",
       "title": "Slider",
       "description": "Styled numeric range slider, built on the @foldkit/ui Slider submodel.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "slider.ts",
@@ -305,10 +263,7 @@
       "type": "registry:ui",
       "title": "Calendar",
       "description": "Styled inline calendar grid with locale support, built on the @foldkit/ui Calendar submodel.",
-      "registryDependencies": [
-        "@foldcn/utils",
-        "@foldcn/icons"
-      ],
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [
         {
           "path": "calendar.ts",
@@ -321,11 +276,7 @@
       "type": "registry:ui",
       "title": "Date Picker",
       "description": "Styled date picker combining trigger, popover and calendar, built on the @foldkit/ui DatePicker submodel.",
-      "registryDependencies": [
-        "@foldcn/utils",
-        "@foldcn/icons",
-        "@foldcn/calendar"
-      ],
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons", "@foldcn/calendar"],
       "files": [
         {
           "path": "date-picker.ts",
@@ -338,10 +289,7 @@
       "type": "registry:ui",
       "title": "Toast",
       "description": "Stacked toast notifications \u2014 measured-height choreography matching Base UI: uniform collapsed stack with peek layers, hover-to-expand spread, limited visible entries, enter/exit motion, auto-dismiss and hover-pause \u2014 built on the @foldkit/ui Toast submodel (embed via h.submodel). \u26a0 No swipe-to-dismiss.",
-      "registryDependencies": [
-        "@foldcn/utils",
-        "@foldcn/icons"
-      ],
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [
         {
           "path": "toast.ts",
@@ -354,9 +302,7 @@
       "type": "registry:ui",
       "title": "Animation",
       "description": "Styled enter/leave animation coordinator, built on the @foldkit/ui Animation submodel.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "animation.ts",
@@ -369,9 +315,7 @@
       "type": "registry:ui",
       "title": "Drag and Drop",
       "description": "Styled sortable lists and cross-container movement, built on the @foldkit/ui DragAndDrop submodel.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "drag-and-drop.ts",
@@ -384,9 +328,7 @@
       "type": "registry:ui",
       "title": "File Drop",
       "description": "Styled file input with drag-and-drop support, built on the @foldkit/ui FileDrop submodel.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "file-drop.ts",
@@ -399,9 +341,7 @@
       "type": "registry:ui",
       "title": "Virtual List",
       "description": "Styled virtualized list for large datasets, built on the @foldkit/ui VirtualList submodel.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "virtual-list.ts",
@@ -414,9 +354,7 @@
       "type": "registry:ui",
       "title": "Badge",
       "description": "Styled inline badge with variant support, built as a themed span.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "badge.ts",
@@ -429,9 +367,7 @@
       "type": "registry:ui",
       "title": "Skeleton",
       "description": "Styled pulsing placeholder block.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "skeleton.ts",
@@ -444,9 +380,7 @@
       "type": "registry:ui",
       "title": "Separator",
       "description": "Styled divider with horizontal/vertical orientation.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "separator.ts",
@@ -459,9 +393,7 @@
       "type": "registry:ui",
       "title": "Kbd",
       "description": "Styled keyboard key(s) with grouping support.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "kbd.ts",
@@ -474,9 +406,7 @@
       "type": "registry:ui",
       "title": "Avatar",
       "description": "Styled avatar with image, fallback, badge and grouping. Note: no automatic image error fallback \u2014 drive the swap from your own state.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "avatar.ts",
@@ -489,9 +419,7 @@
       "type": "registry:ui",
       "title": "Aspect Ratio",
       "description": "Styled aspect-ratio box wrapper.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "aspect-ratio.ts",
@@ -504,9 +432,7 @@
       "type": "registry:ui",
       "title": "Alert",
       "description": "Styled alert with title and description sub-builders.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "alert.ts",
@@ -519,9 +445,7 @@
       "type": "registry:ui",
       "title": "Empty",
       "description": "Styled empty state with header, media, title, description and content.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "cssVars": {
         "theme": {
           "font-heading": "var(--font-heading)"
@@ -539,10 +463,7 @@
       "type": "registry:ui",
       "title": "Spinner",
       "description": "Styled loading spinner (Loader2 icon in a status wrapper).",
-      "registryDependencies": [
-        "@foldcn/utils",
-        "@foldcn/icons"
-      ],
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [
         {
           "path": "spinner.ts",
@@ -555,9 +476,7 @@
       "type": "registry:ui",
       "title": "Marker",
       "description": "Styled marker with icon and content sub-builders and variant support.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "marker.ts",
@@ -570,9 +489,7 @@
       "type": "registry:ui",
       "title": "Item",
       "description": "Styled flexible list row with media, title, description, actions, header and footer.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "item.ts",
@@ -585,9 +502,7 @@
       "type": "registry:ui",
       "title": "Direction",
       "description": "Text-direction wrapper (ltr/rtl) carrying a data-slot surface.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "direction.ts",
@@ -600,9 +515,7 @@
       "type": "registry:ui",
       "title": "Label",
       "description": "Styled form label with optional for association.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "label.ts",
@@ -615,9 +528,7 @@
       "type": "registry:ui",
       "title": "Progress",
       "description": "Styled progress bar with value-driven indicator. Note: no animated indeterminate mode (undefined renders an empty track).",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "progress.ts",
@@ -630,9 +541,7 @@
       "type": "registry:ui",
       "title": "Alert Dialog",
       "description": "Destructive-confirm modal dialog, built on the @foldkit/ui Dialog submodel.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "cssVars": {
         "theme": {
           "font-heading": "var(--font-heading)"
@@ -650,9 +559,7 @@
       "type": "registry:ui",
       "title": "Sheet",
       "description": "Edge-anchored modal panel (top/bottom/left/right), built on the @foldkit/ui Dialog submodel.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "cssVars": {
         "theme": {
           "font-heading": "var(--font-heading)"
@@ -670,9 +577,7 @@
       "type": "registry:ui",
       "title": "Drawer",
       "description": "Bottom-docked modal with grab handle, built on the @foldkit/ui Dialog submodel.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "cssVars": {
         "theme": {
           "font-heading": "var(--font-heading)"
@@ -690,9 +595,7 @@
       "type": "registry:ui",
       "title": "Hover Card",
       "description": "Card-styled floating panel with hover-intent open/close delays (200ms open, 300ms grace). Built on the @foldkit/ui Popover submodel with a hand-rolled hover state machine — not a shared foldkit/ui hover primitive.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "hover-card.ts",
@@ -705,10 +608,7 @@
       "type": "registry:ui",
       "title": "Accordion",
       "description": "Vertical stack of collapsible sections with single or multi-open semantics, built on the @foldkit/ui Disclosure helper.",
-      "registryDependencies": [
-        "@foldcn/utils",
-        "@foldcn/icons"
-      ],
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [
         {
           "path": "accordion.ts",
@@ -721,10 +621,7 @@
       "type": "registry:ui",
       "title": "Collapsible",
       "description": "Stateful single-section collapsible panel, built on the @foldkit/ui Disclosure helper.",
-      "registryDependencies": [
-        "@foldcn/utils",
-        "@foldcn/icons"
-      ],
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [
         {
           "path": "collapsible.ts",
@@ -737,9 +634,7 @@
       "type": "registry:ui",
       "title": "Context Menu",
       "description": "Menu styled for right-click use, built on the @foldkit/ui Menu submodel. \u26a0 Opens on activation at a fixed anchor, not at the pointer \u2014 foldkit has no pointer-position anchor yet.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "context-menu.ts",
@@ -752,9 +647,7 @@
       "type": "registry:ui",
       "title": "Menubar",
       "description": "Horizontal bar of menus built on the @foldkit/ui Menu submodel. \u26a0 Each trigger is an independent menu \u2014 no cross-menu arrow-key traversal yet.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "menubar.ts",
@@ -767,9 +660,7 @@
       "type": "registry:ui",
       "title": "Button Group",
       "description": "Connected run of buttons forming a single segmented control, built on the @foldkit/ui Button helper.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "button-group.ts",
@@ -782,9 +673,7 @@
       "type": "registry:ui",
       "title": "Input Group",
       "description": "Shared bordered box with text/icon add-ons around a connected input, built on the @foldkit/ui Input helper.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "input-group.ts",
@@ -797,9 +686,7 @@
       "type": "registry:ui",
       "title": "Toggle",
       "description": "Stateful two-state toggle button marked with aria-pressed and data-state.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "toggle.ts",
@@ -812,10 +699,7 @@
       "type": "registry:ui",
       "title": "Toggle Group",
       "description": "Stateful group of toggles with shared single or multiple selection.",
-      "registryDependencies": [
-        "@foldcn/utils",
-        "@foldcn/icons"
-      ],
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [
         {
           "path": "toggle-group.ts",
@@ -828,9 +712,7 @@
       "type": "registry:ui",
       "title": "Input OTP",
       "description": "Row of single-character slots backed by one combined value.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "input-otp.ts",
@@ -843,10 +725,7 @@
       "type": "registry:ui",
       "title": "Breadcrumb",
       "description": "Presentational breadcrumb landmark with list, link, page and separator builders.",
-      "registryDependencies": [
-        "@foldcn/utils",
-        "@foldcn/icons"
-      ],
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [
         {
           "path": "breadcrumb.ts",
@@ -859,9 +738,7 @@
       "type": "registry:ui",
       "title": "Navigation Menu",
       "description": "Presentational top-level navigation bar with trigger and content builders. \u26a0 Show/hide behavior is consumer-owned.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "navigation-menu.ts",
@@ -874,10 +751,7 @@
       "type": "registry:ui",
       "title": "Sidebar",
       "description": "Collapsible app shell \u2014 SidebarProvider.view submodel (offcanvas/icon/none \u00d7 sidebar/floating/inset, mobile sheet, \u2318B shortcut, rail) with menu/badge/skeleton/sub-menu/input primitives.",
-      "registryDependencies": [
-        "@foldcn/utils",
-        "@foldcn/icons"
-      ],
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [
         {
           "path": "sidebar.ts",
@@ -890,9 +764,7 @@
       "type": "registry:ui",
       "title": "Table",
       "description": "Presentational table with header, body, footer, row, head, cell and caption builders.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "table.ts",
@@ -905,10 +777,7 @@
       "type": "registry:ui",
       "title": "Command",
       "description": "Presentational command-palette surface with input, list, group and item builders. \u26a0 No cmdk behavior: filtering and arrow-key/Enter selection are consumer-owned \u2014 consider combobox instead.",
-      "registryDependencies": [
-        "@foldcn/utils",
-        "@foldcn/icons"
-      ],
+      "registryDependencies": ["@foldcn/utils", "@foldcn/icons"],
       "files": [
         {
           "path": "command.ts",
@@ -921,9 +790,7 @@
       "type": "registry:ui",
       "title": "Resizable",
       "description": "Stateful two-pane split with a draggable, keyboard-accessible handle.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "resizable.ts",
@@ -936,9 +803,7 @@
       "type": "registry:ui",
       "title": "Attachment",
       "description": "Styled attachment with media, title, description, actions, trigger and group. A pure layout primitive.",
-      "registryDependencies": [
-        "@foldcn/utils"
-      ],
+      "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "attachment.ts",
