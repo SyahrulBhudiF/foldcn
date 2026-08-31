@@ -64,8 +64,15 @@ const nodeToAttributes = <M>(
 
 const defaultIconClass = 'size-4 shrink-0'
 
-export const icon = <M>(h: HtmlBuilder<M>, node: IconNode, className = defaultIconClass): Html =>
+export type IconPosition = 'inline-start' | 'inline-end'
+
+export const icon = <M>(
+  h: HtmlBuilder<M>,
+  node: IconNode,
+  className = defaultIconClass,
+  position?: IconPosition,
+): Html =>
   h.svg(
-    svgAttributes(className, h),
+    [...svgAttributes(className, h), ...(position ? [h.DataAttribute('icon', position)] : [])],
     node.map(([tag, attrs]) => svgElement(tag, h)(nodeToAttributes(attrs, h))),
   )

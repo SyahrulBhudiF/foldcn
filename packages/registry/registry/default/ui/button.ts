@@ -66,8 +66,10 @@ export type ButtonConfig<M> = Readonly<{
   attributes?: ReadonlyArray<Attribute<M>>
 }>
 
+export type ButtonLabel = Html | string | ReadonlyArray<Html | string>
+
 /** Styled button built on the @foldkit/ui Button helper. */
-export const button = <M>(config: ButtonConfig<M>, label: Html | string, h: HtmlBuilder<M>): Html =>
+export const button = <M>(config: ButtonConfig<M>, label: ButtonLabel, h: HtmlBuilder<M>): Html =>
   FoldkitButton.view<M>(
     {
       onClick: config.onClick,
@@ -89,7 +91,7 @@ export const button = <M>(config: ButtonConfig<M>, label: Html | string, h: Html
             h.DataAttribute('slot', 'button'),
             ...(config.attributes ?? []),
           ],
-          [label],
+          Array.isArray(label) ? label : [label],
         ),
     },
     h,
