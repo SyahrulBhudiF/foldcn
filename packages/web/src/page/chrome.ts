@@ -29,6 +29,17 @@ import {
   type ParityStatus,
 } from '../catalog/parity'
 
+const betaBadge = (h: HtmlBuilder<AppMessage>): Html =>
+  badge<AppMessage>(
+    {
+      variant: 'outline',
+      className:
+        'h-5 border-red-500/25 bg-red-500/10 px-1.5 text-[10px] font-semibold uppercase tracking-wide text-red-700 dark:text-red-300',
+    },
+    ['Beta'],
+    h,
+  )
+
 export const themeSelector = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.submodel({
     slotId: model.themeToggleGroup.id,
@@ -71,6 +82,7 @@ export const headerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 [h.span([h.Class('text-[11px] leading-none font-black')], ['F'])],
               ),
               h.span([], ['foldcn']),
+              betaBadge(h),
             ],
           ),
           h.div(
