@@ -85,6 +85,7 @@ export const inputGroupTextarea = <M>(
 
 export type InputGroupInputConfig<M> = Readonly<{
   id: string
+  ariaLabel?: string
   value?: string
   onInput?: (value: string) => M
   isDisabled?: boolean
@@ -103,6 +104,7 @@ export type InputGroupInputConfig<M> = Readonly<{
 export const inputGroupInput = <M>(config: InputGroupInputConfig<M>, h: HtmlBuilder<M>): Html =>
   h.input([
     h.Id(config.id),
+    ...(config.ariaLabel === undefined ? [] : [h.AriaLabel(config.ariaLabel)]),
     ...(config.onInput === undefined ? [] : [h.OnInput(config.onInput)]),
     ...(config.value === undefined ? [] : [h.Value(config.value)]),
     ...(config.isDisabled === true ? [h.Disabled(true), h.DataAttribute('disabled', '')] : []),
