@@ -289,35 +289,42 @@ export const footerView = (h: HtmlBuilder<AppMessage>): Html =>
       h.div(
         [
           h.Class(
-            'mx-auto flex w-full max-w-6xl flex-col items-start justify-between gap-4 px-4 py-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:px-6',
+            'mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-6',
           ),
         ],
         [
-          h.p(
-            [],
+          h.p([], ['MIT licensed.']),
+          h.div(
+            [h.Class('flex flex-wrap items-center gap-x-4 gap-y-1')],
             [
-              'foldcn — ',
-              String(componentCount),
-              ' copy-paste components for ',
+              h.a(
+                [
+                  h.Href('https://github.com/elianiva/foldcn'),
+                  h.Target('_blank'),
+                  h.Rel('noopener noreferrer'),
+                  h.Class('underline underline-offset-4 hover:text-foreground'),
+                ],
+                ['GitHub'],
+              ),
               h.a(
                 [
                   h.Href('https://foldkit.dev'),
-                  h.Class('underline underline-offset-4 hover:text-foreground'),
+                  h.Target('_blank'),
                   h.Rel('noopener noreferrer'),
+                  h.Class('underline underline-offset-4 hover:text-foreground'),
                 ],
                 ['Foldkit'],
               ),
-              '. Built on @foldkit/ui with Foldkit TEA and Tailwind CSS.',
+              h.a(
+                [
+                  h.Href('https://ui.shadcn.com'),
+                  h.Target('_blank'),
+                  h.Rel('noopener noreferrer'),
+                  h.Class('underline underline-offset-4 hover:text-foreground'),
+                ],
+                ['shadcn/ui'],
+              ),
             ],
-          ),
-          h.a(
-            [
-              h.Href('https://github.com/elianiva/foldcn'),
-              h.Target('_blank'),
-              h.Rel('noopener noreferrer'),
-              h.Class('text-sm underline underline-offset-4 hover:text-foreground'),
-            ],
-            ['GitHub →'],
           ),
         ],
       ),
