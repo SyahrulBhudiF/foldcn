@@ -25,7 +25,7 @@ const staticGroup = (
     variant?: toggle.ToggleVariant
     size?: toggle.ToggleSize
     spacing?: number
-    orientation?: string
+    orientation?: 'horizontal' | 'vertical'
   },
 ): Html => {
   const variant = opts?.variant ?? 'default'
