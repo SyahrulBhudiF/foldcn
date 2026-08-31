@@ -126,7 +126,11 @@ const toGotPopoverMessage = (message: FoldkitPopover.Message): Message =>
 
 const mapPopoverCommands = (
   commands: NonNullable<ReturnType<typeof FoldkitPopover.open>['commands']> = [],
-) => Command.mapMessages(commands.filter((command) => command.name !== 'FocusButton'), toGotPopoverMessage)
+) =>
+  Command.mapMessages(
+    commands.filter((command) => command.name !== 'FocusButton'),
+    toGotPopoverMessage,
+  )
 
 const syncPopover = (
   model: Model,
