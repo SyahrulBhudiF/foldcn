@@ -213,6 +213,7 @@ export type Message = typeof MessageSchema.Type
 export const Message = MessageSchema
 
 export const init = (): [Model, []] => {
+  // SAFETY: Spread of per-slice init literals satisfies the assembled Model schema.
   // oxlint-disable-next-line typescript/consistent-type-assertions
   const model = {
     ...accordionSlice.init,

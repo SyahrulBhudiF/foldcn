@@ -16,11 +16,11 @@ export type LlmItem = Readonly<{
 }>
 
 // ---------------------------------------------------------------------------
-// LlmsDocShape — enriched sections for agents as structured composable parts
+// LlmsDocLayout — enriched sections for agents as structured composable parts
 // ---------------------------------------------------------------------------
 
-/** Structured shape of the llms.txt document — title, quote and ordered sections. */
-export type LlmsDocShape = Readonly<{
+/** Structured layout of the llms.txt document — title, quote and ordered sections. */
+export type LlmsDocLayout = Readonly<{
   title: string
   quote: string
   sections: ReadonlyArray<Readonly<{ heading: string; body: ReadonlyArray<string> }>>
@@ -152,12 +152,15 @@ const LLMS_TXT_SECTIONS: ReadonlyArray<SectionDef> = [
   { id: 'source', heading: 'Source', compose: composeSource },
 ]
 
-const TYPE_TO_CATEGORY: Readonly<Record<string, string>> = {
+const TYPE_TO_CATEGORY = {
   'registry:style': 'Base',
   'registry:lib': 'Lib',
   'registry:ui': 'Components',
   'registry:block': 'Blocks',
-}
+} satisfies Readonly<Record<string, string>>
+
+const isRegistryType = (type: string): type is keyof typeof TYPE_TO_CATEGORY =>
+  type in TYPE_TO_CATEGORY
 
 const GROUP_FILES = ['style', 'lib', 'ui', 'blocks'] as const
 
@@ -184,7 +187,10 @@ export const loadRegistryItems = Effect.fn(function* () {
               name: it.name ?? '',
               title: it.title ?? it.name ?? '',
               description: it.description ?? '',
-              category: TYPE_TO_CATEGORY[it.type ?? ''] ?? 'Components',
+              category: (() => {
+                const type = it.type ?? ''
+                return isRegistryType(type) ? TYPE_TO_CATEGORY[type] : 'Components'
+              })(),
             })) ?? []
         )
       }),
@@ -194,11 +200,11 @@ export const loadRegistryItems = Effect.fn(function* () {
   return items.flat()
 })
 
-/** Build the structured shape then render it to Markdown. */
-const renderLlmsDoc = (shape: LlmsDocShape): string => {
+/** Build the structured layout then render it to Markdown. */
+const renderLlmsDoc = (doc: LlmsDocLayout): string => {
   const lines: Array<string> = []
-  lines.push(shape.title, '', shape.quote, '')
-  for (const section of shape.sections) {
+  lines.push(doc.title, '', doc.quote, '')
+  for (const section of doc.sections) {
     lines.push(`## ${section.heading}`)
     lines.push(...section.body)
     lines.push('')
@@ -221,7 +227,7 @@ export const buildLlmsTxt = (items: ReadonlyArray<LlmItem>, origin: string): str
   const fixedSections = LLMS_TXT_SECTIONS.filter((s) => s.id !== 'categories')
   void fixedSections
 
-  const shape: LlmsDocShape = {
+  const doc: LlmsDocLayout = {
     title: LLMS_TITLE,
     quote: LLMS_QUOTE,
     sections: [
@@ -245,7 +251,7 @@ export const buildLlmsTxt = (items: ReadonlyArray<LlmItem>, origin: string): str
     ],
   }
 
-  return renderLlmsDoc(shape)
+  return renderLlmsDoc(doc)
 }
 
 export const buildLlmsFull = (

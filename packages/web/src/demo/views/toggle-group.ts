@@ -21,10 +21,15 @@ const Message = defineMessageUnion({
 const staticGroup = (
   h: HtmlBuilder<AppMessage>,
   items: ReadonlyArray<{ value: string; label: string; icon?: typeof Bold }>,
-  opts?: { variant?: string; size?: string; spacing?: number; orientation?: string },
+  opts?: {
+    variant?: toggle.ToggleVariant
+    size?: toggle.ToggleSize
+    spacing?: number
+    orientation?: string
+  },
 ): Html => {
-  const variant = (opts?.variant ?? 'default') satisfies toggle.ToggleVariant
-  const size = (opts?.size ?? 'default') satisfies toggle.ToggleSize
+  const variant = opts?.variant ?? 'default'
+  const size = opts?.size ?? 'default'
   const spacing = opts?.spacing ?? 2
   const orientation = opts?.orientation ?? 'horizontal'
   return h.div(

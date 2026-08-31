@@ -19,7 +19,7 @@ import type { IconNode } from 'lucide'
 
 import type { BadgeVariant } from '@foldcn/registry/styles/default/ui/badge'
 
-import { gapsByItem } from './gaps'
+import { gapsForItem } from './gaps'
 
 /** Components that exist only in foldcn — no shadcn/ui counterpart. */
 export const foldcnOnly = new Set<string>([
@@ -38,7 +38,7 @@ export type ParityStatus = 'full' | 'diverged' | 'foldcn-only'
  *  For non-components (Blocks, Lib, Base) callers should skip the indicator. */
 export const parityStatus = (name: string): ParityStatus => {
   if (foldcnOnly.has(name)) return 'foldcn-only'
-  if (name in gapsByItem) return 'diverged'
+  if (gapsForItem(name) !== undefined) return 'diverged'
   return 'full'
 }
 
@@ -76,7 +76,7 @@ export const parityIcon: Record<ParityStatus, IconNode> = {
 export const parityTitleForItem = (name: string): string => {
   const status = parityStatus(name)
   if (status === 'diverged') {
-    const gaps = gapsByItem[name]
+    const gaps = gapsForItem(name)
     if (gaps?.[0]) return gaps[0]
     return parityTitle.diverged
   }

@@ -9,7 +9,7 @@
 // @foldkit/ui primitive lands or the component gains the behavior — delete the
 // entry in the same change that adds the behavior.
 
-export const gapsByItem: Readonly<Record<string, ReadonlyArray<string>>> = {
+export const gapsByItem = {
   command: [
     'Presentational surface only — no filtering, arrow-key navigation, or selection. Compose with listbox or wire your own behavior.',
   ],
@@ -48,4 +48,9 @@ export const gapsByItem: Readonly<Record<string, ReadonlyArray<string>>> = {
   progress: [
     'Indeterminate state renders an empty track — animated indeterminacy awaits primitive support.',
   ],
-}
+} satisfies Readonly<Record<string, ReadonlyArray<string>>>
+
+const isGapItem = (name: string): name is keyof typeof gapsByItem => name in gapsByItem
+
+export const gapsForItem = (name: string): ReadonlyArray<string> | undefined =>
+  isGapItem(name) ? gapsByItem[name] : undefined

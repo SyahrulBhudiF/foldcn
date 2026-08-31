@@ -17,7 +17,7 @@ import type { Message as AppMessage } from '../message'
 import type { Model, PackageManager } from '../model'
 
 import { categoryGroups, componentCount } from '../catalog'
-import { gapsByItem } from '../catalog/gaps'
+import { gapsForItem } from '../catalog/gaps'
 import { requestComponentUrl } from '../catalog/issues'
 import {
   parityIcon,
@@ -205,7 +205,7 @@ export const sidebarView = (model: Model, h: HtmlBuilder<AppMessage>): Html => {
                         status === null
                           ? ''
                           : status === 'diverged'
-                            ? (gapsByItem[item.name]?.[0] ?? parityTitle.diverged)
+                            ? (gapsForItem(item.name)?.[0] ?? parityTitle.diverged)
                             : parityTitleForItem(item.name)
                       return h.li(
                         [],

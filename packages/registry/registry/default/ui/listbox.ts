@@ -126,7 +126,8 @@ export const viewInputs = <Item, Value extends string = Item extends string ? It
     // The Listbox view falls back to `String(item)` when `itemToValue` is
     // omitted; the conditional `ItemToValueInput` type can't see that
     // through the generic, so hand it the identity-ish default.
-    // eslint-disable-next-line typescript/consistent-type-assertions -- string is not assignable to generic Value
+    // SAFETY: Listbox defaults itemToValue to String(item); generic Value extends string.
+    // oxlint-disable-next-line typescript/consistent-type-assertions
     itemToValue: itemToValue ?? ((item: Item): Value => String(item) as Value),
   }
 }

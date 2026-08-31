@@ -40,14 +40,20 @@ export type StyledViewInputs<Item> = Readonly<{
 export const styledViewInputs = <Item>(
   viewInputs: StyledViewInputs<Item>,
   h?: HtmlBuilder<unknown>,
-): ViewInputs<Item> => ({
-  items: viewInputs.items,
-  itemToKey: viewInputs.itemToKey,
-  itemToView: viewInputs.itemToView,
-  itemToRowHeightPx: viewInputs.itemToRowHeightPx,
-  overscan: viewInputs.overscan,
-  containerClassName: cn(virtualListContainerClass, viewInputs.containerClass),
-  ...(h !== undefined
-    ? { containerAttributes: childAttributes([h.DataAttribute('slot', 'virtual-list')]) }
-    : {}),
-})
+): ViewInputs<Item> => {
+  const base = {
+    items: viewInputs.items,
+    itemToKey: viewInputs.itemToKey,
+    itemToView: viewInputs.itemToView,
+    itemToRowHeightPx: viewInputs.itemToRowHeightPx,
+    overscan: viewInputs.overscan,
+    containerClassName: cn(virtualListContainerClass, viewInputs.containerClass),
+  }
+  if (h !== undefined) {
+    return {
+      ...base,
+      containerAttributes: childAttributes([h.DataAttribute('slot', 'virtual-list')]),
+    }
+  }
+  return base
+}

@@ -11,7 +11,7 @@ import { Bug, ExternalLink, TriangleAlert } from 'lucide'
 import * as Demo from '../demo'
 import { REGISTRY_STYLES, styleLabel } from '../active-style'
 import { type DemoItemName, hasDemo } from '../demo/view'
-import { gapsByItem } from '../catalog/gaps'
+import { gapsForItem } from '../catalog/gaps'
 import { parityStatus } from '../catalog/parity'
 import { incompatibilityIssueUrl } from '../catalog/issues'
 import { shadcnUrlFor } from '../catalog/upstream'
@@ -30,7 +30,7 @@ const categoryLabel = (category: Item['category']): string =>
 
 /** Known behavioral differences vs the shadcn/ui counterpart — see catalog/gaps.ts. */
 const gapsCallout = (name: string, h: HtmlBuilder<AppMessage>): Html => {
-  const gaps = gapsByItem[name]
+  const gaps = gapsForItem(name)
   if (gaps === undefined) return h.div([], [])
   return Alert<AppMessage>(
     { className: 'mt-4' },
@@ -119,7 +119,7 @@ export const itemPage = (model: Model, name: string, h: HtmlBuilder<AppMessage>)
               ...(() => {
                 const upstream =
                   item.category === 'Components' ? shadcnUrlFor(item.name) : undefined
-                const gaps = gapsByItem[item.name] ?? []
+                const gaps = gapsForItem(item.name) ?? []
                 const reportUrl = incompatibilityIssueUrl(item.name, gaps, parityStatus(item.name))
                 const headerActions = h.div(
                   [h.Class('flex items-center overflow-hidden rounded-md border border-border')],

@@ -131,12 +131,14 @@ const readStoredPackageManager = (): PackageManager =>
         }),
       )
 
-const systemPrefersDark = (): ResolvedTheme =>
-  typeof window !== 'undefined' &&
-  typeof window.matchMedia === 'function' &&
-  window.matchMedia('(prefers-color-scheme: dark)').matches
+const systemPrefersDark = (): ResolvedTheme => {
+  if (globalThis.window === undefined) return 'Light'
+  const matchMedia = globalThis.window.matchMedia
+  if (matchMedia === undefined) return 'Light'
+  return matchMedia.call(globalThis.window, '(prefers-color-scheme: dark)').matches
     ? 'Dark'
     : 'Light'
+}
 
 const resolveTheme = (model: Model, preference: ThemePreference): ResolvedTheme =>
   preference === 'System' ? systemPrefersDark() : preference
@@ -195,14 +197,18 @@ export const LoadBrowserEnvironment = Command.define('LoadBrowserEnvironment', {
 })
 
 const foldDemo = (model: Model, message: Demo.DemoMessage): UpdateReturn => {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  const [nextDemo, demoCommands] = Demo.update(model.demo, message) as unknown as [
-    Demo.DemoModel,
-    ReadonlyArray<Command.Command<Demo.DemoMessage>>,
-  ]
+  const [nextDemo, demoCommands] = Demo.update(model.demo, message)
+  // SAFETY: Demo.update returns the assembled demo Model; slice UpdateReturn erases it to unknown.
+  // oxlint-disable-next-line typescript/consistent-type-assertions
+  const demo: Model['demo'] = nextDemo as Model['demo']
   return [
-    evo(model, { demo: () => nextDemo }),
-    Command.mapMessages(demoCommands, (m) => Message.GotDemoMessage({ message: m })),
+    evo(model, { demo: () => demo }),
+    // SAFETY: Demo.update commands are demo-scoped; slice UpdateReturn erases message types.
+    Command.mapMessages(
+      // oxlint-disable-next-line typescript/consistent-type-assertions
+      demoCommands as ReadonlyArray<Command.Command<Demo.DemoMessage>>,
+      (message) => Message.GotDemoMessage({ message }),
+    ),
   ]
 }
 

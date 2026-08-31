@@ -6,6 +6,10 @@ import type { Model } from './assemble'
 
 type DemoView = (model: Model, h: HtmlBuilder<Message>) => Html
 
+type ViewModule = Readonly<Record<string, DemoView | undefined>>
+
+const isDemoView = (value: DemoView | undefined): value is DemoView => typeof value === 'function'
+
 // Derived registration: each `./views/<item>.ts` module demos the registry item
 // named after its filename and must export exactly one view function named
 // `<something>View` (e.g. `buttonView`, `sideBarView`). Adding a demo requires
@@ -13,7 +17,7 @@ type DemoView = (model: Model, h: HtmlBuilder<Message>) => Html
 // that exports zero or several such functions fails fast at startup.
 const VIEW_NAME_PATTERN = /^[a-zA-Z]+View$/
 
-const extractView = (moduleExports: Record<string, unknown>, file: string): DemoView => {
+const extractView = (moduleExports: ViewModule, file: string): DemoView => {
   const names = Object.keys(moduleExports).filter((name) => VIEW_NAME_PATTERN.test(name))
   if (names.length === 0)
     throw new Error(
@@ -24,13 +28,12 @@ const extractView = (moduleExports: Record<string, unknown>, file: string): Demo
       `Demo view module "${file}" must export exactly one *View function; found ${names.length}: ${names.join(', ')}.`,
     )
   const view = moduleExports[names[0]!]
-  if (typeof view !== 'function')
+  if (!isDemoView(view))
     throw new Error(`Demo view module "${file}" exports "${names[0]}" but it is not a function.`)
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  return view as DemoView
+  return view
 }
 
-const modules = import.meta.glob<Record<string, unknown>>('./views/*.ts', { eager: true })
+const modules: Record<string, ViewModule> = import.meta.glob('./views/*.ts', { eager: true })
 
 export const views: Readonly<Record<string, DemoView>> = Object.fromEntries(
   Object.entries(modules).map(([file, moduleExports]) => {
