@@ -122,7 +122,8 @@ const dragActivityFromModel = (model: Model): 'Idle' | 'Active' =>
   )
 
 /** Drag subscriptions that map pointer position along the track axis, including
- *  vertical sliders marked with `data-vertical`. */
+ *  vertical sliders marked with `data-vertical`. Pending foldkit upstream (#27).
+ */
 export const subscriptionsForRoot = (getTrackRoot: () => Document | ShadowRoot) =>
   Subscription.make<Model, Message>()((entry) => ({
     dragPointer: entry(
