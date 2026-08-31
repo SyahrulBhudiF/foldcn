@@ -19,9 +19,6 @@ export const gapsByItem: Readonly<Record<string, ReadonlyArray<string>>> = {
   'context-menu': [
     'Opens on activation at a fixed anchor — foldkit has no right-click/pointer-position anchoring primitive yet.',
   ],
-  'hover-card': [
-    'Hover-intent is hand-rolled in this component, not a shared foldkit/ui primitive — copy it along if you need the same behavior elsewhere.',
-  ],
   sidebar: [
     'No cookie persistence — foldkit owns initial render through its own hydration rather than document.cookie (an SSR flash-prevention mechanism).',
     'Collapsed-mode menu-button tooltips are not auto-composed — wrap menu buttons in Tooltip submodels yourself if you need them.',

@@ -594,7 +594,7 @@
       "name": "hover-card",
       "type": "registry:ui",
       "title": "Hover Card",
-      "description": "Card-styled floating panel with hover-intent open/close delays (200ms open, 300ms grace). Built on the @foldkit/ui Popover submodel with a hand-rolled hover state machine — not a shared foldkit/ui hover primitive.",
+      "description": "Card-styled floating panel with hover-intent open/close delays (200ms open, 300ms grace), built from @foldkit/ui HoverIntent and Popover.",
       "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
