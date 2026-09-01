@@ -1,7 +1,3 @@
-/** ⚠ BEHAVIOR GAP vs upstream shadcn: no cookie/localStorage persistence of the collapsed state — seed it from your own persisted Model at init.
- *  The styled surface matches, but this behavior is absent — do not use
- *  where that behavior is required.
- */
 /** Stateful submodel — import the whole module as a namespace and wire its
  *  Model/Message/init/update into your app:
  *  `import * as Sidebar from '@/components/ui/sidebar'`
@@ -48,9 +44,7 @@ type Attributes<M> = ReadonlyArray<Attribute<M> | ChildAttribute>
 // derived collapse state; spread them onto any element to wire toggling
 // without lifting messages into your own universe.
 //
-// foldcn gaps vs upstream: no cookie persistence (an SSR flash-prevention
-// mechanism — foldkit owns initial render through its own hydration), and
-// collapsed-mode menu-button tooltips are not auto-composed (each would need
+// Collapsed-mode menu-button tooltips are not auto-composed (each would need
 // a per-item Tooltip submodel; wrap menu buttons yourself if you need them).
 // Controlled/uncontrolled `open` collapses into one mode: the model you pass
 // IS the state.
@@ -58,6 +52,8 @@ type Attributes<M> = ReadonlyArray<Attribute<M> | ChildAttribute>
 export const SIDEBAR_WIDTH = '16rem'
 export const SIDEBAR_WIDTH_MOBILE = '18rem'
 export const SIDEBAR_WIDTH_ICON = '3rem'
+export const SIDEBAR_COOKIE_NAME = 'sidebar_state'
+export const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 export const SIDEBAR_KEYBOARD_SHORTCUT = 'b'
 
 /** Viewport below Tailwind's `md` breakpoint counts as mobile (upstream
@@ -75,6 +71,7 @@ export type Message = typeof Message.Type
 /** Sidebar state: desktop expansion, mobile viewport flag, and the mobile
  *  off-canvas Sheet submodel that owns the open-on-mobile presentation. */
 export const Model = S.Struct({
+  cookieName: S.String,
   isOpen: S.Boolean,
   isMobile: S.Boolean,
   sheet: Sheet.Model,
@@ -86,10 +83,17 @@ export type InitConfig = Readonly<{
   id: string
   /** Desktop initial expansion. Defaults to `true` like upstream. */
   defaultOpen?: boolean
+  /** Cookie used to persist the desktop expanded/collapsed state. */
+  cookieName?: string
 }>
 
-export const init = ({ id, defaultOpen = true }: InitConfig): Model => ({
-  isOpen: defaultOpen,
+export const init = ({
+  id,
+  defaultOpen = true,
+  cookieName = SIDEBAR_COOKIE_NAME,
+}: InitConfig): Model => ({
+  cookieName,
+  isOpen: readOpenCookie(cookieName) ?? defaultOpen,
   isMobile: false,
   sheet: Sheet.init({ id: `${id}-mobile-sheet` }),
 })
@@ -158,60 +162,133 @@ export const update = (model: Model, message: Message): Update.Return<Model, Mes
     }),
   )
 
+function readOpenCookie(cookieName: string): boolean | undefined {
+  if (typeof document === 'undefined') {
+    return undefined
+  }
+
+  const prefix = `${encodeURIComponent(cookieName)}=`
+  const value = document.cookie
+    .split(';')
+    .map((cookie) => cookie.trim())
+    .find((cookie) => cookie.startsWith(prefix))
+    ?.slice(prefix.length)
+
+  return value === 'true' ? true : value === 'false' ? false : undefined
+}
+
+const writeOpenCookie = (cookieName: string, isOpen: boolean): void => {
+  if (typeof document !== 'undefined') {
+    document.cookie = `${encodeURIComponent(cookieName)}=${isOpen}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+  }
+}
+
+const hydrateOpenState = (cookieName: string, isOpen: boolean): void => {
+  if (typeof document === 'undefined') {
+    return
+  }
+
+  const escapedCookieName = CSS.escape(cookieName)
+  for (const wrapper of document.querySelectorAll<HTMLElement>(
+    `[data-slot="sidebar-wrapper"][data-sidebar-cookie="${escapedCookieName}"]`,
+  )) {
+    const sidebar = wrapper.querySelector<HTMLElement>('[data-slot="sidebar"]:not([data-mobile])')
+    if (!sidebar) {
+      continue
+    }
+
+    sidebar.dataset.state = isOpen ? 'expanded' : 'collapsed'
+    sidebar.dataset.collapsible = isOpen ? '' : (sidebar.dataset.sidebarCollapsible ?? '')
+  }
+}
+
 /** Global listeners for an embedded sidebar: the upstream ⌘/Ctrl+B shortcut
  *  (always listening, like upstream's window keydown effect) and a media-query
  *  listener that keeps `isMobile` in sync with the viewport. Lift with
  *  `Subscription.lift(Sidebar.subscriptions)` from your slice. */
-export const subscriptions = Subscription.make<Model, Message>()((entry) => ({
-  keyboardShortcut: entry(
-    { isListening: S.Boolean },
-    {
-      modelToDependencies: () => ({ isListening: true }),
-      dependenciesToStream: ({ isListening }) =>
-        Stream.when(
-          Subscription.fromEventFilterMap<KeyboardEvent, Message>({
-            target: window,
-            type: 'keydown',
-            toMessage: (event) => {
-              if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
-                event.preventDefault()
-                return Option.some(Message.Toggled())
-              }
-              return Option.none()
-            },
-          }),
-          Effect.sync(() => isListening),
-        ),
-    },
-  ),
-  mediaQuery: entry(
-    { isListening: S.Boolean },
-    {
-      modelToDependencies: () => ({ isListening: true }),
-      dependenciesToStream: ({ isListening }) =>
-        Stream.when(
+export const subscriptions = Subscription.make<Model, Message>()((entry) => {
+  let cookieHydrated = false
+
+  return {
+    cookie: entry(
+      { cookieName: S.String, isOpen: S.Boolean },
+      {
+        modelToDependencies: (model) => ({
+          cookieName: model.cookieName,
+          isOpen: model.isOpen,
+        }),
+        dependenciesToStream: ({ cookieName, isOpen }) =>
           Stream.callback<Message>((queue) =>
-            Effect.acquireRelease(
-              Effect.sync(() => {
-                const mediaQuery = window.matchMedia(MOBILE_MEDIA_QUERY)
-                const handler = (event: MediaQueryListEvent) => {
-                  Queue.offerUnsafe(queue, Message.SetIsMobile({ isMobile: event.matches }))
+            Effect.sync(() => {
+              const stored = readOpenCookie(cookieName)
+              if (!cookieHydrated) {
+                cookieHydrated = true
+                if (stored !== undefined && stored !== isOpen) {
+                  hydrateOpenState(cookieName, stored)
+                  Queue.offerUnsafe(queue, Message.SetIsOpen({ isOpen: stored }))
+                } else {
+                  writeOpenCookie(cookieName, isOpen)
                 }
-                mediaQuery.addEventListener('change', handler)
-                // Emit once on subscribe so a mobile viewport corrects the
-                // desktop default right after mount.
-                Queue.offerUnsafe(queue, Message.SetIsMobile({ isMobile: mediaQuery.matches }))
-                return { mediaQuery, handler }
-              }),
-              ({ mediaQuery, handler }) =>
-                Effect.sync(() => mediaQuery.removeEventListener('change', handler)),
-            ).pipe(Effect.flatMap(() => Effect.never)),
+              } else {
+                writeOpenCookie(cookieName, isOpen)
+              }
+            }).pipe(Effect.flatMap(() => Effect.never)),
           ),
-          Effect.sync(() => isListening),
-        ),
-    },
-  ),
-}))
+      },
+    ),
+    keyboardShortcut: entry(
+      { isListening: S.Boolean },
+      {
+        modelToDependencies: () => ({ isListening: true }),
+        dependenciesToStream: ({ isListening }) =>
+          Stream.when(
+            Subscription.fromEventFilterMap<KeyboardEvent, Message>({
+              target: window,
+              type: 'keydown',
+              toMessage: (event) => {
+                if (
+                  event.key.toLowerCase() === SIDEBAR_KEYBOARD_SHORTCUT &&
+                  (event.metaKey || event.ctrlKey)
+                ) {
+                  event.preventDefault()
+                  return Option.some(Message.Toggled())
+                }
+                return Option.none()
+              },
+            }),
+            Effect.sync(() => isListening),
+          ),
+      },
+    ),
+    mediaQuery: entry(
+      { isListening: S.Boolean },
+      {
+        modelToDependencies: () => ({ isListening: true }),
+        dependenciesToStream: ({ isListening }) =>
+          Stream.when(
+            Stream.callback<Message>((queue) =>
+              Effect.acquireRelease(
+                Effect.sync(() => {
+                  const mediaQuery = window.matchMedia(MOBILE_MEDIA_QUERY)
+                  const handler = (event: MediaQueryListEvent) => {
+                    Queue.offerUnsafe(queue, Message.SetIsMobile({ isMobile: event.matches }))
+                  }
+                  mediaQuery.addEventListener('change', handler)
+                  // Emit once on subscribe so a mobile viewport corrects the
+                  // desktop default right after mount.
+                  Queue.offerUnsafe(queue, Message.SetIsMobile({ isMobile: mediaQuery.matches }))
+                  return { mediaQuery, handler }
+                }),
+                ({ mediaQuery, handler }) =>
+                  Effect.sync(() => mediaQuery.removeEventListener('change', handler)),
+              ).pipe(Effect.flatMap(() => Effect.never)),
+            ),
+            Effect.sync(() => isListening),
+          ),
+      },
+    ),
+  }
+})
 
 export const sidebarProviderClass =
   'group/sidebar-wrapper flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar'
@@ -388,6 +465,7 @@ export const view = defineView<Model, Message, ProviderViewInputs>((model, viewI
       [
         h.Class(cn(sidebarProviderClass, viewInputs.className)),
         h.DataAttribute('slot', 'sidebar-wrapper'),
+        h.DataAttribute('sidebar-cookie', model.cookieName),
         h.Style({ '--sidebar-width': SIDEBAR_WIDTH, '--sidebar-width-icon': SIDEBAR_WIDTH_ICON }),
       ],
       [
@@ -475,6 +553,7 @@ export const view = defineView<Model, Message, ProviderViewInputs>((model, viewI
       [
         h.Class(cn(sidebarProviderClass, viewInputs.className)),
         h.DataAttribute('slot', 'sidebar-wrapper'),
+        h.DataAttribute('sidebar-cookie', model.cookieName),
         h.Style({ '--sidebar-width': SIDEBAR_WIDTH, '--sidebar-width-icon': SIDEBAR_WIDTH_ICON }),
       ],
       [
@@ -504,6 +583,7 @@ export const view = defineView<Model, Message, ProviderViewInputs>((model, viewI
           h.DataAttribute('sidebar', 'sidebar'),
           h.DataAttribute('state', slots.state),
           h.DataAttribute('collapsible', slots.state === 'collapsed' ? collapsible : ''),
+          h.DataAttribute('sidebar-collapsible', collapsible),
           h.DataAttribute('variant', variant),
           h.DataAttribute('side', side),
         ],

@@ -48,7 +48,7 @@ export const sidebarView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
         [
           'Collapsible app shell — toggle with the header button, the rail hot-spot, or ',
           h.kbd([h.Class('rounded border bg-muted px-1 font-mono text-[11px]')], ['⌘B']),
-          '. Resize below the md breakpoint for the mobile sheet.',
+          '. Collapse it, reload the page, and the demo restores the saved state from its cookie. Resize below the md breakpoint for the mobile sheet.',
         ],
       ),
       h.div(
@@ -70,11 +70,15 @@ export const sidebarView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
               // so the shell is contained by the transformed preview box.
               className:
                 '!min-h-0 !h-full [&_[data-slot=sidebar]]:!h-full [&_[data-slot=sidebar-container]]:!h-full',
-              content: (slots) => [
+              content: () => [
                 Sidebar.header({}, [teamSwitcher(h)], h),
                 Sidebar.content({}, [navMain(h), navProjects(h), secondarySupportGroup(h)], h),
                 Sidebar.footer({}, [navUser(h)], h),
-                Sidebar.rail(slots.rail, {}, h),
+                Sidebar.rail(
+                  [h.OnClick(Message.GotSidebarMessage({ message: Sidebar.Message.Toggled() }))],
+                  {},
+                  h,
+                ),
               ],
               children: (slots) => [
                 Sidebar.SidebarInset(
@@ -90,7 +94,15 @@ export const sidebarView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                         h.div(
                           [h.Class('flex items-center gap-2 px-4')],
                           [
-                            Sidebar.trigger(slots.trigger, {}, h),
+                            Sidebar.trigger(
+                              [
+                                h.OnClick(
+                                  Message.GotSidebarMessage({ message: Sidebar.Message.Toggled() }),
+                                ),
+                              ],
+                              {},
+                              h,
+                            ),
                             Sidebar.separator({ className: '-ml-px mr-2 h-4' }, h),
                             h.span(
                               [h.Class('text-sm font-medium')],
@@ -352,7 +364,7 @@ const navUser = (h: HtmlBuilder<AppMessage>): Html =>
               h.span(
                 [
                   h.Class(
-                    'flex size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground text-xs font-semibold',
+                    'flex size-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground text-xs font-semibold',
                   ),
                 ],
                 ['CN'],
@@ -386,20 +398,28 @@ const foldSidebar = Update.foldChild({
   toParentMessage: (message) => Message.GotSidebarMessage({ message }),
 })
 
+export const subscriptions = Subscription.lift(Sidebar.subscriptions)<
+  State,
+  typeof Message.GotSidebarMessage.Type
+>({
+  toChildModel: (model) => model.sidebar,
+  toParentMessage: (message) => Message.GotSidebarMessage({ message }),
+})
+
 export const slice = defineSlice({
   fields,
-  init: { sidebar: Sidebar.init({ id: 'sidebar-demo', defaultOpen: true }) },
+  init: {
+    sidebar: Sidebar.init({
+      id: 'sidebar-demo',
+      defaultOpen: true,
+      cookieName: 'foldcn-sidebar-demo',
+    }),
+  },
   messages: [Message.GotSidebarMessage],
   handlers: (model: State) => ({
     GotSidebarMessage: (payload: typeof Message.GotSidebarMessage.Type): UpdateReturn =>
       foldSidebar(model, payload.message),
   }),
   samples: [Message.GotSidebarMessage({ message: Sidebar.Message.Toggled() })],
-  subscriptions: Subscription.lift(Sidebar.subscriptions)<
-    State,
-    typeof Message.GotSidebarMessage.Type
-  >({
-    toChildModel: (model) => model.sidebar,
-    toParentMessage: (message) => Message.GotSidebarMessage({ message }),
-  }),
+  subscriptions,
 })

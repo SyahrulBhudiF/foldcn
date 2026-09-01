@@ -20,7 +20,6 @@ export const gapsByItem = {
     'Opens on activation at a fixed anchor — foldkit has no right-click/pointer-position anchoring primitive yet.',
   ],
   sidebar: [
-    'No cookie persistence — foldkit owns initial render through its own hydration rather than document.cookie (an SSR flash-prevention mechanism).',
     'Collapsed-mode menu-button tooltips are not auto-composed — wrap menu buttons in Tooltip submodels yourself if you need them.',
   ],
   toast: [
