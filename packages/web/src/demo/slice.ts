@@ -29,7 +29,7 @@ export type DemoSlice = {
   /** Schema fields contributed to the shared demo Model struct. */
   fields: Record<string, S.Schema<unknown>>
   /** Initial values for this slice's fields (validated by the smoke test). */
-  // oxlint-disable-next-line anti-slop/no-unsafe-dictionary-type -- heterogeneous schema defaults validated at assembly.
+  // oxlint-disable-next-line anti-slop/no-unsafe-dictionary-type
   init: Record<string, unknown>
   /** Message schemas contributed to the shared demo Message union. */
   messages: ReadonlyArray<S.Schema<unknown>>

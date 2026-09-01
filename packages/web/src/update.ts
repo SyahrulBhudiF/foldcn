@@ -198,14 +198,12 @@ export const LoadBrowserEnvironment = Command.define('LoadBrowserEnvironment', {
 
 const foldDemo = (model: Model, message: Demo.DemoMessage): UpdateReturn => {
   const [nextDemo, demoCommands] = Demo.update(model.demo, message)
-  // SAFETY: Demo.update returns the assembled demo Model; slice UpdateReturn erases it to unknown.
-  // oxlint-disable-next-line typescript/consistent-type-assertions
+  // oxlint-disable-next-line typescript/consistent-type-assertions -- SAFETY: slice UpdateReturn erases demo model
   const demo: Model['demo'] = nextDemo as Model['demo']
   return [
     evo(model, { demo: () => demo }),
-    // SAFETY: Demo.update commands are demo-scoped; slice UpdateReturn erases message types.
     Command.mapMessages(
-      // oxlint-disable-next-line typescript/consistent-type-assertions
+      // oxlint-disable-next-line typescript/consistent-type-assertions -- SAFETY: slice UpdateReturn erases demo commands
       demoCommands as ReadonlyArray<Command.Command<Demo.DemoMessage>>,
       (message) => Message.GotDemoMessage({ message }),
     ),

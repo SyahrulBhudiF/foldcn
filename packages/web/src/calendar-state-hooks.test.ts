@@ -66,8 +66,7 @@ type SceneCarrier = Readonly<{ html?: unknown; _phantom?: unknown }>
 const readSceneHtml = (sim: SceneCarrier): StateNode => {
   const { html } = sim
   if (html === undefined) throw new Error('Scene produced no html')
-  // SAFETY: Scene html is asserted as StateNode for test tree walks.
-  // oxlint-disable-next-line typescript/consistent-type-assertions
+  // oxlint-disable-next-line typescript/consistent-type-assertions -- SAFETY: Scene html tree
   return html as StateNode
 }
 
