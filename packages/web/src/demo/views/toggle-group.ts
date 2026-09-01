@@ -25,7 +25,7 @@ const staticGroup = (
     variant?: toggle.ToggleVariant
     size?: toggle.ToggleSize
     spacing?: number
-    orientation?: string
+    orientation?: 'horizontal' | 'vertical'
   },
 ): Html => {
   const variant = opts?.variant ?? 'default'
@@ -238,7 +238,7 @@ export const toggleGroupView = (model: Model, h: HtmlBuilder<AppMessage>): Html 
 const foldNoOp =
   <Out>(): ((out: Out) => Update.Step<State, unknown>) =>
   () =>
-  (model) => [model, []]
+  (model) => ({ model })
 
 const foldToggleGroupOutMessage = M.type<toggleGroup.OutMessage>().pipe(
   M.withReturnType<Update.Step<State, unknown>>(),

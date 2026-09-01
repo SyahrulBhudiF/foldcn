@@ -1,17 +1,19 @@
 import { Option } from 'effect'
 import { Command } from 'foldkit'
 import type { Url } from 'foldkit'
+import type * as Update from 'foldkit/update'
 import * as Tabs from '@foldkit/ui/tabs'
 
 import * as ToggleGroup from './generated/registry/ui/toggle-group'
 
 import * as Demo from './demo'
 import { parseRoute } from './route'
+import { Message } from './message'
 import type { Message as MessageType } from './message'
 import { Model } from './model'
 import { LoadBrowserEnvironment } from './update'
 
-export type InitReturn = readonly [Model, ReadonlyArray<Command.Command<MessageType>>]
+export type InitReturn = Update.Return<Model, MessageType>
 
 /**
  * Builds the same first Model on the server and in the browser: every field
@@ -21,11 +23,11 @@ export type InitReturn = readonly [Model, ReadonlyArray<Command.Command<MessageT
  * boot Command, which the runtime runs once hydration has completed.
  */
 export const init = (url: Url.Url): InitReturn => {
-  const [demo] = Demo.init()
+  const { model: demo, commands: demoCommands = [] } = Demo.init()
   const installTabs = Tabs.init({ id: 'install-tabs' })
 
-  return [
-    {
+  return {
+    model: {
       route: parseRoute(url),
       maybeThemePreference: Option.none(),
       resolvedTheme: 'Light',
@@ -37,6 +39,9 @@ export const init = (url: Url.Url): InitReturn => {
       selectedStyle: 'default',
       expandedCodeBlocks: new Set<string>(),
     },
-    [LoadBrowserEnvironment()],
-  ]
+    commands: [
+      LoadBrowserEnvironment(),
+      ...Command.mapMessages(demoCommands, (message) => Message.GotDemoMessage({ message })),
+    ],
+  }
 }

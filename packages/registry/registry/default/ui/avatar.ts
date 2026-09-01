@@ -1,8 +1,8 @@
 import { Schema as S } from 'effect'
-import type * as Command from 'foldkit/command'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 import { defineMessageUnion } from 'foldkit/message'
 import { defineView } from 'foldkit/submodel'
+import * as Update from 'foldkit/update'
 
 type Child = Html | string
 
@@ -76,10 +76,9 @@ export const Message = defineMessageUnion({
 })
 export type Message = typeof Message.Type
 
-export const update = (
-  _model: Model,
-  _message: Message,
-): readonly [Model, ReadonlyArray<Command.Command<Message>>] => [{ hasError: true }, []]
+export const update = (_model: Model, _message: Message): Update.Return<Model, Message> => ({
+  model: { hasError: true },
+})
 
 export type PictureConfig = Readonly<{
   id: string

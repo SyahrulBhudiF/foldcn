@@ -2,6 +2,7 @@ import { Option } from 'effect'
 import type { Html, HtmlBuilder } from 'foldkit/html'
 
 import { Alert } from '../generated/registry/ui/alert'
+import { badge } from '../generated/registry/ui/badge'
 import { codeBlock as registryCodeBlock } from '../generated/registry/lib/code-block'
 import { separator } from '../generated/registry/ui/separator'
 
@@ -37,13 +38,27 @@ export const homeView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
           ),
         ],
         [
-          h.h1(
+          h.div(
+            [h.Class('flex flex-wrap items-center gap-3')],
             [
-              h.Class(
-                "whitespace-pre-line text-3xl font-bold leading-[1.2] tracking-[-0.01em] text-foreground before:content-['#_'] before:font-normal before:text-muted-foreground",
+              h.h1(
+                [
+                  h.Class(
+                    "whitespace-pre-line text-3xl font-bold leading-[1.2] tracking-[-0.01em] text-foreground before:content-['#_'] before:font-normal before:text-muted-foreground",
+                  ),
+                ],
+                ['shadcn components for Foldkit.'],
+              ),
+              badge<AppMessage>(
+                {
+                  variant: 'outline',
+                  className:
+                    'h-6 border-red-500/25 bg-red-500/10 px-2 text-[11px] font-semibold uppercase tracking-wide text-red-700 dark:text-red-300',
+                },
+                ['Beta'],
+                h,
               ),
             ],
-            ['shadcn components for Foldkit.'],
           ),
           h.p(
             [h.Class('mt-5')],

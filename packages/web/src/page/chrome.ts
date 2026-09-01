@@ -16,7 +16,7 @@ import { Message } from '../message'
 import type { Message as AppMessage } from '../message'
 import type { Model, PackageManager } from '../model'
 
-import { categoryGroups, componentCount } from '../catalog'
+import { categoryGroups } from '../catalog'
 import { gapsForItem } from '../catalog/gaps'
 import { requestComponentUrl } from '../catalog/issues'
 import {
@@ -28,6 +28,17 @@ import {
   parityVariant,
   type ParityStatus,
 } from '../catalog/parity'
+
+const betaBadge = (h: HtmlBuilder<AppMessage>): Html =>
+  badge<AppMessage>(
+    {
+      variant: 'outline',
+      className:
+        'h-5 border-red-500/25 bg-red-500/10 px-1.5 text-[10px] font-semibold uppercase tracking-wide text-red-700 dark:text-red-300',
+    },
+    ['Beta'],
+    h,
+  )
 
 export const themeSelector = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
   h.submodel({
@@ -71,6 +82,7 @@ export const headerView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 [h.span([h.Class('text-[11px] leading-none font-black')], ['F'])],
               ),
               h.span([], ['foldcn']),
+              betaBadge(h),
             ],
           ),
           h.div(
@@ -277,35 +289,42 @@ export const footerView = (h: HtmlBuilder<AppMessage>): Html =>
       h.div(
         [
           h.Class(
-            'mx-auto flex w-full max-w-6xl flex-col items-start justify-between gap-4 px-4 py-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:px-6',
+            'mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-6',
           ),
         ],
         [
-          h.p(
-            [],
+          h.p([], ['MIT licensed.']),
+          h.div(
+            [h.Class('flex flex-wrap items-center gap-x-4 gap-y-1')],
             [
-              'foldcn — ',
-              String(componentCount),
-              ' copy-paste components for ',
+              h.a(
+                [
+                  h.Href('https://github.com/elianiva/foldcn'),
+                  h.Target('_blank'),
+                  h.Rel('noopener noreferrer'),
+                  h.Class('underline underline-offset-4 hover:text-foreground'),
+                ],
+                ['GitHub'],
+              ),
               h.a(
                 [
                   h.Href('https://foldkit.dev'),
-                  h.Class('underline underline-offset-4 hover:text-foreground'),
+                  h.Target('_blank'),
                   h.Rel('noopener noreferrer'),
+                  h.Class('underline underline-offset-4 hover:text-foreground'),
                 ],
                 ['Foldkit'],
               ),
-              '. Built on @foldkit/ui with Foldkit TEA and Tailwind CSS.',
+              h.a(
+                [
+                  h.Href('https://ui.shadcn.com'),
+                  h.Target('_blank'),
+                  h.Rel('noopener noreferrer'),
+                  h.Class('underline underline-offset-4 hover:text-foreground'),
+                ],
+                ['shadcn/ui'],
+              ),
             ],
-          ),
-          h.a(
-            [
-              h.Href('https://github.com/elianiva/foldcn'),
-              h.Target('_blank'),
-              h.Rel('noopener noreferrer'),
-              h.Class('text-sm underline underline-offset-4 hover:text-foreground'),
-            ],
-            ['GitHub →'],
           ),
         ],
       ),

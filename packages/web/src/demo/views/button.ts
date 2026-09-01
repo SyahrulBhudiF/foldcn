@@ -72,32 +72,32 @@ export const buttonView = (_model: Model, h: HtmlBuilder<Message>): Html =>
             [
               button<Message>(
                 { size: 'xs' },
-                h.span([], ['Default ', icon(h, ArrowRight, 'size-3')]),
+                ['Default ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { size: 'xs', variant: 'secondary' },
-                h.span([], ['Secondary ', icon(h, ArrowRight, 'size-3')]),
+                ['Secondary ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { size: 'xs', variant: 'outline' },
-                h.span([], ['Outline ', icon(h, ArrowRight, 'size-3')]),
+                ['Outline ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { size: 'xs', variant: 'ghost' },
-                h.span([], ['Ghost ', icon(h, ArrowRight, 'size-3')]),
+                ['Ghost ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { size: 'xs', variant: 'destructive' },
-                h.span([], ['Destructive ', icon(h, ArrowRight, 'size-3')]),
+                ['Destructive ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { size: 'xs', variant: 'link' },
-                h.span([], ['Link ', icon(h, ArrowRight, 'size-3')]),
+                ['Link ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
             ],
@@ -107,32 +107,32 @@ export const buttonView = (_model: Model, h: HtmlBuilder<Message>): Html =>
             [
               button<Message>(
                 { size: 'sm' },
-                h.span([], ['Default ', icon(h, ArrowRight, 'size-3')]),
+                ['Default ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { size: 'sm', variant: 'secondary' },
-                h.span([], ['Secondary ', icon(h, ArrowRight, 'size-3')]),
+                ['Secondary ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { size: 'sm', variant: 'outline' },
-                h.span([], ['Outline ', icon(h, ArrowRight, 'size-3')]),
+                ['Outline ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { size: 'sm', variant: 'ghost' },
-                h.span([], ['Ghost ', icon(h, ArrowRight, 'size-3')]),
+                ['Ghost ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { size: 'sm', variant: 'destructive' },
-                h.span([], ['Destructive ', icon(h, ArrowRight, 'size-3')]),
+                ['Destructive ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { size: 'sm', variant: 'link' },
-                h.span([], ['Link ', icon(h, ArrowRight, 'size-3')]),
+                ['Link ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
             ],
@@ -140,30 +140,30 @@ export const buttonView = (_model: Model, h: HtmlBuilder<Message>): Html =>
           h.div(
             [h.Class('flex flex-wrap items-center gap-2')],
             [
-              button<Message>({}, h.span([], ['Default ', icon(h, ArrowRight, 'size-3')]), h),
+              button<Message>({}, ['Default ', icon(h, ArrowRight, 'size-3', 'inline-end')], h),
               button<Message>(
                 { variant: 'secondary' },
-                h.span([], ['Secondary ', icon(h, ArrowRight, 'size-3')]),
+                ['Secondary ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { variant: 'outline' },
-                h.span([], ['Outline ', icon(h, ArrowRight, 'size-3')]),
+                ['Outline ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { variant: 'ghost' },
-                h.span([], ['Ghost ', icon(h, ArrowRight, 'size-3')]),
+                ['Ghost ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { variant: 'destructive' },
-                h.span([], ['Destructive ', icon(h, ArrowRight, 'size-3')]),
+                ['Destructive ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { variant: 'link' },
-                h.span([], ['Link ', icon(h, ArrowRight, 'size-3')]),
+                ['Link ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
             ],
@@ -173,32 +173,32 @@ export const buttonView = (_model: Model, h: HtmlBuilder<Message>): Html =>
             [
               button<Message>(
                 { size: 'lg' },
-                h.span([], ['Default ', icon(h, ArrowRight, 'size-3')]),
+                ['Default ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { size: 'lg', variant: 'secondary' },
-                h.span([], ['Secondary ', icon(h, ArrowRight, 'size-3')]),
+                ['Secondary ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { size: 'lg', variant: 'outline' },
-                h.span([], ['Outline ', icon(h, ArrowRight, 'size-3')]),
+                ['Outline ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { size: 'lg', variant: 'ghost' },
-                h.span([], ['Ghost ', icon(h, ArrowRight, 'size-3')]),
+                ['Ghost ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { size: 'lg', variant: 'destructive' },
-                h.span([], ['Destructive ', icon(h, ArrowRight, 'size-3')]),
+                ['Destructive ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
               button<Message>(
                 { size: 'lg', variant: 'link' },
-                h.span([], ['Link ', icon(h, ArrowRight, 'size-3')]),
+                ['Link ', icon(h, ArrowRight, 'size-3', 'inline-end')],
                 h,
               ),
             ],
@@ -214,32 +214,32 @@ export const buttonView = (_model: Model, h: HtmlBuilder<Message>): Html =>
             [
               button<Message>(
                 { size: 'xs' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Default']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Default'],
                 h,
               ),
               button<Message>(
                 { size: 'xs', variant: 'secondary' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Secondary']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Secondary'],
                 h,
               ),
               button<Message>(
                 { size: 'xs', variant: 'outline' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Outline']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Outline'],
                 h,
               ),
               button<Message>(
                 { size: 'xs', variant: 'ghost' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Ghost']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Ghost'],
                 h,
               ),
               button<Message>(
                 { size: 'xs', variant: 'destructive' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Destructive']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Destructive'],
                 h,
               ),
               button<Message>(
                 { size: 'xs', variant: 'link' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Link']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Link'],
                 h,
               ),
             ],
@@ -249,32 +249,32 @@ export const buttonView = (_model: Model, h: HtmlBuilder<Message>): Html =>
             [
               button<Message>(
                 { size: 'sm' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Default']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Default'],
                 h,
               ),
               button<Message>(
                 { size: 'sm', variant: 'secondary' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Secondary']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Secondary'],
                 h,
               ),
               button<Message>(
                 { size: 'sm', variant: 'outline' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Outline']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Outline'],
                 h,
               ),
               button<Message>(
                 { size: 'sm', variant: 'ghost' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Ghost']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Ghost'],
                 h,
               ),
               button<Message>(
                 { size: 'sm', variant: 'destructive' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Destructive']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Destructive'],
                 h,
               ),
               button<Message>(
                 { size: 'sm', variant: 'link' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Link']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Link'],
                 h,
               ),
             ],
@@ -282,30 +282,34 @@ export const buttonView = (_model: Model, h: HtmlBuilder<Message>): Html =>
           h.div(
             [h.Class('flex flex-wrap items-center gap-2')],
             [
-              button<Message>({}, h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Default']), h),
+              button<Message>(
+                {},
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Default'],
+                h,
+              ),
               button<Message>(
                 { variant: 'secondary' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Secondary']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Secondary'],
                 h,
               ),
               button<Message>(
                 { variant: 'outline' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Outline']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Outline'],
                 h,
               ),
               button<Message>(
                 { variant: 'ghost' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Ghost']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Ghost'],
                 h,
               ),
               button<Message>(
                 { variant: 'destructive' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Destructive']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Destructive'],
                 h,
               ),
               button<Message>(
                 { variant: 'link' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Link']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Link'],
                 h,
               ),
             ],
@@ -315,32 +319,32 @@ export const buttonView = (_model: Model, h: HtmlBuilder<Message>): Html =>
             [
               button<Message>(
                 { size: 'lg' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Default']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Default'],
                 h,
               ),
               button<Message>(
                 { size: 'lg', variant: 'secondary' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Secondary']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Secondary'],
                 h,
               ),
               button<Message>(
                 { size: 'lg', variant: 'outline' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Outline']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Outline'],
                 h,
               ),
               button<Message>(
                 { size: 'lg', variant: 'ghost' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Ghost']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Ghost'],
                 h,
               ),
               button<Message>(
                 { size: 'lg', variant: 'destructive' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Destructive']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Destructive'],
                 h,
               ),
               button<Message>(
                 { size: 'lg', variant: 'link' },
-                h.span([], [icon(h, ArrowLeftCircle, 'size-3'), ' Link']),
+                [icon(h, ArrowLeftCircle, 'size-3', 'inline-start'), ' Link'],
                 h,
               ),
             ],
@@ -504,7 +508,7 @@ export const buttonView = (_model: Model, h: HtmlBuilder<Message>): Html =>
                 [h.Class('flex items-center gap-2')],
                 [
                   button<Message>({ variant: 'outline' }, 'Cancel', h),
-                  button<Message>({}, h.span([], ['Submit ', icon(h, ArrowRight, 'size-3')]), h),
+                  button<Message>({}, ['Submit ', icon(h, ArrowRight, 'size-3', 'inline-end')], h),
                 ],
               ),
               h.div(

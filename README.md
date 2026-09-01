@@ -2,8 +2,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![GitHub](https://img.shields.io/github/stars/elianiva/foldcn)](https://github.com/elianiva/foldcn)
+[![Status](https://img.shields.io/badge/status-beta-rose?style=flat&labelColor=fee2e2&color=be123c)](https://foldcn.elianiva.com)
 
-**shadcn components for Foldkit.**
+**shadcn components for Foldkit.** Public beta — the registry and docs are live, but APIs and parity are still evolving.
 
 A registry of copy-paste components built on [`@foldkit/ui`](https://foldkit.dev), [Foldkit](https://foldkit.dev), and [Tailwind CSS](https://tailwindcss.com). It's a shadcn-compatible registry so you can use an existing shadcn CLI to install it, should be pretty straightforward.
 

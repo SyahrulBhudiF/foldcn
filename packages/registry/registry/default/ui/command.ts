@@ -7,6 +7,7 @@ import type { Html, HtmlBuilder } from 'foldkit/html'
 import { cn } from '@/lib/utils'
 import { icon } from '@/lib/icons'
 import { Search } from 'lucide'
+import { inputGroup, inputGroupAddon, inputGroupInput } from './input-group'
 
 type Child = Html | string
 
@@ -38,6 +39,7 @@ export const commandSeparatorClass = 'cn-command-separator'
 export const commandShortcutClass = 'cn-command-shortcut'
 
 export type CommandInputConfig<M> = Readonly<{
+  id?: string
   value?: string
   onInput?: (value: string) => M
   placeholder?: string
@@ -58,20 +60,25 @@ const commandInput = <M>(config: CommandInputConfig<M>, h: HtmlBuilder<M>): Html
   h.div(
     [h.Class(cn('cn-command-input-wrapper')), h.DataAttribute('slot', 'command-input-wrapper')],
     [
-      h.div(
-        [h.Class(cn('cn-command-input-group'))],
+      inputGroup(
+        { className: 'cn-command-input-group' },
         [
-          icon(h, Search, 'cn-command-input-icon size-4 shrink-0 opacity-50'),
-          h.input([
-            h.Type('text'),
-            ...(config.value === undefined ? [] : [h.Value(config.value)]),
-            ...(config.isDisabled === true ? [h.Disabled(true)] : []),
-            ...(config.placeholder === undefined ? [] : [h.Placeholder(config.placeholder)]),
-            ...(config.onInput === undefined ? [] : [h.OnInput(config.onInput)]),
-            h.Class(cn(commandInputClass, config.className)),
-            h.DataAttribute('slot', 'command-input'),
-          ]),
+          inputGroupAddon({}, [icon(h, Search, 'cn-command-input-icon')], h),
+          inputGroupInput(
+            {
+              id: config.id ?? 'command-input',
+              ariaLabel: 'Search commands',
+              onInput: config.onInput,
+              value: config.value,
+              isDisabled: config.isDisabled,
+              placeholder: config.placeholder,
+              className: cn(commandInputClass, config.className),
+              attributes: [h.DataAttribute('slot', 'command-input')],
+            },
+            h,
+          ),
         ],
+        h,
       ),
     ],
   )
