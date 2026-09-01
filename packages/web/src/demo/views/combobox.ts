@@ -17,8 +17,6 @@ const Message = defineMessageUnion({
   GotComboboxMessage: { message: combobox.Message },
 })
 
-// Frameworks mirror apps/v4/examples/base/combobox-demo.tsx (single-select).
-// Cast through City to reuse the shared CityCombobox bundle without adding a second bundle.
 const FRAMEWORKS = ['Next.js', 'SvelteKit', 'Nuxt.js', 'Remix', 'Astro'] as const
 
 export const comboboxView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
@@ -37,7 +35,7 @@ export const comboboxView = (model: Model, h: HtmlBuilder<AppMessage>): Html =>
                 model: model.combobox,
                 view: CityCombobox.view,
                 viewInputs: combobox.viewInputs<City>({
-                  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+                  // oxlint-disable-next-line anti-slop/no-chained-type-assertions, typescript/consistent-type-assertions -- SAFETY: City bundle reuse
                   items: FRAMEWORKS as unknown as ReadonlyArray<City>,
                   restingInputValue: Option.getOrElse(model.maybeComboboxValue, () => ''),
                   maybeSelectedValue: model.maybeComboboxValue,

@@ -102,11 +102,12 @@ export const update = (model: Model, message: Message): UpdateReturn => {
   const justOpened = outMessage?._tag === 'Opened'
 
   if (!justOpened) {
-    return {
+    const base = {
       model: { popovers: { ...model.popovers, [id]: nextPopover } },
       commands: Command.mapMessages(popoverCommands, toItemMessage(id)),
-      ...(outMessage === undefined ? {} : { outMessage: OutMessage.Closed({ id }) }),
     }
+    if (outMessage === undefined) return base
+    return { ...base, outMessage: OutMessage.Closed({ id }) }
   }
 
   const closedOthers = Object.entries(model.popovers).flatMap(([key, popover]) =>

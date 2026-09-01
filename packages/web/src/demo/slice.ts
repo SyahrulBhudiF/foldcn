@@ -28,6 +28,7 @@ export type DemoSlice = {
   /** Schema fields contributed to the shared demo Model struct. */
   fields: Record<string, import('effect').Schema.Schema<unknown>>
   /** Initial values for this slice's fields (validated by the smoke test). */
+  // oxlint-disable-next-line anti-slop/no-unsafe-dictionary-type
   init: Record<string, unknown>
   /** Message schemas contributed to the shared demo Message union. */
   messages: ReadonlyArray<import('effect').Schema.Schema<unknown>>

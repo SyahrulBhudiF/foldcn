@@ -182,7 +182,7 @@ export const subscriptionsForRoot = (getTrackRoot: () => Document | ShadowRoot) 
             ).pipe(Effect.flatMap(() => Effect.never)),
           )
 
-          // eslint-disable-next-line typescript/consistent-type-assertions -- Stream.when widens the element type
+          // oxlint-disable-next-line typescript/consistent-type-assertions -- SAFETY: Stream.when widens the element type
           return Stream.when(
             Stream.merge(pointerEvents, documentDragStyles),
             Effect.sync(() => dragActivity === 'Active'),
@@ -197,7 +197,7 @@ export const subscriptionsForRoot = (getTrackRoot: () => Document | ShadowRoot) 
           dragActivity: dragActivityFromModel(model),
         }),
         dependenciesToStream: ({ dragActivity }): Stream.Stream<Message> =>
-          // eslint-disable-next-line typescript/consistent-type-assertions -- Stream.when widens the element type
+          // oxlint-disable-next-line typescript/consistent-type-assertions -- SAFETY: Stream.when widens the element type
           Stream.when(
             Stream.fromEventListener(document, 'keydown').pipe(
               Stream.filter(
@@ -221,6 +221,7 @@ const filledTrackStyle = (
   fraction: number,
 ): Readonly<Record<string, string>> => {
   if (orientation === 'vertical') {
+    // oxlint-disable-next-line anti-slop/no-known-value-widening -- SAFETY: style bag must be Record<string,string> for h.Style; literal evidence is intentionally widened to the style contract
     return {
       position: 'absolute',
       bottom: '0',
@@ -231,6 +232,7 @@ const filledTrackStyle = (
       'pointer-events': 'none',
     }
   }
+  // oxlint-disable-next-line anti-slop/no-known-value-widening -- SAFETY: style bag must be Record<string,string> for h.Style; literal evidence is intentionally widened to the style contract
   return {
     position: 'absolute',
     left: '0',
@@ -246,6 +248,7 @@ const thumbStyle = (
   fraction: number,
 ): Readonly<Record<string, string>> => {
   if (orientation === 'vertical') {
+    // oxlint-disable-next-line anti-slop/no-known-value-widening -- SAFETY: style bag must be Record<string,string> for h.Style; literal evidence is intentionally widened to the style contract
     return {
       position: 'absolute',
       bottom: percentString(fraction),
@@ -254,6 +257,7 @@ const thumbStyle = (
       'touch-action': 'none',
     }
   }
+  // oxlint-disable-next-line anti-slop/no-known-value-widening -- SAFETY: style bag must be Record<string,string> for h.Style; literal evidence is intentionally widened to the style contract
   return {
     position: 'absolute',
     left: `calc((100% - ${THUMB_SIZE}) * ${fraction})`,

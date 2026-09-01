@@ -4,6 +4,8 @@ import { Table } from '../../generated/registry/ui/table'
 import { icon } from '../../generated/registry/lib/icons'
 import { MoreHorizontal } from 'lucide'
 
+import { Schema as S } from 'effect'
+
 import { defineSlice } from '../slice'
 import type { Message, Model } from '../assemble'
 
@@ -514,9 +516,13 @@ export const tableView = (_model: Model, h: HtmlBuilder<Message>): Html =>
     ],
   )
 
+const fields = {}
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
 export const slice = defineSlice({
-  fields: {},
+  fields,
   init: {},
   messages: [],
-  handlers: (_model: unknown) => ({}),
+  handlers: (_model: State) => ({}),
 })

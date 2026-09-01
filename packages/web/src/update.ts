@@ -132,12 +132,14 @@ const readStoredPackageManager = (): PackageManager =>
         }),
       )
 
-const systemPrefersDark = (): ResolvedTheme =>
-  typeof window !== 'undefined' &&
-  typeof window.matchMedia === 'function' &&
-  window.matchMedia('(prefers-color-scheme: dark)').matches
+const systemPrefersDark = (): ResolvedTheme => {
+  if (globalThis.window === undefined) return 'Light'
+  const matchMedia = globalThis.window.matchMedia
+  if (matchMedia === undefined) return 'Light'
+  return matchMedia.call(globalThis.window, '(prefers-color-scheme: dark)').matches
     ? 'Dark'
     : 'Light'
+}
 
 const resolveTheme = (model: Model, preference: ThemePreference): ResolvedTheme =>
   preference === 'System' ? systemPrefersDark() : preference

@@ -6,6 +6,8 @@ import { inputClass } from '../../generated/registry/ui/input'
 import { icon } from '../../generated/registry/lib/icons'
 import { Plus, Captions } from 'lucide'
 
+import { Schema as S } from 'effect'
+
 import { defineSlice } from '../slice'
 import type { Message, Model } from '../assemble'
 
@@ -539,9 +541,13 @@ export const cardView = (_model: Model, h: HtmlBuilder<Message>): Html =>
     ],
   )
 
+const fields = {}
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
 export const slice = defineSlice({
-  fields: {},
+  fields,
   init: {},
   messages: [],
-  handlers: (_model: unknown) => ({}),
+  handlers: (_model: State) => ({}),
 })

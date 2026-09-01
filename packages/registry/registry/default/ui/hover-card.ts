@@ -45,8 +45,8 @@ export type InitConfig = Readonly<{
 
 export const init = (config: InitConfig): Model => ({
   hoverIntent: HoverIntent.init({
-    ...(config.openDelay === undefined ? {} : { openDelay: config.openDelay }),
-    ...(config.closeDelay === undefined ? {} : { closeDelay: config.closeDelay }),
+    openDelay: config.openDelay,
+    closeDelay: config.closeDelay,
   }),
   popover: FoldkitPopover.init({
     id: config.id,
@@ -187,14 +187,15 @@ export const update = (model: Model, message: Message): UpdateReturn =>
           popoverMessage._tag === 'RequestedClose'
             ? HoverIntent.close(model.hoverIntent)
             : { model: model.hoverIntent }
-        return {
+        const base = {
           model: evo(model, {
             hoverIntent: () => hoverIntent.model,
             popover: () => result.model,
           }),
           commands: mapPopoverCommands(result.commands),
-          ...(hoverIntent.outMessage === undefined ? {} : { outMessage: hoverIntent.outMessage }),
         }
+        if (hoverIntent.outMessage === undefined) return base
+        return { ...base, outMessage: hoverIntent.outMessage }
       },
     }),
   )
@@ -219,7 +220,7 @@ const withoutPopoverInteractions = (
   attributes: ReadonlyArray<ChildAttribute>,
 ): ReadonlyArray<ChildAttribute> =>
   attributes.filter((wrapped) => {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    // oxlint-disable-next-line typescript/consistent-type-assertions -- SAFETY: foldkit attribute._tag
     const tag = (wrapped.attribute as { readonly _tag?: string } | undefined)?._tag
     return ![
       'OnPointerDown',
@@ -245,8 +246,11 @@ export const view = defineView<Model, Message, ViewInputs>((model, viewInputs, h
           view: FoldkitPopover.view,
           viewInputs: {
             anchor,
+            // oxlint-disable-next-line anti-slop/no-conditional-empty-object-spread
             ...(isDisabled === undefined ? {} : { isDisabled }),
+            // oxlint-disable-next-line anti-slop/no-conditional-empty-object-spread
             ...(ariaLabel === undefined ? {} : { ariaLabel }),
+            // oxlint-disable-next-line anti-slop/no-conditional-empty-object-spread
             ...(ariaLabelledBy === undefined ? {} : { ariaLabelledBy }),
             toView: ({ button, panel: popoverPanel, backdrop, isVisible }) =>
               toView({

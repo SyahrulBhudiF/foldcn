@@ -15,12 +15,7 @@ export type LlmItem = Readonly<{
   category: string
 }>
 
-// ---------------------------------------------------------------------------
-// LlmsDocShape — enriched sections for agents as structured composable parts
-// ---------------------------------------------------------------------------
-
-/** Structured shape of the llms.txt document — title, quote and ordered sections. */
-export type LlmsDocShape = Readonly<{
+export type LlmsDocLayout = Readonly<{
   title: string
   quote: string
   sections: ReadonlyArray<Readonly<{ heading: string; body: ReadonlyArray<string> }>>
@@ -29,16 +24,6 @@ export type LlmsDocShape = Readonly<{
 type LlmsContext = Readonly<{ origin: string; items: ReadonlyArray<LlmItem> }>
 
 type SectionComposer = (ctx: LlmsContext) => ReadonlyArray<string>
-
-type SectionDef = Readonly<{
-  id: string
-  heading: string
-  compose: SectionComposer
-}>
-
-// ---------------------------------------------------------------------------
-// Shared constants and helpers
-// ---------------------------------------------------------------------------
 
 const GITHUB_REPO = 'https://github.com/elianiva/foldcn'
 const GITHUB_ISSUES_NEW = `${GITHUB_REPO}/issues/new`
@@ -120,19 +105,6 @@ const composeForAgents: SectionComposer = ({ origin }) => {
 
 const CATEGORY_ORDER = ['Base', 'Lib', 'Components', 'Blocks'] as const
 
-const composeCategories: SectionComposer = ({ origin, items }) => {
-  const lines: Array<string> = []
-  for (const category of CATEGORY_ORDER) {
-    const group = items.filter((item) => item.category === category)
-    if (group.length === 0) continue
-    lines.push(`## ${category}`)
-    for (const item of group) {
-      lines.push(`- [${item.title}](${origin}/docs/${item.name}.md): ${item.description}`)
-    }
-  }
-  return lines
-}
-
 const composeOptional: SectionComposer = ({ origin }) => [
   '## Optional',
   `- [llms-full.txt](${origin}/llms-full.txt): Every page as a single concatenated Markdown file.`,
@@ -144,20 +116,15 @@ const composeSource: SectionComposer = () => [
   `- [shadcn/ui](https://ui.shadcn.com) — the React counterpart; use it instead if your stack is React.`,
 ]
 
-const LLMS_TXT_SECTIONS: ReadonlyArray<SectionDef> = [
-  { id: 'docs', heading: 'Docs', compose: composeDocs },
-  { id: 'for-agents', heading: 'For agents', compose: composeForAgents },
-  { id: 'categories', heading: 'Categories', compose: composeCategories },
-  { id: 'optional', heading: 'Optional', compose: composeOptional },
-  { id: 'source', heading: 'Source', compose: composeSource },
-]
-
-const TYPE_TO_CATEGORY: Readonly<Record<string, string>> = {
+const TYPE_TO_CATEGORY = {
   'registry:style': 'Base',
   'registry:lib': 'Lib',
   'registry:ui': 'Components',
   'registry:block': 'Blocks',
-}
+} as const
+
+const isRegistryType = (type: string): type is keyof typeof TYPE_TO_CATEGORY =>
+  type in TYPE_TO_CATEGORY
 
 const GROUP_FILES = ['style', 'lib', 'ui', 'blocks'] as const
 
@@ -167,7 +134,7 @@ export const loadRegistryItems = Effect.fn(function* () {
     GROUP_FILES.map((group) =>
       Effect.gen(function* () {
         const file = yield* fs.readFileString(resolve(REGISTRY_DIR, group, 'registry.json'))
-        // oxlint-disable-next-line
+        // oxlint-disable-next-line typescript/consistent-type-assertions -- SAFETY: registry.json shape
         const json = JSON.parse(file) as {
           items?: ReadonlyArray<{
             name?: string
@@ -184,7 +151,10 @@ export const loadRegistryItems = Effect.fn(function* () {
               name: it.name ?? '',
               title: it.title ?? it.name ?? '',
               description: it.description ?? '',
-              category: TYPE_TO_CATEGORY[it.type ?? ''] ?? 'Components',
+              category: (() => {
+                const type = it.type ?? ''
+                return isRegistryType(type) ? TYPE_TO_CATEGORY[type] : 'Components'
+              })(),
             })) ?? []
         )
       }),
@@ -194,11 +164,11 @@ export const loadRegistryItems = Effect.fn(function* () {
   return items.flat()
 })
 
-/** Build the structured shape then render it to Markdown. */
-const renderLlmsDoc = (shape: LlmsDocShape): string => {
+/** Build the structured layout then render it to Markdown. */
+const renderLlmsDoc = (doc: LlmsDocLayout): string => {
   const lines: Array<string> = []
-  lines.push(shape.title, '', shape.quote, '')
-  for (const section of shape.sections) {
+  lines.push(doc.title, '', doc.quote, '')
+  for (const section of doc.sections) {
     lines.push(`## ${section.heading}`)
     lines.push(...section.body)
     lines.push('')
@@ -209,25 +179,17 @@ const renderLlmsDoc = (shape: LlmsDocShape): string => {
 export const buildLlmsTxt = (items: ReadonlyArray<LlmItem>, origin: string): string => {
   const ctx: LlmsContext = { origin, items }
 
-  // Build category bodies separately so the table stays declarative — categories
-  // expand to one section per non-empty group but composeCategories already
-  // returns headings inline, so we handle it as a special case below.
   const docsBody = composeDocs(ctx).slice(1)
   const forAgentsBody = composeForAgents(ctx).slice(1)
   const optionalBody = composeOptional(ctx).slice(1)
   const sourceBody = composeSource(ctx).slice(1)
 
-  // Use the section table for the fixed sections, then splice categories.
-  const fixedSections = LLMS_TXT_SECTIONS.filter((s) => s.id !== 'categories')
-  void fixedSections
-
-  const shape: LlmsDocShape = {
+  const doc: LlmsDocLayout = {
     title: LLMS_TITLE,
     quote: LLMS_QUOTE,
     sections: [
       { heading: 'Docs', body: docsBody },
       { heading: 'For agents', body: forAgentsBody },
-      // Categories expand inline — one heading per group
       ...CATEGORY_ORDER.flatMap((category) => {
         const group = items.filter((item) => item.category === category)
         if (group.length === 0) return []
@@ -245,7 +207,7 @@ export const buildLlmsTxt = (items: ReadonlyArray<LlmItem>, origin: string): str
     ],
   }
 
-  return renderLlmsDoc(shape)
+  return renderLlmsDoc(doc)
 }
 
 export const buildLlmsFull = (

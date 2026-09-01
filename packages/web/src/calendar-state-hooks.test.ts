@@ -22,9 +22,12 @@ const today = CalendarDate.make({ year: 2026, month: 8, day: 22 })
 
 type StateNode = {
   sel?: string
-  data?: { attrs?: Record<string, unknown>; class?: Record<string, boolean> }
+  data?: { attrs?: Record<string, string>; class?: Record<string, boolean> }
   children?: ReadonlyArray<StateNode | string>
 }
+
+const isStateNode = (node: StateNode | string | undefined): node is StateNode =>
+  node !== undefined && typeof node !== 'string'
 
 const classTokens = (node: StateNode): Array<string> =>
   Object.entries(node.data?.class ?? {})
@@ -32,7 +35,7 @@ const classTokens = (node: StateNode): Array<string> =>
     .map(([name]) => name)
 
 const walk = (node: StateNode | string | undefined, visit: (n: StateNode) => void): void => {
-  if (!node || typeof node === 'string') return
+  if (!isStateNode(node)) return
   visit(node)
   for (const child of node.children ?? []) walk(child, visit)
 }
@@ -58,9 +61,19 @@ const dayButtons = (html: StateNode): Array<StateNode> => {
   return found
 }
 
-const assertHtml = (sim: { html?: StateNode }, assert: (html: StateNode) => void): void => {
-  expect(sim.html).toBeDefined()
-  if (sim.html) assert(sim.html)
+type SceneCarrier = Readonly<{ html?: unknown; _phantom?: unknown }>
+
+const readSceneHtml = (sim: SceneCarrier): StateNode => {
+  const { html } = sim
+  if (html === undefined) throw new Error('Scene produced no html')
+  // oxlint-disable-next-line typescript/consistent-type-assertions -- SAFETY: Scene html tree
+  return html as StateNode
+}
+
+const assertHtml = (sim: SceneCarrier, assert: (html: StateNode) => void): void => {
+  const html = readSceneHtml(sim)
+  expect(html).toBeDefined()
+  assert(html)
 }
 
 describe('calendar state hooks', () => {

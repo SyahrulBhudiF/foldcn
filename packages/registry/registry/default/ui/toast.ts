@@ -177,13 +177,13 @@ export const toastLoadingIcon = <M>(h: HtmlBuilder<M>): Html =>
  *  uniform-height rule), so only never-measured cards — which render at
  *  natural height — contribute meaningful values. Runs after paint so the
  *  just-mounted card is in the DOM. */
-const measureHeights = (containerId: string): Readonly<Record<string, number>> => {
+const measureHeights = (containerId: string) => {
   if (typeof document === 'undefined') {
-    return {}
+    return {} satisfies Readonly<Record<string, number>>
   }
   const container = document.getElementById(containerId)
   if (container === null) {
-    return {}
+    return {} satisfies Readonly<Record<string, number>>
   }
   const heights: Record<string, number> = {}
   // Batched read: single query + single layout pass via
@@ -205,7 +205,7 @@ const measureHeights = (containerId: string): Readonly<Record<string, number>> =
       heights[item.id] = Math.round(h)
     }
   }
-  return heights
+  return heights satisfies Readonly<Record<string, number>>
 }
 
 /** Per-entry placement for the current frame, mirroring Base UI's CSS

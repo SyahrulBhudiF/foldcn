@@ -65,10 +65,14 @@ const generate = () => {
   // Parity check first: shims assume identical export surfaces across styles.
   for (const relPath of itemPaths()) {
     const source = readFileSync(join(TREES, 'default', relPath), 'utf8')
-    const reference = [...valueExports(source), ...typeExports(source)].sort()
+    const reference = [...valueExports(source), ...typeExports(source)].sort((a, b) =>
+      a.localeCompare(b),
+    )
     for (const style of STYLES.slice(1)) {
       const otherSource = readFileSync(join(TREES, style, relPath), 'utf8')
-      const other = [...valueExports(otherSource), ...typeExports(otherSource)].sort()
+      const other = [...valueExports(otherSource), ...typeExports(otherSource)].sort((a, b) =>
+        a.localeCompare(b),
+      )
       if (reference.length !== other.length || reference.some((name, i) => name !== other[i])) {
         throw new Error(`export mismatch between default and ${style} for ${relPath}`)
       }

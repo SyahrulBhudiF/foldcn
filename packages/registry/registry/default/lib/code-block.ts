@@ -49,7 +49,7 @@ export type CodeBlockConfig<M> = Readonly<{
   collapsedHeightClass?: string
 }>
 
-const LANG_BY_EXT: Record<string, string> = {
+const LANG_BY_EXT = {
   ts: 'ts',
   tsx: 'tsx',
   js: 'js',
@@ -86,11 +86,13 @@ const LANG_BY_EXT: Record<string, string> = {
   scm: 'scheme',
   racket: 'scheme',
   mermaid: 'mermaid',
-}
+} as const
+
+const isLangExt = (ext: string): ext is keyof typeof LANG_BY_EXT => ext in LANG_BY_EXT
 
 const inferLang = (path: string): string => {
   const ext = path.split('.').pop()?.toLowerCase() ?? ''
-  return LANG_BY_EXT[ext] ?? 'plaintext'
+  return isLangExt(ext) ? LANG_BY_EXT[ext] : 'plaintext'
 }
 
 /** Render a highlighted code block with file header and copy button. */

@@ -4,6 +4,8 @@ import { button } from '../../generated/registry/ui/button'
 import { icon } from '../../generated/registry/lib/icons'
 import { ArrowRight, ArrowLeftCircle } from 'lucide'
 
+import { Schema as S } from 'effect'
+
 import { defineSlice } from '../slice'
 import type { Model, Message } from '../assemble'
 
@@ -705,9 +707,13 @@ export const buttonView = (_model: Model, h: HtmlBuilder<Message>): Html =>
     ],
   )
 
+const fields = {}
+const stateSchema = S.Struct(fields)
+type State = typeof stateSchema.Type
+
 export const slice = defineSlice({
-  fields: {},
+  fields,
   init: {},
   messages: [],
-  handlers: (_model: unknown) => ({}),
+  handlers: (_model: State) => ({}),
 })
