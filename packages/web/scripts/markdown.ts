@@ -121,7 +121,7 @@ const TYPE_TO_CATEGORY = {
   'registry:lib': 'Lib',
   'registry:ui': 'Components',
   'registry:block': 'Blocks',
-} satisfies Readonly<Record<string, string>>
+} as const
 
 const isRegistryType = (type: string): type is keyof typeof TYPE_TO_CATEGORY =>
   type in TYPE_TO_CATEGORY

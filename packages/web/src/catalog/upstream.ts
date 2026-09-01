@@ -3,7 +3,7 @@ import { foldcnOnly } from './parity'
 const rename = {
   menu: 'dropdown-menu',
   fieldset: 'field',
-} satisfies Record<string, string>
+} as const
 
 const isRenameKey = (name: string): name is keyof typeof rename => name in rename
 

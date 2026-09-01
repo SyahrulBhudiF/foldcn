@@ -86,7 +86,7 @@ const LANG_BY_EXT = {
   scm: 'scheme',
   racket: 'scheme',
   mermaid: 'mermaid',
-} satisfies Record<string, string>
+} as const
 
 const isLangExt = (ext: string): ext is keyof typeof LANG_BY_EXT => ext in LANG_BY_EXT
 

@@ -221,6 +221,7 @@ const filledTrackStyle = (
   fraction: number,
 ): Readonly<Record<string, string>> => {
   if (orientation === 'vertical') {
+    // oxlint-disable-next-line anti-slop/no-known-value-widening -- SAFETY: style bag must be Record<string,string> for h.Style; literal evidence is intentionally widened to the style contract
     return {
       position: 'absolute',
       bottom: '0',
@@ -231,6 +232,7 @@ const filledTrackStyle = (
       'pointer-events': 'none',
     }
   }
+  // oxlint-disable-next-line anti-slop/no-known-value-widening -- SAFETY: style bag must be Record<string,string> for h.Style; literal evidence is intentionally widened to the style contract
   return {
     position: 'absolute',
     left: '0',
@@ -246,6 +248,7 @@ const thumbStyle = (
   fraction: number,
 ): Readonly<Record<string, string>> => {
   if (orientation === 'vertical') {
+    // oxlint-disable-next-line anti-slop/no-known-value-widening -- SAFETY: style bag must be Record<string,string> for h.Style; literal evidence is intentionally widened to the style contract
     return {
       position: 'absolute',
       bottom: percentString(fraction),
@@ -254,6 +257,7 @@ const thumbStyle = (
       'touch-action': 'none',
     }
   }
+  // oxlint-disable-next-line anti-slop/no-known-value-widening -- SAFETY: style bag must be Record<string,string> for h.Style; literal evidence is intentionally widened to the style contract
   return {
     position: 'absolute',
     left: `calc((100% - ${THUMB_SIZE}) * ${fraction})`,

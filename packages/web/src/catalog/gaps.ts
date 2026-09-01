@@ -45,7 +45,7 @@ export const gapsByItem = {
   progress: [
     'Indeterminate state renders an empty track — animated indeterminacy awaits primitive support.',
   ],
-} satisfies Readonly<Record<string, ReadonlyArray<string>>>
+} as const
 
 const isGapItem = (name: string): name is keyof typeof gapsByItem => name in gapsByItem
 
