@@ -71,7 +71,7 @@ const navDropdown = (
     [
       h.submodel({
         slotId: id,
-        model: NavMenu.getPopover(model.navigationMenu, id),
+        model: NavMenu.getItem(model.navigationMenu, id),
         view: NavMenu.view,
         viewInputs: NavMenu.dropdownViewInputs({ id, trigger }, content, h),
         toParentMessage: (message) =>

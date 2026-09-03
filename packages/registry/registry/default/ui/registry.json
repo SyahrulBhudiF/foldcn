@@ -737,7 +737,7 @@
       "name": "navigation-menu",
       "type": "registry:ui",
       "title": "Navigation Menu",
-      "description": "Presentational top-level navigation bar with trigger and content builders. \u26a0 Show/hide behavior is consumer-owned.",
+      "description": "Top-level navigation bar with delayed hover/focus dropdowns and trigger/content builders.",
       "registryDependencies": ["@foldcn/utils"],
       "files": [
         {

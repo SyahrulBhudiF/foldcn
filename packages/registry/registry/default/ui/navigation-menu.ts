@@ -1,9 +1,11 @@
-import { Popover as FoldkitPopover } from '@foldkit/ui'
+import { HoverIntent, Popover as FoldkitPopover } from '@foldkit/ui'
 import type { AnchorConfig } from '@foldkit/ui/popover'
-import { Schema as S } from 'effect'
+import { Option, Schema as S } from 'effect'
 import * as Command from 'foldkit/command'
-import type { Html, HtmlBuilder } from 'foldkit/html'
+import { childAttributes, type ChildAttribute, type Html, type HtmlBuilder } from 'foldkit/html'
 import { defineMessageUnion } from 'foldkit/message'
+import { evo } from 'foldkit/struct'
+import { defineView } from 'foldkit/submodel'
 import * as Update from 'foldkit/update'
 import { ChevronDown } from 'lucide'
 import { icon } from '@/lib/icons'
@@ -18,36 +20,50 @@ import { placementToSide } from './popover'
 // `.link` (fully presentational, for static links) and `dropdownViewInputs`
 // (stateful — see below).
 //
-// `dropdownViewInputs` builds the `ViewInputs` for one @foldkit/ui Popover
+// `dropdownViewInputs` builds the `ViewInputs` for one hover-aware Popover
 // submodel per item, keyed by id; the consumer wires it up with `h.submodel`
-// themselves, the same way `Menubar.viewInputs`/`HoverCard.styledViewInputs`
-// do — this keeps `h.submodel`, `model`, and `toParentMessage` visible at the
-// call site instead of hidden behind a bespoke `(config, children, model,
-// toParentMessage, h)` signature. Popover already supplies click-toggle,
-// outside-click/Escape dismissal, and focus management — the nav menu
-// doesn't reimplement any of that; `update` only adds "opening one item's
-// dropdown closes any other open one," since a nav bar shows at most one
-// dropdown at a time.
+// themselves. HoverIntent owns delayed pointer/focus engagement; Popover owns
+// anchoring, dismissal, and focus management. `update` adds "opening one
+// item's dropdown closes any other open one," since a nav bar shows at most
+// one dropdown at a time.
 //
-// foldcn gaps vs upstream: no shared/animated Viewport (Radix's single
-// morphing panel with a slide-direction indicator) — each dropdown is its
-// own independently-anchored Popover panel instead. cn-navigation-menu-item
-// is an intentional no-op hook upstream.
+// foldcn gaps vs upstream: no shared/animated Viewport (Base UI's single
+// morphing panel with a slide-direction indicator) — each dropdown is its own
+// independently-anchored Popover panel instead. cn-navigation-menu-item is an
+// intentional no-op hook upstream.
+
+export const ItemModel = S.Struct({
+  hoverIntent: HoverIntent.Model,
+  popover: FoldkitPopover.Model,
+})
+export type ItemModel = typeof ItemModel.Type
 
 export const Model = S.Struct({
-  popovers: S.Record(S.String, FoldkitPopover.Model),
+  items: S.Record(S.String, ItemModel),
 })
 export type Model = typeof Model.Type
 
-/** Creates an initial nav-menu model with one closed Popover per given item id. */
+/** Creates an initial nav-menu model with one closed hover-aware item per id. */
 export const init = (itemIds: ReadonlyArray<string>): Model => ({
-  popovers: Object.fromEntries(
-    itemIds.map((id) => [id, FoldkitPopover.init({ id, isAnimated: true })]),
+  items: Object.fromEntries(
+    itemIds.map((id) => [
+      id,
+      {
+        hoverIntent: HoverIntent.init({ closeDelay: 200 }),
+        popover: FoldkitPopover.init({ id, isAnimated: true, contentFocus: true }),
+      },
+    ]),
   ),
 })
 
+export const ItemMessage = defineMessageUnion({
+  GotHoverIntentMessage: { message: HoverIntent.Message },
+  GotPopoverMessage: { message: FoldkitPopover.Message },
+})
+export type ItemMessage = typeof ItemMessage.Type
+
 export const Message = defineMessageUnion({
-  GotItemMessage: { id: S.String, message: FoldkitPopover.Message },
+  GotItemMessage: { id: S.String, message: ItemMessage },
 })
 export type Message = typeof Message.Type
 
@@ -57,30 +73,119 @@ export const OutMessage = defineMessageUnion({
 })
 export type OutMessage = typeof OutMessage.Type
 
-/** Re-export of the underlying Popover submodel's `view`, for `h.submodel`
- *  calls built from `dropdownViewInputs`. */
-export const view = FoldkitPopover.view
+const ItemOutMessage = defineMessageUnion({
+  Opened: {},
+  Closed: {},
+})
+type ItemOutMessage = typeof ItemOutMessage.Type
 
 type UpdateReturn = Update.ReturnWithOutMessage<Model, Message, OutMessage>
+type ItemUpdateReturn = Update.ReturnWithOutMessage<ItemModel, ItemMessage, ItemOutMessage>
 
-/** Looks up the Popover model for `id`, throwing a message that names the
- *  bad id and the ids that were actually passed to `init` — the mismatch is
- *  otherwise easy to miss until the dropdown silently never opens. */
-export const getPopover = (model: Model, id: string): FoldkitPopover.Model => {
-  const popover = model.popovers[id]
-  if (popover === undefined) {
-    const knownIds = Object.keys(model.popovers)
+/** Looks up one item's hover and popover state. */
+export const getItem = (model: Model, id: string): ItemModel => {
+  const item = model.items[id]
+  if (item === undefined) {
+    const knownIds = Object.keys(model.items)
     throw new Error(
       `NavigationMenu: unknown item id "${id}" — add it to the array passed to NavigationMenu.init. Known ids: ${knownIds.length > 0 ? knownIds.join(', ') : '(none — init was called with an empty array)'}.`,
     )
   }
-  return popover
+  return item
 }
 
 const toItemMessage =
   (id: string) =>
-  (message: FoldkitPopover.Message): Message =>
+  (message: ItemMessage): Message =>
     Message.GotItemMessage({ id, message })
+
+const withoutPopoverInteractions = (
+  attributes: ReadonlyArray<ChildAttribute>,
+): ReadonlyArray<ChildAttribute> =>
+  attributes.filter((wrapped) => {
+    // oxlint-disable-next-line typescript/consistent-type-assertions -- SAFETY: foldkit attribute._tag
+    const tag = (wrapped.attribute as { readonly _tag?: string } | undefined)?._tag
+    return ![
+      'OnPointerDown',
+      'OnClick',
+      'OnKeyDownPreventDefault',
+      'OnKeyUpPreventDefault',
+    ].includes(tag ?? '')
+  })
+
+const mapPopoverCommands = (
+  commands: NonNullable<ReturnType<typeof FoldkitPopover.open>['commands']> = [],
+) =>
+  Command.mapMessages(
+    commands.filter((command) => command.name !== 'FocusButton'),
+    (message) => ItemMessage.GotPopoverMessage({ message }),
+  )
+
+const syncPopover = (
+  model: ItemModel,
+  operation: typeof FoldkitPopover.open | typeof FoldkitPopover.close,
+  outMessage: ItemOutMessage,
+): ItemUpdateReturn => {
+  const result = operation(model.popover)
+  return {
+    model: { ...model, popover: result.model },
+    commands: mapPopoverCommands(result.commands),
+    outMessage,
+  }
+}
+
+const releaseTriggerFocus = (hoverIntent: HoverIntent.Model): HoverIntent.Model =>
+  evo(hoverIntent, {
+    maybeFocusLocation: () =>
+      Option.filter(hoverIntent.maybeFocusLocation, (location) => location !== 'Trigger'),
+  })
+
+const updateItem = (model: ItemModel, message: ItemMessage): ItemUpdateReturn => {
+  if (message._tag === 'GotHoverIntentMessage') {
+    if (message.message._tag === 'FocusedPanel' || message.message._tag === 'BlurredPanel') {
+      return { model }
+    }
+
+    const result = HoverIntent.update(
+      message.message._tag === 'LeftTrigger'
+        ? releaseTriggerFocus(model.hoverIntent)
+        : model.hoverIntent,
+      message.message,
+    )
+    const nextModel = { ...model, hoverIntent: result.model }
+
+    if (result.outMessage?._tag === 'Opened') {
+      return syncPopover(nextModel, FoldkitPopover.open, ItemOutMessage.Opened())
+    }
+    if (result.outMessage?._tag === 'Closed') {
+      return syncPopover(nextModel, FoldkitPopover.close, ItemOutMessage.Closed())
+    }
+    return {
+      model: nextModel,
+      commands: Command.mapMessages(result.commands ?? [], (message) =>
+        ItemMessage.GotHoverIntentMessage({ message }),
+      ),
+    }
+  }
+
+  const result = FoldkitPopover.update(model.popover, message.message)
+  const hoverIntent =
+    message.message._tag === 'RequestedClose'
+      ? HoverIntent.close(model.hoverIntent)
+      : { model: model.hoverIntent }
+  const base = {
+    model: { hoverIntent: hoverIntent.model, popover: result.model },
+    commands: mapPopoverCommands(result.commands),
+  }
+  if (hoverIntent.outMessage === undefined) return base
+  return { ...base, outMessage: hoverIntent.outMessage }
+}
+
+const closeItem = (item: ItemModel): ItemUpdateReturn =>
+  updateItem(
+    item,
+    ItemMessage.GotPopoverMessage({ message: FoldkitPopover.Message.RequestedClose() }),
+  )
 
 /** Processes a nav-menu message. Opening one item's popover force-closes any
  *  other currently-open item, so at most one dropdown shows at a time.
@@ -88,46 +193,42 @@ const toItemMessage =
  *  is emitted, the siblings are closed purely via commands with no matching
  *  `Closed` out message, so don't expect one for the item that got bumped. */
 export const update = (model: Model, message: Message): UpdateReturn => {
-  const { id, message: popoverMessage } = message
-  const current = model.popovers[id]
-  if (current === undefined) {
-    return { model }
-  }
+  const { id, message: itemMessage } = message
+  const current = model.items[id]
+  if (current === undefined) return { model }
 
   const {
-    model: nextPopover,
-    commands: popoverCommands = [],
+    model: nextItem,
+    commands: itemCommands = [],
     outMessage,
-  } = FoldkitPopover.update(current, popoverMessage)
+  } = updateItem(current, itemMessage)
   const justOpened = outMessage?._tag === 'Opened'
 
   if (!justOpened) {
     const base = {
-      model: { popovers: { ...model.popovers, [id]: nextPopover } },
-      commands: Command.mapMessages(popoverCommands, toItemMessage(id)),
+      model: { items: { ...model.items, [id]: nextItem } },
+      commands: Command.mapMessages(itemCommands, toItemMessage(id)),
     }
     if (outMessage === undefined) return base
     return { ...base, outMessage: OutMessage.Closed({ id }) }
   }
 
-  const closedOthers = Object.entries(model.popovers).flatMap(([key, popover]) =>
-    key === id || !popover.isOpen ? [] : [[key, FoldkitPopover.close(popover)] as const],
+  const closedOthers = Object.entries(model.items).flatMap(([key, item]) =>
+    key === id || !item.popover.isOpen ? [] : [[key, closeItem(item)] as const],
   )
 
   return {
     model: {
-      popovers: {
-        ...model.popovers,
-        [id]: nextPopover,
-        ...Object.fromEntries(
-          closedOthers.map(([key, { model: closedPopover }]) => [key, closedPopover]),
-        ),
+      items: {
+        ...model.items,
+        [id]: nextItem,
+        ...Object.fromEntries(closedOthers.map(([key, result]) => [key, result.model])),
       },
     },
     commands: [
-      ...Command.mapMessages(popoverCommands, toItemMessage(id)),
-      ...closedOthers.flatMap(([key, { commands: closeCommands = [] }]) =>
-        Command.mapMessages(closeCommands, toItemMessage(key)),
+      ...Command.mapMessages(itemCommands, toItemMessage(id)),
+      ...closedOthers.flatMap(([key, { commands = [] }]) =>
+        Command.mapMessages(commands, toItemMessage(key)),
       ),
     ],
     outMessage: OutMessage.Opened({ id }),
@@ -233,12 +334,9 @@ export type DropdownConfig = Readonly<{
   isDisabled?: boolean
 }>
 
-/** Builds a Popover `ViewInputs` for one nav-item's trigger + dropdown
- *  panel. The consumer owns `h.submodel` (model: `NavigationMenu.getPopover(model, config.id)`,
- *  view: `FoldkitPopover.view`) and the surrounding `<li>` — wrap the
- *  `h.submodel` call in `NavigationMenu.item` yourself, the same way
- *  `Menubar.viewInputs`/`HoverCard.styledViewInputs` leave their wrapping
- *  markup to the caller instead of hiding it behind a bespoke signature. */
+/** Builds hover-aware `ViewInputs` for one nav item. The consumer owns
+ * `h.submodel` (model: `NavigationMenu.getItem(model, config.id)`, view:
+ * `NavigationMenu.view`) and the surrounding `<li>`. */
 const navigationMenuViewport = <M>(
   config: StyleConfig,
   children: ReadonlyArray<Child>,
@@ -265,35 +363,80 @@ const navigationMenuIndicator = <M>(
     children.length > 0 ? children : [h.div([h.Class(navigationMenuIndicatorArrowClass)])],
   )
 
+export type ViewInputs = Readonly<{
+  anchor: AnchorConfig
+  toView: (render: RenderInfo) => Html
+  isDisabled?: boolean
+}>
+
+export type RenderInfo = Readonly<{
+  trigger: ReadonlyArray<ChildAttribute>
+  panel: ReadonlyArray<ChildAttribute>
+  isVisible: boolean
+}>
+
+/** HoverIntent owns interaction; Popover remains only for positioning. */
+export const view = defineView<ItemModel, ItemMessage, ViewInputs>((model, viewInputs, h) =>
+  h.submodel({
+    slotId: `${model.popover.id}-hover-intent`,
+    model: model.hoverIntent,
+    view: HoverIntent.view,
+    viewInputs: {
+      focusTriggerSelector: `#${FoldkitPopover.buttonId(model.popover.id)}`,
+      toView: ({ trigger, panel }) =>
+        h.submodel({
+          slotId: `${model.popover.id}-popover`,
+          model: model.popover,
+          view: FoldkitPopover.view,
+          viewInputs: {
+            anchor: viewInputs.anchor,
+            isDisabled: viewInputs.isDisabled,
+            toView: ({ button, panel: popoverPanel, isVisible }) =>
+              viewInputs.toView({
+                trigger: [
+                  ...withoutPopoverInteractions(button),
+                  ...(viewInputs.isDisabled ? [] : trigger),
+                  ...childAttributes([h.DataAttribute('slot', 'navigation-menu-trigger')]),
+                ],
+                panel: [
+                  ...withoutPopoverInteractions(popoverPanel),
+                  ...(viewInputs.isDisabled ? [] : panel),
+                  ...childAttributes([h.DataAttribute('slot', 'navigation-menu-content')]),
+                ],
+                isVisible,
+              }),
+          },
+          toParentMessage: (message) => ItemMessage.GotPopoverMessage({ message }),
+        }),
+    },
+    toParentMessage: (message) => ItemMessage.GotHoverIntentMessage({ message }),
+  }),
+)
+
 export const dropdownViewInputs = <M>(
   config: DropdownConfig,
   content: ReadonlyArray<Child>,
   h: HtmlBuilder<M>,
-): FoldkitPopover.ViewInputs => {
+): ViewInputs => {
   const anchor = config.anchor ?? NAVIGATION_MENU_ANCHOR
   return {
     anchor,
     ...(config.isDisabled !== undefined && { isDisabled: config.isDisabled }),
-    toView: ({ button, panel, isVisible }) =>
+    toView: ({ trigger, panel, isVisible }) =>
       h.div(
         [h.Class('contents')],
         [
           h.button(
-            [
-              ...button,
-              h.Class(cn(navigationMenuTriggerClass, config.triggerClass)),
-              h.DataAttribute('slot', 'navigation-menu-trigger'),
-            ],
+            [h.Class(cn(navigationMenuTriggerClass, config.triggerClass)), ...trigger],
             [config.trigger, icon(h, ChevronDown, navigationMenuTriggerIconClass)],
           ),
           ...(isVisible
             ? [
                 h.div(
                   [
-                    ...panel,
                     h.Class(cn(navigationMenuContentClass, config.contentClass)),
-                    h.DataAttribute('slot', 'navigation-menu-content'),
                     h.DataAttribute('side', placementToSide(anchor.placement ?? 'bottom')),
+                    ...panel,
                   ],
                   content,
                 ),

@@ -99,7 +99,7 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 - **accordion — MAJOR.** Opinionated stack skin; grid-rows animation vs `animate-accordion-down/up`; single rotating chevron vs icon swap; legacy py-4/ring-2 metrics.
 - **collapsible — MAJOR.** Opinionated card skin (bordered trigger + panel) vs base's unstyled parts; single `title`/`content` config instead of free-form children.
 - **tabs — MINOR.** Full keyboard/activation parity (roving tabindex, orientation, automatic/manual). Diffs: `data-selected` vs `data-active`; h-9 vs h-8 list; line underline offset.
-- **navigation-menu — MAJOR.** Presentational bar; no viewport/indicator/popup management, no `aria-expanded`, no chevron; content is per-item absolute dropdown.
+- **navigation-menu — MAJOR.** Delayed hover/focus behavior and single-open-item coordination now match the primitive's core interaction. Still no shared viewport/indicator/popup management or activation-direction animation; each item remains an independently anchored Popover.
 - **breadcrumb — MINOR.** Visuals match; missing `.ellipsis` part and `aria-label="breadcrumb"`, page `role/aria-current`, separator `role=presentation`; no rtl-flip.
 - **toggle — MINOR.** Pressed/hover colors + size scale from legacy; `aria-pressed` correctly emitted.
 - **toggle-group — MAJOR.** Always-joined bordered strip vs loose flex joining only at `spacing=0`; no spacing/orientation props; item defaults outline+sm vs default+default.
