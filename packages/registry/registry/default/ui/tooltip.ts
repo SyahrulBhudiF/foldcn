@@ -50,8 +50,7 @@ export const TOOLTIP_ANCHOR: AnchorConfig = {
   gap: 4,
 }
 
-export const tooltipTriggerClass =
-  'inline-flex items-center justify-center rounded-md text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50'
+export const tooltipTriggerClass = 'cn-button cn-button-variant-outline cn-button-size-default'
 
 /**
  * The foldkit anchor writes the resolved side to `data-placement`; this view
