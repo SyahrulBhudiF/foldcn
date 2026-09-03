@@ -26,6 +26,7 @@ import { type ButtonSize, type ButtonVariant } from './button'
 import { inputClass } from './input'
 import * as Sheet from './sheet'
 import { skeletonClass } from './skeleton'
+import * as Tooltip from './tooltip'
 
 type Child = Html | string
 
@@ -44,8 +45,8 @@ type Attributes<M> = ReadonlyArray<Attribute<M> | ChildAttribute>
 // derived collapse state; spread them onto any element to wire toggling
 // without lifting messages into your own universe.
 //
-// Collapsed-mode menu-button tooltips are not auto-composed (each would need
-// a per-item Tooltip submodel; wrap menu buttons yourself if you need them).
+// Collapsed-mode menu-button tooltips compose through the optional `tooltip`
+// config on `menuButton`; callers still own the Tooltip submodel state.
 // Controlled/uncontrolled `open` collapses into one mode: the model you pass
 // IS the state.
 
@@ -573,6 +574,7 @@ export const view = defineView<Model, Message, ProviderViewInputs>((model, viewI
     [
       h.Class(cn(sidebarProviderClass, viewInputs.className)),
       h.DataAttribute('slot', 'sidebar-wrapper'),
+      h.DataAttribute('sidebar-cookie', model.cookieName),
       h.Style({ '--sidebar-width': SIDEBAR_WIDTH, '--sidebar-width-icon': SIDEBAR_WIDTH_ICON }),
     ],
     [
@@ -766,10 +768,21 @@ export type MenuButtonConfig<M> = Readonly<{
   /** Extra attributes merged onto the button (click handlers, hrefs via
    *  delegation, …). */
   attributes?: Attributes<M>
+  /** Optional collapsed-mode tooltip composition. The caller owns the
+   *  Tooltip model and maps its messages into the parent update loop. */
+  tooltip?: MenuButtonTooltipConfig<M>
+}>
+
+export type MenuButtonTooltipConfig<M> = Readonly<{
+  model: Tooltip.Model
+  content: Child
+  toParentMessage: (message: Tooltip.Message) => M
 }>
 
 /** Menu item button. Wire clicks/navigation through `config.attributes`;
- *  wrap the label in a `<span>` so icon-mode truncation applies. */
+ *  wrap the label in a `<span>` so icon-mode truncation applies. When
+ *  `tooltip` is supplied, the shared Tooltip wrapper owns the generated
+ *  trigger while preserving this button's Sidebar attributes. */
 export const menuButton = <M>(
   config: MenuButtonConfig<M>,
   children: ReadonlyArray<Child>,
@@ -777,25 +790,42 @@ export const menuButton = <M>(
 ): Html => {
   const variant = config.variant ?? 'default'
   const size = config.size ?? 'default'
-  return h.button(
-    [
-      h.Type('button'),
-      ...(config.attributes ?? []),
-      h.Class(
-        cn(
-          sidebarMenuButtonClass,
-          sidebarMenuButtonVariantClass[variant],
-          sidebarMenuButtonSizeClass[size],
-          config.className,
-        ),
-      ),
-      h.DataAttribute('slot', 'sidebar-menu-button'),
-      h.DataAttribute('sidebar', 'menu-button'),
-      h.DataAttribute('size', size),
-      ...(config.isActive === true ? [h.DataAttribute('active', 'true')] : []),
-    ],
-    children,
+  const menuButtonClass = cn(
+    sidebarMenuButtonClass,
+    sidebarMenuButtonVariantClass[variant],
+    sidebarMenuButtonSizeClass[size],
+    config.className,
   )
+  const triggerAttributes = [
+    h.Type('button'),
+    ...(config.attributes ?? []),
+    h.DataAttribute('slot', 'sidebar-menu-button'),
+    h.DataAttribute('sidebar', 'menu-button'),
+    h.DataAttribute('size', size),
+    ...(config.isActive === true ? [h.DataAttribute('active', 'true')] : []),
+  ]
+
+  if (config.tooltip === undefined) {
+    return h.button([...triggerAttributes, h.Class(menuButtonClass)], children)
+  }
+
+  return h.submodel({
+    slotId: config.tooltip.model.id,
+    model: config.tooltip.model,
+    view: Tooltip.view,
+    viewInputs: Tooltip.styledViewInputs(
+      {
+        anchor: { placement: 'right', gap: 8 },
+        trigger: h.span([], children),
+        triggerAttributes,
+        triggerClass: menuButtonClass,
+        content: config.tooltip.content,
+        hoverOnly: true,
+      },
+      h,
+    ),
+    toParentMessage: config.tooltip.toParentMessage,
+  })
 }
 
 /** Icon-only action pinned at the end of a menu row. `showOnHover` reveals it

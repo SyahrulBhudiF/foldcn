@@ -19,9 +19,6 @@ export const gapsByItem = {
   'context-menu': [
     'Opens on activation at a fixed anchor — foldkit has no right-click/pointer-position anchoring primitive yet.',
   ],
-  sidebar: [
-    'Collapsed-mode menu-button tooltips are not auto-composed — wrap menu buttons in Tooltip submodels yourself if you need them.',
-  ],
   toast: [
     'No swipe-to-dismiss — foldkit has no pointer-move gesture primitive yet. Auto-dismiss, hover-pause, hover-to-expand and manual close work as expected.',
   ],

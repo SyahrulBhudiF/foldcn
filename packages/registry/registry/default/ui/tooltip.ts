@@ -4,7 +4,7 @@
  */
 import { Tooltip as FoldkitTooltip } from '@foldkit/ui'
 import type { AnchorConfig } from '@foldkit/ui/tooltip'
-import type { Html, HtmlBuilder } from 'foldkit/html'
+import type { Attribute, ChildAttribute, Html, HtmlBuilder } from 'foldkit/html'
 
 type Child = Html | string
 
@@ -77,7 +77,7 @@ export const tooltipArrowClass =
 
 export const tooltipWrapperClass = 'relative inline-block'
 
-export type StyledViewInputs = Readonly<{
+export type StyledViewInputs<M = never> = Readonly<{
   /** Positioning overrides. Defaults to `TOOLTIP_ANCHOR`
    *  (`placement: 'top'`, `gap: 4`), matching the shadcn reference. */
   anchor?: AnchorConfig
@@ -89,11 +89,16 @@ export type StyledViewInputs = Readonly<{
   triggerClass?: string
   contentClass?: string
   wrapperClass?: string
+  /** When true, the trigger is skipped by keyboard focus and only pointer
+   *  hover can reveal the tooltip. */
+  hoverOnly?: boolean
+  /** Attributes applied to the generated trigger element. */
+  triggerAttributes?: ReadonlyArray<Attribute<M> | ChildAttribute>
 }>
 
 /** Build styled `Tooltip.ViewInputs`. Pass your view's `h`. */
 export const styledViewInputs = <M>(
-  viewInputs: StyledViewInputs,
+  viewInputs: StyledViewInputs<M>,
   h: HtmlBuilder<M>,
 ): FoldkitTooltip.ViewInputs => {
   const anchor = { ...TOOLTIP_ANCHOR, ...viewInputs.anchor }
@@ -109,7 +114,9 @@ export const styledViewInputs = <M>(
         [
           h.button(
             [
+              ...(viewInputs.triggerAttributes ?? []),
               ...trigger,
+              ...(viewInputs.hoverOnly === true ? [h.Attribute('tabindex', '-1')] : []),
               h.Class(cn(tooltipTriggerClass, viewInputs.triggerClass)),
               h.DataAttribute('slot', 'tooltip-trigger'),
             ],
