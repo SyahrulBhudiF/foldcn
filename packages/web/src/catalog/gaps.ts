@@ -11,20 +11,27 @@
 
 export const gapsByItem = {
   command: [
-    'Presentational surface only — no filtering, arrow-key navigation, or selection. Compose with listbox or wire your own behavior.',
+    'Data-driven Foldkit API: provide stable item values and content instead of cmdk React children. CommandDialog uses Foldkit Dialog; nested pages and async fetching remain application-owned.',
   ],
   menubar: [
     'Renders independent menus in a bar — no cross-menu keyboard traversal or open-on-hover of the next trigger.',
   ],
   'context-menu': [
-    'Opens on activation at a fixed anchor — foldkit has no right-click/pointer-position anchoring primitive yet.',
+    'Right-click opens the menu anchored to the trigger region — foldkit has no pointer-position anchoring primitive yet.',
   ],
   toast: [
     'No swipe-to-dismiss — foldkit has no pointer-move gesture primitive yet. Auto-dismiss, hover-pause, hover-to-expand and manual close work as expected.',
   ],
-  drawer: ['Bottom-docked modal with handle visuals — no drag/snap gestures.'],
+  drawer: [
+    'No snap points, nested stacks, or non-modal drawers — handle drag-to-dismiss and all four directions work.',
+  ],
   resizable: [
     'Two-pane percentage splitter — no min/max constraints, collapsible panes, or N-pane layouts.',
+  ],
+  'scroll-area': [
+    "Wheel events over the scrollbar don't scroll the viewport — foldkit has no wheel-delta listener yet.",
+    'No RTL mirroring for the horizontal scrollbar — LTR geometry only.',
+    'Track clicks jump without continuing into a drag — dragging starts on the thumb only.',
   ],
   'navigation-menu': [
     'Each dropdown is its own independently-anchored Popover panel — no shared/morphing Viewport panel or slide-direction indicator like upstream.',
@@ -35,11 +42,27 @@ export const gapsByItem = {
   'input-group': [
     'Addons do not focus the input on click — foldkit has no scoped click-to-focus primitive yet.',
   ],
+  carousel: [
+    'Embla options are a serializable schema subset on the model (align/loop/duration/startIndex/direction/containScroll/slidesToScroll); plugin instances register via Carousel.configure(id, { plugins }) since they cannot be serialized.',
+    'No imperative API hand-off: listen for ChangedIndex out-messages instead of upstream setApi.',
+  ],
   menu: [
-    'Flat items only — no submenu, checkbox-item, radio-item, or destructive variants (foldkit menu primitives do not have those kinds yet).',
+    'No submenu, checkbox-item, or radio-item kinds — submenus render as labelled groups and checkbox/radio rows run off demo state; toggling one closes the panel.',
   ],
   progress: [
     'Indeterminate state renders an empty track — animated indeterminacy awaits primitive support.',
+  ],
+  'input-otp': [
+    'Numeric codes only — non-digits are stripped with no pattern or alphanumeric mode like upstream.',
+    'onInput fires on every change; onComplete alone doubles as the update channel, so derive completion from the stored value.',
+  ],
+  questionnaire: [
+    'Data-driven Foldkit API: questions are declared as an items array on init instead of React children.',
+    'Focus stays where it was after moving between questions — upstream moves focus to the newly active question. Validation failures do focus the invalid answer.',
+    'No arrow-key answer traversal or left/right question navigation — Enter-to-advance and letter/number shortcuts work.',
+    'No native form semantics: no FormData or reset-event integration; answers flow out via the SubmittedAnswers out-message.',
+  bubble: [
+    "BubbleContent supports `as: 'div' | 'button' | 'a'` in place of upstream's render prop — other element substitutions need a manual wrapper.",
   ],
 } as const
 

@@ -1,5 +1,14 @@
 # foldcn ↔ shadcn/ui v4 `bases/base/ui` parity audit
 
+> **Questionnaire update (2026-09-09):** `questionnaire` is now ported —
+> `packages/registry/registry/default/ui/questionnaire.ts` authors the flow in place
+> (there is no `@foldkit/ui` questionnaire primitive yet), data-driven instead of
+> React children: progress, single/multiple choices with freeform input, validation
+>
+> - skip, Enter-to-advance, letter/number shortcuts, `SubmittedAnswers` out-message.
+>   Behavioral deltas are listed in `packages/web/src/catalog/gaps.ts`. The
+>   "base-only, missing from foldcn" list below is now 9 items.
+>
 > **Status (post-migration):** every file in `packages/registry/registry/default/ui/*.ts`
 > now derives from `bases/base/ui` per `docs/deriving-from-base.md` — class strings are
 > the upstream `cn-*` token compositions, resolved at build time from the vendored
@@ -7,14 +16,42 @@
 > against the **pre-migration legacy port** and are kept for the functional-gap analysis
 > only; class-material diffs (radius/surface/ring columns) are resolved as of this
 > branch. Primitive-level gaps (menus without submenu/checkbox kinds, static sidebar,
-> presentational command, click-vs-hover popover family) still stand.
+> click-vs-hover popover family) still stand. Command has a later update below.
 >
 > **Functional-gap update (2026-08-22):** gaps #1–#4 below are FIXED:
 > #1 button disabled → `aria-disabled:`/`data-disabled:` twins added in `packages/registry/registry/default/style/cn-compat.css` (button block);
 > #2 progress indeterminate → `undefined` now renders an empty track (`packages/registry/registry/default/ui/progress.ts`; animated indeterminate still awaits primitive support);
 > #3 switch hidden input → Foldkit's `attributes.hiddenInput` is now rendered (`packages/registry/registry/default/ui/switch.ts`);
-> #4 input-otp `onComplete` → documented intentional update-channel fallback with an in-code comment (`packages/registry/registry/default/ui/input-otp.ts`).
+> #4 input-otp `onComplete` → fixed: `onInput` now fires on every change
+> including the completing one (mirrors upstream `onChange`); `onComplete`
+> alone remains the update channel when `onInput` is absent, and Group/Slot
+> parts plus `isInvalid` landed (`packages/registry/registry/default/ui/input-otp.ts`).
+> Remaining: numeric-only (no pattern/alphanumeric mode).
 > Gaps #5–#12 are unchanged.
+>
+> **Menu update (2026-09-03):** menu/context-menu/menubar panels now emit
+> `data-side` derived from the anchor placement (upstream slide-in variants
+> keyed on `data-side` previously never matched), shortcut accent-on-highlight
+> is fixed via `group-data-active/*` twins in `cn-compat.css` (foldkit
+> highlights via `data-active`, never `:focus`), and menubar `viewInputs`
+> gained `itemGroupKey`/`groupToHeading`/`groupClass`/`groupAttributes`
+> (with `menubar-group` slot) so menubar demos render upstream's groups and
+> separators. The menu/context-menu/menubar demos now exercise every row:
+> triggers, groups, shortcuts, icons, destructive rows, disabled items,
+> demo-state checkboxes/radios, and keyboard nav. Primitive ceilings stand:
+> no real submenus (flattened to labelled groups), checkbox/radio rows close
+> the panel on toggle, context menus anchor to the trigger region (right-click
+> opens via `OnContextMenu`), and menubar triggers stay independent.
+>
+> **Drawer update:** the drawer is now a gesture drawer, not a static bottom
+> dialog (`packages/registry/registry/default/ui/drawer.ts`). It owns a
+> fused Dialog + drag submodel: the grab handle starts a model-owned drag
+> (document pointermove/pointerup streams, slider precedent), release past
+> 96px closes the nested dialog, shorter drags snap back, and all four
+> swipe directions dock with verbatim upstream panel lines. The demo
+> (`packages/web/src/demo/views/drawer.ts`) follows the upstream examples:
+> delivery-picker basic, left/right/top sides, handle-drag affordance.
+> Still out of scope: snap points, nested stacks, non-modal drawers.
 
 Reference: `/Users/elianiva/Development/repos/shadcn-ui/ui/apps/v4/registry/bases/base/ui` (Base UI–backed registry), with `cn-*` tokens resolved via `registry/styles/style-nova.css`. Lineage checked against `registry/new-york-v4/ui` (legacy inline-class registry).
 
@@ -30,16 +67,16 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 
 ## Scorecard (52 compared pairs)
 
-| Verdict     | Count | Components                                                                                                                                                                                                                                                                                                    |
-| ----------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| MATCHES     | 4     | label, separator, spinner, kbd                                                                                                                                                                                                                                                                                |
-| MINOR DIFFS | 18    | input, textarea, checkbox, avatar, card, skeleton, popover, tooltip, tabs, breadcrumb, toggle, item, fieldset↔field, slider, aspect-ratio, direction, marker, table                                                                                                                                           |
-| MAJOR DIFFS | 30    | button, switch, radio-group, select, menu, context-menu, menubar, combobox, command, dialog, alert-dialog, sheet, drawer, hover-card, accordion, collapsible, navigation-menu, toggle-group, alert, badge, empty, progress, input-group, input-otp, button-group, calendar, resizable, sonner, toast, sidebar |
+| Verdict     | Count | Components                                                                                                                                                                                                                                                                                         |
+| ----------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| MATCHES     | 4     | label, separator, spinner, kbd                                                                                                                                                                                                                                                                     |
+| MINOR DIFFS | 19    | input, textarea, checkbox, avatar, card, skeleton, popover, tooltip, tabs, breadcrumb, toggle, item, fieldset↔field, slider, aspect-ratio, direction, marker, table, input-otp                                                                                                                     |
+| MAJOR DIFFS | 29    | button, switch, radio-group, select, menu, context-menu, menubar, combobox, command, dialog, alert-dialog, sheet, drawer, hover-card, accordion, collapsible, navigation-menu, toggle-group, alert, badge, empty, progress, input-group, button-group, calendar, resizable, sonner, toast, sidebar |
 
 ### Not covered (no counterpart)
 
 - **foldcn-only (7):** animation, date-picker, drag-and-drop, file-drop, listbox, nav, virtual-list
-- **base-only, missing from foldcn (10):** attachment, bubble, carousel, chart, message, message-scroller, native-select (partially covered inside foldcn `select.ts`), pagination, questionnaire, scroll-area
+- **base-only, missing from foldcn (9):** attachment, bubble, carousel, chart, message, message-scroller, native-select (partially covered inside foldcn `select.ts`), questionnaire, scroll-area
 - Renames: foldcn `menu` ↔ base `dropdown-menu`; foldcn `fieldset` ↔ base `field`.
 - Manifest `ui/registry.json`: 60 entries ↔ 60 files, no mismatches.
 
@@ -48,15 +85,20 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 1. **button — disabled is visually broken.** Foldkit emits `aria-disabled="true"` + `data-disabled=""` (never native `disabled`), but foldcn ships only `disabled:pointer-events-none disabled:opacity-50`. The `:disabled` pseudo-class never matches → disabled buttons look enabled and stay tabbable (`tabindex="0"` always emitted).
 2. **progress — indeterminate renders a full bar.** `value === undefined` applies no transform; indicator is `w-full` → 100%. Legacy used `100 - (value || 0)`; base primitive has true indeterminate. Also no `role="progressbar"`/ARIA values, no Label/Value parts.
 3. **switch — form payload dropped.** Config accepts `name`/`value` but `toView` never renders the hidden input Foldkit supplies (checkbox does) → nothing submits.
-4. **input-otp — `onComplete` fires on partial values** when `onInput` is absent (fall-through at the end of the `OnInput` handler).
+4. **input-otp — numeric-only + single-message callbacks.** Non-digits are
+   stripped with no `pattern`/alphanumeric mode like upstream, and foldkit
+   maps one event to one message: `onInput` fires on every change (including
+   completion) while `onComplete` alone doubles as the update channel — the
+   two never fire for the same keystroke, so controlled owners derive
+   completion from their stored value.
 5. **hover-card — click-toggled, not hover.** It reuses the Popover submodel; there is no hover-intent delay/grace model. Trigger semantics are the component's defining behavior.
 6. **context-menu — not a context menu.** Opens on activation at a fixed anchor; no right-click/pointer-position anchoring.
 7. **menubar — no menubar behavior.** Each trigger is an independent Menu bundle; no ArrowLeft/Right traversal, no open-on-hover-of-next-trigger.
-8. **command — pure markup.** No filtering, arrow-key nav, Enter-to-select, roving tabindex, or Dialog wrapper; `[cmdk-group-heading]` selectors in its classes match nothing.
+8. **command — implemented in the current review branch (2026-09-05).** Stateful Command provides fuzzy ranking, keyword aliases, groups, disabled items, and keyboard/pointer selection. CommandDialog composes Foldkit Dialog with configurable close/reset behavior. The view emits `cmdk-group-heading`, and the resolver preserves its selectors. See the [Command and CommandDialog guide](command-composition.md). Publication and full browser/visual parity verification remain pending.
 9. **toast/sonner — no swipe-to-dismiss, no stack expansion** (index-based scale/peek choreography absent); hover-pause restarts the _full_ duration on resume. foldcn emits literal `cn-toast` but defines no such rule in its CSS (inert class).
 10. **sidebar — interactive shell with one remaining gap.** Collapse modes (`offcanvas|icon|none`), side/variant props, mobile Sheet path, ⌘/Ctrl+B shortcut, rail, all 20+ parts (`groupAction/groupContent/menuAction/menuBadge/menuSkeleton/menuSub*`, `input`, RTL flip), and shared collapsed-mode menu-button tooltip composition are now ported. Remaining: desktop cookie hydration still needs its wrapper marker when the initial DOM must be corrected before model hydration.
 11. **avatar — no image loading/error fallback chain** (stateless `<img>`; base swaps to Fallback automatically).
-12. **Inert/dead classes:** `peer-disabled:*` on input/textarea labels (no `.peer` sibling exists); command's cmdk selectors (above).
+12. **Inert/dead classes:** `peer-disabled:*` on input/textarea labels (no `.peer` sibling exists). Command now emits its cmdk attributes and preserves their selectors.
 
 > **2026-08-26 sidebar:** the static-paint bucket for sidebar is closed. The collapsible app shell, keyboard shortcut, mobile sheet, rail, and the `menu* / group* / input` sub-parts were added to `packages/registry/registry/default/ui/sidebar.ts`, and the demo at `packages/web/src/demo/views/sidebar.ts` now embeds the provider submodel, exercises `offcanvas|icon|none × left|right × sidebar|floating|inset`, and lifts the breakpoint/keyboard subscriptions.
 
@@ -83,9 +125,9 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 - **select — MAJOR.** Flat options only (no groups/labels/separators/scroll arrows); activedescendant focus vs item focus; h-9/rounded-md vs h-8/rounded-lg material. Native `<select>` export ≈ base native-select.
 - **menu ↔ dropdown-menu — MAJOR.** Plain items only (no checkbox/radio/sub/destructive/inset); panel `min-w-48 rounded-md border` vs `min-w-32 rounded-lg ring-foreground/10`; zero data-slots; shortcut not accent-on-focus.
 - **context-menu — MAJOR.** Same gaps as menu + no pointer anchoring (bug #6).
-- **menubar — MAJOR.** Static bar of independent menus; no cross-menu keyboard model (bug #7); h-9 vs h-8 bar.
+- **menubar — MAJOR.** Bar of independent live menus (per-menu open/keyboard/typeahead/disabled/groups all work; anchor gap 8 = upstream sideOffset; group + checkbox/radio/sub token constants ported, demo covers every upstream example interactively). Still no cross-menu keyboard model (bug #7 — OPEN); submenu/checkbox/radio/destructive/inset item kinds need primitive work (demo uses labeled groups + state-managed check/radio rows).
 - **combobox — MAJOR.** Parent-owned filtering; no chips UI for multi-select, no clear button, no Empty row; panel metrics differ.
-- **command — MAJOR.** Presentational only (bug #8); item selection `bg-accent` vs base `bg-muted`.
+- **command — updated, parity not re-audited.** See #8 for the stateful implementation. The API uses Foldkit models and item arrays; it does not expose React child registration.
 
 ### Overlays
 
@@ -120,7 +162,7 @@ Beyond styling, several foldcn components are missing their **defining behaviors
 ### Composite inputs
 
 - **input-group — MINOR.** Full part set (Group/Addon/Button/Text/Input/Textarea) with `role=group`, align variants, and frame-level invalid/focus states keyed off `data-slot=input-group-control`; addon-click-focus missing (foldkit has no scoped click-to-focus attribute).
-- **input-otp — MAJOR.** Standalone cells vs joined pill; no Group/Slot/Separator parts; onComplete quirk (bug #4).
+- **input-otp — MINOR.** Full part set (root/Group/Slot/Separator) with joined-pill slots, active caret, and invalid rings; numeric-only with no pattern/alphanumeric mode, and one-message-per-event callbacks (see bug #4).
 - **button-group — MAJOR.** Outer-frame model vs child corner-cutting; no orientation/Text/Separator, no `role=group`.
 - **item — MINOR.** Full part parity minus `xs` size; padding/radius/hover drift; media boxed vs bare.
 - **fieldset ↔ field — MINOR.** Near-complete part mapping incl. container-query responsive orientation; spacing drift; checked-label card tint/radius differ.

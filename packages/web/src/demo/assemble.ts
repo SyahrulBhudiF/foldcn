@@ -16,9 +16,11 @@ import { slice as attachmentSlice } from './views/attachment'
 import { slice as avatarSlice } from './views/avatar'
 import { slice as badgeSlice } from './views/badge'
 import { slice as breadcrumbSlice } from './views/breadcrumb'
+import { slice as bubbleSlice } from './views/bubble'
 import { slice as buttonGroupSlice } from './views/button-group'
 import { slice as buttonSlice } from './views/button'
 import { slice as calendarSlice } from './views/calendar'
+import { slice as carouselSlice } from './views/carousel'
 import { slice as cardSlice } from './views/card'
 import { slice as checkboxSlice } from './views/checkbox'
 import { slice as comboboxSlice } from './views/combobox'
@@ -50,10 +52,13 @@ import { slice as menubarSlice } from './views/menubar'
 import { slice as navSlice } from './views/nav'
 import { slice as nativeSelectSlice } from './views/native-select'
 import { slice as navigationMenuSlice } from './views/navigation-menu'
+import { slice as paginationSlice } from './views/pagination'
 import { slice as popoverSlice } from './views/popover'
 import { slice as progressSlice } from './views/progress'
+import { slice as questionnaireSlice } from './views/questionnaire'
 import { slice as radioGroupSlice } from './views/radio-group'
 import { slice as resizableSlice } from './views/resizable'
+import { slice as scrollAreaSlice } from './views/scroll-area'
 import { slice as selectSlice } from './views/select'
 import { slice as separatorSlice } from './views/separator'
 import { slice as settingsPageSlice } from './views/settings-page'
@@ -85,8 +90,10 @@ const ModelSchema = S.Struct({
   ...avatarSlice.fields,
   ...badgeSlice.fields,
   ...breadcrumbSlice.fields,
+  ...bubbleSlice.fields,
   ...buttonGroupSlice.fields,
   ...buttonSlice.fields,
+  ...carouselSlice.fields,
   ...calendarSlice.fields,
   ...cardSlice.fields,
   ...checkboxSlice.fields,
@@ -119,10 +126,13 @@ const ModelSchema = S.Struct({
   ...navSlice.fields,
   ...navigationMenuSlice.fields,
   ...nativeSelectSlice.fields,
+  ...paginationSlice.fields,
   ...popoverSlice.fields,
   ...progressSlice.fields,
+  ...questionnaireSlice.fields,
   ...radioGroupSlice.fields,
   ...resizableSlice.fields,
+  ...scrollAreaSlice.fields,
   ...selectSlice.fields,
   ...separatorSlice.fields,
   ...settingsPageSlice.fields,
@@ -154,8 +164,10 @@ const MessageSchema = S.Union([
   ...avatarSlice.messages,
   ...badgeSlice.messages,
   ...breadcrumbSlice.messages,
+  ...bubbleSlice.messages,
   ...buttonGroupSlice.messages,
   ...buttonSlice.messages,
+  ...carouselSlice.messages,
   ...calendarSlice.messages,
   ...cardSlice.messages,
   ...checkboxSlice.messages,
@@ -188,10 +200,13 @@ const MessageSchema = S.Union([
   ...navSlice.messages,
   ...navigationMenuSlice.messages,
   ...nativeSelectSlice.messages,
+  ...paginationSlice.messages,
   ...popoverSlice.messages,
   ...progressSlice.messages,
+  ...questionnaireSlice.messages,
   ...radioGroupSlice.messages,
   ...resizableSlice.messages,
+  ...scrollAreaSlice.messages,
   ...selectSlice.messages,
   ...separatorSlice.messages,
   ...settingsPageSlice.messages,
@@ -227,8 +242,10 @@ export const init = (): DemoUpdateReturn => {
     ...avatarSlice.init,
     ...badgeSlice.init,
     ...breadcrumbSlice.init,
+    ...bubbleSlice.init,
     ...buttonGroupSlice.init,
     ...buttonSlice.init,
+    ...carouselSlice.init,
     ...calendarSlice.init,
     ...cardSlice.init,
     ...checkboxSlice.init,
@@ -261,10 +278,13 @@ export const init = (): DemoUpdateReturn => {
     ...navSlice.init,
     ...navigationMenuSlice.init,
     ...nativeSelectSlice.init,
+    ...paginationSlice.init,
     ...popoverSlice.init,
     ...progressSlice.init,
+    ...questionnaireSlice.init,
     ...radioGroupSlice.init,
     ...resizableSlice.init,
+    ...scrollAreaSlice.init,
     ...selectSlice.init,
     ...separatorSlice.init,
     ...settingsPageSlice.init,
@@ -294,16 +314,19 @@ export const update = (model: Model, message: Message): DemoUpdateReturn => {
     M.tagsExhaustive({
       ...accordionSlice.handlers(model),
       ...alertDialogSlice.handlers(model),
+      ...bubbleSlice.handlers(model),
       ...breadcrumbSlice.handlers(model),
       ...animationSlice.handlers(model),
       ...avatarSlice.handlers(model),
       ...buttonSlice.handlers(model),
+      ...carouselSlice.handlers(model),
       ...calendarSlice.handlers(model),
       ...cardSlice.handlers(model),
       ...checkboxSlice.handlers(model),
       ...comboboxSlice.handlers(model),
       ...collapsibleSlice.handlers(model),
       ...commandSlice.handlers(model),
+      ...contextMenuSlice.handlers(model),
       ...dataTableSlice.handlers(model),
       ...datePickerSlice.handlers(model),
       ...dialogSlice.handlers(model),
@@ -318,12 +341,15 @@ export const update = (model: Model, message: Message): DemoUpdateReturn => {
       ...listboxSlice.handlers(model),
       ...loginFormSlice.handlers(model),
       ...menuSlice.handlers(model),
+      ...menubarSlice.handlers(model),
       ...navSlice.handlers(model),
       ...navigationMenuSlice.handlers(model),
       ...nativeSelectSlice.handlers(model),
       ...popoverSlice.handlers(model),
+      ...questionnaireSlice.handlers(model),
       ...radioGroupSlice.handlers(model),
       ...resizableSlice.handlers(model),
+      ...scrollAreaSlice.handlers(model),
       ...selectSlice.handlers(model),
       ...settingsPageSlice.handlers(model),
       ...sheetSlice.handlers(model),
