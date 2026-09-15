@@ -9,6 +9,7 @@ import badgeViewSource from './views/badge.ts?raw'
 import bubbleViewSource from './views/bubble.ts?raw'
 import buttonViewSource from './views/button.ts?raw'
 import calendarViewSource from './views/calendar.ts?raw'
+import carouselViewSource from './views/carousel.ts?raw'
 import cardViewSource from './views/card.ts?raw'
 import checkboxViewSource from './views/checkbox.ts?raw'
 import comboboxViewSource from './views/combobox.ts?raw'
@@ -120,6 +121,11 @@ export const demoExampleByName: Readonly<Record<DemoItemName, DemoExample>> = {
     path: 'src/demo/views/button.ts',
     code: buttonViewSource,
     githubUrl: gh('src/demo/views/button.ts'),
+  },
+  carousel: {
+    path: 'src/demo/views/carousel.ts',
+    code: carouselViewSource,
+    githubUrl: gh('src/demo/views/carousel.ts'),
   },
   calendar: {
     path: 'src/demo/views/calendar.ts',
