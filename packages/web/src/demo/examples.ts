@@ -35,6 +35,7 @@ import navViewSource from './views/nav.ts?raw'
 import paginationViewSource from './views/pagination.ts?raw'
 import popoverViewSource from './views/popover.ts?raw'
 import progressViewSource from './views/progress.ts?raw'
+import questionnaireViewSource from './views/questionnaire.ts?raw'
 import radioGroupViewSource from './views/radio-group.ts?raw'
 import selectViewSource from './views/select.ts?raw'
 import separatorViewSource from './views/separator.ts?raw'
@@ -251,6 +252,11 @@ export const demoExampleByName: Readonly<Record<DemoItemName, DemoExample>> = {
     path: 'src/demo/views/progress.ts',
     code: progressViewSource,
     githubUrl: gh('src/demo/views/progress.ts'),
+  },
+  questionnaire: {
+    path: 'src/demo/views/questionnaire.ts',
+    code: questionnaireViewSource,
+    githubUrl: gh('src/demo/views/questionnaire.ts'),
   },
   'radio-group': {
     path: 'src/demo/views/radio-group.ts',
