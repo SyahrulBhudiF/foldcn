@@ -843,11 +843,15 @@
       "name": "resizable",
       "type": "registry:ui",
       "title": "Resizable",
-      "description": "Stateful two-pane split with a draggable, keyboard-accessible handle.",
+      "description": "Resizable panel group with pointer-drag and keyboard separators, N panels, min/max constraints, and collapsible panels.",
       "registryDependencies": ["@foldcn/utils"],
       "files": [
         {
           "path": "resizable.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "resizable-box.ts",
           "type": "registry:ui"
         }
       ]
