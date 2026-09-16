@@ -53,6 +53,9 @@ export const gapsByItem = {
     'Numeric codes only — non-digits are stripped with no pattern or alphanumeric mode like upstream.',
     'onInput fires on every change; onComplete alone doubles as the update channel, so derive completion from the stored value.',
   ],
+  'message-scroller': [
+    'Reimplemented as a Foldkit submodel — @foldkit/ui has no message-scroller primitive. Auto-follow at the live edge, the default open position, anchored-turn alignment with previous-turn peek, and the scroll-to-end/start button all work; no visibility tracking (currentAnchorId / visibleMessageIds), no prepend preservation, and no anchored-turn tail spacer — a reply streaming below an anchored turn is not held while it grows (the anchor scrolls once; follow resumes once the reply reaches the live edge).',
+  ],
   questionnaire: [
     'Data-driven Foldkit API: questions are declared as an items array on init instead of React children.',
     'Focus stays where it was after moving between questions — upstream moves focus to the newly active question. Validation failures do focus the invalid answer.',
